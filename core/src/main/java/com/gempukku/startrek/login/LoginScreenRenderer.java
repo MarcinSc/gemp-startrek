@@ -196,13 +196,13 @@ public class LoginScreenRenderer extends BaseSystem {
                     }
                 });
 
-        registerTable.setWidth(Math.max(400, logoWidth));
+        registerTable.setWidth(Math.max(580, logoWidth));
 
         registerTable.add(registerErrorLabel).colspan(2).fillX().row();
-        registerTable.add(usernameField).colspan(2).width(250).pad(5).fillX().row();
-        registerTable.add(emailField).colspan(2).width(250).pad(5).fillX().row();
-        registerTable.add(passwordField).colspan(2).width(250).pad(5).fillX().row();
-        registerTable.add(passwordRepeatedField).colspan(2).width(250).pad(5).fillX().row();
+        registerTable.add(usernameField).colspan(2).width(280).pad(5).fillX().row();
+        registerTable.add(emailField).colspan(2).width(280).pad(5).fillX().row();
+        registerTable.add(passwordField).colspan(2).width(280).pad(5).fillX().row();
+        registerTable.add(passwordRepeatedField).colspan(2).width(280).pad(5).fillX().row();
         registerTable.add(goToLoginButton).pad(10);
         registerTable.add(registerButton).pad(10).row();
     }

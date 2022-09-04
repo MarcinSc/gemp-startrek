@@ -1022,13 +1022,15 @@
   }
   "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
     "default": {
-      "font": "sub-title",
-      "fontColor": {
-        "a": 1
-      },
-      "background": "button-oval-c",
-      "messageFont": "sub-title"
-    }
+		"font": "sub-title",
+		"fontColor": {
+			"a": 1
+		},
+		"background": "button-oval-c",
+		"selection": "button-big",
+		"cursor": "cursor",
+		"messageFont": "sub-title"
+	}
   },
   com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
     default: {

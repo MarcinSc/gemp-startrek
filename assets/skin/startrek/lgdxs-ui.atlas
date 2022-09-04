@@ -22,6 +22,15 @@ button-big
   orig: 110, 50
   offset: 0, 0
   index: -1
+cursor
+  rotate: false
+  xy: 158, 102
+  size: 3, 11
+  split: 1, 0, 0, 0
+  pad: 4, 4, 4, 4
+  orig: 110, 50
+  offset: 0, 0
+  index: -1
 button-big-disabled
   rotate: false
   xy: 158, 50
