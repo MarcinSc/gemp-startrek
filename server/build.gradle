@@ -1,0 +1,42 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.3'
+    id 'io.spring.dependency-management' version '1.0.7.RELEASE'
+}
+
+eclipse.project.name = appName + '-core'
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-dependencies:2.7.3'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.security:spring-security-web"
+    implementation "org.springframework.security:spring-security-config"
+    implementation "com.google.guava:guava:31.1-jre"
+    implementation "com.auth0:java-jwt:4.0.0"
+    implementation "com.h2database:h2"
+//    implementation "mysql:mysql-connector-java"
+    implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-template:$gdxGempLibVersion"
+
+    implementation project(':common')
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    components {
+        withModule('org.springframework:spring-beans') {
+            allVariants {
+                withDependencyConstraints {
+                    // Need to patch constraints because snakeyaml is an optional dependency
+                    it.findAll { it.name == 'snakeyaml' }.each { it.version { strictly '1.19' } }
+                }
+            }
+        }
+    }
+}
+
+bootJar {
+    launchScript()
+    mainClass = 'com.gempukku.ovpr.server.ServerApplication'
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
