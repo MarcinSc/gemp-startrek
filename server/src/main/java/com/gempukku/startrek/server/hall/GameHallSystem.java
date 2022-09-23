@@ -4,14 +4,16 @@ import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
-import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
+import com.gempukku.startrek.hall.GameHallComponent;
+import com.gempukku.startrek.hall.GameHallPlayerComponent;
+import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.hall.event.PlayerConnected;
 import com.gempukku.startrek.server.hall.event.PlayerDisconnected;
 
 public class GameHallSystem extends BaseSystem {
     private HallEntityProviderSystem hallEntityProviderSystem;
-    private SpawnSystem spawnSystem;
+    private ServerSpawnSystem spawnSystem;
     private EventSystem eventSystem;
 
     @EventListener
@@ -24,11 +26,13 @@ public class GameHallSystem extends BaseSystem {
 
         eventSystem.fireEvent(EntityUpdated.instance, gameHallEntity);
 
-        Entity playerEntity = spawnSystem.spawnEntity("hall/gameHallPlayer.prefab");
+        Entity playerEntity = spawnSystem.spawnEntity("hall/gameHallPlayer.template");
 
         GameHallPlayerComponent player = playerEntity.getComponent(GameHallPlayerComponent.class);
         player.setOwner(username);
         player.setPortrait("professor-x");
+
+        eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
     }
 
     @EventListener

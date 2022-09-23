@@ -1019,18 +1019,36 @@
       name: progress-bar-back-vertical
       color: color
     }
-  }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
+    "default": {
+      "background": "cursor",
+      "titleFont": "title",
+      "titleFontColor": {
+        "a": 1,
+        "b": 1,
+        "g": 1,
+        "r": 1
+      }
+    }
+  },
   "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
     "default": {
-		"font": "sub-title",
-		"fontColor": {
-			"a": 1
-		},
-		"background": "button-oval-c",
-		"selection": "button-big",
-		"cursor": "cursor",
-		"messageFont": "sub-title"
-	}
+      "font": "sub-title",
+      "fontColor": {
+        "a": 1
+      },
+      "background": "button-oval-c",
+      "selection": "button-big",
+      "cursor": "cursor",
+      "messageFont": "sub-title"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle": {
+    "default": {
+      "up": "button-c",
+      "down": "button-c-p"
+    }
   },
   com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
     default: {

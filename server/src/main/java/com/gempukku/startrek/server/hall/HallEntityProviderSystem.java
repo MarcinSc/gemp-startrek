@@ -6,16 +6,18 @@ import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.artemis.EntitySubscription;
 import com.artemis.utils.IntBag;
-import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
+import com.gempukku.startrek.hall.GameHallPlayerComponent;
+import com.gempukku.startrek.server.common.ServerSpawnSystem;
 
 public class HallEntityProviderSystem extends BaseSystem {
     private Entity hallEntity;
     private EntitySubscription playerEntitySubscription;
 
+    private ServerSpawnSystem serverSpawnSystem;
+
     @Override
     protected void initialize() {
-        SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
-        hallEntity = spawnSystem.spawnEntity("hall/gameHall.prefab");
+        hallEntity = serverSpawnSystem.spawnEntity("hall/gameHall.template");
         playerEntitySubscription = world.getAspectSubscriptionManager().get(Aspect.all(GameHallPlayerComponent.class));
     }
 

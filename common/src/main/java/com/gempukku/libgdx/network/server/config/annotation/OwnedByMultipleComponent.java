@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.network;
+package com.gempukku.libgdx.network.server.config.annotation;
 
 import java.util.List;
 

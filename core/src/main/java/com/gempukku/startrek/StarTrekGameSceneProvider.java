@@ -9,6 +9,7 @@ import com.gempukku.libgdx.lib.artemis.input.InputProcessorSystem;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.common.GameSceneSystem;
 import com.gempukku.startrek.login.LoginGameScene;
+import com.github.czyzby.websocket.CommonWebSockets;
 
 public class StarTrekGameSceneProvider implements GameSceneProvider {
     private AuthenticationHolderSystem authenticationHolderSystem;
@@ -19,6 +20,8 @@ public class StarTrekGameSceneProvider implements GameSceneProvider {
 
     @Override
     public void startup() {
+        CommonWebSockets.initiate();
+
         authenticationHolderSystem = new AuthenticationHolderSystem();
         gameSceneSystem = new GameSceneSystem();
 

@@ -30,7 +30,6 @@ public class InformationPacketUtil<T> {
                                 for (int i = 0, s = entities.size(); s > i; i++) {
                                     entityAdded(entities.get(i));
                                 }
-
                             }
 
                             @Override

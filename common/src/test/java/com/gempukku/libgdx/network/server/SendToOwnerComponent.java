@@ -1,8 +1,8 @@
 package com.gempukku.libgdx.network.server;
 
 import com.artemis.Component;
-import com.gempukku.libgdx.network.OwnedComponent;
-import com.gempukku.libgdx.network.ReplicateToOwner;
+import com.gempukku.libgdx.network.server.config.annotation.OwnedComponent;
+import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 
 @ReplicateToOwner
 public class SendToOwnerComponent extends Component implements OwnedComponent {

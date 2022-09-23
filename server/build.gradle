@@ -17,6 +17,7 @@ dependencies {
     implementation "com.h2database:h2"
 //    implementation "mysql:mysql-connector-java"
     implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-template:$gdxGempLibVersion"
+    implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-template-artemis:$gdxGempLibVersion"
 
     implementation project(':common')
 

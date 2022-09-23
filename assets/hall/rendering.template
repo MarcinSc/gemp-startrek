@@ -1,0 +1,10 @@
+{
+  "com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererComponent": {
+    "pipelinePath": "pipeline/hall-pipeline.json"
+  },
+  "com.gempukku.libgdx.lib.graph.artemis.ui.StageComponent": {
+    "skinPath": "skin/startrek/lgdxs-ui.json",
+    "stageName": "Main"
+  },
+  "com.gempukku.libgdx.lib.graph.artemis.time.TimeComponent": {}
+}

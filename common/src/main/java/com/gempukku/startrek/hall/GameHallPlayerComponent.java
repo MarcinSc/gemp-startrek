@@ -1,8 +1,8 @@
-package com.gempukku.startrek.server.hall;
+package com.gempukku.startrek.hall;
 
 import com.artemis.Component;
-import com.gempukku.libgdx.network.OwnedComponent;
-import com.gempukku.libgdx.network.ReplicateToOwner;
+import com.gempukku.libgdx.network.server.config.annotation.OwnedComponent;
+import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 
 @ReplicateToOwner
 public class GameHallPlayerComponent extends Component implements OwnedComponent {

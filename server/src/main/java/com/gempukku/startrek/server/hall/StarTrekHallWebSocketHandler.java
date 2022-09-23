@@ -4,6 +4,7 @@ import com.artemis.World;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.JsonDataSerializer;
 import com.gempukku.libgdx.network.server.RemoteEntityManagerHandler;
+import com.gempukku.libgdx.network.server.config.annotation.SerializeToClientsConfig;
 import com.gempukku.startrek.server.hall.event.PlayerConnected;
 import com.gempukku.startrek.server.hall.event.PlayerDisconnected;
 import com.gempukku.startrek.server.hall.event.UpdateGames;
@@ -14,7 +15,6 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.lang.reflect.Method;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
@@ -56,6 +56,8 @@ public class StarTrekHallWebSocketHandler extends TextWebSocketHandler {
                         eventSystem.fireEvent(new PlayerDisconnected(username), hallEntityProvider.getGameHallEntity());
                     }
                 });
+        oneConnectionPerUserIntoContext.addNetworkEntitySerializationConfig(
+                new SerializeToClientsConfig());
         executor.scheduleWithFixedDelay(
                 new Runnable() {
                     @Override

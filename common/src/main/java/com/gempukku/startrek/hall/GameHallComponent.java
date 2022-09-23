@@ -1,7 +1,7 @@
-package com.gempukku.startrek.server.hall;
+package com.gempukku.startrek.hall;
 
 import com.artemis.Component;
-import com.gempukku.libgdx.network.ReplicateToClients;
+import com.gempukku.libgdx.network.server.config.annotation.ReplicateToClients;
 
 @ReplicateToClients
 public class GameHallComponent extends Component {

@@ -1,8 +1,8 @@
 package com.gempukku.startrek.server.hall;
 
 import com.artemis.Component;
-import com.gempukku.libgdx.network.OwnedByMultipleComponent;
-import com.gempukku.libgdx.network.ReplicateToOwner;
+import com.gempukku.libgdx.network.server.config.annotation.OwnedByMultipleComponent;
+import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 
 import java.util.ArrayList;
 import java.util.List;

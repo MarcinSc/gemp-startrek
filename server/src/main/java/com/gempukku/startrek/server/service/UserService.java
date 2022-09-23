@@ -5,6 +5,8 @@ import com.gempukku.startrek.server.service.vo.LoggedUser;
 import org.springframework.security.authentication.BadCredentialsException;
 
 public interface UserService {
-    void registerUser(String username, String email, String password) throws UserValidation.UserValidationException;
+    void registerUser(String username, String email, String password) throws UserValidation.UserValidationException,
+            UserConflictException;
+
     LoggedUser loginUser(String username, String password) throws BadCredentialsException;
 }

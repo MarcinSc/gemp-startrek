@@ -18,6 +18,14 @@ import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
 import com.gempukku.libgdx.lib.graph.artemis.time.TimeKeepingSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
+import com.gempukku.libgdx.network.JsonDataSerializer;
+import com.gempukku.libgdx.network.client.WebsocketRemoteClientConnector;
+import com.gempukku.libgdx.network.json.JsonValueNetworkMessageMarshaller;
+import com.gempukku.libgdx.network.json.JsonValueServerSessionProducer;
+import com.gempukku.startrek.common.ConnectionParamSystem;
+import com.gempukku.startrek.common.FontProviderSystem;
+import com.gempukku.startrek.common.IncomingUpdatesProcessor;
+import com.gempukku.startrek.hall.*;
 import com.gempukku.startrek.login.LoginScreenRenderer;
 
 import java.io.IOException;
@@ -45,7 +53,23 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
     @Override
     public World visitHallScene() {
         createCommonSystems();
-        return new World(worldConfigurationBuilder.build());
+        worldConfigurationBuilder.with(
+                new DeckBoxRenderingSystem(),
+                new GameHallConnectionInitializer(),
+                new GameHallPlayerProviderSystem(),
+                new GameHallUIRenderer(),
+                new HallConnectionLostHandling(),
+                new WebsocketRemoteClientConnector<>(
+                        new JsonDataSerializer(), new JsonValueServerSessionProducer(),
+                        new JsonValueNetworkMessageMarshaller()),
+                new FontProviderSystem(),
+                new IncomingUpdatesProcessor(),
+                new TransitionToGame());
+
+        World world = new World(worldConfigurationBuilder.build());
+        SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
+        spawnSystem.spawnEntity("hall/rendering.template");
+        return world;
     }
 
     private void createCommonSystems() {
@@ -65,6 +89,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new TextureSystem(new RuntimeTextureHandler()),
                 new PropertySystem(properties),
                 new PipelineRendererSystem(),
+                new ConnectionParamSystem(),
                 new StageSystem(1));
     }
 }

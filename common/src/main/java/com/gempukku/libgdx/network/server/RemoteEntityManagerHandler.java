@@ -1,13 +1,19 @@
 package com.gempukku.libgdx.network.server;
 
-import com.artemis.*;
-import com.artemis.utils.Bag;
+import com.artemis.Aspect;
+import com.artemis.BaseSystem;
+import com.artemis.Entity;
+import com.artemis.EntitySubscription;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.event.EntityEvent;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RawEventListener;
-import com.gempukku.libgdx.network.*;
+import com.gempukku.libgdx.network.EntityUpdated;
+import com.gempukku.libgdx.network.EventFromClient;
+import com.gempukku.libgdx.network.server.config.NetworkEntityConfig;
+import com.gempukku.libgdx.network.server.config.annotation.SendToClients;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -18,10 +24,9 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
     private Map<String, ClientConnection> clientConnectionMap = new HashMap<>();
     private Multimap<ClientConnection, Integer> clientTrackingEntities = HashMultimap.create();
 
-    private Bag<Component> tempComponentBag = new Bag<>();
-
     private EventSystem eventSystem;
     private EntitySubscription allEntitiesSubscription;
+    private Array<NetworkEntityConfig> networkEntityConfigArray = new Array<>();
 
     @Override
     public void initialize() {
@@ -55,17 +60,22 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
                 });
     }
 
+    public void addNetworkEntityConfig(NetworkEntityConfig networkEntityConfig) {
+        networkEntityConfigArray.add(networkEntityConfig);
+    }
+
+    public void removeNetworkEntityConfig(NetworkEntityConfig networkEntityConfig) {
+        networkEntityConfigArray.removeValue(networkEntityConfig, true);
+    }
+
     @EventListener
     public void entityUpdated(EntityUpdated entityUpdated, Entity entity) {
-        loadComponentBag(entity);
-
-        boolean replicateToAllClients = hasToReplicateToAllClients(tempComponentBag);
+        boolean replicateToAllClients = hasToReplicateToAllClients(entity);
 
         int entityId = entity.getId();
         for (Map.Entry<String, ClientConnection> clientConnectionEntry : clientConnectionMap.entrySet()) {
-            String clientName = clientConnectionEntry.getKey();
             ClientConnection clientConnection = clientConnectionEntry.getValue();
-            if (replicateToAllClients || hasToReplicateToClient(tempComponentBag, clientName)) {
+            if (replicateToAllClients || hasToReplicateToClient(entity, clientConnection)) {
                 if (clientTracksEntity(clientConnection, entityId)) {
                     clientConnection.entityModified(entity);
                 } else {
@@ -79,20 +89,12 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
         }
     }
 
-    private void loadComponentBag(Entity entity) {
-        tempComponentBag.clear();
-        entity.getComponents(tempComponentBag);
-    }
-
-    private static boolean hasToReplicateToAllClients(Bag<Component> componentBag) {
-        boolean replicateToAllClients = false;
-        for (Component component : componentBag) {
-            if (component.getClass().getAnnotation(ReplicateToClients.class) != null) {
-                replicateToAllClients = true;
-                break;
-            }
+    private boolean hasToReplicateToAllClients(Entity entity) {
+        for (NetworkEntityConfig networkEntityConfig : networkEntityConfigArray) {
+            if (networkEntityConfig.isEntitySentToAll(entity))
+                return true;
         }
-        return replicateToAllClients;
+        return false;
     }
 
     private void entityRemoved(int entityId) {
@@ -108,19 +110,6 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
         for (ClientConnection value : clientConnectionMap.values()) {
             value.applyChanges();
         }
-    }
-
-    private static boolean hasToReplicateToClient(Bag<Component> componentBag, final String username) {
-        for (Component component : componentBag) {
-            Class<? extends Component> componentClass = component.getClass();
-            if (componentClass.getAnnotation(ReplicateToOwner.class) != null) {
-                if (component instanceof OwnedComponent && ((OwnedComponent) component).getOwner().equals(username))
-                    return true;
-                if (component instanceof OwnedByMultipleComponent && ((OwnedByMultipleComponent) component).getOwners().contains(username))
-                    return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -154,14 +143,24 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
 
         IntBag entities = allEntitiesSubscription.getEntities();
         for (int i = 0, s = entities.size(); s > i; i++) {
-            Entity entity = world.getEntity(entities.get(i));
-            loadComponentBag(entity);
-            if (hasToReplicateToAllClients(tempComponentBag) || hasToReplicateToClient(tempComponentBag, clientName)) {
+            int entityId = entities.get(i);
+            Entity entity = world.getEntity(entityId);
+            if (hasToReplicateToAllClients(entity) || hasToReplicateToClient(entity, clientConnection)) {
                 clientConnection.entityAdded(entity);
+                clientTrackingEntities.put(clientConnection, entityId);
             }
         }
 
         clientConnection.applyChanges();
+    }
+
+    private boolean hasToReplicateToClient(Entity entity, ClientConnection clientConnection) {
+        for (NetworkEntityConfig networkEntityConfig : networkEntityConfigArray) {
+            if (networkEntityConfig.isEntitySentToClient(entity, clientConnection))
+                return true;
+        }
+
+        return false;
     }
 
     private boolean clientTracksEntity(ClientConnection clientConnection, int entityId) {

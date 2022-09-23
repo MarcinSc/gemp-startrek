@@ -6,6 +6,7 @@ import com.gempukku.startrek.server.service.vo.User;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public void registerUser(String username, String email, String password) throws UserValidation.UserValidationException {
+    public void registerUser(String username, String email, String password) throws UserValidation.UserValidationException,
+            UserConflictException {
         UserValidation.validateUser(username, email, password);
 
         User user = new User();
@@ -32,14 +34,17 @@ public class UserServiceImpl implements UserService {
         user.setSalt(salt);
         HashCode hashCode = calculateHash(salt, password);
         user.setPasswordHash(hashCode.toString());
-
-        userRepository.save(user);
+        try {
+            userRepository.save(user);
+        } catch (DataIntegrityViolationException exp) {
+            throw new UserConflictException();
+        }
     }
 
     private String getRandomSalt() {
         Random rnd = new Random();
         char[] result = new char[saltLength];
-        for (int i=0; i<result.length; i++) {
+        for (int i = 0; i < result.length; i++) {
             result[i] = saltChars[rnd.nextInt(saltChars.length)];
         }
         return new String(result);

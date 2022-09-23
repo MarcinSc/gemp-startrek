@@ -4,7 +4,10 @@ import com.artemis.Component;
 import com.artemis.Entity;
 import com.artemis.utils.Bag;
 import com.gempukku.libgdx.lib.artemis.event.EntityEvent;
-import com.gempukku.libgdx.network.*;
+import com.gempukku.libgdx.network.DataSerializer;
+import com.gempukku.libgdx.network.EventFromClient;
+import com.gempukku.libgdx.network.NetworkMessage;
+import com.gempukku.libgdx.network.server.config.NetworkEntitySerializationConfig;
 
 import java.util.*;
 
@@ -21,10 +24,14 @@ public class SerializingClientConnection<T> implements ClientConnection {
 
     private final Bag<Component> tempComponentBag = new Bag<>();
 
-    public SerializingClientConnection(String username, ClientSession<T> session, DataSerializer<T> dataSerializer) {
+    private final NetworkEntitySerializationConfig networkEntitySerializationConfig;
+
+    public SerializingClientConnection(String username, ClientSession<T> session, DataSerializer<T> dataSerializer,
+                                       NetworkEntitySerializationConfig networkEntitySerializationConfig) {
         this.username = username;
         this.session = session;
         this.dataSerializer = dataSerializer;
+        this.networkEntitySerializationConfig = networkEntitySerializationConfig;
     }
 
     @Override
@@ -107,25 +114,12 @@ public class SerializingClientConnection<T> implements ClientConnection {
         List<T> entityData = new LinkedList<>();
 
         for (Component component : tempComponentBag) {
-            Class<? extends Component> componentClass = component.getClass();
-            if (componentClass.getAnnotation(ReplicateToClients.class) != null
-                    || componentClass.getAnnotation(ReplicateWithOthers.class) != null
-                    || replicatesToUser(username, componentClass, component)) {
+            if (networkEntitySerializationConfig.isComponentSerializedToClient(
+                    component, this)) {
                 entityData.add(dataSerializer.serializeComponent(component));
             }
         }
         return entityData;
-    }
-
-    private boolean replicatesToUser(String username, Class<? extends Component> componentClass, Component componentData) {
-        ReplicateToOwner replicateToOwner = componentClass.getAnnotation(ReplicateToOwner.class);
-        if (replicateToOwner != null) {
-            if (componentData instanceof OwnedComponent && ((OwnedComponent) componentData).getOwner().equals(username))
-                return true;
-            if (componentData instanceof OwnedByMultipleComponent && ((OwnedByMultipleComponent) componentData).getOwners().contains(username))
-                return true;
-        }
-        return false;
     }
 
     @Override

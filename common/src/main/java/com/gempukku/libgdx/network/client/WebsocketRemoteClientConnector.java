@@ -7,7 +7,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RawEventListener;
 import com.gempukku.libgdx.network.DataSerializer;
 import com.gempukku.libgdx.network.NetworkMessage;
-import com.gempukku.libgdx.network.NetworkMessageHandler;
+import com.gempukku.libgdx.network.NetworkMessageMarshaller;
 import com.gempukku.libgdx.network.SendToServer;
 import com.github.czyzby.websocket.AbstractWebSocketListener;
 import com.github.czyzby.websocket.WebSocket;
@@ -25,20 +25,21 @@ public class WebsocketRemoteClientConnector<T> extends BaseSystem {
     private final LinkedList<List<IncomingInformationPacket<T>>> readyToProcessMessages = new LinkedList<>();
 
     private WebSocket socket;
+    private ServerSession<T> serverSession;
 
     private boolean disconnected;
 
     private DataSerializer<T> dataSerializer;
-    private ServerSession<T> serverSession;
-    private NetworkMessageHandler<T> networkMessageHandler;
+    private ServerSessionProducer<T> serverSessionProducer;
+    private NetworkMessageMarshaller<T> networkMessageMarshaller;
     private Entity serverConnectionEntity;
     private EventSystem eventSystem;
 
-    public WebsocketRemoteClientConnector(DataSerializer<T> dataSerializer, ServerSession<T> serverSession,
-                                          NetworkMessageHandler<T> networkMessageHandler) {
+    public WebsocketRemoteClientConnector(DataSerializer<T> dataSerializer, ServerSessionProducer<T> serverSessionProducer,
+                                          NetworkMessageMarshaller<T> networkMessageMarshaller) {
         this.dataSerializer = dataSerializer;
-        this.serverSession = serverSession;
-        this.networkMessageHandler = networkMessageHandler;
+        this.serverSessionProducer = serverSessionProducer;
+        this.networkMessageMarshaller = networkMessageMarshaller;
     }
 
     @Override
@@ -48,7 +49,7 @@ public class WebsocketRemoteClientConnector<T> extends BaseSystem {
                 new RawEventListener() {
                     @Override
                     public void eventDispatched(EntityEvent event, Entity entity) {
-                        if (entity.getComponent(ServerEntityComponent.class) != null
+                        if (entity != null && entity.getComponent(ServerEntityComponent.class) != null
                                 && event.getClass().getAnnotation(SendToServer.class) != null) {
                             sendEventToServer(event, entity.getComponent(ServerEntityComponent.class).getEntityId());
                         }
@@ -117,6 +118,8 @@ public class WebsocketRemoteClientConnector<T> extends BaseSystem {
         if (authenticationToken != null)
             ((NvWebSocket) socket).addHeader("Authorization", authenticationToken);
         socket.connect();
+
+        serverSession = serverSessionProducer.createServerSession(socket);
     }
 
     private WebSocketListener createListener() {
@@ -131,7 +134,7 @@ public class WebsocketRemoteClientConnector<T> extends BaseSystem {
             @Override
             protected boolean onMessage(WebSocket webSocket, Object packet) throws WebSocketException {
                 try {
-                    NetworkMessage<T> networkMessage = networkMessageHandler.convertToNetworkMessage(packet);
+                    NetworkMessage<T> networkMessage = networkMessageMarshaller.unmarshall((T) packet);
                     if (networkMessage.getType() == NetworkMessage.Type.APPLY_CHANGES) {
                         synchronized (readyToProcessMessages) {
                             readyToProcessMessages.add(new LinkedList<>(networkMessages));

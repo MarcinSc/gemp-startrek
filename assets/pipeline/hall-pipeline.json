@@ -1,0 +1,43 @@
+{
+  "version": "0.5.0",
+  "type": "Render_Pipeline",
+  "nodes": [
+    {
+      "id": "1d08e096ec5a428280a7cd7753666d74",
+      "type": "PipelineStart",
+      "x": 76.0,
+      "y": 424.0
+    },
+    {
+      "id": "e24ec51e09a44f568fd0390574e05876",
+      "type": "UIRenderer",
+      "x": 50.0,
+      "y": 201.0,
+      "data": {
+        "id": "Main"
+      }
+    },
+    {
+      "id": "end",
+      "type": "PipelineEnd",
+      "x": 85.0,
+      "y": 50.0
+    }
+  ],
+  "connections": [
+    {
+      "fromNode": "1d08e096ec5a428280a7cd7753666d74",
+      "fromField": "output",
+      "toNode": "e24ec51e09a44f568fd0390574e05876",
+      "toField": "input"
+    },
+    {
+      "fromNode": "e24ec51e09a44f568fd0390574e05876",
+      "fromField": "output",
+      "toNode": "end",
+      "toField": "input"
+    }
+  ],
+  "properties": [],
+  "groups": []
+}

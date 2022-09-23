@@ -1,11 +1,19 @@
 package com.gempukku.startrek.server.websocket;
 
+import com.artemis.Component;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.libgdx.network.*;
+import com.gempukku.libgdx.network.DataSerializer;
+import com.gempukku.libgdx.network.EventFromClient;
+import com.gempukku.libgdx.network.NetworkMessage;
+import com.gempukku.libgdx.network.SendToServer;
+import com.gempukku.libgdx.network.json.JsonValueNetworkMessageMarshaller;
+import com.gempukku.libgdx.network.server.ClientConnection;
 import com.gempukku.libgdx.network.server.RemoteEntityManagerHandler;
 import com.gempukku.libgdx.network.server.RemoteHandler;
 import com.gempukku.libgdx.network.server.SerializingClientConnection;
+import com.gempukku.libgdx.network.server.config.NetworkEntitySerializationConfig;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,14 +23,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
-public class OneConnectionPerUserIntoContext {
+public class OneConnectionPerUserIntoContext implements NetworkEntitySerializationConfig {
     private Map<WebSocketSession, SerializingClientConnection<JsonValue>> clientConnections = new HashMap<>();
     private Map<String, WebSocketSession> userSessions = new HashMap<>();
+    private JsonValueNetworkMessageMarshaller networkMessageMarshaller = new JsonValueNetworkMessageMarshaller();
 
     private ExecutorService executorService;
     private RemoteHandler remoteHandler;
     private DataSerializer<JsonValue> dataSerializer;
     private PlayerListener playerListener;
+
+    private Array<NetworkEntitySerializationConfig> networkEntitySerializationConfigArray = new Array<>();
 
     public OneConnectionPerUserIntoContext(ExecutorService executorService, RemoteEntityManagerHandler remoteHandler, DataSerializer<JsonValue> jsonEntitySerializer) {
         this(executorService, remoteHandler, jsonEntitySerializer, null);
@@ -35,13 +46,31 @@ public class OneConnectionPerUserIntoContext {
         this.playerListener = playerListener;
     }
 
+    public void addNetworkEntitySerializationConfig(NetworkEntitySerializationConfig networkEntitySerializationConfig) {
+        networkEntitySerializationConfigArray.add(networkEntitySerializationConfig);
+    }
+
+    public void removeNetworkEntitySerializationConfig(NetworkEntitySerializationConfig networkEntitySerializationConfig) {
+        networkEntitySerializationConfigArray.removeValue(networkEntitySerializationConfig, true);
+    }
+
+    @Override
+    public boolean isComponentSerializedToClient(Component component, ClientConnection clientConnection) {
+        for (NetworkEntitySerializationConfig networkEntitySerializationConfig : networkEntitySerializationConfigArray) {
+            if (networkEntitySerializationConfig.isComponentSerializedToClient(component, clientConnection))
+                return true;
+        }
+        return false;
+    }
+
     public void connectionEstablished(WebSocketSession session) {
         executorService.submit(
                 new Runnable() {
                     @Override
                     public void run() {
                         String username = session.getPrincipal().getName();
-                        SerializingClientConnection<JsonValue> clientConnection = new SerializingClientConnection<>(username, new WebSocketClientSession(session), dataSerializer);
+                        SerializingClientConnection<JsonValue> clientConnection = new SerializingClientConnection<JsonValue>(username, new WebSocketClientSession(session, networkMessageMarshaller), dataSerializer,
+                                OneConnectionPerUserIntoContext.this);
                         clientConnections.put(session, clientConnection);
 
                         WebSocketSession oldSession = userSessions.put(username, session);

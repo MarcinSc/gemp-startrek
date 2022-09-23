@@ -1,0 +1,5 @@
+{
+  "com.gempukku.startrek.hall.GameHallPlayerComponent": {
+    "maximumDeckCount": 10
+  }
+}

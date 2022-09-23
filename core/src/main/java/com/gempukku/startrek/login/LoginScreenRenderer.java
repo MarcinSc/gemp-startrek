@@ -22,9 +22,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.property.PropertySystem;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
-import com.gempukku.startrek.common.AuthenticationHolderSystem;
-import com.gempukku.startrek.common.GameSceneSystem;
-import com.gempukku.startrek.common.UserValidation;
+import com.gempukku.startrek.common.*;
 import com.gempukku.startrek.hall.HallGameScene;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -44,16 +42,13 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class LoginScreenRenderer extends BaseSystem {
-    private boolean uiDebug = true;
+    private boolean uiDebug = false;
     private String storagePath = "gempukku-overpower/download";
-
-    private String errorLabelStyle = "c2";
-    private String navigationButtonStyle = "oval1";
-    private String actionButtonStyle = "oval2";
 
     private StageSystem uiSystem;
     private TextureSystem textureSystem;
     private PropertySystem propertySystem;
+    private ConnectionParamSystem connectionParamSystem;
     private AuthenticationHolderSystem authenticationHolderSystem;
     private GameSceneSystem gameSceneSystem;
 
@@ -112,7 +107,7 @@ public class LoginScreenRenderer extends BaseSystem {
         loginTable = new Table();
         loginTable.setDebug(uiDebug);
 
-        loginErrorLabel = new Label(null, skin, errorLabelStyle);
+        loginErrorLabel = new Label(null, skin, UISettings.errorLabelStyle);
         loginErrorLabel.setAlignment(Align.center);
         final TextField usernameField = new TextField("", skin);
         usernameField.setMessageText("Username");
@@ -122,7 +117,7 @@ public class LoginScreenRenderer extends BaseSystem {
         passwordField.setPasswordCharacter('*');
         messageLabel = new Label(null, skin);
 
-        goToRegisterButton = new TextButton("Register >", skin, navigationButtonStyle);
+        goToRegisterButton = new TextButton("Register >", skin, UISettings.alternativeButtonStyle);
         goToRegisterButton.addListener(
                 new ClickListener() {
                     @Override
@@ -130,7 +125,7 @@ public class LoginScreenRenderer extends BaseSystem {
                         navigateToRegisterScreen();
                     }
                 });
-        loginButton = new TextButton("Login", skin, actionButtonStyle);
+        loginButton = new TextButton("Login", skin, UISettings.mainButtonStyle);
         loginButton.addListener(
                 new ClickListener() {
                     @Override
@@ -152,7 +147,7 @@ public class LoginScreenRenderer extends BaseSystem {
     private void createRegisterTable(Skin skin, int logoWidth) {
         registerTable = new Table();
         registerTable.setDebug(uiDebug);
-        registerErrorLabel = new Label(null, skin, errorLabelStyle);
+        registerErrorLabel = new Label(null, skin, UISettings.errorLabelStyle);
         registerErrorLabel.setAlignment(Align.center);
         final TextField usernameField = new TextField("", skin);
         usernameField.setMessageText("Username");
@@ -167,7 +162,7 @@ public class LoginScreenRenderer extends BaseSystem {
         passwordRepeatedField.setPasswordMode(true);
         passwordRepeatedField.setPasswordCharacter('*');
 
-        goToLoginButton = new TextButton("< Login", skin, navigationButtonStyle);
+        goToLoginButton = new TextButton("< Login", skin, UISettings.alternativeButtonStyle);
         goToLoginButton.addListener(
                 new ClickListener() {
                     @Override
@@ -175,7 +170,7 @@ public class LoginScreenRenderer extends BaseSystem {
                         navigateToLoginScreen();
                     }
                 });
-        registerButton = new TextButton("Register", skin, actionButtonStyle);
+        registerButton = new TextButton("Register", skin, UISettings.mainButtonStyle);
         registerButton.addListener(
                 new ClickListener() {
                     @Override
@@ -216,10 +211,10 @@ public class LoginScreenRenderer extends BaseSystem {
         Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("username", username);
         parameters.put("password", password);
-        parameters.put("version", propertySystem.getProperty("client.version"));
+        parameters.put("version", connectionParamSystem.getClientVersion());
 
         Net.HttpRequest httpRequest = new Net.HttpRequest("POST");
-        httpRequest.setUrl("http://" + propertySystem.getProperty("server.host") + ":" + propertySystem.getProperty("server.port") + propertySystem.getProperty("server.login.url"));
+        httpRequest.setUrl(connectionParamSystem.getLoginUrl());
         httpRequest.setContent(HttpParametersUtils.convertHttpParameters(parameters));
         Gdx.net.sendHttpRequest(httpRequest,
                 new Net.HttpResponseListener() {
@@ -266,7 +261,7 @@ public class LoginScreenRenderer extends BaseSystem {
         parameters.put("password", password);
 
         Net.HttpRequest httpRequest = new Net.HttpRequest("POST");
-        httpRequest.setUrl("http://" + propertySystem.getProperty("server.host") + ":" + propertySystem.getProperty("server.port") + propertySystem.getProperty("server.register.url"));
+        httpRequest.setUrl(connectionParamSystem.getRegisterUrl());
         httpRequest.setContent(HttpParametersUtils.convertHttpParameters(parameters));
         Gdx.net.sendHttpRequest(httpRequest,
                 new Net.HttpResponseListener() {
@@ -276,13 +271,16 @@ public class LoginScreenRenderer extends BaseSystem {
                         if (statusCode == HttpStatus.SC_CREATED) {
                             registerSuccessful();
                         } else {
-                            setRegisterError("Unable to register: " + statusCode);
+                            if (statusCode == HttpStatus.SC_CONFLICT)
+                                setRegisterError("Unable to register - this username or email already exists in the system");
+                            else
+                                setRegisterError("Unable to register: " + statusCode);
                         }
                     }
 
                     @Override
                     public void failed(Throwable t) {
-                        setLoginError("Unable to login - " + t.getMessage());
+                        setRegisterError("Unable to register - " + t.getMessage());
                     }
 
                     @Override
@@ -293,7 +291,16 @@ public class LoginScreenRenderer extends BaseSystem {
     }
 
     private void registerSuccessful() {
-        navigateToLoginScreen();
+        Gdx.app.postRunnable(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        resetRegistrationButtons();
+                        navigateToLoginScreen();
+                        setLoginError("User successfully registered");
+                    }
+                }
+        );
     }
 
     private void loginSuccessful(final String username, final String authentication) {
@@ -301,8 +308,7 @@ public class LoginScreenRenderer extends BaseSystem {
             processFilesAndGoToScene(Collections.emptyList(), username, authentication);
         } else {
             Net.HttpRequest httpRequest = new Net.HttpRequest("GET");
-            httpRequest.setUrl("http://" + propertySystem.getProperty("server.host") + ":" + propertySystem.getProperty("server.port") +
-                    propertySystem.getProperty("server.file.list.url"));
+            httpRequest.setUrl(connectionParamSystem.getFileListUrl());
             Gdx.net.sendHttpRequest(httpRequest,
                     new Net.HttpResponseListener() {
                         @Override
@@ -431,13 +437,17 @@ public class LoginScreenRenderer extends BaseSystem {
                 new Runnable() {
                     @Override
                     public void run() {
-                        registerButton.setTouchable(Touchable.enabled);
-                        registerButton.setDisabled(false);
-                        goToLoginButton.setTouchable(Touchable.enabled);
-                        goToLoginButton.setDisabled(false);
+                        resetRegistrationButtons();
                         registerErrorLabel.setText(registerError);
                     }
                 });
+    }
+
+    private void resetRegistrationButtons() {
+        registerButton.setTouchable(Touchable.enabled);
+        registerButton.setDisabled(false);
+        goToLoginButton.setTouchable(Touchable.enabled);
+        goToLoginButton.setDisabled(false);
     }
 
     private void setLoginError(final String loginError) {
@@ -445,13 +455,17 @@ public class LoginScreenRenderer extends BaseSystem {
                 new Runnable() {
                     @Override
                     public void run() {
-                        loginButton.setTouchable(Touchable.enabled);
-                        loginButton.setDisabled(false);
-                        goToRegisterButton.setTouchable(Touchable.enabled);
-                        goToRegisterButton.setDisabled(false);
+                        resetLoginButtons();
                         loginErrorLabel.setText(loginError);
                     }
                 });
+    }
+
+    private void resetLoginButtons() {
+        loginButton.setTouchable(Touchable.enabled);
+        loginButton.setDisabled(false);
+        goToRegisterButton.setTouchable(Touchable.enabled);
+        goToRegisterButton.setDisabled(false);
     }
 
     @EventListener
