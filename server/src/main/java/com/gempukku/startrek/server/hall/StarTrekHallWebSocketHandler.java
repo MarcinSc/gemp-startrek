@@ -10,17 +10,25 @@ import com.gempukku.startrek.server.hall.event.PlayerDisconnected;
 import com.gempukku.startrek.server.hall.event.UpdateGames;
 import com.gempukku.startrek.server.websocket.OneConnectionPerUserIntoContext;
 import com.gempukku.startrek.server.websocket.PlayerListener;
+import com.gempukku.startrek.server.websocket.WebSocketChannelConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import javax.annotation.PostConstruct;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-public class StarTrekHallWebSocketHandler extends TextWebSocketHandler {
+@Component
+public class StarTrekHallWebSocketHandler extends TextWebSocketHandler implements WebSocketChannelConfig {
+    @Autowired
+    private StarTrekHallContext starTrekHallContext;
+
     private OneConnectionPerUserIntoContext oneConnectionPerUserIntoContext;
 
     private ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1,
@@ -38,8 +46,9 @@ public class StarTrekHallWebSocketHandler extends TextWebSocketHandler {
                 }
             });
 
-    public StarTrekHallWebSocketHandler(StarTrekHallContext gameHallContext) {
-        World hallEntityWorld = gameHallContext.getHallEntityWorld();
+    @PostConstruct
+    public void initialize() {
+        World hallEntityWorld = starTrekHallContext.getHallEntityWorld();
         EventSystem eventSystem = hallEntityWorld.getSystem(EventSystem.class);
         HallEntityProviderSystem hallEntityProvider = hallEntityWorld.getSystem(HallEntityProviderSystem.class);
         oneConnectionPerUserIntoContext = new OneConnectionPerUserIntoContext(
@@ -66,6 +75,11 @@ public class StarTrekHallWebSocketHandler extends TextWebSocketHandler {
                         hallEntityWorld.process();
                     }
                 }, 100, 100, TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public String getPath() {
+        return "/hall";
     }
 
     @Override
