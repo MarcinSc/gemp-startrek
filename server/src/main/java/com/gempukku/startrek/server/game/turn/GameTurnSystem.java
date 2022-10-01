@@ -36,16 +36,16 @@ public class GameTurnSystem extends BaseSystem {
     private Entity executionStackEntity;
 
     @EventListener
-    public void executeGameAction(ExecuteStackedAction action, Entity entity) {
+    public void executeGameAction(ExecuteStackedAction action, Entity gameEntity) {
         if (executionStackEntity == null) {
             executionStackEntity = LazyEntityUtil.findEntityWithComponent(world, ExecutionStackComponent.class);
         }
 
-        GameComponent game = entity.getComponent(GameComponent.class);
+        GameComponent game = gameEntity.getComponent(GameComponent.class);
         if (game != null) {
-            setupGame(entity);
+            setupGame(gameEntity);
 
-            setupTurnSequence(entity, game);
+            setupTurnSequence(game);
         }
     }
 
@@ -89,7 +89,7 @@ public class GameTurnSystem extends BaseSystem {
         dilemmaPile.getCards().shuffle();
     }
 
-    private void setupTurnSequence(Entity entity, GameComponent game) {
+    private void setupTurnSequence(GameComponent game) {
         Entity turnSequenceEntity = spawnSystem.spawnEntity("game/turnSequence.template");
         Array<String> players = game.getPlayers();
         List<String> orderedPlayers = determinePlayerOrder(players);
@@ -100,7 +100,7 @@ public class GameTurnSystem extends BaseSystem {
             turnPlayers.add(orderedPlayer);
         }
 
-        stackExecutionEntity(entity);
+        stackExecutionEntity(turnSequenceEntity);
     }
 
     private List<String> determinePlayerOrder(Array<String> players) {
@@ -114,8 +114,8 @@ public class GameTurnSystem extends BaseSystem {
     }
 
     @EventListener
-    public void executeTurnSequenceAction(ExecuteStackedAction action, Entity entity) {
-        TurnSequenceComponent turnSequence = entity.getComponent(TurnSequenceComponent.class);
+    public void executeTurnSequenceAction(ExecuteStackedAction action, Entity turnSequenceEntity) {
+        TurnSequenceComponent turnSequence = turnSequenceEntity.getComponent(TurnSequenceComponent.class);
         if (turnSequence != null) {
             Array<String> players = turnSequence.getPlayers();
             String nextPlayerTurn;
@@ -130,12 +130,14 @@ public class GameTurnSystem extends BaseSystem {
             Entity turnEntity = spawnSystem.spawnEntity("game/turn.template");
             TurnComponent turn = turnEntity.getComponent(TurnComponent.class);
             turn.setPlayer(nextPlayerTurn);
+
+            stackExecutionEntity(turnEntity);
         }
     }
 
     @EventListener
-    public void executeTurnAction(ExecuteStackedAction action, Entity entity) {
-        TurnComponent turn = entity.getComponent(TurnComponent.class);
+    public void executeTurnAction(ExecuteStackedAction action, Entity turnEntity) {
+        TurnComponent turn = turnEntity.getComponent(TurnComponent.class);
         if (turn != null) {
             TurnSegment nextTurnSegment;
 
@@ -151,10 +153,10 @@ public class GameTurnSystem extends BaseSystem {
             }
 
             if (nextTurnSegment == null) {
-                removeExecutionEntity(entity);
+                removeExecutionEntity(turnEntity);
             } else {
                 turn.setTurnSegment(nextTurnSegment);
-                eventSystem.fireEvent(EntityUpdated.instance, entity);
+                eventSystem.fireEvent(EntityUpdated.instance, turnEntity);
 
                 Entity turnSegmentEntity = spawnSystem.spawnEntity(nextTurnSegment.getEntityTemplate());
                 stackExecutionEntity(turnSegmentEntity);
