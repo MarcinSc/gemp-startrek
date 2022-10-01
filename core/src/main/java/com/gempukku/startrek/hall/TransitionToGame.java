@@ -6,6 +6,7 @@ import com.artemis.EntitySystem;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.startrek.common.GameSceneSystem;
 import com.gempukku.startrek.common.ServerStateChanged;
+import com.gempukku.startrek.game.PlayingGameScene;
 
 public class TransitionToGame extends EntitySystem {
     private GameSceneSystem gameSceneSystem;
@@ -26,7 +27,7 @@ public class TransitionToGame extends EntitySystem {
         if (playedGame != null) {
             PlayedGameComponent playedGameComponent = playedGame.getComponent(PlayedGameComponent.class);
             String gameId = playedGameComponent.getGameId();
-            //gameSceneSystem.setNextGameScene(new PlayingGameScene(gameId));
+            gameSceneSystem.setNextGameScene(new PlayingGameScene(gameId));
         }
     }
 

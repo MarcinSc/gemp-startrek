@@ -10,6 +10,7 @@ public class GameHallPlayerComponent extends Component implements OwnedComponent
     private String portrait;
     private boolean waitingForGame;
     private String chosenStarterDeck;
+    private String chosenPlayerDeck;
     private int maximumDeckCount;
 
     @Override
@@ -44,6 +45,14 @@ public class GameHallPlayerComponent extends Component implements OwnedComponent
 
     public void setChosenStarterDeck(String chosenStarterDeck) {
         this.chosenStarterDeck = chosenStarterDeck;
+    }
+
+    public String getChosenPlayerDeck() {
+        return chosenPlayerDeck;
+    }
+
+    public void setChosenPlayerDeck(String chosenPlayerDeck) {
+        this.chosenPlayerDeck = chosenPlayerDeck;
     }
 
     public int getMaximumDeckCount() {

@@ -4,30 +4,41 @@ import com.artemis.World;
 import com.artemis.WorldConfigurationBuilder;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
-import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
-import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.network.server.RemoteEntityManagerHandler;
-import com.gempukku.startrek.server.common.DummApplicationSystem;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
 import com.gempukku.startrek.server.common.ServerSpawnSystem;
-import org.springframework.stereotype.Component;
+import com.gempukku.startrek.server.game.StarTrekGameWebSocketHandler;
+import com.gempukku.startrek.server.service.DummyGdx;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-@Component
+import javax.annotation.PostConstruct;
+
+@Service
 public class StarTrekHallContext {
+    @Autowired
+    private DummyGdx dummyGdx;
+    @Autowired
+    private StarTrekGameWebSocketHandler starTrekGameWebSocketHandler;
+
     private World hallEntityWorld;
 
-    public StarTrekHallContext() {
+    @PostConstruct
+    public void buildHallEntityWorld() {
         WorldConfigurationBuilder worldConfigurationBuilder = new WorldConfigurationBuilder();
         worldConfigurationBuilder.with(
-                new DummApplicationSystem(),
+                // Base systems
                 new ServerSpawnSystem(),
                 new EventSystem(new RuntimeEntityEventDispatcher()),
-                new TransformSystem(),
-                new HierarchySystem(),
+
+                // Specific system
                 new GameHallSystem(),
+                new PairingSystem(starTrekGameWebSocketHandler),
+                new StarTrekServerDeckSystem(),
+
+                // Network systems
                 new RemoteEntityManagerHandler(),
-                new NetworkEntityConfigurationSystem(),
-                new HallEntityProviderSystem());
+                new NetworkEntityConfigurationSystem());
 
         hallEntityWorld = new World(worldConfigurationBuilder.build());
     }

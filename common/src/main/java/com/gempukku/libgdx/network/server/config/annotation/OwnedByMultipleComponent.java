@@ -1,9 +1,9 @@
 package com.gempukku.libgdx.network.server.config.annotation;
 
-import java.util.List;
+import com.badlogic.gdx.utils.Array;
 
 public interface OwnedByMultipleComponent {
-    List<String> getOwners();
+    Array<String> getOwners();
 
-    void setOwners(List<String> owners);
+    void setOwners(Array<String> owners);
 }

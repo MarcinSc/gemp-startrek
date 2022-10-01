@@ -1,5 +1,6 @@
 package com.gempukku.startrek;
 
+import com.artemis.Entity;
 import com.artemis.World;
 import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
@@ -25,6 +26,9 @@ import com.gempukku.libgdx.network.json.JsonValueServerSessionProducer;
 import com.gempukku.startrek.common.ConnectionParamSystem;
 import com.gempukku.startrek.common.FontProviderSystem;
 import com.gempukku.startrek.common.IncomingUpdatesProcessor;
+import com.gempukku.startrek.game.GameConnectionInitializer;
+import com.gempukku.startrek.game.GameConnectionLostHandling;
+import com.gempukku.startrek.game.StarTrekGameComponent;
 import com.gempukku.startrek.hall.*;
 import com.gempukku.startrek.login.LoginScreenRenderer;
 
@@ -69,6 +73,30 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
         World world = new World(worldConfigurationBuilder.build());
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
         spawnSystem.spawnEntity("hall/rendering.template");
+        return world;
+    }
+
+    @Override
+    public World visitPlayingGameScene(String gameId) {
+        createCommonSystems();
+        worldConfigurationBuilder.with(
+                new GameConnectionInitializer(),
+                new GameConnectionLostHandling(),
+                new WebsocketRemoteClientConnector<>(
+                        new JsonDataSerializer(), new JsonValueServerSessionProducer(),
+                        new JsonValueNetworkMessageMarshaller()),
+                new FontProviderSystem(),
+                new IncomingUpdatesProcessor());
+
+        World world = new World(worldConfigurationBuilder.build());
+        SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
+
+        spawnSystem.spawnEntity("game/rendering.template");
+
+        Entity gameEntity = spawnSystem.spawnEntity("game/game.template");
+        StarTrekGameComponent game = gameEntity.getComponent(StarTrekGameComponent.class);
+        game.setGameId(gameId);
+
         return world;
     }
 

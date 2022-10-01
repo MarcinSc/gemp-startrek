@@ -108,7 +108,7 @@ public class WebsocketRemoteClientConnector<T> extends BaseSystem {
         return IncomingInformationPacket.destroy(networkMessage.getEntityId());
     }
 
-    public void connectToServer(String host, int port, String address, String player, String authenticationToken) {
+    public void connectToServer(String host, int port, String address, String authenticationToken) {
         if (socket != null)
             throw new IllegalStateException();
 

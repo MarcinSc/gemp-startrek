@@ -332,26 +332,20 @@ public class HomeScreen extends Table implements HallScreen {
                                 Entity starterDeckEntity = world.getEntity(starterDeckEntities.get(i));
                                 StarterDeckComponent starterDeck = starterDeckEntity.getComponent(StarterDeckComponent.class);
                                 final String deckId = starterDeck.getDeckId();
-                                // TODO
-//                                final OverpowerDeckList deckList = starterProvider.getDeckList(deckId);
-//                                DeckBoxWidget deckDisplay = new DeckBoxWidget(textureAtlasProvider, skin);
-//                                deckDisplay.addListener(
-//                                        new ClickListener() {
-//                                            @Override
-//                                            public void clicked(InputEvent event, float x, float y) {
-//                                                deckChooser.setDeckId(deckId);
-//                                                deckChooser.setDeckName(deckList.getName());
-//                                                deckChooser.setCardImage(deckList.getCardImage());
-//                                                startGame.setTouchable(Touchable.enabled);
-//                                                startGame.setDisabled(false);
-//
-//                                                window.remove();
-//                                            }
-//                                        });
-//                                deckDisplay.setDeckId(deckId);
-//                                deckDisplay.setDeckName(deckList.getName());
-//                                deckDisplay.setCardImage(deckList.getCardImage());
-//                                horizontalGroup.addActor(deckDisplay);
+                                DeckBoxWidget deckDisplay = new DeckBoxWidget(deckBoxRenderingSystem, skin);
+                                deckDisplay.addListener(
+                                        new ClickListener() {
+                                            @Override
+                                            public void clicked(InputEvent event, float x, float y) {
+                                                deckChooser.setDeckId(deckId);
+                                                startGame.setTouchable(Touchable.enabled);
+                                                startGame.setDisabled(false);
+
+                                                window.remove();
+                                            }
+                                        });
+                                deckDisplay.setDeckId(deckId);
+                                horizontalGroup.addActor(deckDisplay);
                             }
 
                             ScrollPane scrollPane = new ScrollPane(horizontalGroup, skin);

@@ -56,6 +56,7 @@ public class StarTrekGameSceneProvider implements GameSceneProvider {
     public void processContext() {
         GameScene gameScene = gameSceneSystem.consumeNextGameScene();
         if (gameScene != null) {
+            System.out.println("Transitioning to scene: " + gameScene.getClass().getSimpleName());
             disposeCurrentWorld();
             currentScene = gameScene;
             currentSceneWorld = createCurrentSceneWorld();

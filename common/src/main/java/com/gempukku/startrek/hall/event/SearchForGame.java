@@ -6,6 +6,7 @@ import com.gempukku.libgdx.network.SendToServer;
 @SendToServer
 public class SearchForGame extends EventFromClient {
     private String starterDeckId;
+    private String playerDeckId;
 
     public SearchForGame() {
     }
@@ -20,5 +21,13 @@ public class SearchForGame extends EventFromClient {
 
     public String getStarterDeckId() {
         return starterDeckId;
+    }
+
+    public void setPlayerDeckId(String playerDeckId) {
+        this.playerDeckId = playerDeckId;
+    }
+
+    public String getPlayerDeckId() {
+        return playerDeckId;
     }
 }

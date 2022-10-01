@@ -1,0 +1,36 @@
+
+holodeck-commander.png
+size: 512, 512
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+bobcaygr
+  rotate: false
+  xy: 1, 420
+  size: 506, 28
+  orig: 506, 28
+  offset: 0, 0
+  index: -1
+DROID___
+  rotate: false
+  xy: 1, 383
+  size: 506, 35
+  orig: 506, 35
+  offset: 0, 0
+  index: -1
+Star Trek Enterprise Future
+  rotate: false
+  xy: 1, 450
+  size: 506, 55
+  orig: 506, 55
+  offset: 0, 0
+  index: -1
+rounded-rectangle
+  rotate: false
+  xy: 1, 331
+  size: 100, 50
+  split: 23, 25, 0, 0
+  pad: 13, 15, 0, 0
+  orig: 100, 50
+  offset: 0, 0
+  index: -1

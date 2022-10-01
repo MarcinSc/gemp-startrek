@@ -22,6 +22,10 @@ public class ConnectionParamSystem extends BaseSystem {
         return propertySystem.getProperty("server.hall.url");
     }
 
+    public String getGameUrl(String gameId) {
+        return propertySystem.getProperty("server.game.url") + gameId;
+    }
+
     @Override
     protected void processSystem() {
 

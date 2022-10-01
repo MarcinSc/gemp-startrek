@@ -1,0 +1,54 @@
+{
+  "type": "personnel",
+  "affiliation": "federation",
+  "cost": "2",
+  "title": "Benjamin Sisko",
+  "subtitle": "Command Staffer",
+  "species": "human",
+  "skills": [
+    "Engineer",
+    "Leadership",
+    "Officer",
+    "Security"
+  ],
+  "icons": [
+    "command",
+    "Deep Space Nine"
+  ],
+  "integrity": 6,
+  "cunning": 6,
+  "strength": 6,
+  "abilities": [
+    {
+      "text": "You may play this personnel aboard your [The Original Series] ship.",
+      "type": "playModifier",
+      "effect": [
+        {
+          "type": "select",
+          "min": 0,
+          "max": 1,
+          "prompt": "Choose ship to play on",
+          "filter": "your,type(ship),icon(The Original Series)",
+          "memorize": "selectedShip"
+        },
+        {
+          "type": "changePlayLocation",
+          "value": "memory(selectedShip)"
+        }
+      ]
+    },
+    {
+      "text": "When an opponent plays an interrupt, if this personnel is present with three [past] personnel, you may return this personnel to his owner's hand to prevent that interrupt and place it in its owner's discard pile.",
+      "type": "trigger",
+      "condition": "playerPlays(opponent,interrupt),presentWith(3,type(personnel),icon(past))",
+      "cost": {
+        "type": "returnToHand",
+        "filter": "self"
+      },
+      "effect": {
+        "type": "preventInterrupt"
+      }
+    }
+  ],
+  "lore": "If my people had caused any changes in the timeline, we would've been the first to notice when we got back."
+}

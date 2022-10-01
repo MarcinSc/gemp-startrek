@@ -19,8 +19,8 @@ public class GameHallConnectionInitializer extends BaseSystem {
     protected void processSystem() {
         if (!initialized) {
             try {
-                remoteClientConnector.connectToServer(connectionParamSystem.getServerHost(), connectionParamSystem.getServerPort(), connectionParamSystem.getHallUrl(),
-                        authenticationHolderSystem.getUsername(), authenticationHolderSystem.getAuthenticationToken());
+                remoteClientConnector.connectToServer(connectionParamSystem.getServerHost(), connectionParamSystem.getServerPort(),
+                        connectionParamSystem.getHallUrl(), authenticationHolderSystem.getAuthenticationToken());
                 initialized = true;
             } catch (Exception exp) {
                 gameSceneManager.setNextGameScene(new LoginGameScene());

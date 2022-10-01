@@ -13,6 +13,12 @@ import com.gempukku.startrek.game.turn.TurnSegment;
 import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.game.ExecuteStackedAction;
 import com.gempukku.startrek.server.game.ExecutionStackComponent;
+import com.gempukku.startrek.server.game.GamePlayerComponent;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class GameTurnSystem extends BaseSystem {
     private ServerSpawnSystem serverSpawnSystem;
@@ -24,13 +30,47 @@ public class GameTurnSystem extends BaseSystem {
     public void executeGameAction(ExecuteStackedAction action, Entity entity) {
         GameComponent game = entity.getComponent(GameComponent.class);
         if (game != null) {
-            Entity turnSequenceEntity = serverSpawnSystem.spawnEntity("game/turnSequence.template");
-            Array<String> players = game.getPlayers();
-            TurnSequenceComponent turnSequence = turnSequenceEntity.getComponent(TurnSequenceComponent.class);
-            turnSequence.getPlayers().addAll(players);
+            setupGame(entity);
 
-            stackExecutionEntity(entity);
+            setupTurnSequence(entity, game);
         }
+    }
+
+    private void setupGame(Entity entity) {
+        LazyEntityUtil.forEachEntityWithComponent(world, GamePlayerComponent.class,
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity entity) {
+                        GamePlayerComponent gamePlayer = entity.getComponent(GamePlayerComponent.class);
+                        for (String card : gamePlayer.getCards()) {
+
+                        }
+                    }
+                });
+    }
+
+    private void setupTurnSequence(Entity entity, GameComponent game) {
+        Entity turnSequenceEntity = serverSpawnSystem.spawnEntity("game/turnSequence.template");
+        Array<String> players = game.getPlayers();
+        List<String> orderedPlayers = determinePlayerOrder(players);
+
+        TurnSequenceComponent turnSequence = turnSequenceEntity.getComponent(TurnSequenceComponent.class);
+        Array<String> turnPlayers = turnSequence.getPlayers();
+        for (String orderedPlayer : orderedPlayers) {
+            turnPlayers.add(orderedPlayer);
+        }
+
+        stackExecutionEntity(entity);
+    }
+
+    private List<String> determinePlayerOrder(Array<String> players) {
+        List<String> orderedPlayers = new ArrayList<>();
+        for (String player : players) {
+            orderedPlayers.add(player);
+        }
+
+        Collections.shuffle(orderedPlayers);
+        return orderedPlayers;
     }
 
     @EventListener

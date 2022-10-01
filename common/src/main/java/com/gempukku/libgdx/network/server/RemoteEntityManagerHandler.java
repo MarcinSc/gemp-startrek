@@ -35,7 +35,9 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
                 new EntitySubscription.SubscriptionListener() {
                     @Override
                     public void inserted(IntBag entities) {
-
+                        for (int i = 0, s = entities.size(); s > i; i++) {
+                            entityCreated(entities.get(i));
+                        }
                     }
 
                     @Override
@@ -95,6 +97,10 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
                 return true;
         }
         return false;
+    }
+
+    private void entityCreated(int entityId) {
+        entityUpdated(null, world.getEntity(entityId));
     }
 
     private void entityRemoved(int entityId) {

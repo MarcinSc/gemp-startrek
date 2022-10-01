@@ -1,0 +1,7 @@
+{
+  "entities": [
+    {
+      "tpl:extends": "hall/starter/tosBeginner.template"
+    }
+  ]
+}

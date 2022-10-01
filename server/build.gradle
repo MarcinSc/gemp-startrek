@@ -18,6 +18,7 @@ dependencies {
 //    implementation "mysql:mysql-connector-java"
     implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-template:$gdxGempLibVersion"
     implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-template-artemis:$gdxGempLibVersion"
+    implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 
     implementation project(':common')
 

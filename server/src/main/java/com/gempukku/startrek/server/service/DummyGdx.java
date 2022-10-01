@@ -1,17 +1,15 @@
-package com.gempukku.startrek.server.common;
+package com.gempukku.startrek.server.service;
 
-import com.artemis.BaseSystem;
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.backends.headless.HeadlessFiles;
 import com.badlogic.gdx.utils.Clipboard;
+import org.springframework.stereotype.Service;
 
-public class DummApplicationSystem extends BaseSystem {
-    @Override
-    protected void processSystem() {
+@Service
+public class DummyGdx {
+    public DummyGdx() {
+        Gdx.files = new HeadlessFiles();
 
-    }
-
-    @Override
-    protected void initialize() {
         Gdx.app = new Application() {
             @Override
             public ApplicationListener getApplicationListener() {
@@ -143,7 +141,5 @@ public class DummApplicationSystem extends BaseSystem {
 
             }
         };
-
-
     }
 }

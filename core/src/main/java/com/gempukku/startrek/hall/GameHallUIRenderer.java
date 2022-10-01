@@ -78,7 +78,9 @@ public class GameHallUIRenderer extends BaseSystem {
     @Override
     protected void dispose() {
         pixelTexture.dispose();
-        homeScreen.dispose();
+        if (initialized) {
+            homeScreen.dispose();
+        }
     }
 
     @EventListener

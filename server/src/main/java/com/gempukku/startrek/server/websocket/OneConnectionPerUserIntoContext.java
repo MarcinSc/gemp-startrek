@@ -104,7 +104,7 @@ public class OneConnectionPerUserIntoContext implements NetworkEntitySerializati
                         try {
                             JsonValue messageJson = jsonReader.parse(message.getPayload());
                             if (messageJson.getString("type").equals(NetworkMessage.Type.EVENT.name())) {
-                                EventFromClient entityEvent = (EventFromClient) dataSerializer.deserializeEntityEvent(messageJson);
+                                EventFromClient entityEvent = (EventFromClient) dataSerializer.deserializeEntityEvent(messageJson.get("data"));
                                 if (entityEvent.getClass().getAnnotation(SendToServer.class) != null) {
                                     SerializingClientConnection<JsonValue> websocketClientConnection = clientConnections.get(session);
                                     if (websocketClientConnection != null) {
@@ -139,5 +139,11 @@ public class OneConnectionPerUserIntoContext implements NetworkEntitySerializati
                         }
                     }
                 });
+    }
+
+    public void closeAllConnections() {
+        for (WebSocketSession session : userSessions.values()) {
+            connectionClosed(session);
+        }
     }
 }

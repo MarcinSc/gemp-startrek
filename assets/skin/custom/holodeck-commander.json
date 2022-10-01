@@ -1,0 +1,107 @@
+{
+  "com.badlogic.gdx.graphics.g2d.BitmapFont": {
+    "menu": {
+      "file": "Star Trek Enterprise Future.fnt"
+    },
+    "normal": {
+      "file": "bobcaygr.fnt"
+    },
+    "very-skinny": {
+      "file": "DROID___.fnt"
+    }
+  },
+  "com.badlogic.gdx.graphics.Color": {
+    "black": {
+      "r": 0,
+      "g": 0,
+      "b": 0,
+      "a": 1
+    },
+    "dark-blue": {
+      "r": 0.12898552,
+      "g": 0.089666665,
+      "b": 0.89666665,
+      "a": 1
+    },
+    "gray": {
+      "r": 0.50666666,
+      "g": 0.50666666,
+      "b": 0.50666666,
+      "a": 1
+    },
+    "light-blue": {
+      "r": 0.44200003,
+      "g": 0.633692,
+      "b": 0.85,
+      "a": 1
+    },
+    "orange": {
+      "r": 1,
+      "g": 0.71888375,
+      "b": 0.12666667,
+      "a": 1
+    },
+    "red": {
+      "r": 0.79666674,
+      "g": 0,
+      "b": 0,
+      "a": 1
+    },
+    "white": {
+      "r": 1,
+      "g": 1,
+      "b": 1,
+      "a": 1
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable": {
+    "button-default": {
+      "name": "rounded-rectangle",
+      "color": "orange"
+    },
+    "textfield-default": {
+      "name": "rounded-rectangle",
+      "color": "dark-blue"
+    },
+    "button-other": {
+      "name": "rounded-rectangle",
+      "color": "light-blue"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "default": {
+      "font": "normal",
+      "fontColor": "white"
+    },
+    "menu-error": {
+      "font": "normal",
+      "fontColor": "red"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
+    "button-default": {
+      "font": "normal",
+      "fontColor": "black",
+      "disabledFontColor": "gray",
+      "up": "button-default"
+    },
+    "button-other": {
+      "font": "normal",
+      "fontColor": "black",
+      "disabledFontColor": "gray",
+      "up": "button-other"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
+    "default": {
+      "font": "normal",
+      "fontColor": "white",
+      "background": "textfield-default"
+    }
+  },
+  "com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle": {
+    "default": {
+      "label": "default"
+    }
+  }
+}

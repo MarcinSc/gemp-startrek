@@ -50,19 +50,19 @@ public class StarTrekHallWebSocketHandler extends TextWebSocketHandler implement
     public void initialize() {
         World hallEntityWorld = starTrekHallContext.getHallEntityWorld();
         EventSystem eventSystem = hallEntityWorld.getSystem(EventSystem.class);
-        HallEntityProviderSystem hallEntityProvider = hallEntityWorld.getSystem(HallEntityProviderSystem.class);
+        GameHallSystem gameHall = hallEntityWorld.getSystem(GameHallSystem.class);
         oneConnectionPerUserIntoContext = new OneConnectionPerUserIntoContext(
                 executor, hallEntityWorld.getSystem(RemoteEntityManagerHandler.class),
                 new JsonDataSerializer(),
                 new PlayerListener() {
                     @Override
                     public void playerEntered(String username) {
-                        eventSystem.fireEvent(new PlayerConnected(username), hallEntityProvider.getGameHallEntity());
+                        eventSystem.fireEvent(new PlayerConnected(username), gameHall.getGameHallEntity());
                     }
 
                     @Override
                     public void playerLeft(String username) {
-                        eventSystem.fireEvent(new PlayerDisconnected(username), hallEntityProvider.getGameHallEntity());
+                        eventSystem.fireEvent(new PlayerDisconnected(username), gameHall.getGameHallEntity());
                     }
                 });
         oneConnectionPerUserIntoContext.addNetworkEntitySerializationConfig(
@@ -71,8 +71,12 @@ public class StarTrekHallWebSocketHandler extends TextWebSocketHandler implement
                 new Runnable() {
                     @Override
                     public void run() {
-                        eventSystem.fireEvent(new UpdateGames(), hallEntityProvider.getGameHallEntity());
-                        hallEntityWorld.process();
+                        try {
+                            eventSystem.fireEvent(new UpdateGames(), gameHall.getGameHallEntity());
+                            hallEntityWorld.process();
+                        } catch (Exception exp) {
+                            exp.printStackTrace();
+                        }
                     }
                 }, 100, 100, TimeUnit.MILLISECONDS);
     }
