@@ -1,0 +1,33 @@
+{
+  "type": "Dilemma",
+  "dilemmaType": "Dual",
+  "cost": 2,
+  "title": "Dark Page",
+  "abilities": [
+    {
+      "text": "Choose a personnel who has Anthropology or Exobiology to be stopped. If you cannot, randomly select a personnel to be killed.",
+      "type": "dilemmaEffect",
+      "effect": [
+        {
+          "type": "select",
+          "prompt": "Choose personnel to be stopped",
+          "filter": "onMission(self),personnel,skill(or(Anthropology,Exobiology))",
+          "memorize": "personnelToBeStopped"
+        },
+        {
+          "type": "condition",
+          "condition": "countAtLeast(memory(personnelToBeStopped),1)",
+          "trueEffect": {
+            "type": "stop",
+            "filter": "memory(personnelToBeStopped)"
+          },
+          "falseEffect": {
+            "type": "kill",
+            "filter": "random(onMission(self))"
+          }
+        }
+      ]
+    }
+  ],
+  "lore": "\"Oh, Kestra. My precious one. I'm so sorry.\""
+}

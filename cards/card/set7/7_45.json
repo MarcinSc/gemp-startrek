@@ -1,0 +1,27 @@
+{
+  "type": "Mission",
+  "missionType": "Space",
+  "unique": true,
+  "title": "Advanced Battle Simulation",
+  "quadrant": "A",
+  "span": 3,
+  "points": 35,
+  "requirements": [
+    "2 Leadership",
+    "Cunning>33",
+    "(Engineer and Programming or Navigation and Security"
+  ],
+  "affiliations": [
+    "not(Borg)"
+  ],
+  "affiliationsText": "Any affiliation (except [Borg]) may attempt this mission.",
+  "abilities": [
+    {
+      "text": "When you play a Manuever event, if you have completed this mission, that event's cost is -1.",
+      "type": "modifyCost",
+      "condition": "playerPlays(controller,type(Manuever)),completedMission(self)",
+      "amount": -1
+    }
+  ],
+  "lore": "Braslota: \"Let us hope your distaste for the exercise will not affect your strategic abilities.\""
+}

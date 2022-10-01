@@ -6,6 +6,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
@@ -86,7 +87,12 @@ public class PairingSystem extends BaseEntitySystem {
         GameHallPlayerComponent player2 = playerComponentMapper.get(player2Entity);
 
         Array<String> players = new Array<>(new String[]{player1.getOwner(), player2.getOwner()});
-        String gameId = gameHandler.createGame(players);
+        ObjectMap<String, StarTrekDeck> playerDecks = new ObjectMap<>();
+        playerDecks.put(player1.getOwner(), findDeck(player1.getOwner(),
+                player1.getChosenStarterDeck(), player1.getChosenPlayerDeck()));
+        playerDecks.put(player2.getOwner(), findDeck(player2.getOwner(),
+                player2.getChosenStarterDeck(), player2.getChosenPlayerDeck()));
+        String gameId = gameHandler.createGame(playerDecks);
 
         Entity hallGame = spawnSystem.spawnEntity("hall/hallGame.template");
         PlayedGameComponent game = hallGame.getComponent(PlayedGameComponent.class);

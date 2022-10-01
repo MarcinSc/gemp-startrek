@@ -1,11 +1,15 @@
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets.main.resources.srcDirs += [ rootProject.file('cards').path ]
 eclipse.project.name = appName + '-common'
 
 dependencies {
     api "net.onedaybeard.artemis:artemis-odb:$artemisOdbVersion"
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
     api "com.googlecode.json-simple:json-simple:1.1.1"
     api "com.google.guava:guava:21.0"
+    api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-template:$gdxGempLibVersion"
     api "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"
     api "com.github.czyzby:gdx-websocket:$websocketLibVersion.$gdxWebsocketVersion"
     api "com.neovisionaries:nv-websocket-client:1.31"

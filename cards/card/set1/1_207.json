@@ -1,9 +1,9 @@
 {
-  "type": "personnel",
-  "affiliation": "bajoran",
+  "type": "Personnel",
+  "affiliation": "Bajoran",
   "cost": "1",
   "title": "Anara",
-  "species": "bajoran",
+  "species": "Bajoran",
   "skills": [
     "Engineer",
     "Physics",

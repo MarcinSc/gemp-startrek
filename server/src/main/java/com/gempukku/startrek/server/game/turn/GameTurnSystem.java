@@ -7,6 +7,8 @@ import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.LazyEntityUtil;
+import com.gempukku.startrek.card.CardDefinition;
+import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.game.GameComponent;
 import com.gempukku.startrek.game.turn.TurnComponent;
 import com.gempukku.startrek.game.turn.TurnSegment;
@@ -14,6 +16,12 @@ import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.game.ExecuteStackedAction;
 import com.gempukku.startrek.server.game.ExecutionStackComponent;
 import com.gempukku.startrek.server.game.GamePlayerComponent;
+import com.gempukku.startrek.server.game.card.CardComponent;
+import com.gempukku.startrek.server.game.card.CardLookupSystem;
+import com.gempukku.startrek.server.game.card.CardZone;
+import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
+import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
+import com.gempukku.startrek.server.game.deck.PlayerDilemmaPileComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,13 +29,18 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class GameTurnSystem extends BaseSystem {
-    private ServerSpawnSystem serverSpawnSystem;
+    private ServerSpawnSystem spawnSystem;
     private EventSystem eventSystem;
+    private CardLookupSystem cardLookupSystem;
 
     private Entity executionStackEntity;
 
     @EventListener
     public void executeGameAction(ExecuteStackedAction action, Entity entity) {
+        if (executionStackEntity == null) {
+            executionStackEntity = LazyEntityUtil.findEntityWithComponent(world, ExecutionStackComponent.class);
+        }
+
         GameComponent game = entity.getComponent(GameComponent.class);
         if (game != null) {
             setupGame(entity);
@@ -41,16 +54,43 @@ public class GameTurnSystem extends BaseSystem {
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
-                        GamePlayerComponent gamePlayer = entity.getComponent(GamePlayerComponent.class);
-                        for (String card : gamePlayer.getCards()) {
-
-                        }
+                        spawnPlayerCards(entity);
                     }
                 });
     }
 
+    private void spawnPlayerCards(Entity playerEntity) {
+        GamePlayerComponent gamePlayer = playerEntity.getComponent(GamePlayerComponent.class);
+        PlayerDecklistComponent decklist = playerEntity.getComponent(PlayerDecklistComponent.class);
+        PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);
+        PlayerDilemmaPileComponent dilemmaPile = playerEntity.getComponent(PlayerDilemmaPileComponent.class);
+        for (String cardId : decklist.getCards()) {
+            CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
+            if (cardDefinition == null)
+                throw new RuntimeException("Unable to locate card with id: " + cardId);
+
+            Entity cardEntity = spawnSystem.spawnEntity("game/card.template");
+            CardComponent card = cardEntity.getComponent(CardComponent.class);
+            card.setOwner(gamePlayer.getName());
+            card.setCardId(cardId);
+            CardType cardType = cardDefinition.getType();
+            if (cardType == CardType.Dilemma) {
+                card.setCardZone(CardZone.DILLEMMA_PILE);
+                dilemmaPile.getCards().add(cardEntity.getId());
+            } else if (cardType == CardType.Mission) {
+                card.setCardZone(CardZone.MISSIONS);
+            } else {
+                card.setCardZone(CardZone.DECK);
+                deck.getCards().add(cardEntity.getId());
+            }
+        }
+
+        deck.getCards().shuffle();
+        dilemmaPile.getCards().shuffle();
+    }
+
     private void setupTurnSequence(Entity entity, GameComponent game) {
-        Entity turnSequenceEntity = serverSpawnSystem.spawnEntity("game/turnSequence.template");
+        Entity turnSequenceEntity = spawnSystem.spawnEntity("game/turnSequence.template");
         Array<String> players = game.getPlayers();
         List<String> orderedPlayers = determinePlayerOrder(players);
 
@@ -87,7 +127,7 @@ public class GameTurnSystem extends BaseSystem {
                 int nextPlayerIndex = (players.indexOf(lastPlayerTurn, false) + 1) % players.size;
                 nextPlayerTurn = players.get(nextPlayerIndex);
             }
-            Entity turnEntity = serverSpawnSystem.spawnEntity("game/turn.template");
+            Entity turnEntity = spawnSystem.spawnEntity("game/turn.template");
             TurnComponent turn = turnEntity.getComponent(TurnComponent.class);
             turn.setPlayer(nextPlayerTurn);
         }
@@ -116,7 +156,7 @@ public class GameTurnSystem extends BaseSystem {
                 turn.setTurnSegment(nextTurnSegment);
                 eventSystem.fireEvent(EntityUpdated.instance, entity);
 
-                Entity turnSegmentEntity = serverSpawnSystem.spawnEntity(nextTurnSegment.getEntityTemplate());
+                Entity turnSegmentEntity = spawnSystem.spawnEntity(nextTurnSegment.getEntityTemplate());
                 stackExecutionEntity(turnSegmentEntity);
             }
         }
@@ -132,13 +172,6 @@ public class GameTurnSystem extends BaseSystem {
         Array<Integer> entityIds = executionStackEntity.getComponent(ExecutionStackComponent.class).getEntityIds();
         entityIds.removeIndex(entityIds.size - 1);
         world.deleteEntity(entity);
-    }
-
-    private Entity getExecutionStackEntity() {
-        if (executionStackEntity == null) {
-            executionStackEntity = LazyEntityUtil.findEntityWithComponent(world, ExecutionStackComponent.class);
-        }
-        return executionStackEntity;
     }
 
     @Override

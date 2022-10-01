@@ -1,0 +1,13 @@
+{
+  "cards": {
+    "12_40": {
+      "tpl:extends": "card/set12/12_40.json"
+    },
+    "12_42": {
+      "tpl:extends": "card/set12/12_42.json"
+    },
+    "12_58": {
+      "tpl:extends": "card/set12/12_58.json"
+    }
+  }
+}

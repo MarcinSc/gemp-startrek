@@ -1,0 +1,31 @@
+{
+  "type": "Mission",
+  "missionType": "Planet",
+  "unique": true,
+  "title": "Organia",
+  "subtitle": "Secure Strategic Base",
+  "quadrant": "A",
+  "span": 2,
+  "points": 30,
+  "requirements": [
+    "Anthropology",
+    "2 Leadership",
+    "Security",
+    "(Cunning>32 or Strength>32)"
+  ],
+  "affiliations": [
+    "Federation",
+    "Klingon",
+    "Starfleet"
+  ],
+  "abilities": [
+    {
+      "text": "Each of your [past] personnel at this mission is attributes +1.",
+      "type": "effectInPlay",
+      "effectType": "attributes",
+      "filter": "controlled,icon(past),personnel,atMission(self)",
+      "amount": 1
+    }
+  ],
+  "lore": "\"... the only Class-M planet in the disputed area, ideally located for use by either side. ... Inhabited by humanoids, a very peaceful, friendly people living on a primitive level. Little of intrinsic value.\""
+}

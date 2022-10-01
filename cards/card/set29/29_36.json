@@ -1,0 +1,43 @@
+{
+  "type": "Mission",
+  "missionType": "Planet",
+  "unique": true,
+  "title": "Rigel X",
+  "subtitle": "Locate Mysterious Contact",
+  "quadrant": "A",
+  "span": 2,
+  "points": 35,
+  "requirements": [
+    "Anthropology",
+    "Diplomacy",
+    "Leadership",
+    "Security",
+    "Cunning>34"
+  ],
+  "keywords": [
+    "Region: Sector 001"
+  ],
+  "affiliations": [
+    "not(Borg)"
+  ],
+  "affiliationsText": "Any affiliation (except [Borg]) may attempt this mission.",
+  "abilities": [
+    {
+      "text": "When six or more personnel begin a mission attempt here, you may draw two cards. If you do, your opponent may draw one extra dilemma and spend one extra in total cost on dilemmas.",
+      "type": "trigger",
+      "optional": "true",
+      "condition": "beginMission,onMission(personnel,atLeast(6))",
+      "effect": [
+        {
+          "type": "drawCards",
+          "count": 2
+        },
+        {
+          "type": "modifyDilemmaNumber",
+          "amount": 1
+        }
+      ]
+    }
+  ],
+  "lore": "\"...the last place he stopped before crashing on your planet.\""
+}

@@ -1,0 +1,7 @@
+{
+  "cards": {
+    "1_207": {
+      "tpl:extends": "card/set1/1_207.json"
+    }
+  }
+}

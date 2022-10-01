@@ -1,0 +1,40 @@
+{
+  "type": "Mission",
+  "missionType": "Space",
+  "unique": true,
+  "title": "Starbase 718",
+  "subtitle": "Investigate Cryosatellite",
+  "quadrant": "A",
+  "span": 3,
+  "points": 30,
+  "requirements": [
+    "Engineer",
+    "(Leadership, Security, Strength>32 or Medical, Science, and Cunning>32)"
+  ],
+  "affiliations": [
+    "not(Borg)"
+  ],
+  "affiliationsText": "Any affiliation (except [Borg]) may attempt this mission.",
+  "abilities": [
+    {
+      "text": "When your personnel complete this mission, you may place any number of unique personnel with a total cost of 6 or less from your discard pile at your headquarters mission where they could be played.",
+      "type": "trigger",
+      "optional": "true",
+      "condition": "playerCompletesMission(controller,self)",
+      "effect": [
+        {
+          "type": "selectFromDiscard",
+          "prompt": "Choose which personnel to place at your headquarters",
+          "filter": "unique,type(personnel),canBePlayedAt(mission(headquarters))",
+          "maxTotalCost": 6,
+          "memorize": "selectedPersonnel"
+        },
+        {
+          "type": "place",
+          "filter": "memory(selectedPersonnel)"
+        }
+      ]
+    }
+  ],
+  "lore": "\"...each of them had been frozen after they died.\""
+}

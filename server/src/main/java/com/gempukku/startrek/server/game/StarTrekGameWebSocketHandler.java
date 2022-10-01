@@ -1,7 +1,14 @@
 package com.gempukku.startrek.server.game;
 
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.network.JsonDataSerializer;
+import com.gempukku.libgdx.network.server.RemoteEntityManagerHandler;
+import com.gempukku.libgdx.network.server.config.annotation.SerializeToClientsConfig;
+import com.gempukku.startrek.hall.StarTrekDeck;
+import com.gempukku.startrek.server.service.CardDataService;
+import com.gempukku.startrek.server.websocket.OneConnectionPerUserIntoContext;
 import com.gempukku.startrek.server.websocket.WebSocketChannelConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -19,7 +26,11 @@ import java.util.concurrent.ThreadFactory;
 
 @Component
 public class StarTrekGameWebSocketHandler extends TextWebSocketHandler implements WebSocketChannelConfig {
-    private final Map<String, StarTrekGameHolder> games = new HashMap<>();
+    @Autowired
+    private CardDataService cardDataService;
+
+    private final ObjectMap<String, StarTrekGameHolder> games = new ObjectMap<>();
+    private final ObjectMap<String, OneConnectionPerUserIntoContext> gameContexts = new ObjectMap<>();
 
     private ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1,
             new ThreadFactory() {
@@ -41,46 +52,74 @@ public class StarTrekGameWebSocketHandler extends TextWebSocketHandler implement
         return "/game";
     }
 
-    public String createGame(Array<String> players) {
+    public String createGame(ObjectMap<String, StarTrekDeck> playerDecks) {
         String gameId = UUID.randomUUID().toString();
-        games.put(gameId, new StarTrekGameHolder(executor));
+
+        StarTrekGameHolder gameHolder = new StarTrekGameHolder(cardDataService.getCardData());
+
+        OneConnectionPerUserIntoContext gameContext = new OneConnectionPerUserIntoContext(
+                executor, gameHolder.getGameWorld().getSystem(RemoteEntityManagerHandler.class),
+                new JsonDataSerializer());
+
+        gameContext.addNetworkEntitySerializationConfig(
+                new SerializeToClientsConfig());
+
+        for (ObjectMap.Entry<String, StarTrekDeck> playerDeck : playerDecks) {
+            gameHolder.addPlayer(playerDeck.key, playerDeck.value);
+        }
+        gameHolder.processGame();
+        games.put(gameId, gameHolder);
+        gameContexts.put(gameId, gameContext);
         return gameId;
+    }
+
+    public void removeGame(String gameId) {
+        gameContexts.remove(gameId).closeAllConnections();
+        games.remove(gameId).dispose();
     }
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         String gameId = getGameId(session);
-        StarTrekGameHolder starTrekGameHolder = games.get(gameId);
-        if (starTrekGameHolder == null) {
+        OneConnectionPerUserIntoContext gameContext = gameContexts.get(gameId);
+        if (gameContext == null) {
             session.close();
         } else {
-            starTrekGameHolder.connectUser(session);
+            gameContext.connectionEstablished(session);
         }
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         String gameId = getGameId(session);
-        StarTrekGameHolder starTrekGameHolder = games.get(gameId);
-        if (starTrekGameHolder == null) {
+        OneConnectionPerUserIntoContext gameContext = gameContexts.get(gameId);
+        StarTrekGameHolder game = games.get(gameId);
+        if (gameContext == null || game == null) {
             try {
                 session.close();
             } catch (IOException e) {
                 // Ignore
             }
         } else {
-            starTrekGameHolder.messageReceived(session, message);
+            gameContext.messageReceived(session, message);
+            executor.execute(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            game.processGame();
+                        }
+                    });
         }
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         String gameId = getGameId(session);
-        StarTrekGameHolder starTrekGameHolder = games.get(gameId);
-        if (starTrekGameHolder == null) {
+        OneConnectionPerUserIntoContext gameContext = gameContexts.get(gameId);
+        if (gameContext == null) {
             session.close();
         } else {
-            starTrekGameHolder.sessionClosed(session);
+            gameContext.connectionClosed(session);
         }
     }
 

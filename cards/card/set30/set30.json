@@ -1,0 +1,7 @@
+{
+  "cards": {
+    "30_32": {
+      "tpl:extends": "card/set30/30_32.json"
+    }
+  }
+}

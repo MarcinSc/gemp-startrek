@@ -1,0 +1,37 @@
+{
+  "type": "Mission",
+  "missionType": "Headquarters",
+  "unique": true,
+  "title": "Earth",
+  "subtitle": "Lush and Beautiful Home",
+  "quadrant": "A",
+  "span": 4,
+  "points": 0,
+  "requirements": [],
+  "keywords": [
+    "Region: Sector 001"
+  ],
+  "affiliationsText": "Federation Headquarters",
+  "abilities": [
+    {
+      "text": "When you play a [The Original Series] card here, you may spend a counter to draw two cards. You may do this only once each turn.",
+      "type": "trigger",
+      "optional": "true",
+      "condition": "playerPlays(controller,icon(The Original Series)),notUsed",
+      "cost": {
+        "type": "spendCounters",
+        "count": 1
+      },
+      "effect": [
+        {
+          "type": "drawCards",
+          "count": 2
+        },
+        {
+          "type": "markUsed"
+        }
+      ]
+    }
+  ],
+  "lore": "Earth: \"... the green fields and blue skies...\""
+}
