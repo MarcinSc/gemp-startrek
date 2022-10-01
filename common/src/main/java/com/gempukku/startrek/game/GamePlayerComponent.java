@@ -1,7 +1,9 @@
-package com.gempukku.startrek.server.game;
+package com.gempukku.startrek.game;
 
 import com.artemis.Component;
+import com.gempukku.libgdx.network.server.config.annotation.ReplicateToClients;
 
+@ReplicateToClients
 public class GamePlayerComponent extends Component {
     private String name;
 

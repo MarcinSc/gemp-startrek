@@ -6,8 +6,6 @@ import com.badlogic.gdx.assets.loaders.FileHandleResolver;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.artemis.template.ArtemisGameStateSerializer;
-import com.gempukku.libgdx.artemis.template.ArtemisTemplateEntityLoader;
 import com.gempukku.libgdx.template.JsonTemplateLoader;
 
 public class ServerSpawnSystem extends BaseSystem {
@@ -16,14 +14,18 @@ public class ServerSpawnSystem extends BaseSystem {
 
     public void spawnEntities(String internalFilePath) {
         if (internalFilePath.endsWith(".entities")) {
-            ArtemisGameStateSerializer.loadIntoEngine(world, internalFilePath, fileHandleResolver);
+            JsonValue value = loadJson(internalFilePath);
+            JsonValue entities = value.get("entities");
+            for (JsonValue jsonEntity : entities) {
+                JsonAwareEntityLoader.loadArtemisTemplateToWorld(world, jsonEntity);
+            }
         }
     }
 
     public Entity spawnEntity(String internalFilePath) {
         System.out.println("Spawning entity: " + internalFilePath);
         if (internalFilePath.endsWith(".template")) {
-            return ArtemisTemplateEntityLoader.loadArtemisTemplateToWorld(world, loadJson(internalFilePath));
+            return JsonAwareEntityLoader.loadArtemisTemplateToWorld(world, loadJson(internalFilePath));
         }
         return null;
     }

@@ -1,3 +1,33 @@
 {
-  ""
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "stackAction",
+    "data": {
+      "action": [
+        {
+          "type": "setPlayerCounters",
+          "player": "currentPlayer",
+          "amount": 7
+        },
+        {
+          "type": "stackUntil",
+          "condition": "memoryHas(playerFinished,true),or(counterCount(currentPlayer,0),playerDeckCount(currentPlayer,0))",
+          "action": {
+            "type": "stackAction",
+            "action": [
+              {
+                "type": "sendDecisionToPlayer",
+                "player": "currentPlayer",
+                "data": {
+                  "type": "playOrDrawDecision"
+                }
+              },
+              {
+                "type": "playoutPlayOrDrawDecision"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
 }
