@@ -1,0 +1,6 @@
+{
+  "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystemComponent": {
+    "name": "ditherTexture",
+    "renderTag": "TextureDither"
+  }
+}

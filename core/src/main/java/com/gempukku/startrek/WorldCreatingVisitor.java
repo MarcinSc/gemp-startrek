@@ -17,6 +17,7 @@ import com.gempukku.libgdx.lib.artemis.texture.RuntimeTextureHandler;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
+import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.lib.graph.artemis.time.TimeKeepingSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
 import com.gempukku.libgdx.network.JsonDataSerializer;
@@ -86,6 +87,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                         new JsonDataSerializer(), new JsonValueServerSessionProducer(),
                         new JsonValueNetworkMessageMarshaller()),
                 new FontProviderSystem(),
+                new SpriteSystem(),
                 new IncomingUpdatesProcessor());
 
         World world = new World(worldConfigurationBuilder.build());
@@ -96,6 +98,8 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
         Entity gameEntity = spawnSystem.spawnEntity("game/game.template");
         StarTrekGameComponent game = gameEntity.getComponent(StarTrekGameComponent.class);
         game.setGameId(gameId);
+
+        spawnSystem.spawnEntity("game/textureDither.template");
 
         return world;
     }
