@@ -106,7 +106,7 @@ public class PairingSystem extends BaseEntitySystem {
 
         Entity gameHallEntity = gameHallSystem.getGameHallEntity();
         GameHallComponent gameHall = gameHallEntity.getComponent(GameHallComponent.class);
-        gameHall.setUserCount(1);
+        gameHall.setGameCount(gameHall.getGameCount() + 1);
         eventSystem.fireEvent(EntityUpdated.instance, gameHallEntity);
     }
 

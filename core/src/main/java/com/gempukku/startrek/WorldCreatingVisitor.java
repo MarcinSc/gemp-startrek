@@ -7,6 +7,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.PropertiesUtils;
+import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
+import com.gempukku.libgdx.lib.artemis.camera.TopDownCameraController;
+import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
@@ -88,6 +91,8 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                         new JsonValueNetworkMessageMarshaller()),
                 new FontProviderSystem(),
                 new SpriteSystem(),
+                new CameraSystem(new TopDownCameraController()),
+                new EvaluatePropertySystem(),
                 new IncomingUpdatesProcessor());
 
         World world = new World(worldConfigurationBuilder.build());
@@ -100,6 +105,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
         game.setGameId(gameId);
 
         spawnSystem.spawnEntity("game/textureDither.template");
+        spawnSystem.spawnEntity("game/camera.template");
 
         return world;
     }

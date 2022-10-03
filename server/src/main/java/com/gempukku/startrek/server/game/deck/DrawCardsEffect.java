@@ -48,6 +48,7 @@ public class DrawCardsEffect extends EffectSystem {
 
         PlayerPublicStatsComponent playerPublicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         playerPublicStats.setHandCount(playerPublicStats.getHandCount() + cardsDrawn);
+        playerPublicStats.setDeckCount(playerPublicStats.getDeckCount() - cardsDrawn);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
 
         removeEffectFromStack(gameEffectEntity);
