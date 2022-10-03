@@ -3,7 +3,7 @@ package com.gempukku.startrek.server.game.turn;
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
-import com.gempukku.startrek.server.game.ExecuteStackedAction;
+import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
 
 public class PlayAndDrawSegmentSystem extends BaseSystem {
     @EventListener

@@ -1,4 +1,4 @@
-package com.gempukku.startrek.server.game;
+package com.gempukku.startrek.server.game.stack;
 
 import com.artemis.Component;
 import com.badlogic.gdx.utils.Array;

@@ -2,15 +2,13 @@ package com.gempukku.startrek.server.game.effect;
 
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
-import com.badlogic.gdx.utils.Array;
-import com.gempukku.startrek.LazyEntityUtil;
-import com.gempukku.startrek.server.game.ExecutionStackComponent;
+import com.gempukku.startrek.server.game.stack.StackSystem;
 
 public abstract class EffectSystem extends BaseSystem implements GameEffectHandler {
     private GameEffectSystem gameEffectSystem;
+    private StackSystem stackSystem;
 
     private final String[] effectTypes;
-    private ExecutionStackComponent executionStackComponent;
 
     public EffectSystem(String... effectTypes) {
         this.effectTypes = effectTypes;
@@ -24,25 +22,16 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
     }
 
     protected void removeEffectFromStack(Entity effectEntity) {
-        Array<Integer> entityIds = getExecutionStack().getEntityIds();
-        Integer topMostEntityId = entityIds.get(entityIds.size - 1);
-        if (effectEntity.getId() != topMostEntityId)
+        Entity topStackEntity = stackSystem.peekTopStackEntity();
+        if (topStackEntity != effectEntity)
             throw new RuntimeException("The entity to remove is not top most on stack");
 
-        entityIds.removeIndex(entityIds.size - 1);
-        world.deleteEntity(effectEntity);
+        Entity entity = stackSystem.removeTopStackEntity();
+        world.deleteEntity(entity);
     }
 
     protected void stackEffect(Entity effectEntity) {
-        Array<Integer> entityIds = getExecutionStack().getEntityIds();
-        entityIds.add(effectEntity.getId());
-    }
-
-    private ExecutionStackComponent getExecutionStack() {
-        if (executionStackComponent == null) {
-            executionStackComponent = LazyEntityUtil.findEntityWithComponent(world, ExecutionStackComponent.class).getComponent(ExecutionStackComponent.class);
-        }
-        return executionStackComponent;
+        stackSystem.stackEntity(effectEntity);
     }
 
     @Override

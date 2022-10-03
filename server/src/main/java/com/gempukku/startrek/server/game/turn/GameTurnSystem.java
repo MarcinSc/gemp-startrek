@@ -14,14 +14,14 @@ import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.game.turn.TurnComponent;
 import com.gempukku.startrek.game.turn.TurnSegment;
 import com.gempukku.startrek.server.common.ServerSpawnSystem;
-import com.gempukku.startrek.server.game.ExecuteStackedAction;
-import com.gempukku.startrek.server.game.ExecutionStackComponent;
 import com.gempukku.startrek.server.game.card.CardComponent;
 import com.gempukku.startrek.server.game.card.CardLookupSystem;
 import com.gempukku.startrek.server.game.card.CardZone;
 import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.deck.PlayerDilemmaPileComponent;
+import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
+import com.gempukku.startrek.server.game.stack.StackSystem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,15 +32,10 @@ public class GameTurnSystem extends BaseSystem {
     private ServerSpawnSystem spawnSystem;
     private EventSystem eventSystem;
     private CardLookupSystem cardLookupSystem;
-
-    private Entity executionStackEntity;
+    private StackSystem stackSystem;
 
     @EventListener
     public void executeGameAction(ExecuteStackedAction action, Entity gameEntity) {
-        if (executionStackEntity == null) {
-            executionStackEntity = LazyEntityUtil.findEntityWithComponent(world, ExecutionStackComponent.class);
-        }
-
         GameComponent game = gameEntity.getComponent(GameComponent.class);
         if (game != null) {
             setupGame(gameEntity);
@@ -100,7 +95,7 @@ public class GameTurnSystem extends BaseSystem {
             turnPlayers.add(orderedPlayer);
         }
 
-        stackExecutionEntity(turnSequenceEntity);
+        stackSystem.stackEntity(turnSequenceEntity);
     }
 
     private List<String> determinePlayerOrder(Array<String> players) {
@@ -131,7 +126,7 @@ public class GameTurnSystem extends BaseSystem {
             TurnComponent turn = turnEntity.getComponent(TurnComponent.class);
             turn.setPlayer(nextPlayerTurn);
 
-            stackExecutionEntity(turnEntity);
+            stackSystem.stackEntity(turnEntity);
         }
     }
 
@@ -153,27 +148,15 @@ public class GameTurnSystem extends BaseSystem {
             }
 
             if (nextTurnSegment == null) {
-                removeExecutionEntity(turnEntity);
+                world.deleteEntity(stackSystem.removeTopStackEntity());
             } else {
                 turn.setTurnSegment(nextTurnSegment);
                 eventSystem.fireEvent(EntityUpdated.instance, turnEntity);
 
                 Entity turnSegmentEntity = spawnSystem.spawnEntity(nextTurnSegment.getEntityTemplate());
-                stackExecutionEntity(turnSegmentEntity);
+                stackSystem.stackEntity(turnSegmentEntity);
             }
         }
-    }
-
-    private void stackExecutionEntity(Entity entity) {
-        executionStackEntity.getComponent(ExecutionStackComponent.class).getEntityIds().add(entity.getId());
-        // Not needed on client - no need to replicate changes
-        // eventSystem.fireEvent(EntityUpdated.instance, executionStackEntity);
-    }
-
-    private void removeExecutionEntity(Entity entity) {
-        Array<Integer> entityIds = executionStackEntity.getComponent(ExecutionStackComponent.class).getEntityIds();
-        entityIds.removeIndex(entityIds.size - 1);
-        world.deleteEntity(entity);
     }
 
     @Override

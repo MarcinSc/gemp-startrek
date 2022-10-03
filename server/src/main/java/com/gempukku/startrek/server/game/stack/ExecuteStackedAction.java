@@ -1,4 +1,4 @@
-package com.gempukku.startrek.server.game;
+package com.gempukku.startrek.server.game.stack;
 
 import com.gempukku.libgdx.lib.artemis.event.EntityEvent;
 

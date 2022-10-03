@@ -4,7 +4,7 @@ import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
-import com.gempukku.startrek.server.game.ExecuteStackedAction;
+import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
 
 public class GameEffectSystem extends BaseSystem {
     private ObjectMap<String, GameEffectHandler> gameEffectHandlers = new ObjectMap<>();

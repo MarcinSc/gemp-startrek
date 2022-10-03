@@ -20,30 +20,34 @@ import com.gempukku.startrek.server.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.server.game.card.CardLookupSystem;
 import com.gempukku.startrek.server.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.server.game.condition.MemoryConditionHandler;
-import com.gempukku.startrek.server.game.decision.DecisionEffect;
+import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 import com.gempukku.startrek.server.game.effect.LoopEffect;
 import com.gempukku.startrek.server.game.effect.PlayerCounterEffect;
 import com.gempukku.startrek.server.game.effect.StackActionEffect;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
+import com.gempukku.startrek.server.game.stack.StackSystem;
 import com.gempukku.startrek.server.game.turn.GameTurnSystem;
 import com.gempukku.startrek.server.game.turn.PlayAndDrawSegmentSystem;
 
 public class StarTrekGameHolder implements Disposable {
     private final World gameWorld;
-    private final Entity executionStackEntity;
     private final Entity gameEntity;
+
+    private final StackSystem stackSystem;
 
     public StarTrekGameHolder(CardData cardData) {
         gameWorld = createGameWorld(cardData);
 
         ServerSpawnSystem spawnSystem = gameWorld.getSystem(ServerSpawnSystem.class);
-        executionStackEntity = spawnSystem.spawnEntity("game/executionStack.template");
+        spawnSystem.spawnEntity("game/executionStack.template");
         gameEntity = spawnSystem.spawnEntity("game/game.template");
+        gameWorld.process();
 
         // Stack the game on the execution stack
-        executionStackEntity.getComponent(ExecutionStackComponent.class).getEntityIds().add(gameEntity.getId());
+        stackSystem = gameWorld.getSystem(StackSystem.class);
+        stackSystem.stackEntity(gameEntity);
     }
 
     public World getGameWorld() {
@@ -62,13 +66,14 @@ public class StarTrekGameHolder implements Disposable {
                 new GameTurnSystem(),
                 new PlayAndDrawSegmentSystem(),
                 new ExpressionSystem(),
+                new StackSystem(),
 
                 // Game effects
                 new GameEffectSystem(),
                 new StackActionEffect(),
                 new PlayerCounterEffect(),
                 new LoopEffect(),
-                new DecisionEffect(),
+                new DecisionSystem(),
 
                 // Resolvers
                 new PlayerResolverSystem(),
@@ -103,18 +108,11 @@ public class StarTrekGameHolder implements Disposable {
         game.getPlayers().add(username);
         EventSystem eventSystem = gameWorld.getSystem(EventSystem.class);
         eventSystem.fireEvent(EntityUpdated.instance, gameEntity);
+
+        gameWorld.process();
     }
 
     public void processGame() {
-        EventSystem eventSystem = gameWorld.getSystem(EventSystem.class);
-
-        ExecuteStackedAction executeStackedAction = new ExecuteStackedAction();
-        do {
-            ExecutionStackComponent executionStack = executionStackEntity.getComponent(ExecutionStackComponent.class);
-            Array<Integer> entityIds = executionStack.getEntityIds();
-            Entity topMostStackEntity = gameWorld.getEntity(entityIds.get(entityIds.size - 1));
-            eventSystem.fireEvent(executeStackedAction, topMostStackEntity);
-            gameWorld.process();
-        } while (!executeStackedAction.isFinishedProcessing());
+        stackSystem.processStack();
     }
 }
