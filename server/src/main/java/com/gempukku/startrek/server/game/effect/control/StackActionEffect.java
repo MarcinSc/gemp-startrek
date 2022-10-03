@@ -6,46 +6,25 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.GameComponent;
+import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 
 public class StackActionEffect extends EffectSystem {
+    private ServerSpawnSystem spawnSystem;
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
 
     public StackActionEffect() {
-        super("stackAction", "stackForEachPlayer");
+        super("stackForEachPlayer", "stackActionTemplate");
     }
 
     @Override
     public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         String effectType = gameEffect.getType();
-        if (effectType.equals("stackAction")) {
-            stackActionEffect(gameEffectEntity, gameEffect);
-        } else if (effectType.equals("stackForEachPlayer")) {
+        if (effectType.equals("stackForEachPlayer")) {
             stackForEachPlayerEffect(gameEffectEntity, gameEffect);
-        }
-    }
-
-    private void stackActionEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        JsonValue action = gameEffect.getData().get("action");
-        String stackedIndex = gameEffect.getMemory().get("stackedIndex");
-        int nextActionIndex = 0;
-        if (stackedIndex != null) {
-            nextActionIndex = Integer.parseInt(stackedIndex) + 1;
-        }
-
-        if (nextActionIndex == action.size) {
-            // Finished the effect - remove from stack
-            removeEffectFromStack(gameEffectEntity);
-        } else {
-            JsonValue actionToStack = getArrayElement(action, nextActionIndex);
-            Entity stackedEntity = world.createEntity();
-            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-            newGameEffect.setType(actionToStack.getString("type"));
-            newGameEffect.setData(actionToStack);
-            gameEffect.getMemory().put("stackedIndex", String.valueOf(nextActionIndex));
-
-            stackEffect(stackedEntity);
+        } else if (effectType.equals("stackActionTemplate")) {
+            stackActionTemplate(gameEffectEntity, gameEffect);
         }
     }
 
@@ -54,51 +33,38 @@ public class StackActionEffect extends EffectSystem {
         Array<String> players = game.getPlayers();
 
         String playerIndex = gameEffect.getMemory().get("playerIndex");
-        int executePlayerIndex = 0;
+        int nextPlayerIndex = 0;
         if (playerIndex != null) {
-            executePlayerIndex = Integer.parseInt(playerIndex);
+            nextPlayerIndex = Integer.parseInt(playerIndex) + 1;
         }
 
-        if (executePlayerIndex == players.size) {
+        if (nextPlayerIndex == players.size) {
             // Finished all players - remove from stack
             removeEffectFromStack(gameEffectEntity);
         } else {
-            String player = players.get(executePlayerIndex);
+            String player = players.get(nextPlayerIndex);
             JsonValue action = gameEffect.getData().get("action");
-            String stackedIndex = gameEffect.getMemory().get("stackedIndex");
-            int nextActionIndex = 0;
-            if (stackedIndex != null) {
-                nextActionIndex = Integer.parseInt(stackedIndex) + 1;
-            }
 
-            if (nextActionIndex == action.size) {
-                // Finished the effect - increment player index
-                gameEffect.getMemory().put("playerIndex", String.valueOf(executePlayerIndex + 1));
-                gameEffect.getMemory().remove("stackedIndex");
-            } else {
-                JsonValue actionToStack = getArrayElement(action, nextActionIndex);
-                actionToStack.remove("player");
-                actionToStack.addChild("player", new JsonValue("username(" + player + ")"));
-                Entity stackedEntity = world.createEntity();
-                GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-                newGameEffect.setType(actionToStack.getString("type"));
-                newGameEffect.setData(actionToStack);
-                gameEffect.getMemory().put("stackedIndex", String.valueOf(nextActionIndex));
+            action.remove("player");
+            action.addChild("player", new JsonValue("username(" + player + ")"));
+            Entity stackedEntity = world.createEntity();
+            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
+            newGameEffect.setType(action.getString("type"));
+            newGameEffect.setData(action);
+            gameEffect.getMemory().put("playerIndex", String.valueOf(nextPlayerIndex));
 
-                stackEffect(stackedEntity);
-            }
+            stackEffect(stackedEntity);
         }
     }
 
-    private JsonValue getArrayElement(JsonValue arrayOrObject, int index) {
-        if (arrayOrObject.type() == JsonValue.ValueType.object) {
-            if (index > 0)
-                throw new ArrayIndexOutOfBoundsException(index);
-            return arrayOrObject;
-        } else if (arrayOrObject.type() == JsonValue.ValueType.array) {
-            return arrayOrObject.get(index);
-        } else {
-            throw new RuntimeException("Passed element is not object or array");
-        }
+    private void stackActionTemplate(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+        String template = gameEffect.getData().getString("template");
+
+        Entity spawnedAction = spawnSystem.spawnEntity(template);
+
+        removeEffectFromStack(gameEffectEntity);
+
+        stackEffect(spawnedAction);
     }
+
 }

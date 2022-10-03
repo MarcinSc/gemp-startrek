@@ -1,8 +1,12 @@
 {
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
-    "type": "stackAction",
+    "type": "sequence",
     "data": {
-      "action": [
+      "actions": [
+        {
+          "type": "setTurnSegment",
+          "segment": "PLAY_AND_DRAW_CARDS"
+        },
         {
           "type": "setPlayerCounters",
           "player": "currentPlayer",
@@ -12,8 +16,8 @@
           "type": "stackUntil",
           "condition": "memoryHas(playerFinished,true),or(counterCount(currentPlayer,0),playerDeckCount(currentPlayer,0))",
           "action": {
-            "type": "stackAction",
-            "action": [
+            "type": "sequence",
+            "actions": [
               {
                 "type": "sendDecisionToPlayer",
                 "player": "currentPlayer",

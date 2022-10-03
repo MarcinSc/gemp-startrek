@@ -12,6 +12,23 @@ public class ConditionResolverSystem extends BaseSystem {
 
     private ObjectMap<String, ConditionHandler> conditionHandlers = new ObjectMap<>();
 
+    public ConditionResolverSystem() {
+        registerConditionHandler("false",
+                new ConditionHandler() {
+                    @Override
+                    public boolean resolveCondition(String type, Entity sourceEntity, ObjectMap<String, String> memory, Array<String> parameters) {
+                        return false;
+                    }
+                });
+        registerConditionHandler("true",
+                new ConditionHandler() {
+                    @Override
+                    public boolean resolveCondition(String type, Entity sourceEntity, ObjectMap<String, String> memory, Array<String> parameters) {
+                        return true;
+                    }
+                });
+    }
+
     public void registerConditionHandler(String effectType, ConditionHandler conditionHandler) {
         conditionHandlers.put(effectType, conditionHandler);
     }

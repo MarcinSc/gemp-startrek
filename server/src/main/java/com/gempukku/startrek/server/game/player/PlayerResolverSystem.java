@@ -9,7 +9,7 @@ import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.expression.Expression;
 import com.gempukku.startrek.expression.ExpressionSystem;
 import com.gempukku.startrek.game.GamePlayerComponent;
-import com.gempukku.startrek.game.turn.TurnComponent;
+import com.gempukku.startrek.game.turn.TurnSequenceComponent;
 
 public class PlayerResolverSystem extends BaseSystem {
     private ExpressionSystem expressionSystem;
@@ -21,7 +21,7 @@ public class PlayerResolverSystem extends BaseSystem {
 
         Expression expression = expressions.get(0);
         if (expression.getType().equals("currentPlayer")) {
-            return LazyEntityUtil.findEntityWithComponent(world, TurnComponent.class).getComponent(TurnComponent.class).getPlayer();
+            return LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class).getComponent(TurnSequenceComponent.class).getCurrentPlayer();
         } else if (expression.getType().equals("username")) {
             return expression.getParameters().get(0);
         }

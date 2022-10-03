@@ -30,16 +30,17 @@ import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.deck.ShuffleDeckEffect;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 import com.gempukku.startrek.server.game.effect.control.LoopEffect;
+import com.gempukku.startrek.server.game.effect.control.SequenceEffect;
 import com.gempukku.startrek.server.game.effect.control.StackActionEffect;
 import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
 import com.gempukku.startrek.server.game.effect.setup.PlaceAllCardsInDrawDeckEffect;
 import com.gempukku.startrek.server.game.effect.setup.PlaceAllDilemmasInDeckEffect;
 import com.gempukku.startrek.server.game.effect.setup.SetupMissionCardsEffect;
 import com.gempukku.startrek.server.game.effect.setup.SetupTurnOrderEffect;
+import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
+import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.stack.StackSystem;
-import com.gempukku.startrek.server.game.turn.GameTurnSystem;
-import com.gempukku.startrek.server.game.turn.PlayAndDrawSegmentSystem;
 
 import java.util.function.Consumer;
 
@@ -75,8 +76,6 @@ public class StarTrekGameHolder implements Disposable {
 
                 // Specific systems
                 new CardLookupSystem(cardDataService),
-                new GameTurnSystem(),
-                new PlayAndDrawSegmentSystem(),
                 new ExpressionSystem(),
                 new StackSystem(),
 
@@ -92,12 +91,19 @@ public class StarTrekGameHolder implements Disposable {
                 new PlaceAllDilemmasInDeckEffect(),
                 new PlaceAllCardsInDrawDeckEffect(),
                 new SetupTurnOrderEffect(),
+                new SetTurnPlayerEffect(),
+                new SetTurnSegmentEffect(),
 
                 // Game effects
                 new GameEffectSystem(),
-                new StackActionEffect(),
-                new PlayerCounterEffect(),
+
+                // Control game effects
                 new LoopEffect(),
+                new SequenceEffect(),
+                new StackActionEffect(),
+
+                // Specific game effects
+                new PlayerCounterEffect(),
                 new ShuffleDeckEffect(),
                 new DecisionSystem(),
                 new DrawCardsEffect(),

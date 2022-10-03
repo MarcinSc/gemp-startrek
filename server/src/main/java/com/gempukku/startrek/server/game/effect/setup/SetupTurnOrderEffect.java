@@ -4,11 +4,11 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.GameComponent;
+import com.gempukku.startrek.game.turn.TurnSequenceComponent;
 import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.stack.StackSystem;
-import com.gempukku.startrek.server.game.turn.TurnSequenceComponent;
 
 import java.util.ArrayList;
 import java.util.Collections;

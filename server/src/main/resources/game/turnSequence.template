@@ -1,3 +1,21 @@
 {
-  "com.gempukku.startrek.server.game.turn.TurnSequenceComponent": {}
+  "com.gempukku.startrek.game.turn.TurnSequenceComponent": {},
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "stackUntilInTurnOrder",
+    "data": {
+      "condition": "false",
+      "action": {
+        "type": "sequenceForPlayer",
+        "actions": [
+          {
+            "type": "setTurnPlayer"
+          },
+          {
+            "type": "stackActionTemplate",
+            "template": "game/turn.template"
+          }
+        ]
+      }
+    }
+  }
 }
