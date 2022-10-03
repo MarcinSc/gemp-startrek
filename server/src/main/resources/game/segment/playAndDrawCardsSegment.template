@@ -17,9 +17,7 @@
               {
                 "type": "sendDecisionToPlayer",
                 "player": "currentPlayer",
-                "data": {
-                  "type": "playOrDrawDecision"
-                }
+                "decisionType": "playOrDrawDecision"
               },
               {
                 "type": "playoutPlayOrDrawDecision"

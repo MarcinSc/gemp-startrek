@@ -8,6 +8,7 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 @ReplicateToOwner
 public class PlayerDecisionComponent extends Component implements OwnedComponent {
     private String owner;
+    private String decisionType;
     private JsonValue data;
 
     @Override
@@ -18,6 +19,14 @@ public class PlayerDecisionComponent extends Component implements OwnedComponent
     @Override
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getDecisionType() {
+        return decisionType;
+    }
+
+    public void setDecisionType(String decisionType) {
+        this.decisionType = decisionType;
     }
 
     public JsonValue getData() {
