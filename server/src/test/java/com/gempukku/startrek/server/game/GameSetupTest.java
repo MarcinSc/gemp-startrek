@@ -31,6 +31,7 @@ public class GameSetupTest {
         StarTrekGameHolder gameHolder = new StarTrekGameHolder(cardData);
         gameHolder.addPlayer("test1", testDeck);
         gameHolder.addPlayer("test2", testDeck);
+        gameHolder.setupGame();
         gameHolder.processGame();
 
         StackSystem stackSystem = gameHolder.getGameWorld().getSystem(StackSystem.class);

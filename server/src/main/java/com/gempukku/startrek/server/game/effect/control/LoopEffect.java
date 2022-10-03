@@ -1,9 +1,11 @@
-package com.gempukku.startrek.server.game.effect;
+package com.gempukku.startrek.server.game.effect.control;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.server.game.condition.ConditionResolverSystem;
+import com.gempukku.startrek.server.game.effect.EffectSystem;
+import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 
 public class LoopEffect extends EffectSystem {
     private ConditionResolverSystem conditionResolverSystem;
@@ -15,8 +17,7 @@ public class LoopEffect extends EffectSystem {
 
     @Override
     public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        JsonValue condition = gameEffect.getData().get("condition");
-        boolean result = conditionResolverSystem.resolveBoolean(gameEffect.getMemory(), condition);
+        boolean result = conditionResolverSystem.resolveBoolean(gameEffectEntity, gameEffect.getMemory(), gameEffect.getData().getString("condition"));
         if (!result) {
             Entity stackedEntity = world.createEntity();
             GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);

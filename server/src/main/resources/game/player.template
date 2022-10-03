@@ -1,6 +1,6 @@
 {
   "com.gempukku.startrek.game.GamePlayerComponent": {},
-  "com.gempukku.startrek.game.PlayerCounterComponent": {},
+  "com.gempukku.startrek.game.PlayerPublicStatsComponent": {},
   "com.gempukku.startrek.server.game.deck.PlayerDecklistComponent": {},
   "com.gempukku.startrek.server.game.deck.PlayerDeckComponent": {},
   "com.gempukku.startrek.server.game.deck.PlayerDilemmaPileComponent": {}

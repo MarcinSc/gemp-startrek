@@ -1,3 +1,39 @@
 {
-  "com.gempukku.startrek.game.GameComponent": {}
+  "com.gempukku.startrek.game.GameComponent": {},
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "stackAction",
+    "data": {
+      "action": [
+        {
+          "type": "stackForEachPlayer",
+          "action": [
+            {
+              "type": "setupMissionCards"
+            },
+            {
+              "type": "placeAllDilemmasInDilemmaDeck"
+            },
+            {
+              "type": "shuffleDeck",
+              "deck": "dilemmaDeck"
+            },
+            {
+              "type": "placeAllCardsInDrawDeck"
+            },
+            {
+              "type": "shuffleDeck",
+              "deck": "drawDeck"
+            },
+            {
+              "type": "drawCards",
+              "amount": 7
+            }
+          ]
+        },
+        {
+          "type": "setupTurnOrder"
+        }
+      ]
+    }
+  }
 }

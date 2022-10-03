@@ -25,7 +25,10 @@ public class JsonDataSerializer implements DataSerializer<JsonValue> {
 
                     @Override
                     public JsonValue read(Json json, JsonValue jsonData, Class type) {
-                        return jsonReader.parse(jsonData.asString());
+                        String result = jsonData.asString();
+                        if (result == null)
+                            return null;
+                        return jsonReader.parse(result);
                     }
                 }
         );

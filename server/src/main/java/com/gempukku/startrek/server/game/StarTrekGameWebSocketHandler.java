@@ -67,7 +67,9 @@ public class StarTrekGameWebSocketHandler extends TextWebSocketHandler implement
         for (ObjectMap.Entry<String, StarTrekDeck> playerDeck : playerDecks) {
             gameHolder.addPlayer(playerDeck.key, playerDeck.value);
         }
+        gameHolder.setupGame();
         gameHolder.processGame();
+
         games.put(gameId, gameHolder);
         gameContexts.put(gameId, gameContext);
         return gameId;

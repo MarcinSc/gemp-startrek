@@ -56,7 +56,7 @@ public class DecisionSystem extends EffectSystem {
     @Override
     public boolean processEndingEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         String player = gameEffect.getData().getString("player");
-        Entity playerEntity = playerResolverSystem.resolvePlayer(player);
+        Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, gameEffect.getMemory(), player);
 
         Entity decisionEntity = world.createEntity();
         PlayerDecisionComponent decision = playerDecisionComponentMapper.create(decisionEntity);

@@ -4,8 +4,9 @@ import com.artemis.Component;
 import com.gempukku.libgdx.network.server.config.annotation.ReplicateToClients;
 
 @ReplicateToClients
-public class PlayerCounterComponent extends Component {
+public class PlayerPublicStatsComponent extends Component {
     private int counterCount;
+    private int handCount;
 
     public int getCounterCount() {
         return counterCount;
@@ -13,5 +14,13 @@ public class PlayerCounterComponent extends Component {
 
     public void setCounterCount(int counterCount) {
         this.counterCount = counterCount;
+    }
+
+    public int getHandCount() {
+        return handCount;
+    }
+
+    public void setHandCount(int handCount) {
+        this.handCount = handCount;
     }
 }

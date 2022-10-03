@@ -22,4 +22,19 @@ public class Expression {
     public Array<String> getParameters() {
         return parameters;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(type);
+        if (parameters != null && parameters.size > 0) {
+            sb.append("(");
+            sb.append(parameters.get(0));
+            for (int i = 1; i < parameters.size; i++) {
+                sb.append(",");
+                sb.append(parameters.get(i));
+            }
+            sb.append(")");
+        }
+        return sb.toString();
+    }
 }
