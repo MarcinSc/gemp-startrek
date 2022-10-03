@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class JsonDataSerializerTest {
     private JsonDataSerializer dataSerializer;
@@ -43,5 +44,22 @@ public class JsonDataSerializerTest {
         TestComponent resultComponent = world.getMapper(TestComponent.class).get(entity);
         assertEquals(2, resultComponent.getIntField());
         assertEquals("test String", resultComponent.getStringField());
+    }
+
+    @Test
+    public void serializeDeserializeComponentWithJsonData() {
+        JsonValue json = new JsonValue(JsonValue.ValueType.object);
+        json.addChild("field", new JsonValue("test"));
+
+        JsonTestComponent jsonTestComponent = new JsonTestComponent();
+        jsonTestComponent.setField(json);
+
+        JsonValue result = dataSerializer.serializeComponent(jsonTestComponent);
+        Entity entity = world.createEntity();
+        dataSerializer.deserializeComponent(entity, world, result);
+
+        JsonTestComponent resultComponent = world.getMapper(JsonTestComponent.class).get(entity);
+        assertTrue(resultComponent.getField().type() == JsonValue.ValueType.object);
+        assertEquals("test", resultComponent.getField().getString("field"));
     }
 }

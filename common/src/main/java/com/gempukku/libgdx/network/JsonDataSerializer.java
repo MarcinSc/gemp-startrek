@@ -16,6 +16,19 @@ public class JsonDataSerializer implements DataSerializer<JsonValue> {
 
     public JsonDataSerializer() {
         json.setUsePrototypes(false);
+        json.setSerializer(JsonValue.class,
+                new Json.Serializer<JsonValue>() {
+                    @Override
+                    public void write(Json json, JsonValue object, Class knownType) {
+                        json.writeValue(object.toJson(JsonWriter.OutputType.json));
+                    }
+
+                    @Override
+                    public JsonValue read(Json json, JsonValue jsonData, Class type) {
+                        return jsonReader.parse(jsonData.asString());
+                    }
+                }
+        );
     }
 
     @Override

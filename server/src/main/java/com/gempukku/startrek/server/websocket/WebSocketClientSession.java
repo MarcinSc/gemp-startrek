@@ -26,6 +26,7 @@ public class WebSocketClientSession implements ClientSession<JsonValue>, JsonUti
             String networkMessageMarshalled = networkMessageMarshaller.marshall(networkMessage);
             webSocketSession.sendMessage(new TextMessage(networkMessageMarshalled));
         } catch (Exception exp) {
+            exp.printStackTrace();
             try {
                 webSocketSession.close();
             } catch (IOException e) {

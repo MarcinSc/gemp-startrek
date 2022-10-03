@@ -19,12 +19,7 @@ public class JsonAwareEntityLoader {
 
     static {
         json.setSerializer(JsonValue.class,
-                new Json.Serializer<JsonValue>() {
-                    @Override
-                    public void write(Json json, JsonValue object, Class knownType) {
-
-                    }
-
+                new Json.ReadOnlySerializer<JsonValue>() {
                     @Override
                     public JsonValue read(Json json, JsonValue jsonData, Class type) {
                         return jsonData;
