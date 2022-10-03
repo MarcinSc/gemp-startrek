@@ -1,0 +1,13 @@
+{
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "sequence",
+    "data": {
+      "actions": [
+        {
+          "type": "setTurnSegment",
+          "segment": "DISCARD_EXCESS_CARDS"
+        }
+      ]
+    }
+  }
+}

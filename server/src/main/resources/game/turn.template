@@ -8,6 +8,14 @@
           "type": "stackActionTemplate",
           "template": "game/segment/playAndDrawCardsSegment.template"
         }
+        {
+          "type": "stackActionTemplate",
+          "template": "game/segment/executeOrdersSegment.template"
+        }
+        {
+          "type": "stackActionTemplate",
+          "template": "game/segment/discardExcessCardsSegment.template"
+        }
       ]
     }
   }
