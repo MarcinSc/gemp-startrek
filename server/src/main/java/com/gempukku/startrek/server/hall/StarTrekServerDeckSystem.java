@@ -20,6 +20,13 @@ public class StarTrekServerDeckSystem extends BaseSystem {
         temporaryDeck.getDillemas().add("37_2");
 
         temporaryDeck.getDrawDeck().add("12_58");
+        temporaryDeck.getDrawDeck().add("12_58");
+        temporaryDeck.getDrawDeck().add("12_58");
+        temporaryDeck.getDrawDeck().add("12_58");
+        temporaryDeck.getDrawDeck().add("12_58");
+        temporaryDeck.getDrawDeck().add("12_58");
+        temporaryDeck.getDrawDeck().add("12_58");
+        temporaryDeck.getDrawDeck().add("12_58");
     }
 
     public StarTrekDeck getStarterDeck(String starterDeckId) {

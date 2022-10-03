@@ -7,6 +7,8 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToClients;
 public class PlayerPublicStatsComponent extends Component {
     private int counterCount;
     private int handCount;
+    private int deckCount;
+    private int dilemmaCount;
 
     public int getCounterCount() {
         return counterCount;
@@ -22,5 +24,21 @@ public class PlayerPublicStatsComponent extends Component {
 
     public void setHandCount(int handCount) {
         this.handCount = handCount;
+    }
+
+    public int getDeckCount() {
+        return deckCount;
+    }
+
+    public void setDeckCount(int deckCount) {
+        this.deckCount = deckCount;
+    }
+
+    public int getDilemmaCount() {
+        return dilemmaCount;
+    }
+
+    public void setDilemmaCount(int dilemmaCount) {
+        this.dilemmaCount = dilemmaCount;
     }
 }
