@@ -22,49 +22,53 @@
     }
   },
   "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent": {
-    "spriteSystemName": "ditherTexture",
-    "properties": {
-      "UV": {
-        "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
-      },
-      "Position": {
-        "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
-        "transform": {
-          "val": [
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1
-          ]
-        },
-        "rightVector": {
-          "x": 0.6,
-          "y": 0,
-          "z": 0
-        },
-        "upVector": {
-          "x": 0,
-          "y": 0,
-          "z": 0.6
+    "sprites": [
+      {
+        "spriteSystemName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.6,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.6
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "path": "atlas/scene.atlas",
+            "region": "playarea"
+          }
         }
-      },
-      "Texture": {
-        "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-        "path": "atlas/scene.atlas",
-        "region": "playarea"
       }
-    }
+    ]
   }
 }

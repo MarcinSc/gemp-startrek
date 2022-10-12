@@ -7,48 +7,46 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
-import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
+import com.gempukku.libgdx.graph.util.property.HierarchicalPropertyContainer;
 import com.gempukku.libgdx.graph.util.sprite.RenderableSprite;
 import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 
-public class SpriteComponentAdapter implements Disposable {
+public class SpriteDefinitionAdapter implements Disposable {
     private static final Vector3 position = new Vector3();
 
     private final EvaluatePropertySystem propertySystem;
-    private final MapWritablePropertyContainer propertyContainer;
+    private final HierarchicalPropertyContainer propertyContainer;
     private final SpriteBatchModel spriteBatchModel;
-    private final SpriteComponent spriteComponent;
     private final Entity entity;
 
     private final Sprite3DRenderableSprite renderableSprite;
 
-    public SpriteComponentAdapter(EvaluatePropertySystem propertySystem, SpriteBatchModel spriteBatchModel,
-                                  SpriteComponent spriteComponent, Entity entity) {
+    public SpriteDefinitionAdapter(PropertyContainer parentProperties, EvaluatePropertySystem propertySystem,
+                                   SpriteBatchModel spriteBatchModel, SpriteDefinition spriteDefintion, Entity entity) {
         this.propertySystem = propertySystem;
         this.spriteBatchModel = spriteBatchModel;
-        this.spriteComponent = spriteComponent;
         this.entity = entity;
 
         renderableSprite = new Sprite3DRenderableSprite();
 
-        this.propertyContainer = new MapWritablePropertyContainer();
+        this.propertyContainer = new HierarchicalPropertyContainer(parentProperties);
 
-        evaluateProperties();
+        evaluateProperties(spriteDefintion);
 
         spriteBatchModel.addSprite(renderableSprite);
     }
 
-    private void evaluateProperties() {
+    private void evaluateProperties(SpriteDefinition spriteDefinition) {
         propertyContainer.clear();
 
-        for (ObjectMap.Entry<String, Object> property : spriteComponent.getProperties()) {
+        for (ObjectMap.Entry<String, Object> property : spriteDefinition.getProperties()) {
             propertyContainer.setValue(property.key, propertySystem.evaluateProperty(entity, property.value, Object.class));
         }
     }
 
-    public void updateSprite() {
-        evaluateProperties();
+    public void updateSprite(SpriteDefinition spriteDefinition) {
+        evaluateProperties(spriteDefinition);
         spriteBatchModel.updateSprite(renderableSprite);
     }
 

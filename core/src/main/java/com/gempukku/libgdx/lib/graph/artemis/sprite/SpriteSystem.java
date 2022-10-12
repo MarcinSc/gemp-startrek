@@ -4,11 +4,13 @@ import com.artemis.*;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
+import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.ValueOperations;
 import com.gempukku.libgdx.graph.util.sprite.MultiPageSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
@@ -27,7 +29,7 @@ import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
 
 public class SpriteSystem extends BaseSystem implements Disposable {
     private final ObjectMap<String, TexturePagedSpriteBatchModel> spriteSystemMap = new ObjectMap<>();
-    private final IntMap<SpriteComponentAdapter> spriteMap = new IntMap<>();
+    private final IntMap<Array<SpriteDefinitionAdapter>> spriteMap = new IntMap<>();
 
     private ComponentMapper<SpriteComponent> spriteComponentMapper;
     private ComponentMapper<SpriteSystemComponent> spriteSystemComponentMapper;
@@ -35,6 +37,7 @@ public class SpriteSystem extends BaseSystem implements Disposable {
     private PipelineRendererSystem pipelineRendererSystem;
     private TransformSystem transformSystem;
     private EvaluatePropertySystem evaluatePropertySystem;
+    private EvaluatePropertySystem propertySystem;
 
     private static final Vector2ValuePerVertex uvAttribute = new Vector2ValuePerVertex(new float[]{0, 0, 1, 0, 0, 1, 1, 1});
 
@@ -87,7 +90,14 @@ public class SpriteSystem extends BaseSystem implements Disposable {
     }
 
     public void updateSprite(int entityId) {
-        spriteMap.get(entityId).updateSprite();
+        Entity spriteEntity = world.getEntity(entityId);
+        SpriteComponent sprite = spriteEntity.getComponent(SpriteComponent.class);
+
+        for (SpriteDefinitionAdapter spriteDefinitionAdapter : spriteMap.remove(entityId)) {
+            spriteDefinitionAdapter.dispose();
+        }
+
+        addSprites(entityId, spriteEntity, sprite);
     }
 
     @EventListener
@@ -171,15 +181,38 @@ public class SpriteSystem extends BaseSystem implements Disposable {
     }
 
     private void spriteInserted(int entityId) {
-        Entity entity = world.getEntity(entityId);
-        SpriteComponent spriteComponent = spriteComponentMapper.get(entityId);
-        TexturePagedSpriteBatchModel spriteBatchModel = spriteSystemMap.get(spriteComponent.getSpriteSystemName());
-        SpriteComponentAdapter spriteComponentAdapter = new SpriteComponentAdapter(evaluatePropertySystem, spriteBatchModel, spriteComponent, entity);
-        spriteMap.put(entityId, spriteComponentAdapter);
+        Entity spriteEntity = world.getEntity(entityId);
+        SpriteComponent sprite = spriteComponentMapper.get(entityId);
+
+        addSprites(entityId, spriteEntity, sprite);
+    }
+
+    private void addSprites(int entityId, Entity spriteEntity, SpriteComponent sprite) {
+        MapWritablePropertyContainer propertyContainer = new MapWritablePropertyContainer();
+        evaluatePropertyContainer(spriteEntity, sprite, propertyContainer);
+
+        Array<SpriteDefinitionAdapter> spriteComponentAdapters = new Array<>();
+        for (SpriteDefinition spriteDefinition : sprite.getSprites()) {
+            TexturePagedSpriteBatchModel spriteBatchModel = spriteSystemMap.get(spriteDefinition.getSpriteSystemName());
+            SpriteDefinitionAdapter spriteComponentAdapter = new SpriteDefinitionAdapter(propertyContainer, evaluatePropertySystem,
+                    spriteBatchModel, spriteDefinition, spriteEntity);
+            spriteComponentAdapters.add(spriteComponentAdapter);
+        }
+
+        spriteMap.put(entityId, spriteComponentAdapters);
+    }
+
+    private void evaluatePropertyContainer(Entity entity, SpriteComponent spriteComponent, MapWritablePropertyContainer propertyContainer) {
+        for (ObjectMap.Entry<String, Object> property : spriteComponent.getProperties()) {
+            propertyContainer.setValue(property.key, propertySystem.evaluateProperty(entity, property.value, Object.class));
+        }
     }
 
     private void spriteRemoved(int entityId) {
-        spriteMap.remove(entityId).dispose();
+        Array<SpriteDefinitionAdapter> sprites = spriteMap.remove(entityId);
+        for (SpriteDefinitionAdapter sprite : sprites) {
+            sprite.dispose();
+        }
     }
 
     @Override
