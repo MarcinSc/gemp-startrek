@@ -11,3 +11,24 @@ dependencies {
 	api "com.github.MarcinSc.gdx-graph:gdx-graph-util:$gdxGraphVersion"
 	implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"
 }
+
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+
+tasks.register('texturePacking') {
+	if (project.ext.has('texturePacker')) {
+		TexturePacker.Settings settings = new TexturePacker.Settings()
+		settings.maxWidth = 2048
+		settings.maxHeight = 2048
+		settings.filterMin = Texture.TextureFilter.Linear
+		settings.filterMag = Texture.TextureFilter.Linear
+
+		for (int i = 0; i < texturePacker.size(); i += 3) {
+			String inputFolder = texturePacker[i + 0]
+			String outputFolder = texturePacker[i + 1]
+			String packFilename = texturePacker[i + 2]
+			println("Calling TexturePacker: " + packFilename)
+			TexturePacker.process(settings, inputFolder, outputFolder, packFilename)
+		}
+	}
+}

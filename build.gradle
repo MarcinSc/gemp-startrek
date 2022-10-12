@@ -9,6 +9,7 @@ buildscript {
 		maven { url 'https://jitpack.io' }
 	}
 	dependencies {
+		classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 		classpath "com.android.tools.build:gradle:$androidPluginVersion"
 
 		// This follows advice from https://blog.gradle.org/log4j-vulnerability
@@ -27,6 +28,7 @@ buildscript {
 allprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
+	apply plugin: 'java'
 }
 
 configure(subprojects) {
@@ -55,6 +57,9 @@ configure(subprojects) {
 subprojects {
 	version = '0.0.1'
 	ext.appName = 'Gemp-StarTrek'
+	ext.texturePacker = [
+			"../internal/image/scene", "../assets/atlas", "scene",
+	]
 	repositories {
 		mavenCentral()
 		maven { url 'https://s01.oss.sonatype.org' }

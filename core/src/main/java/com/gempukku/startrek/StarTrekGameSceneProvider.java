@@ -60,6 +60,7 @@ public class StarTrekGameSceneProvider implements GameSceneProvider {
             disposeCurrentWorld();
             currentScene = gameScene;
             currentSceneWorld = createCurrentSceneWorld();
+            resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
         currentSceneWorld.setDelta(Gdx.graphics.getDeltaTime());
         currentSceneWorld.process();

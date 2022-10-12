@@ -15,7 +15,7 @@ public class EvaluatePropertySystem extends BaseSystem {
     }
 
     public <T> T evaluateProperty(Entity entity, Object property, Class<T> clazz) {
-        if (property instanceof EvaluateProperty) {
+        if (property instanceof EvaluableProperty) {
             evaluateProperty.setResult(null);
             evaluateProperty.setPropertyValue((EvaluableProperty) property);
             eventSystem.fireEvent(evaluateProperty, entity);
