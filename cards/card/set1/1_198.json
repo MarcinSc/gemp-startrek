@@ -1,0 +1,14 @@
+{
+  "type": "Mission",
+  "missionType": "Planet",
+  "unique": true,
+  "title": "Search for Survivors",
+  "quadrant": "A",
+  "span": 2,
+  "points": 35,
+  "requirements": "skill(Leadership),skill(Officer),skill(Programming),skill(Security),attributeTotalMoreThan(Strength,36)",
+  "requirementsText": "Leadership, Officer, Programming, Security, and Strength>36",
+  "affiliations": "or(affiliation(Bajoran),affiliation(Cardassian))",
+  "affiliationsText": "[Baj][Car]",
+  "lore": "[b]Dozaria:[/b] Pursue a lead to a possible crash site of the missing Cardassian prisoner transport Ravinok."
+}

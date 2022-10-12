@@ -1,0 +1,19 @@
+{
+  "type": "Personnel",
+  "affiliation": "Federation",
+  "cost": "1",
+  "title": "Bandee",
+  "species": "Human",
+  "skills": [
+    "Biology",
+    "Medical",
+    "Programming"
+  ],
+  "icons": [
+    "Deep Space Nine"
+  ],
+  "integrity": 6,
+  "cunning": 5,
+  "strength": 5,
+  "lore": "After the retaking of Deep Space 9 in 2374, the number of starfleet personnel aboard was increased in all departments. The medical staff was nearly doubled, in case of a surprise Dominion attack."
+}

@@ -1,0 +1,36 @@
+{
+  "type": "Personnel",
+  "affiliation": "Federation",
+  "cost": "4",
+  "unique": true,
+  "title": "Worf",
+  "subtitle": "Strategic Operations Officer",
+  "species": "Klingon",
+  "skills": [
+    "Diplomacy",
+    "Honor",
+    "Honor",
+    "Leadership",
+    "Officer"
+  ],
+  "icons": [
+    "Command",
+    "Deep Space Nine"
+  ],
+  "integrity": 8,
+  "cunning": 5,
+  "strength": 8,
+  "abilities": [
+    {
+      "text": "When an engagement involving your [Fed] ship begins at this mission, if this personnel is aboard a ship, that ship may join that engagement.",
+      "type": "trigger",
+      "optional": true,
+      "condition": "engagementBeginsAt(missionLocation(self)),engagementInvolving(owned,type(ship),icon(Fed)),isOnboardShip(self)",
+      "effect": {
+        "type": "joinEngagement",
+        "filter": "onboardShip(self)"
+      }
+    }
+  ],
+  "lore": "\"There are many Klingons who say we have been at peace too long. That the Empire must expand in order to survive. ... If my people return to the old ways, no one will be safe.\""
+}

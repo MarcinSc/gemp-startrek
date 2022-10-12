@@ -1,0 +1,20 @@
+{
+  "type": "Personnel",
+  "affiliation": "Federation",
+  "cost": "1",
+  "title": "T'Lor",
+  "species": "Tiburonian",
+  "skills": [
+    "Geology",
+    "Programming",
+    "Science"
+  ],
+  "icons": [
+    "Staff",
+    "Deep Space Nine"
+  ],
+  "integrity": 5,
+  "cunning": 5,
+  "strength": 5,
+  "lore": "Member of the team dispatched from Deep Space 9 to confirm readings of large cormaline deposits on the Gamma Quadrant planet Torga IV."
+}

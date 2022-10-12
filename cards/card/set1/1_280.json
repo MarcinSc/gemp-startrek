@@ -1,0 +1,20 @@
+{
+  "type": "Personnel",
+  "affiliation": "Federation",
+  "cost": "1",
+  "title": "Paulson",
+  "species": "Human",
+  "skills": [
+    "Astrometrics",
+    "Science",
+    "Transporters"
+  ],
+  "icons": [
+    "Staff",
+    "Deep Space Nine"
+  ],
+  "integrity": 6,
+  "cunning": 5,
+  "strength": 4,
+  "lore": "Starfleet posted a number of astrophysicists at Deep Space 9 to study the unusual properties of the stable Bajoran wormhole."
+}

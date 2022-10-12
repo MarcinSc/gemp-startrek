@@ -1,0 +1,20 @@
+{
+  "type": "Personnel",
+  "affiliation": "Federation",
+  "cost": "1",
+  "title": "Altman",
+  "species": "Human",
+  "skills": [
+    "Biology",
+    "Engineer",
+    "Transporters"
+  ],
+  "icons": [
+    "Staff",
+    "Deep Space Nine"
+  ],
+  "integrity": 6,
+  "cunning": 5,
+  "strength": 5,
+  "lore": "The engineering staff of Deep Space 9 is faced with the constant challenge of making Starfleet, Cardassian, and Bajoran technology work together."
+}

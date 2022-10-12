@@ -1,0 +1,20 @@
+{
+  "type": "Personnel",
+  "affiliation": "Bajoran",
+  "cost": "1",
+  "title": "Jabara",
+  "species": "Bajoran",
+  "skills": [
+    "Exobiology",
+    "Medical",
+    "Programming"
+  ],
+  "icons": [
+    "Staff",
+    "Deep Space Nine"
+  ],
+  "integrity": 6,
+  "cunning": 6,
+  "strength": 4,
+  "lore": "Bajorans on the Infirmary staff proved every bit as reliable as the Starfleet personnel."
+}

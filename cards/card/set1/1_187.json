@@ -1,0 +1,14 @@
+{
+  "type": "Mission",
+  "missionType": "Space",
+  "unique": true,
+  "title": "Mining Survey",
+  "quadrant": "A",
+  "span": 3,
+  "points": 35,
+  "requirements": "skill(Engineer),skill(Geology),skill(Physics),skill(Science),attributeTotalMoreThan(Cunning,34)",
+  "requirementsText": "Engineer, Geology, Physics, Science, and Cunning>34",
+  "affiliations": "not(Borg)",
+  "affiliationsText": "Any affiliation (except [Borg]) may attempt this mission.",
+  "lore": "[b]Unclaimed asteroid belt:[/b] Evaluate feasibility of a proposed mining station in this star system."
+}

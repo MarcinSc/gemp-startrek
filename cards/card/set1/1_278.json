@@ -1,0 +1,20 @@
+{
+  "type": "Personnel",
+  "affiliation": "Federation",
+  "cost": "1",
+  "title": "Mills",
+  "species": "Human",
+  "skills": [
+    "Geology",
+    "Physics",
+    "Security"
+  ],
+  "icons": [
+    "Staff",
+    "Deep Space Nine"
+  ],
+  "integrity": 6,
+  "cunning": 5,
+  "strength": 6,
+  "lore": "Although there was some initial friction, Starfleet and Bajoran security forces aboard Deep Space 9 were soon working together smoothly."
+}

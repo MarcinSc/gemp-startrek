@@ -1,0 +1,22 @@
+{
+  "type": "Personnel",
+  "affiliation": "Bajoran",
+  "cost": "1",
+  "title": "Shandor",
+  "species": "Bajoran",
+  "skills": [
+    "Archeology",
+    "Diplomacy",
+    "Honor"
+  ],
+  "icons": [
+    "Deep Space Nine"
+  ],
+  "keywords": [
+    "Prylar"
+  ],
+  "integrity": 6,
+  "cunning": 5,
+  "strength": 3,
+  "lore": "\"Yelim cha ono... tamah purono dhar jeek... teram far che... yavar ha iktasho...\""
+}

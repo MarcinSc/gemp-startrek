@@ -1,0 +1,14 @@
+{
+  "type": "Mission",
+  "missionType": "Space",
+  "unique": true,
+  "title": "Fissure Research",
+  "quadrant": "A",
+  "span": 3,
+  "points": 35,
+  "requirements": "skill(Astrometrics),skill(Engineer),skill(Physics),skill(Science),attributeTotalMoreThan(Cunning,36)",
+  "requirementsText": "Astrometics, Engineer, Physics, Science, and Cunning>36",
+  "affiliations": "any",
+  "affiliationsText": "Any affiliation may attempt this mission.",
+  "lore": "[b]Forcas sector:[/b] Perform scans of this \"keyhole\" intersecting different quantum realities."
+}

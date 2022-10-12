@@ -1,0 +1,48 @@
+{
+  "type": "Personnel",
+  "affiliation": "Bajoran",
+  "cost": "2",
+  "unique": true,
+  "title": "Li Nalas",
+  "subtitle": "Legend of Bajor",
+  "species": "Bajoran",
+  "skills": [
+    "Geology",
+    "Honor",
+    "Leadership",
+    "Officer"
+  ],
+  "icons": [
+    "Command",
+    "Deep Space Nine"
+  ],
+  "keywords": [
+    "Bajoran Resistance"
+  ],
+  "integrity": 8,
+  "cunning": 5,
+  "strength": 5,
+  "abilities": [
+    {
+      "text": "When you play this personnel, you may draw a card.",
+      "type": "trigger",
+      "optional": true,
+      "condition": "played(self)",
+      "effect": {
+        "type": "drawCards",
+        "amount": 1
+      }
+    },
+    {
+      "text": "When this personnel is killed, you must discard a card from hand.",
+      "type": "trigger",
+      "condition": "killed(self)",
+      "effect": {
+        "type": "chooseAndDiscard",
+        "player": "owner(self)",
+        "amount": 1
+      }
+    }
+  ],
+  "lore": "\"...I have done what Bajor needed me to do. I've allowed myself to be a slave to my reputation all of these years. And now, it is enough.\""
+}

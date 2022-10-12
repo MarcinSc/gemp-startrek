@@ -27,8 +27,9 @@ public class CardDefinition {
     private String quadrant;
     private int span;
     private int points;
-    private Array<String> requirements;
-    private Array<String> affiliations;
+    private String requirements;
+    private String requirementsText;
+    private String affiliations;
     private String affiliationsText;
 
     // Dilemma specific

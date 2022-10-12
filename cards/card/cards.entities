@@ -2,21 +2,6 @@
   "sets": [
     {
       "tpl:extends": "card/set1/set1.json"
-    },
-    {
-      "tpl:extends": "card/set12/set12.json"
-    },
-    {
-      "tpl:extends": "card/set29/set29.json"
-    },
-    {
-      "tpl:extends": "card/set30/set30.json"
-    },
-    {
-      "tpl:extends": "card/set37/set37.json"
-    },
-    {
-      "tpl:extends": "card/set7/set7.json"
     }
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "type": "Mission",
+  "missionType": "Planet",
+  "unique": true,
+  "title": "Security Briefing",
+  "quadrant": "A",
+  "span": 2,
+  "points": 35,
+  "requirements": "skillCount(Diplomacy,2),skillCount(Security,2),attributeTotalMoreThan(Cunning,32)",
+  "requirementsText": "2 Diplomacy, 2 Security, and Cunning>32",
+  "affiliations": "or(affiliation(Bajoran),affiliation(Cardassian),affiliation(Dominion))",
+  "affiliationsText": "[Baj][Car][Dom]",
+  "lore": "[b]Korma:[/b] Attend a conference on this Cardassian outpost and share intelligence on the Klingon Empire."
+}

@@ -1,0 +1,41 @@
+{
+  "type": "Personnel",
+  "affiliation": "Federation",
+  "cost": "4",
+  "unique": true,
+  "title": "Benjamin Sisko",
+  "subtitle": "Defiant Captain",
+  "species": "Human",
+  "skills": [
+    "Diplomacy",
+    "Engineer",
+    "Honor",
+    "Leadership",
+    "Navigation",
+    "Officer"
+  ],
+  "icons": [
+    "Command",
+    "Deep Space Nine"
+  ],
+  "keywords": [
+    "Commander: U.S.S. Defiant"
+  ],
+  "integrity": 6,
+  "cunning": 6,
+  "strength": 6,
+  "abilities": [
+    {
+      "text": "When you play this personnel, you may download a [DS9] ship.",
+      "type": "trigger",
+      "optional": true,
+      "condition": "played(self)",
+      "effect": {
+        "type": "download",
+        "filter": "type(ship),icon(Deep Space Nine)",
+        "amount": 1
+      }
+    }
+  ],
+  "lore": "\"Let's just say we're preparing a few surprises just in case the Dominion comes through the wormhole.\""
+}

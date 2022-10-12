@@ -9,24 +9,28 @@ public class StarTrekServerDeckSystem extends BaseSystem {
     public StarTrekServerDeckSystem() {
         temporaryDeck = new StarTrekDeck();
         temporaryDeck.setDeckId("deckId");
-        temporaryDeck.setDeckName("Example deck");
+        temporaryDeck.setDeckName("Deep Space Nine Starter Deck");
 
-        temporaryDeck.getMissions().add("12_40");
-        temporaryDeck.getMissions().add("12_42");
-        temporaryDeck.getMissions().add("29_36");
-        temporaryDeck.getMissions().add("7_45");
-        temporaryDeck.getMissions().add("30_32");
+        temporaryDeck.getMissions().add("1_170");
+        temporaryDeck.getMissions().add("1_187");
+        temporaryDeck.getMissions().add("1_188");
+        temporaryDeck.getMissions().add("1_198");
+        temporaryDeck.getMissions().add("1_199");
 
-        temporaryDeck.getDillemas().add("37_2");
+        temporaryDeck.getDillemas().add("1_4");
 
-        temporaryDeck.getDrawDeck().add("12_58");
-        temporaryDeck.getDrawDeck().add("12_58");
-        temporaryDeck.getDrawDeck().add("12_58");
-        temporaryDeck.getDrawDeck().add("12_58");
-        temporaryDeck.getDrawDeck().add("12_58");
-        temporaryDeck.getDrawDeck().add("12_58");
-        temporaryDeck.getDrawDeck().add("12_58");
-        temporaryDeck.getDrawDeck().add("12_58");
+        temporaryDeck.getDrawDeck().add("1_210");
+        temporaryDeck.getDrawDeck().add("1_214");
+        temporaryDeck.getDrawDeck().add("1_217");
+        temporaryDeck.getDrawDeck().add("1_225");
+        temporaryDeck.getDrawDeck().add("1_251");
+        temporaryDeck.getDrawDeck().add("1_254");
+        temporaryDeck.getDrawDeck().add("1_256");
+        temporaryDeck.getDrawDeck().add("1_265");
+        temporaryDeck.getDrawDeck().add("1_278");
+        temporaryDeck.getDrawDeck().add("1_280");
+        temporaryDeck.getDrawDeck().add("1_285");
+        temporaryDeck.getDrawDeck().add("1_291");
     }
 
     public StarTrekDeck getStarterDeck(String starterDeckId) {
