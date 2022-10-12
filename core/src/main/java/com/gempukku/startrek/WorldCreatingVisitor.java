@@ -30,9 +30,7 @@ import com.gempukku.libgdx.network.json.JsonValueServerSessionProducer;
 import com.gempukku.startrek.common.ConnectionParamSystem;
 import com.gempukku.startrek.common.FontProviderSystem;
 import com.gempukku.startrek.common.IncomingUpdatesProcessor;
-import com.gempukku.startrek.game.GameConnectionInitializer;
-import com.gempukku.startrek.game.GameConnectionLostHandling;
-import com.gempukku.startrek.game.StarTrekGameComponent;
+import com.gempukku.startrek.game.*;
 import com.gempukku.startrek.hall.*;
 import com.gempukku.startrek.login.LoginScreenRenderer;
 
@@ -93,7 +91,10 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new SpriteSystem(),
                 new CameraSystem(new TopDownCameraController()),
                 new EvaluatePropertySystem(),
-                new IncomingUpdatesProcessor());
+                new IncomingUpdatesProcessor(),
+
+                new CardInGameRenderingSystem(),
+                new PlayerPositionSystem());
 
         World world = new World(worldConfigurationBuilder.build());
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);

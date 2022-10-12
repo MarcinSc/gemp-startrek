@@ -1,0 +1,13 @@
+
+card-templates.png
+size: 1024, 2048
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+federation-template
+  rotate: false
+  xy: 2, 2
+  size: 736, 1029
+  orig: 736, 1029
+  offset: 0, 0
+  index: -1
