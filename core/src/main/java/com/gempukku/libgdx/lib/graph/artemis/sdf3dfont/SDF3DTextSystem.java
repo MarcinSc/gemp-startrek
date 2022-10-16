@@ -5,6 +5,7 @@ import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
@@ -29,7 +30,7 @@ public class SDF3DTextSystem extends BaseEntitySystem {
     private PipelineRendererSystem pipelineRendererSystem;
     private ComponentMapper<SDF3DTextComponent> sdf3DTextComponentMapper;
 
-    private final IntMap<SDFText> renderedTexts = new IntMap<>();
+    private final IntMap<Array<SDFText>> renderedTexts = new IntMap<>();
 
     private SpriteBatchModel spriteBatchModel;
 
@@ -72,27 +73,40 @@ public class SDF3DTextSystem extends BaseEntitySystem {
         Entity textEntity = world.getEntity(entityId);
         Matrix4 resolvedTransform = transformSystem.getResolvedTransform(textEntity);
 
-        SDFText text = new SDFText(glyphOffseter, textParser, spriteBatchModel, bitmapFontSystem,
-                resolvedTransform, sdf3DTextComponentMapper.get(entityId));
+        Array<SDFText> texts = new Array<>();
+        SDF3DTextComponent textComponent = sdf3DTextComponentMapper.get(entityId);
+        for (SDFTextBlock textBlock : textComponent.getTextBlocks()) {
+            SDFText text = new SDFText(glyphOffseter, textParser, spriteBatchModel, bitmapFontSystem,
+                    resolvedTransform, textBlock);
+            texts.add(text);
+        }
 
-        renderedTexts.put(entityId, text);
+        renderedTexts.put(entityId, texts);
     }
 
     @EventListener
     public void transformChanged(TransformUpdated transformUpdated, Entity entity) {
-        SDFText text = renderedTexts.get(entity.getId());
-        if (text != null)
-            text.updateSprites();
+        Array<SDFText> texts = renderedTexts.get(entity.getId());
+        if (texts != null) {
+            for (SDFText text : texts) {
+                text.updateSprites();
+            }
+        }
     }
 
-    public void updateSDFText(int entityId) {
-        renderedTexts.get(entityId).updateSprites();
+    public void updateSDFTexts(int entityId) {
+        Array<SDFText> texts = renderedTexts.get(entityId);
+        for (SDFText text : texts) {
+            text.updateSprites();
+        }
     }
 
     @Override
     protected void removed(int entityId) {
-        SDFText text = renderedTexts.remove(entityId);
-        text.dispose();
+        Array<SDFText> texts = renderedTexts.remove(entityId);
+        for (SDFText text : texts) {
+            text.dispose();
+        }
     }
 
     @Override

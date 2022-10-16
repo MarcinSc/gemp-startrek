@@ -39,7 +39,7 @@ public class SDFText implements Disposable {
     private SpriteBatchModel spriteBatchModel;
     private BitmapFontSystem bitmapFontSystem;
     private Matrix4 transform;
-    private SDF3DTextComponent sdf3DTextComponent;
+    private SDFTextBlock sdfTextBlock;
 
     private ObjectSet<RenderableSprite> tagGraphSprites = new ObjectSet<>();
 
@@ -56,13 +56,13 @@ Color - character color
 
     public SDFText(GlyphOffseter glyphOffseter, TextParser textParser, SpriteBatchModel spriteBatchModel,
                    BitmapFontSystem bitmapFontSystem,
-                   Matrix4 transform, SDF3DTextComponent sdf3DTextComponent) {
+                   Matrix4 transform, SDFTextBlock sdfTextBlock) {
         this.glyphOffseter = glyphOffseter;
         this.textParser = textParser;
         this.spriteBatchModel = spriteBatchModel;
         this.bitmapFontSystem = bitmapFontSystem;
         this.transform = transform;
-        this.sdf3DTextComponent = sdf3DTextComponent;
+        this.sdfTextBlock = sdfTextBlock;
         addText();
     }
 
@@ -72,32 +72,32 @@ Color - character color
     }
 
     private void addText() {
-        float width = sdf3DTextComponent.getRightVector().len();
-        float height = sdf3DTextComponent.getUpVector().len();
+        float width = sdfTextBlock.getRightVector().len();
+        float height = sdfTextBlock.getUpVector().len();
 
         TextStyle defaultTextStyle = createDefaultTextStyle();
 
-        ParsedText parsedText = textParser.parseText(defaultTextStyle, sdf3DTextComponent.getText());
+        ParsedText parsedText = textParser.parseText(defaultTextStyle, sdfTextBlock.getText());
         try {
-            Vector3 normalizedRightVector = tempVector1.set(sdf3DTextComponent.getRightVector()).nor();
-            Vector3 normalizedUpVector = tempVector2.set(sdf3DTextComponent.getUpVector()).nor();
+            Vector3 normalizedRightVector = tempVector1.set(sdfTextBlock.getRightVector()).nor();
+            Vector3 normalizedUpVector = tempVector2.set(sdfTextBlock.getUpVector()).nor();
 
             GlyphOffsetText offsetText;
             float scale;
-            if (sdf3DTextComponent.isScaleDownToFit()) {
-                offsetText = layoutTextToFit(width, height, glyphOffseter, parsedText, sdf3DTextComponent.getTargetWidth(),
-                        sdf3DTextComponent.getScaleDownMultiplier(), sdf3DTextComponent.isWrap());
+            if (sdfTextBlock.isScaleDownToFit()) {
+                offsetText = layoutTextToFit(width, height, glyphOffseter, parsedText, sdfTextBlock.getTargetWidth(),
+                        sdfTextBlock.getScaleDownMultiplier(), sdfTextBlock.isWrap());
                 scale = calculateScale(offsetText, width, height);
             } else {
-                offsetText = glyphOffseter.offsetText(parsedText, sdf3DTextComponent.getTargetWidth(), sdf3DTextComponent.isWrap());
-                scale = width / sdf3DTextComponent.getTargetWidth();
+                offsetText = glyphOffseter.offsetText(parsedText, sdfTextBlock.getTargetWidth(), sdfTextBlock.isWrap());
+                scale = width / sdfTextBlock.getTargetWidth();
             }
 
             ObjectMap<TextStyle, PropertyContainer> stylePropertyContainerMap = new ObjectMap<>();
 
-            Alignment alignment = sdf3DTextComponent.getAlignment();
+            Alignment alignment = sdfTextBlock.getAlignment();
 
-            Matrix4 resultTransform = tempMatrix.set(transform).mul(sdf3DTextComponent.getTransform());
+            Matrix4 resultTransform = tempMatrix.set(transform).mul(sdfTextBlock.getTransform());
 
             float startY = alignment.applyY(offsetText.getTextHeight() * scale, height) - height / 2;
 
@@ -157,29 +157,29 @@ Color - character color
 
     private float getFontWidth(TextStyle textStyle) {
         Float fontWidth = (Float) textStyle.getAttribute(TextStyleConstants.FontWidth);
-        return fontWidth != null ? fontWidth : sdf3DTextComponent.getWidth();
+        return fontWidth != null ? fontWidth : sdfTextBlock.getWidth();
     }
 
     private float getFontEdge(TextStyle textStyle) {
         Float fontEdge = (Float) textStyle.getAttribute(TextStyleConstants.FontEdge);
-        return fontEdge != null ? fontEdge : sdf3DTextComponent.getEdge();
+        return fontEdge != null ? fontEdge : sdfTextBlock.getEdge();
     }
 
     private Color getFontColor(TextStyle textStyle) {
         Color fontColor = (Color) textStyle.getAttribute(TextStyleConstants.FontColor);
-        return fontColor != null ? fontColor : sdf3DTextComponent.getColor();
+        return fontColor != null ? fontColor : sdfTextBlock.getColor();
     }
 
     private Alignment getHorizontalAlignment(TextStyle textStyle) {
         Alignment alignment = (Alignment) textStyle.getAttribute(TextStyleConstants.AlignmentHorizontal);
-        return alignment != null ? alignment : sdf3DTextComponent.getAlignment();
+        return alignment != null ? alignment : sdfTextBlock.getAlignment();
     }
 
     private TextStyle createDefaultTextStyle() {
         TextStyle sdfTextStyle = Pools.obtain(TextStyle.class);
-        sdfTextStyle.setAttribute(TextStyleConstants.Kerning, sdf3DTextComponent.getKerning());
-        sdfTextStyle.setAttribute(TextStyleConstants.Font, bitmapFontSystem.getBitmapFont(sdf3DTextComponent.getBitmapFontPath()));
-        sdfTextStyle.setAttribute(TextStyleConstants.LetterSpacing, sdf3DTextComponent.getLetterSpacing());
+        sdfTextStyle.setAttribute(TextStyleConstants.Kerning, sdfTextBlock.getKerning());
+        sdfTextStyle.setAttribute(TextStyleConstants.Font, bitmapFontSystem.getBitmapFont(sdfTextBlock.getBitmapFontPath()));
+        sdfTextStyle.setAttribute(TextStyleConstants.LetterSpacing, sdfTextBlock.getLetterSpacing());
         return sdfTextStyle;
     }
 
@@ -188,7 +188,7 @@ Color - character color
         float scale = width / targetWidth;
         do {
             GlyphOffsetText offsetText = glyphOffseter.offsetText(text, targetWidth, wrap);
-            if (!sdf3DTextComponent.isScaleDownToFit())
+            if (!sdfTextBlock.isScaleDownToFit())
                 return offsetText;
 
             if (offsetText.getTextWidth() * scale <= width && offsetText.getTextHeight() * scale <= height)
