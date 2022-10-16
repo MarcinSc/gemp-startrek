@@ -114,7 +114,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                 line.xAdvances.add(usedWidth + kerning * fontScale);
                 line.yAdvances.add(maxAscent - font.getAscent() * fontScale);
 
-                float glyphAdvance = (glyph.xadvance - fontData.padLeft - fontData.padRight) + kerning + getLetterSpacing(textStyle);
+                float glyphAdvance = glyph.xadvance + kerning + getLetterSpacing(textStyle);
 
                 usedWidth += glyphAdvance * fontScale;
 
@@ -135,7 +135,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
     private float getFontDescent(BitmapFont font) {
         BitmapFont.BitmapFontData fontData = font.getData();
-        return font.getLineHeight() - fontData.padTop - fontData.padBottom - font.getAscent();
+        return font.getLineHeight() - font.getAscent();
     }
 
     private int determineLineGlyphLength(ParsedText parsedText, float availableWidth, int startIndex, boolean wrap) {
@@ -173,7 +173,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
             float fontScale = getFontScale(textStyle);
 
-            return ((glyph.xadvance - fontData.padLeft - fontData.padRight) + getLetterSpacing(textStyle)) * fontScale;
+            return (glyph.xadvance + getLetterSpacing(textStyle)) * fontScale;
         } else {
             return 0f;
         }
@@ -195,7 +195,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
                 float fontScale = getFontScale(textStyle);
 
-                float glyphAdvance = (glyph.xadvance - fontData.padLeft - fontData.padRight);
+                float glyphAdvance = glyph.xadvance;
                 if (lastCharacter != 0 && lastCharacterStyle == textStyle && getKerning(textStyle)) {
                     int kerning = fontData.getGlyph(lastCharacter).getKerning(character);
                     glyphAdvance += kerning;

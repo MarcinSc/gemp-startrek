@@ -87,7 +87,7 @@
         1,
         0,
         0,
-        0.01,
+        0.005,
         0,
         1
       ]
@@ -115,6 +115,6 @@
     "scaleDownToFit": true,
     "alignment": "left",
     "bitmapFontPath": "font/arial.fnt",
-    "text": "Test text\n[b][color ff0000]Second line[/color][/b]"
+    "text": "T[scale 0.9]e[/scale][scale 0.8]e[/scale][scale 0.7]e[/scale][scale 0.6]e[/scale][scale 0.5]e[/scale]st"
   }
 }

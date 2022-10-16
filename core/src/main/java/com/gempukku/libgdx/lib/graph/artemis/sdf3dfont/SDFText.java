@@ -112,15 +112,19 @@ Color - character color
                     TextStyle textStyle = line.getGlyphStyle(glyphIndex);
                     BitmapFont bitmapFont = (BitmapFont) textStyle.getAttribute(TextStyleConstants.Font);
                     BitmapFont.Glyph glyph = bitmapFont.getData().getGlyph(character);
+
+                    float fontScale = getFontScale(textStyle);
+
                     float charX = line.getGlyphXAdvance(glyphIndex);
-                    float charY = lineY + line.getGlyphYAdvance(glyphIndex);
+                    // TODO: This 5* is a magic number, can't figure out why it works...
+                    float charY = lineY + 5 * line.getGlyphYAdvance(glyphIndex);
 
                     PropertyContainer stylePropertyContainer = getStylePropertyContainer(stylePropertyContainerMap, textStyle);
 
                     addGlyph(glyph, bitmapFont,
                             resultTransform,
                             normalizedRightVector, normalizedUpVector, stylePropertyContainer,
-                            1f,
+                            fontScale,
                             startX, startY,
                             charX, charY, scale);
                 }
@@ -146,12 +150,17 @@ Color - character color
         return result;
     }
 
-    private Object getFontWidth(TextStyle textStyle) {
+    private float getFontScale(TextStyle textStyle) {
+        Float fontScale = (Float) textStyle.getAttribute(TextStyleConstants.FontScale);
+        return fontScale != null ? fontScale : 1f;
+    }
+
+    private float getFontWidth(TextStyle textStyle) {
         Float fontWidth = (Float) textStyle.getAttribute(TextStyleConstants.FontWidth);
         return fontWidth != null ? fontWidth : sdf3DTextComponent.getWidth();
     }
 
-    private Object getFontEdge(TextStyle textStyle) {
+    private float getFontEdge(TextStyle textStyle) {
         Float fontEdge = (Float) textStyle.getAttribute(TextStyleConstants.FontEdge);
         return fontEdge != null ? fontEdge : sdf3DTextComponent.getEdge();
     }

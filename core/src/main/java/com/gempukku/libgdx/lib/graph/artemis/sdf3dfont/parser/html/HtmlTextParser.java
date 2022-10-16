@@ -26,6 +26,9 @@ public class HtmlTextParser implements TextParser {
         // Color
         tagTextParser.addTagHandler("color", new ColorTagHandler());
         tagTextParser.addTagHandler("/color", new PopStyleTagHandler());
+        // Scale
+        tagTextParser.addTagHandler("scale", new ScaleTagHandler());
+        tagTextParser.addTagHandler("/scale", new PopStyleTagHandler());
     }
 
     @Override
