@@ -17,15 +17,15 @@ public class HtmlTextParser implements TextParser {
 
     public HtmlTextParser(Function<String, BitmapFont> fontResolver, char startTagCharacter, char endTagCharacter, char escapeCharacter) {
         tagTextParser = new ConfigurableTagTextParser(fontResolver, startTagCharacter, endTagCharacter, escapeCharacter);
-        // Bold
-        tagTextParser.addTagHandler("b", new BoldTagHandler(0.5f));
-        tagTextParser.addTagHandler("/b", new PopStyleTagHandler());
         // Font
         tagTextParser.addTagHandler("font", new FontTagHandler(fontResolver));
         tagTextParser.addTagHandler("/font", new PopStyleTagHandler());
         // Color
         tagTextParser.addTagHandler("color", new ColorTagHandler());
         tagTextParser.addTagHandler("/color", new PopStyleTagHandler());
+        // Width
+        tagTextParser.addTagHandler("width", new WidthTagHandler());
+        tagTextParser.addTagHandler("/width", new PopStyleTagHandler());
         // Scale
         tagTextParser.addTagHandler("scale", new ScaleTagHandler());
         tagTextParser.addTagHandler("/scale", new PopStyleTagHandler());

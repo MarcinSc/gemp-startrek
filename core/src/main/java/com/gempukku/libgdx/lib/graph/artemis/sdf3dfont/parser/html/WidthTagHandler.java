@@ -5,18 +5,14 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable.TagHandler;
 
-public class BoldTagHandler implements TagHandler {
-    private float fontWidth;
-
-    public BoldTagHandler(float fontWidth) {
-        this.fontWidth = fontWidth;
-    }
-
+public class WidthTagHandler implements TagHandler {
     @Override
     public String startProcessingTag(String tagParameters, Array<TextStyle> textStyleStack) {
+        Float width = Float.parseFloat(tagParameters.trim());
+
         TextStyle lastTextStyle = textStyleStack.peek();
         TextStyle duplicated = lastTextStyle.duplicate();
-        duplicated.setAttribute(TextStyleConstants.FontWidth, fontWidth);
+        duplicated.setAttribute(TextStyleConstants.FontWidth, width);
 
         textStyleStack.add(duplicated);
 
