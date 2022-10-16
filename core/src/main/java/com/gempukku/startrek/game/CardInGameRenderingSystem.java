@@ -113,7 +113,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
         Array<String> skills = cardDefinition.getSkills();
         if (skills != null) {
             for (String skill : skills) {
-                result.append("[width 0.52][color ff0000]•[/color]").append(skill).append("[/width] ");
+                result.append("[width 0.52][letterSpacing 5][color ff0000]•[/color][/letterSpacing]").append(skill).append("[/width] ");
             }
             result.append("\n");
         }
@@ -131,10 +131,10 @@ public class CardInGameRenderingSystem extends BaseSystem {
                 result.append(text).append("\n");
             }
         }
-//        String lore = cardDefinition.getLore();
-//        if (lore != null) {
-//            result.append("[width 0.48][color 101010][scale 0.8]").append(lore).append("[/scale][/color][/width]");
-//        }
+        String lore = cardDefinition.getLore();
+        if (lore != null) {
+            result.append("[width 0.48][scale 0.8][font font/arial-italic.fnt]").append(lore).append("[/font][/scale][/width]");
+        }
 
         return result.toString();
     }

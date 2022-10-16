@@ -32,7 +32,11 @@ public class HtmlTextParser implements TextParser {
         // Scale
         tagTextParser.addTagHandler("scale", new ScaleTagHandler());
         tagTextParser.addTagHandler("/scale", new PopStyleTagHandler());
+        // Letter spacing
+        tagTextParser.addTagHandler("letterSpacing", new LetterSpacingTagHandler());
+        tagTextParser.addTagHandler("/letterSpacing", new PopStyleTagHandler());
 
+        // Image
         tagTextParser.addTagHandler("img", new ImageTagHandler(textureRegionResolver));
     }
 
