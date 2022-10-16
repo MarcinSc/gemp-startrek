@@ -25,6 +25,10 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         this.defaultLineSpacing = defaultLineSpacing;
     }
 
+    public void setDefaultFontScale(float defaultFontScale) {
+        this.defaultFontScale = defaultFontScale;
+    }
+
     @Override
     public GlyphOffsetText offsetText(ParsedText parsedText, float availableWidth, boolean wrap) {
         float width = 0;
