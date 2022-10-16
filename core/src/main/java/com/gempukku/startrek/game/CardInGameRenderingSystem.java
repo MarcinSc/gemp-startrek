@@ -9,12 +9,16 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
+import com.gempukku.libgdx.lib.artemis.texture.TextureReference;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextComponent;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDFTextBlock;
+import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
+import com.gempukku.startrek.card.Affiliation;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 
@@ -53,9 +57,16 @@ public class CardInGameRenderingSystem extends BaseSystem {
         Entity card = world.getEntity(i);
         CardInHandComponent cardInHand = card.getComponent(CardInHandComponent.class);
         String owner = cardInHand.getOwner();
-        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardInHand.getCardId());
+        String cardId = cardInHand.getCardId();
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
 
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full.template");
+        Affiliation affiliation = cardDefinition.getAffiliation();
+        String cardTemplate = getCardTemplate(affiliation);
+        SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
+        TextureReference textureReference = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
+        textureReference.setRegion(cardTemplate);
+
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
         SDF3DTextComponent sdfText = cardRepresentation.getComponent(SDF3DTextComponent.class);
         if (sdfText != null) {
@@ -78,10 +89,53 @@ public class CardInGameRenderingSystem extends BaseSystem {
             // Species
             SDFTextBlock raceBlock = sdfText.getTextBlocks().get(3);
             raceBlock.setText(cardDefinition.getSpecies().toString());
+
+            // Text
+            SDFTextBlock textBlock = sdfText.getTextBlocks().get(4);
+            textBlock.setText(createCardText(cardDefinition));
         }
         getPlayerCards(owner).addCardInHand(card, cardRepresentation);
 
         layoutHand(owner);
+    }
+
+    private String getCardTemplate(Affiliation affiliation) {
+        if (affiliation == Affiliation.Federation)
+            return "federation-template";
+        else if (affiliation == Affiliation.Bajoran)
+            return "bajoran-template";
+        return null;
+    }
+
+    private String createCardText(CardDefinition cardDefinition) {
+        StringBuilder result = new StringBuilder();
+        Array<String> skills = cardDefinition.getSkills();
+        if (skills != null) {
+            for (String skill : skills) {
+                result.append("[width 0.52][color ff0000]•[/color]").append(skill).append("[/width] ");
+            }
+            result.append("\n");
+        }
+        Array<String> keywords = cardDefinition.getKeywords();
+        if (keywords != null) {
+            for (String keyword : keywords) {
+                result.append("[width 0.52]").append(keyword).append("[/width] ");
+            }
+            result.append("\n");
+        }
+        Array<JsonValue> cardAbilities = cardDefinition.getAbilities();
+        if (cardAbilities != null) {
+            for (JsonValue ability : cardAbilities) {
+                String text = ability.getString("text");
+                result.append(text).append("\n");
+            }
+        }
+//        String lore = cardDefinition.getLore();
+//        if (lore != null) {
+//            result.append("[width 0.48][color 101010][scale 0.8]").append(lore).append("[/scale][/color][/width]");
+//        }
+
+        return result.toString();
     }
 
     private void layoutHand(String username) {

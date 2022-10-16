@@ -29,6 +29,8 @@ public class HtmlTextParser implements TextParser {
         // Scale
         tagTextParser.addTagHandler("scale", new ScaleTagHandler());
         tagTextParser.addTagHandler("/scale", new PopStyleTagHandler());
+
+        tagTextParser.addTagHandler("img", new NoOpTagHandler());
     }
 
     @Override

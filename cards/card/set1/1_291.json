@@ -8,8 +8,7 @@
   "species": "Klingon",
   "skills": [
     "Diplomacy",
-    "Honor",
-    "Honor",
+    "2 Honor",
     "Leadership",
     "Officer"
   ],
@@ -22,7 +21,7 @@
   "strength": 8,
   "abilities": [
     {
-      "text": "When an engagement involving your [Fed] ship begins at this mission, if this personnel is aboard a ship, that ship may join that engagement.",
+      "text": "When an engagement involving your [img Fed] ship begins at this mission, if this personnel is aboard a ship, that ship may join that engagement.",
       "type": "trigger",
       "optional": true,
       "condition": "engagementBeginsAt(missionLocation(self)),engagementInvolving(owned,type(ship),icon(Fed)),isOnboardShip(self)",

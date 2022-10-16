@@ -13,4 +13,12 @@ public class TextureReference implements EvaluableProperty {
     public String getRegion() {
         return region;
     }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
 }

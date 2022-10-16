@@ -26,7 +26,7 @@
   "strength": 6,
   "abilities": [
     {
-      "text": "When you play this personnel, you may download a [DS9] ship.",
+      "text": "When you play this personnel, you may download a [img DS9] ship.",
       "type": "trigger",
       "optional": true,
       "condition": "played(self)",

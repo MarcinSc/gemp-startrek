@@ -67,6 +67,10 @@ public class CardDefinition {
         return skills;
     }
 
+    public Array<String> getKeywords() {
+        return keywords;
+    }
+
     public Array<String> getIcons() {
         return icons;
     }

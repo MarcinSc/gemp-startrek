@@ -72,15 +72,21 @@ Color - character color
     }
 
     private void addText() {
-        float width = sdfTextBlock.getRightVector().len();
-        float height = sdfTextBlock.getUpVector().len();
-
         TextStyle defaultTextStyle = createDefaultTextStyle();
 
         ParsedText parsedText = textParser.parseText(defaultTextStyle, sdfTextBlock.getText());
+        if (parsedText.getNextUnbreakableChunkLength(0) == -1)
+            return;
+
+        float width = sdfTextBlock.getRightVector().len();
+        float height = sdfTextBlock.getUpVector().len();
+
         try {
             Vector3 normalizedRightVector = tempVector1.set(sdfTextBlock.getRightVector()).nor();
             Vector3 normalizedUpVector = tempVector2.set(sdfTextBlock.getUpVector()).nor();
+
+            float targetWidth = sdfTextBlock.getTargetWidth();
+            boolean wrap = sdfTextBlock.isWrap();
 
             GlyphOffsetText offsetText;
             float scale;
@@ -89,8 +95,8 @@ Color - character color
                         sdfTextBlock.getScaleDownMultiplier(), sdfTextBlock.isWrap());
                 scale = calculateScale(offsetText, width, height);
             } else {
-                offsetText = glyphOffseter.offsetText(parsedText, sdfTextBlock.getTargetWidth(), sdfTextBlock.isWrap());
-                scale = width / sdfTextBlock.getTargetWidth();
+                offsetText = glyphOffseter.offsetText(parsedText, targetWidth, wrap);
+                scale = width / targetWidth;
             }
 
             ObjectMap<TextStyle, PropertyContainer> stylePropertyContainerMap = new ObjectMap<>();
@@ -186,8 +192,9 @@ Color - character color
     private GlyphOffsetText layoutTextToFit(float width, float height, GlyphOffseter glyphOffseter,
                                             ParsedText text, float targetWidth, float scaleDownMultiplier, boolean wrap) {
         float scale = width / targetWidth;
+        float renderScale = 1f;
         do {
-            GlyphOffsetText offsetText = glyphOffseter.offsetText(text, targetWidth, wrap);
+            GlyphOffsetText offsetText = glyphOffseter.offsetText(text, targetWidth * renderScale, wrap);
             if (!sdfTextBlock.isScaleDownToFit())
                 return offsetText;
 
@@ -195,6 +202,7 @@ Color - character color
                 return offsetText;
 
             scale /= scaleDownMultiplier;
+            renderScale *= scaleDownMultiplier;
         } while (true);
     }
 

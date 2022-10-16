@@ -159,6 +159,10 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             usedWidth += chunkWidth;
 
             consumedGlyphIndex += chunkLength;
+
+            if (parsedText.getCharAt(consumedGlyphIndex - 1) == '\n')
+                return consumedGlyphIndex - startIndex;
+
             firstChunk = false;
         }
     }
