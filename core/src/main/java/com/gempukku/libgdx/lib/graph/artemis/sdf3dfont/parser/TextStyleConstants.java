@@ -9,5 +9,5 @@ public class TextStyleConstants {
     public static final String LetterSpacing = "Letter-Spacing";
 
     public static final String AlignmentHorizontal = "Alignment-Horizontal";
-
+    public static final String LineSpacing = "Line-Spacing";
 }

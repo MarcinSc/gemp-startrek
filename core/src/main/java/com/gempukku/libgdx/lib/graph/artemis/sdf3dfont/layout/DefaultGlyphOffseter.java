@@ -9,6 +9,20 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants
 
 public class DefaultGlyphOffseter implements GlyphOffseter {
     private boolean defaultKerning = true;
+    private float defaultLetterSpacing = 0f;
+    private float defaultLineSpacing = 0f;
+
+    public void setDefaultKerning(boolean defaultKerning) {
+        this.defaultKerning = defaultKerning;
+    }
+
+    public void setDefaultLetterSpacing(float defaultLetterSpacing) {
+        this.defaultLetterSpacing = defaultLetterSpacing;
+    }
+
+    public void setDefaultLineSpacing(float defaultLineSpacing) {
+        this.defaultLineSpacing = defaultLineSpacing;
+    }
 
     @Override
     public GlyphOffsetText offsetText(ParsedText parsedText, float availableWidth, boolean wrap) {
@@ -19,16 +33,25 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
         DefaultGlyphOffsetText text = new DefaultGlyphOffsetText();
 
+        DefaultGlyphOffsetLine lastLine = null;
+
         do {
             DefaultGlyphOffsetLine line = layoutLine(parsedText, availableWidth, nextCharacterIndex, wrap);
             if (line == null)
                 break;
+
+            if (lastLine != null) {
+                float lastLineSpacing = getLineSpacing(lastLine.getGlyphStyle(0));
+                height += lastLineSpacing;
+                lastLine.lineHeight += lastLineSpacing;
+            }
 
             text.lines.add(line);
 
             width = Math.max(width, line.getWidth());
             height += line.getHeight();
             nextCharacterIndex = nextCharacterIndex + line.getGlyphCount();
+            lastLine = line;
         } while (wrap);
 
         text.textWidth = width;
@@ -175,10 +198,6 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         return width;
     }
 
-    private float getLetterSpacing(TextStyle textStyle) {
-        return (Float) textStyle.getAttributes().get(TextStyleConstants.LetterSpacing);
-    }
-
     private boolean isSkippable(char character) {
         return Character.isWhitespace(character);
     }
@@ -194,6 +213,16 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
     private Boolean getKerning(TextStyle textStyle) {
         Boolean kerning = (Boolean) textStyle.getAttributes().get(TextStyleConstants.Kerning);
         return kerning != null ? kerning : defaultKerning;
+    }
+
+    private float getLetterSpacing(TextStyle textStyle) {
+        Float letterSpacing = (Float) textStyle.getAttributes().get(TextStyleConstants.LetterSpacing);
+        return letterSpacing != null ? letterSpacing : defaultLetterSpacing;
+    }
+
+    private float getLineSpacing(TextStyle textStyle) {
+        Float lineSpacing = (Float) textStyle.getAttributes().get(TextStyleConstants.LineSpacing);
+        return lineSpacing != null ? lineSpacing : defaultLineSpacing;
     }
 
     private static class DefaultGlyphOffsetText implements GlyphOffsetText {

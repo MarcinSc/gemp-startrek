@@ -110,11 +110,11 @@
       "b": 1,
       "a": 1
     },
-    "targetWidth": 120,
+    "targetWidth": 150,
     "kerning": true,
     "scaleDownToFit": true,
     "alignment": "left",
     "bitmapFontPath": "font/arial.fnt",
-    "text": "Test text"
+    "text": "Test text\nSecond line"
   }
 }
