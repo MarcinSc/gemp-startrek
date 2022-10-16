@@ -83,7 +83,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                 line.xAdvances.add(usedWidth + kerning);
                 line.yAdvances.add(maxAscent - font.getAscent());
 
-                float glyphAdvance = (glyph.xadvance - fontData.padLeft - fontData.padRight) + kerning;
+                float glyphAdvance = (glyph.xadvance - fontData.padLeft - fontData.padRight) + kerning + getLetterSpacing(textStyle);
 
                 usedWidth += glyphAdvance;
 
@@ -140,7 +140,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             BitmapFont.BitmapFontData fontData = getFontData(textStyle);
             BitmapFont.Glyph glyph = fontData.getGlyph(character);
 
-            return (glyph.xadvance - fontData.padLeft - fontData.padRight);
+            return (glyph.xadvance - fontData.padLeft - fontData.padRight) + getLetterSpacing(textStyle);
         } else {
             return 0f;
         }
@@ -166,13 +166,17 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                     glyphAdvance += kerning;
                 }
 
-                width += glyphAdvance;
+                width += glyphAdvance + getLetterSpacing(textStyle);
 
                 lastCharacterStyle = textStyle;
                 lastCharacter = character;
             }
         }
         return width;
+    }
+
+    private float getLetterSpacing(TextStyle textStyle) {
+        return (Float) textStyle.getAttributes().get(TextStyleConstants.LetterSpacing);
     }
 
     private boolean isSkippable(char character) {

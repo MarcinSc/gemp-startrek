@@ -148,6 +148,7 @@ Color - character color
         sdfTextStyle.getAttributes().put(TextStyleConstants.FontWidth, sdf3DTextComponent.getWidth());
         sdfTextStyle.getAttributes().put(TextStyleConstants.FontEdge, sdf3DTextComponent.getEdge());
         sdfTextStyle.getAttributes().put(TextStyleConstants.AlignmentHorizontal, sdf3DTextComponent.getAlignment());
+        sdfTextStyle.getAttributes().put(TextStyleConstants.LetterSpacing, sdf3DTextComponent.getLetterSpacing());
         return sdfTextStyle;
     }
 

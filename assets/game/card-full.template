@@ -110,7 +110,7 @@
       "b": 1,
       "a": 1
     },
-    "targetWidth": 50,
+    "targetWidth": 120,
     "kerning": true,
     "scaleDownToFit": true,
     "alignment": "left",

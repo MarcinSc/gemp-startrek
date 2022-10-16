@@ -6,6 +6,7 @@ public class TextStyleConstants {
     public static final String FontWidth = "Font-Width";
     public static final String FontEdge = "Font-Edge";
     public static final String Kerning = "Kerning";
+    public static final String LetterSpacing = "Letter-Spacing";
 
     public static final String AlignmentHorizontal = "Alignment-Horizontal";
 
