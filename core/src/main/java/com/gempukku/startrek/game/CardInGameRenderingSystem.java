@@ -61,13 +61,14 @@ public class CardInGameRenderingSystem extends BaseSystem {
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
 
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full.template");
+        //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
+
         Affiliation affiliation = cardDefinition.getAffiliation();
         String cardTemplate = getCardTemplate(affiliation);
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
         TextureReference textureReference = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
         textureReference.setRegion(cardTemplate);
 
-        //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
         SDF3DTextComponent sdfText = cardRepresentation.getComponent(SDF3DTextComponent.class);
         if (sdfText != null) {
             // Title
