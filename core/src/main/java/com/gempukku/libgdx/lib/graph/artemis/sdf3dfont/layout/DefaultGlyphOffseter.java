@@ -69,8 +69,6 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
     }
 
     private DefaultGlyphOffsetLine layoutLine(ParsedText parsedText, float availableWidth, int startIndex, boolean wrap) {
-        float usedWidth = 0f;
-
         int lineGlyphLength = determineLineGlyphLength(parsedText, availableWidth, startIndex, wrap);
         // Check if no more lines available
         if (lineGlyphLength == 0)
@@ -93,6 +91,10 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         }
 
         DefaultGlyphOffsetLine line = Pools.obtain(DefaultGlyphOffsetLine.class);
+
+        TextStyle lineStyle = parsedText.getTextStyle(startIndex);
+
+        float usedWidth = getLinePaddingLeft(lineStyle);
 
         char lastCharacter = 0;
         TextStyle lastCharacterStyle = null;
@@ -163,6 +165,10 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             // Add the trailing whitespace width (if any) of a previous chunk (if not first chunk)
             if (!firstChunk) {
                 usedWidth += getCharacterWidthIfSkippable(parsedText, consumedGlyphIndex - 1);
+            } else {
+                TextStyle lineStyle = parsedText.getTextStyle(startIndex);
+                usedWidth += getLinePaddingLeft(lineStyle);
+                availableWidth -= getLinePaddingRight(lineStyle);
             }
 
             float chunkWidth = getChunkWidthExcludingLastSkippable(parsedText, consumedGlyphIndex, chunkLength);
@@ -268,6 +274,16 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
     private TextureRegion getTextureRegion(TextStyle textStyle) {
         return (TextureRegion) textStyle.getAttribute(TextStyleConstants.ImageTextureRegion);
+    }
+
+    private float getLinePaddingLeft(TextStyle lineStyle) {
+        Float linePaddingLeft = (Float) lineStyle.getAttribute(TextStyleConstants.PaddingLeft);
+        return linePaddingLeft != null ? linePaddingLeft : 0f;
+    }
+
+    private float getLinePaddingRight(TextStyle lineStyle) {
+        Float linePaddingRight = (Float) lineStyle.getAttribute(TextStyleConstants.PaddingRight);
+        return linePaddingRight != null ? linePaddingRight : 0f;
     }
 
     public static class DefaultGlyphOffsetText implements GlyphOffsetText, Pool.Poolable {

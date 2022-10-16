@@ -113,14 +113,14 @@ public class CardInGameRenderingSystem extends BaseSystem {
         Array<String> skills = cardDefinition.getSkills();
         if (skills != null) {
             for (String skill : skills) {
-                result.append("[width 0.52][letterSpacing 5][color ff0000]•[/color][/letterSpacing]").append(skill).append("[/width] ");
+                result.append("[width 0.5][letterSpacing 5][color ff0000]•[/color][/letterSpacing]").append(skill).append("[/width] ");
             }
             result.append("\n");
         }
         Array<String> keywords = cardDefinition.getKeywords();
         if (keywords != null) {
             for (String keyword : keywords) {
-                result.append("[width 0.52]").append(keyword).append(".[/width] ");
+                result.append("[width 0.5]").append(keyword).append(".[/width] ");
             }
             result.append("\n");
         }
@@ -133,7 +133,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
         }
         String lore = cardDefinition.getLore();
         if (lore != null) {
-            result.append("[width 0.48][scale 0.8][font font/arial-italic.fnt]").append(lore).append("[/font][/scale][/width]");
+            result.append("[paddingLeft 20][paddingRight 20][width 0.46][scale 0.8][font font/arial-italic.fnt]").append(lore).append("[/font][/scale][/width][/paddingRight][/paddingLeft]");
         }
 
         return result.toString();

@@ -14,4 +14,6 @@ public class TextStyleConstants {
 
     public static final String AlignmentHorizontal = "Alignment-Horizontal";
     public static final String LineSpacing = "Line-Spacing";
+    public static final String PaddingLeft = "Line-Padding-Left";
+    public static final String PaddingRight = "Line-Padding-Right";
 }

@@ -35,6 +35,11 @@ public class HtmlTextParser implements TextParser {
         // Letter spacing
         tagTextParser.addTagHandler("letterSpacing", new LetterSpacingTagHandler());
         tagTextParser.addTagHandler("/letterSpacing", new PopStyleTagHandler());
+        // Padding
+        tagTextParser.addTagHandler("paddingLeft", new PaddingLeftTagHandler());
+        tagTextParser.addTagHandler("/paddingLeft", new PopStyleTagHandler());
+        tagTextParser.addTagHandler("paddingRight", new PaddingRightTagHandler());
+        tagTextParser.addTagHandler("/paddingRight", new PopStyleTagHandler());
 
         // Image
         tagTextParser.addTagHandler("img", new ImageTagHandler(textureRegionResolver));
