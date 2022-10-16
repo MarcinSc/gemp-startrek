@@ -1,17 +1,26 @@
 package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser;
 
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
+
 public class DefaultTextParser implements TextParser {
     @Override
     public ParsedText parseText(TextStyle defaultTextStyle, String text) {
-        return new DefaultParsedText(defaultTextStyle, text);
+        DefaultParsedText result = Pools.obtain(DefaultParsedText.class);
+        result.setTextStyle(defaultTextStyle);
+        result.setText(text);
+        return result;
     }
 
-    private static class DefaultParsedText implements ParsedText {
+    public static class DefaultParsedText implements ParsedText, Pool.Poolable {
         private TextStyle textStyle;
         private String text;
 
-        public DefaultParsedText(TextStyle textStyle, String text) {
+        public void setTextStyle(TextStyle textStyle) {
             this.textStyle = textStyle;
+        }
+
+        public void setText(String text) {
             this.text = text;
         }
 
@@ -36,6 +45,17 @@ public class DefaultTextParser implements TextParser {
         @Override
         public char getCharAt(int glyphIndex) {
             return text.charAt(glyphIndex);
+        }
+
+        @Override
+        public void reset() {
+            textStyle = null;
+            text = null;
+        }
+
+        @Override
+        public void dispose() {
+            Pools.free(this);
         }
     }
 }

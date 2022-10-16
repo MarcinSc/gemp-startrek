@@ -4,7 +4,6 @@ import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.IntMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
@@ -24,8 +23,6 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.layout.GlyphOffseter;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.DefaultTextParser;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextParser;
 
-import java.util.function.Function;
-
 public class SDF3DTextSystem extends BaseEntitySystem {
     private BitmapFontSystem bitmapFontSystem;
     private TransformSystem transformSystem;
@@ -33,27 +30,25 @@ public class SDF3DTextSystem extends BaseEntitySystem {
     private ComponentMapper<SDF3DTextComponent> sdf3DTextComponentMapper;
 
     private final IntMap<SDFText> renderedTexts = new IntMap<>();
-    private Function<String, BitmapFont> bitmapFontFunction;
 
     private SpriteBatchModel spriteBatchModel;
 
-    private GlyphOffseter glyphOffseter = new DefaultGlyphOffseter();
-    private TextParser textParser = new DefaultTextParser();
-    private String sdfTextTag;
+    private final GlyphOffseter glyphOffseter = new DefaultGlyphOffseter();
+    private TextParser textParser;
+    private final String sdfTextTag;
 
     public SDF3DTextSystem(String sdfTextTag) {
-        super(Aspect.all(SDF3DTextComponent.class));
-        this.sdfTextTag = sdfTextTag;
+        this(sdfTextTag, new DefaultTextParser());
     }
 
-    @Override
-    protected void initialize() {
-        bitmapFontFunction = new Function<String, BitmapFont>() {
-            @Override
-            public BitmapFont apply(String s) {
-                return bitmapFontSystem.getBitmapFont(s);
-            }
-        };
+    public SDF3DTextSystem(String sdfTextTag, TextParser textParser) {
+        super(Aspect.all(SDF3DTextComponent.class));
+        this.sdfTextTag = sdfTextTag;
+        this.textParser = textParser;
+    }
+
+    public void setTextParser(TextParser textParser) {
+        this.textParser = textParser;
     }
 
     private void initializeSpriteBatchModel() {

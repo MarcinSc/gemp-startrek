@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
 import com.gempukku.libgdx.graph.util.ValueOperations;
@@ -74,56 +75,60 @@ Color - character color
         float width = sdf3DTextComponent.getRightVector().len();
         float height = sdf3DTextComponent.getUpVector().len();
 
-        TextStyle sdfTextStyle = createDefaultTextStyle();
+        TextStyle defaultTextStyle = createDefaultTextStyle();
 
-        ParsedText parsedText = textParser.parseText(sdfTextStyle, sdf3DTextComponent.getText());
+        ParsedText parsedText = textParser.parseText(defaultTextStyle, sdf3DTextComponent.getText());
+        try {
+            Vector3 normalizedRightVector = tempVector1.set(sdf3DTextComponent.getRightVector()).nor();
+            Vector3 normalizedUpVector = tempVector2.set(sdf3DTextComponent.getUpVector()).nor();
 
-        Vector3 normalizedRightVector = tempVector1.set(sdf3DTextComponent.getRightVector()).nor();
-        Vector3 normalizedUpVector = tempVector2.set(sdf3DTextComponent.getUpVector()).nor();
-
-        GlyphOffsetText offsetText;
-        float scale;
-        if (sdf3DTextComponent.isScaleDownToFit()) {
-            offsetText = layoutTextToFit(width, height, glyphOffseter, parsedText, sdf3DTextComponent.getTargetWidth(),
-                    sdf3DTextComponent.getScaleDownMultiplier(), sdf3DTextComponent.isWrap());
-            scale = calculateScale(offsetText, width, height);
-        } else {
-            offsetText = glyphOffseter.offsetText(parsedText, sdf3DTextComponent.getTargetWidth(), sdf3DTextComponent.isWrap());
-            scale = width / sdf3DTextComponent.getTargetWidth();
-        }
-
-        ObjectMap<TextStyle, PropertyContainer> stylePropertyContainerMap = new ObjectMap<>();
-
-        Alignment alignment = sdf3DTextComponent.getAlignment();
-
-        Matrix4 resultTransform = tempMatrix.set(transform).mul(sdf3DTextComponent.getTransform());
-
-        float startY = alignment.applyY(offsetText.getTextHeight() * scale, height) - height / 2;
-
-        float lineY = 0;
-        for (int lineIndex = 0; lineIndex < offsetText.getLineCount(); lineIndex++) {
-            GlyphOffsetLine line = offsetText.getLine(lineIndex);
-            TextStyle lineStyle = offsetText.getLineStyle(lineIndex);
-            Alignment horizontalAlignment = getHorizontalAlignment(lineStyle);
-            float startX = horizontalAlignment.applyX(line.getWidth() * scale, width) - width / 2;
-            for (int glyphIndex = 0; glyphIndex < line.getGlyphCount(); glyphIndex++) {
-                char character = line.getGlyph(glyphIndex);
-                TextStyle textStyle = line.getGlyphStyle(glyphIndex);
-                BitmapFont bitmapFont = (BitmapFont) textStyle.getAttribute(TextStyleConstants.Font);
-                BitmapFont.Glyph glyph = bitmapFont.getData().getGlyph(character);
-                float charX = line.getGlyphXAdvance(glyphIndex);
-                float charY = lineY + line.getGlyphYAdvance(glyphIndex);
-
-                PropertyContainer stylePropertyContainer = getStylePropertyContainer(stylePropertyContainerMap, textStyle);
-
-                addGlyph(glyph, bitmapFont,
-                        resultTransform,
-                        normalizedRightVector, normalizedUpVector, stylePropertyContainer,
-                        1f,
-                        startX, startY,
-                        charX, charY, scale);
+            GlyphOffsetText offsetText;
+            float scale;
+            if (sdf3DTextComponent.isScaleDownToFit()) {
+                offsetText = layoutTextToFit(width, height, glyphOffseter, parsedText, sdf3DTextComponent.getTargetWidth(),
+                        sdf3DTextComponent.getScaleDownMultiplier(), sdf3DTextComponent.isWrap());
+                scale = calculateScale(offsetText, width, height);
+            } else {
+                offsetText = glyphOffseter.offsetText(parsedText, sdf3DTextComponent.getTargetWidth(), sdf3DTextComponent.isWrap());
+                scale = width / sdf3DTextComponent.getTargetWidth();
             }
-            lineY += line.getHeight();
+
+            ObjectMap<TextStyle, PropertyContainer> stylePropertyContainerMap = new ObjectMap<>();
+
+            Alignment alignment = sdf3DTextComponent.getAlignment();
+
+            Matrix4 resultTransform = tempMatrix.set(transform).mul(sdf3DTextComponent.getTransform());
+
+            float startY = alignment.applyY(offsetText.getTextHeight() * scale, height) - height / 2;
+
+            float lineY = 0;
+            for (int lineIndex = 0; lineIndex < offsetText.getLineCount(); lineIndex++) {
+                GlyphOffsetLine line = offsetText.getLine(lineIndex);
+                TextStyle lineStyle = offsetText.getLineStyle(lineIndex);
+                Alignment horizontalAlignment = getHorizontalAlignment(lineStyle);
+                float startX = horizontalAlignment.applyX(line.getWidth() * scale, width) - width / 2;
+                for (int glyphIndex = 0; glyphIndex < line.getGlyphCount(); glyphIndex++) {
+                    char character = line.getGlyph(glyphIndex);
+                    TextStyle textStyle = line.getGlyphStyle(glyphIndex);
+                    BitmapFont bitmapFont = (BitmapFont) textStyle.getAttribute(TextStyleConstants.Font);
+                    BitmapFont.Glyph glyph = bitmapFont.getData().getGlyph(character);
+                    float charX = line.getGlyphXAdvance(glyphIndex);
+                    float charY = lineY + line.getGlyphYAdvance(glyphIndex);
+
+                    PropertyContainer stylePropertyContainer = getStylePropertyContainer(stylePropertyContainerMap, textStyle);
+
+                    addGlyph(glyph, bitmapFont,
+                            resultTransform,
+                            normalizedRightVector, normalizedUpVector, stylePropertyContainer,
+                            1f,
+                            startX, startY,
+                            charX, charY, scale);
+                }
+                lineY += line.getHeight();
+            }
+        } finally {
+            parsedText.dispose();
+            Pools.free(defaultTextStyle);
         }
     }
 
@@ -152,7 +157,7 @@ Color - character color
     }
 
     private Color getFontColor(TextStyle textStyle) {
-        Color fontColor = (Color) textStyle.getAttribute(TextStyleConstants.FontEdge);
+        Color fontColor = (Color) textStyle.getAttribute(TextStyleConstants.FontColor);
         return fontColor != null ? fontColor : sdf3DTextComponent.getColor();
     }
 
@@ -162,7 +167,7 @@ Color - character color
     }
 
     private TextStyle createDefaultTextStyle() {
-        TextStyle sdfTextStyle = new TextStyle();
+        TextStyle sdfTextStyle = Pools.obtain(TextStyle.class);
         sdfTextStyle.setAttribute(TextStyleConstants.Kerning, sdf3DTextComponent.getKerning());
         sdfTextStyle.setAttribute(TextStyleConstants.Font, bitmapFontSystem.getBitmapFont(sdf3DTextComponent.getBitmapFontPath()));
         sdfTextStyle.setAttribute(TextStyleConstants.LetterSpacing, sdf3DTextComponent.getLetterSpacing());

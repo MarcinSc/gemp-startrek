@@ -3,6 +3,8 @@ package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.layout;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.ParsedText;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants;
@@ -36,7 +38,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
         int nextCharacterIndex = 0;
 
-        DefaultGlyphOffsetText text = new DefaultGlyphOffsetText();
+        DefaultGlyphOffsetText text = Pools.obtain(DefaultGlyphOffsetText.class);
 
         DefaultGlyphOffsetLine lastLine = null;
 
@@ -89,7 +91,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             }
         }
 
-        DefaultGlyphOffsetLine line = new DefaultGlyphOffsetLine();
+        DefaultGlyphOffsetLine line = Pools.obtain(DefaultGlyphOffsetLine.class);
 
         char lastCharacter = 0;
         TextStyle lastCharacterStyle = null;
@@ -240,7 +242,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         return fontScale != null ? fontScale : defaultFontScale;
     }
 
-    private static class DefaultGlyphOffsetText implements GlyphOffsetText {
+    public static class DefaultGlyphOffsetText implements GlyphOffsetText, Pool.Poolable {
         private float textWidth;
         private float textHeight;
         private Array<DefaultGlyphOffsetLine> lines = new Array<>();
@@ -269,9 +271,22 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         public TextStyle getLineStyle(int index) {
             return getLine(index).getGlyphStyle(0);
         }
+
+        @Override
+        public void dispose() {
+            Pools.free(this);
+        }
+
+        @Override
+        public void reset() {
+            textWidth = 0f;
+            textHeight = 0;
+            Pools.freeAll(lines);
+            lines.clear();
+        }
     }
 
-    private static class DefaultGlyphOffsetLine implements GlyphOffsetLine {
+    private static class DefaultGlyphOffsetLine implements GlyphOffsetLine, Pool.Poolable {
         private ParsedText parsedText;
         private float lineWidth;
         private float lineHeight;
@@ -313,6 +328,17 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         @Override
         public char getGlyph(int glyphIndex) {
             return parsedText.getCharAt(glyphStartIndex + glyphIndex);
+        }
+
+        @Override
+        public void reset() {
+            parsedText = null;
+            lineWidth = 0f;
+            lineHeight = 0f;
+            glyphStartIndex = 0;
+            glyphCount = 0;
+            xAdvances.clear();
+            yAdvances.clear();
         }
     }
 }

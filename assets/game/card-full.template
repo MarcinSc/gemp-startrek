@@ -115,6 +115,6 @@
     "scaleDownToFit": true,
     "alignment": "left",
     "bitmapFontPath": "font/arial.fnt",
-    "text": "Test text\nSecond line"
+    "text": "Test text\n[b][color ff0000]Second line[/color][/b]"
   }
 }

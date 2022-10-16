@@ -90,9 +90,12 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new WebsocketRemoteClientConnector<>(
                         new JsonDataSerializer(), new JsonValueServerSessionProducer(),
                         new JsonValueNetworkMessageMarshaller()),
+
                 new BitmapFontSystem(new RuntimeBitmapFontHandler()),
+                //new FontProviderSystem(),
                 new SDF3DTextSystem("SdfText"),
-                new FontProviderSystem(),
+                new ConfigureTextSystem(),
+
                 new SpriteSystem(),
                 new CameraSystem(new TopDownCameraController()),
                 new EvaluatePropertySystem(),

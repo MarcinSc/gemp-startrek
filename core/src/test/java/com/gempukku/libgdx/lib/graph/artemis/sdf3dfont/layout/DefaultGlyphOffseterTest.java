@@ -30,7 +30,7 @@ public class DefaultGlyphOffseterTest {
         bitmapFont = new BitmapFont();
 
         defaultStyle = new TextStyle();
-        defaultStyle.getAttributes().put(TextStyleConstants.Font, bitmapFont);
+        defaultStyle.setAttribute(TextStyleConstants.Font, bitmapFont);
     }
 
     @AfterClass
