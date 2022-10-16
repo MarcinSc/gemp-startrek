@@ -11,6 +11,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
     private boolean defaultKerning = true;
     private float defaultLetterSpacing = 0f;
     private float defaultLineSpacing = 0f;
+    private float defaultFontScale = 1f;
 
     public void setDefaultKerning(boolean defaultKerning) {
         this.defaultKerning = defaultKerning;
@@ -69,7 +70,6 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             return null;
 
         // Calculate max ascent and descent of the line
-        // For some reason in BitmapFont descent is negative
         float maxAscent = 0f;
         float maxDescent = 0f;
         for (int i = startIndex; i < startIndex + lineGlyphLength; i++) {
@@ -79,8 +79,9 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             // If it's not the last character, or not whitespace - use to calculate ascent/descent
             if (i != startIndex + lineGlyphLength - 1 || !isSkippable(character)) {
                 BitmapFont font = getFont(textStyle);
-                maxDescent = Math.max(maxDescent, getFontDescent(font));
-                maxAscent = Math.max(maxAscent, font.getAscent());
+                float fontScale = getFontScale(textStyle);
+                maxDescent = Math.max(maxDescent, getFontDescent(font) * fontScale);
+                maxAscent = Math.max(maxAscent, font.getAscent() * fontScale);
             }
         }
 
@@ -98,17 +99,18 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                 BitmapFont font = getFont(textStyle);
                 BitmapFont.BitmapFontData fontData = font.getData();
                 BitmapFont.Glyph glyph = fontData.getGlyph(character);
+                float fontScale = getFontScale(textStyle);
 
                 float kerning = 0f;
                 if (lastCharacter != 0 && lastCharacterStyle == textStyle && getKerning(textStyle)) {
                     kerning = fontData.getGlyph(lastCharacter).getKerning(character);
                 }
-                line.xAdvances.add(usedWidth + kerning);
-                line.yAdvances.add(maxAscent - font.getAscent());
+                line.xAdvances.add(usedWidth + kerning * fontScale);
+                line.yAdvances.add(maxAscent - font.getAscent() * fontScale);
 
                 float glyphAdvance = (glyph.xadvance - fontData.padLeft - fontData.padRight) + kerning + getLetterSpacing(textStyle);
 
-                usedWidth += glyphAdvance;
+                usedWidth += glyphAdvance * fontScale;
 
                 lastCharacterStyle = textStyle;
                 lastCharacter = character;
@@ -163,7 +165,9 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             BitmapFont.BitmapFontData fontData = getFontData(textStyle);
             BitmapFont.Glyph glyph = fontData.getGlyph(character);
 
-            return (glyph.xadvance - fontData.padLeft - fontData.padRight) + getLetterSpacing(textStyle);
+            float fontScale = getFontScale(textStyle);
+
+            return ((glyph.xadvance - fontData.padLeft - fontData.padRight) + getLetterSpacing(textStyle)) * fontScale;
         } else {
             return 0f;
         }
@@ -183,13 +187,15 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                 BitmapFont.BitmapFontData fontData = getFontData(textStyle);
                 BitmapFont.Glyph glyph = fontData.getGlyph(character);
 
+                float fontScale = getFontScale(textStyle);
+
                 float glyphAdvance = (glyph.xadvance - fontData.padLeft - fontData.padRight);
                 if (lastCharacter != 0 && lastCharacterStyle == textStyle && getKerning(textStyle)) {
                     int kerning = fontData.getGlyph(lastCharacter).getKerning(character);
                     glyphAdvance += kerning;
                 }
 
-                width += glyphAdvance + getLetterSpacing(textStyle);
+                width += (glyphAdvance + getLetterSpacing(textStyle)) * fontScale;
 
                 lastCharacterStyle = textStyle;
                 lastCharacter = character;
@@ -207,22 +213,27 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
     }
 
     private BitmapFont getFont(TextStyle textStyle) {
-        return (BitmapFont) textStyle.getAttributes().get(TextStyleConstants.Font);
+        return (BitmapFont) textStyle.getAttribute(TextStyleConstants.Font);
     }
 
     private Boolean getKerning(TextStyle textStyle) {
-        Boolean kerning = (Boolean) textStyle.getAttributes().get(TextStyleConstants.Kerning);
+        Boolean kerning = (Boolean) textStyle.getAttribute(TextStyleConstants.Kerning);
         return kerning != null ? kerning : defaultKerning;
     }
 
     private float getLetterSpacing(TextStyle textStyle) {
-        Float letterSpacing = (Float) textStyle.getAttributes().get(TextStyleConstants.LetterSpacing);
+        Float letterSpacing = (Float) textStyle.getAttribute(TextStyleConstants.LetterSpacing);
         return letterSpacing != null ? letterSpacing : defaultLetterSpacing;
     }
 
     private float getLineSpacing(TextStyle textStyle) {
-        Float lineSpacing = (Float) textStyle.getAttributes().get(TextStyleConstants.LineSpacing);
+        Float lineSpacing = (Float) textStyle.getAttribute(TextStyleConstants.LineSpacing);
         return lineSpacing != null ? lineSpacing : defaultLineSpacing;
+    }
+
+    private float getFontScale(TextStyle textStyle) {
+        Float fontScale = (Float) textStyle.getAttribute(TextStyleConstants.FontScale);
+        return fontScale != null ? fontScale : defaultFontScale;
     }
 
     private static class DefaultGlyphOffsetText implements GlyphOffsetText {

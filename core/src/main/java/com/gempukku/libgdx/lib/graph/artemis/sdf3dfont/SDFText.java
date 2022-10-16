@@ -1,5 +1,6 @@
 package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Matrix4;
@@ -99,19 +100,19 @@ Color - character color
 
         float startY = alignment.applyY(offsetText.getTextHeight() * scale, height) - height / 2;
 
-        float fontY = 0;
+        float lineY = 0;
         for (int lineIndex = 0; lineIndex < offsetText.getLineCount(); lineIndex++) {
             GlyphOffsetLine line = offsetText.getLine(lineIndex);
             TextStyle lineStyle = offsetText.getLineStyle(lineIndex);
-            Alignment horizontalAlignment = (Alignment) lineStyle.getAttributes().get(TextStyleConstants.AlignmentHorizontal);
+            Alignment horizontalAlignment = getHorizontalAlignment(lineStyle);
             float startX = horizontalAlignment.applyX(line.getWidth() * scale, width) - width / 2;
             for (int glyphIndex = 0; glyphIndex < line.getGlyphCount(); glyphIndex++) {
                 char character = line.getGlyph(glyphIndex);
                 TextStyle textStyle = line.getGlyphStyle(glyphIndex);
-                BitmapFont bitmapFont = (BitmapFont) textStyle.getAttributes().get(TextStyleConstants.Font);
+                BitmapFont bitmapFont = (BitmapFont) textStyle.getAttribute(TextStyleConstants.Font);
                 BitmapFont.Glyph glyph = bitmapFont.getData().getGlyph(character);
                 float charX = line.getGlyphXAdvance(glyphIndex);
-                float charY = fontY + line.getGlyphYAdvance(glyphIndex);
+                float charY = lineY + line.getGlyphYAdvance(glyphIndex);
 
                 PropertyContainer stylePropertyContainer = getStylePropertyContainer(stylePropertyContainerMap, textStyle);
 
@@ -122,7 +123,7 @@ Color - character color
                         startX, startY,
                         charX, charY, scale);
             }
-            fontY += line.getHeight();
+            lineY += line.getHeight();
         }
     }
 
@@ -130,9 +131,9 @@ Color - character color
         PropertyContainer result = stylePropertyContainerMap.get(textStyle);
         if (result == null) {
             MapWritablePropertyContainer container = new MapWritablePropertyContainer();
-            container.setValue("Width", textStyle.getAttributes().get(TextStyleConstants.FontWidth));
-            container.setValue("Edge", textStyle.getAttributes().get(TextStyleConstants.FontEdge));
-            container.setValue("Color", textStyle.getAttributes().get(TextStyleConstants.FontColor));
+            container.setValue("Width", getFontWidth(textStyle));
+            container.setValue("Edge", getFontEdge(textStyle));
+            container.setValue("Color", getFontColor(textStyle));
             result = container;
 
             stylePropertyContainerMap.put(textStyle, result);
@@ -140,15 +141,31 @@ Color - character color
         return result;
     }
 
+    private Object getFontWidth(TextStyle textStyle) {
+        Float fontWidth = (Float) textStyle.getAttribute(TextStyleConstants.FontWidth);
+        return fontWidth != null ? fontWidth : sdf3DTextComponent.getWidth();
+    }
+
+    private Object getFontEdge(TextStyle textStyle) {
+        Float fontEdge = (Float) textStyle.getAttribute(TextStyleConstants.FontEdge);
+        return fontEdge != null ? fontEdge : sdf3DTextComponent.getEdge();
+    }
+
+    private Color getFontColor(TextStyle textStyle) {
+        Color fontColor = (Color) textStyle.getAttribute(TextStyleConstants.FontEdge);
+        return fontColor != null ? fontColor : sdf3DTextComponent.getColor();
+    }
+
+    private Alignment getHorizontalAlignment(TextStyle textStyle) {
+        Alignment alignment = (Alignment) textStyle.getAttribute(TextStyleConstants.AlignmentHorizontal);
+        return alignment != null ? alignment : sdf3DTextComponent.getAlignment();
+    }
+
     private TextStyle createDefaultTextStyle() {
         TextStyle sdfTextStyle = new TextStyle();
-        sdfTextStyle.getAttributes().put(TextStyleConstants.Kerning, sdf3DTextComponent.getKerning());
-        sdfTextStyle.getAttributes().put(TextStyleConstants.Font, bitmapFontSystem.getBitmapFont(sdf3DTextComponent.getBitmapFontPath()));
-        sdfTextStyle.getAttributes().put(TextStyleConstants.FontColor, sdf3DTextComponent.getColor());
-        sdfTextStyle.getAttributes().put(TextStyleConstants.FontWidth, sdf3DTextComponent.getWidth());
-        sdfTextStyle.getAttributes().put(TextStyleConstants.FontEdge, sdf3DTextComponent.getEdge());
-        sdfTextStyle.getAttributes().put(TextStyleConstants.AlignmentHorizontal, sdf3DTextComponent.getAlignment());
-        sdfTextStyle.getAttributes().put(TextStyleConstants.LetterSpacing, sdf3DTextComponent.getLetterSpacing());
+        sdfTextStyle.setAttribute(TextStyleConstants.Kerning, sdf3DTextComponent.getKerning());
+        sdfTextStyle.setAttribute(TextStyleConstants.Font, bitmapFontSystem.getBitmapFont(sdf3DTextComponent.getBitmapFontPath()));
+        sdfTextStyle.setAttribute(TextStyleConstants.LetterSpacing, sdf3DTextComponent.getLetterSpacing());
         return sdfTextStyle;
     }
 
