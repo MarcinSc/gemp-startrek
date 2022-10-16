@@ -26,6 +26,9 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.ParsedText;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextParser;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants;
+import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
+import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinitionAdapter;
+import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.util.Alignment;
 
 public class SDFText implements Disposable {
@@ -40,8 +43,10 @@ public class SDFText implements Disposable {
     private BitmapFontSystem bitmapFontSystem;
     private Matrix4 transform;
     private SDFTextBlock sdfTextBlock;
+    private SpriteSystem spriteSystem;
 
     private ObjectSet<RenderableSprite> tagGraphSprites = new ObjectSet<>();
+    private ObjectSet<SpriteDefinitionAdapter> externalSprites = new ObjectSet<>();
 
     /*
 Up-Vector (vec3) - vector defining both height and up direction
@@ -55,12 +60,13 @@ Color - character color
      */
 
     public SDFText(GlyphOffseter glyphOffseter, TextParser textParser, SpriteBatchModel spriteBatchModel,
-                   BitmapFontSystem bitmapFontSystem,
+                   BitmapFontSystem bitmapFontSystem, SpriteSystem spriteSystem,
                    Matrix4 transform, SDFTextBlock sdfTextBlock) {
         this.glyphOffseter = glyphOffseter;
         this.textParser = textParser;
         this.spriteBatchModel = spriteBatchModel;
         this.bitmapFontSystem = bitmapFontSystem;
+        this.spriteSystem = spriteSystem;
         this.transform = transform;
         this.sdfTextBlock = sdfTextBlock;
         addText();
@@ -105,14 +111,14 @@ Color - character color
 
             Matrix4 resultTransform = tempMatrix.set(transform).mul(sdfTextBlock.getTransform());
 
-            float startY = alignment.applyY(offsetText.getTextHeight() * scale, height) - height / 2;
+            final float startY = alignment.applyY(offsetText.getTextHeight() * scale, height) - height / 2;
 
             float lineY = 0;
             for (int lineIndex = 0; lineIndex < offsetText.getLineCount(); lineIndex++) {
                 GlyphOffsetLine line = offsetText.getLine(lineIndex);
                 TextStyle lineStyle = offsetText.getLineStyle(lineIndex);
                 Alignment horizontalAlignment = getHorizontalAlignment(lineStyle);
-                float startX = horizontalAlignment.applyX(line.getWidth() * scale, width) - width / 2;
+                final float startX = horizontalAlignment.applyX(line.getWidth() * scale, width) - width / 2;
                 for (int glyphIndex = 0; glyphIndex < line.getGlyphCount(); glyphIndex++) {
                     char character = line.getGlyph(glyphIndex);
                     TextStyle textStyle = line.getGlyphStyle(glyphIndex);
@@ -121,18 +127,34 @@ Color - character color
 
                     float fontScale = getFontScale(textStyle);
 
-                    float charX = line.getGlyphXAdvance(glyphIndex);
-                    // TODO: This 5* is a magic number, can't figure out why it works...
-                    float charY = lineY + 5 * line.getGlyphYAdvance(glyphIndex);
+                    TextureRegion textureRegion = getTextureRegion(textStyle);
+                    if (textureRegion != null) {
+                        SpriteDefinition spriteDefinition = new SpriteDefinition();
+                        spriteDefinition.setSpriteSystemName(getSpriteSystemName(textStyle));
+                        spriteDefinition.getProperties().put("UV", SpriteSystem.uvAttribute);
+                        float charX = line.getGlyphXAdvance(glyphIndex);
+                        // TODO: This 5* is a magic number, can't figure out why it works...
+                        float charY = lineY + 5 * line.getGlyphYAdvance(glyphIndex) + textureRegion.getRegionHeight();
+                        float[] positionFloatArray = createPositionFloatArray(resultTransform, normalizedRightVector, normalizedUpVector,
+                                startX, startY, charX, charY, scale, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
+                        spriteDefinition.getProperties().put("Position", new Vector3ValuePerVertex(positionFloatArray));
+                        spriteDefinition.getProperties().put("Texture", textureRegion);
 
-                    PropertyContainer stylePropertyContainer = getStylePropertyContainer(stylePropertyContainerMap, textStyle);
+                        spriteSystem.addSprite(null, null, spriteDefinition);
+                    } else {
+                        float charX = line.getGlyphXAdvance(glyphIndex);
+                        // TODO: This 5* is a magic number, can't figure out why it works...
+                        float charY = lineY + 5 * line.getGlyphYAdvance(glyphIndex);
 
-                    addGlyph(glyph, bitmapFont,
-                            resultTransform,
-                            normalizedRightVector, normalizedUpVector, stylePropertyContainer,
-                            fontScale,
-                            startX, startY,
-                            charX, charY, scale);
+                        PropertyContainer stylePropertyContainer = getStylePropertyContainer(stylePropertyContainerMap, textStyle);
+
+                        addGlyph(glyph, bitmapFont,
+                                resultTransform,
+                                normalizedRightVector, normalizedUpVector, stylePropertyContainer,
+                                fontScale,
+                                startX, startY,
+                                charX, charY, scale);
+                    }
                 }
                 lineY += line.getHeight();
             }
@@ -179,6 +201,14 @@ Color - character color
     private Alignment getHorizontalAlignment(TextStyle textStyle) {
         Alignment alignment = (Alignment) textStyle.getAttribute(TextStyleConstants.AlignmentHorizontal);
         return alignment != null ? alignment : sdfTextBlock.getAlignment();
+    }
+
+    private TextureRegion getTextureRegion(TextStyle textStyle) {
+        return (TextureRegion) textStyle.getAttribute(TextStyleConstants.ImageTextureRegion);
+    }
+
+    private String getSpriteSystemName(TextStyle textStyle) {
+        return (String) textStyle.getAttribute(TextStyleConstants.ImageSpriteSystemName);
     }
 
     private TextStyle createDefaultTextStyle() {

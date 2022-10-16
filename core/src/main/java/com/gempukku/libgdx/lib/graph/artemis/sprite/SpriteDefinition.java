@@ -10,6 +10,10 @@ public class SpriteDefinition {
         return spriteSystemName;
     }
 
+    public void setSpriteSystemName(String spriteSystemName) {
+        this.spriteSystemName = spriteSystemName;
+    }
+
     public ObjectMap<String, Object> getProperties() {
         return properties;
     }

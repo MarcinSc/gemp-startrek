@@ -47,7 +47,7 @@ public class ConfigurableTagTextParser implements TextParser {
                     result.addStyleIndex(resultText.length(), textStyleStack.peek());
                     resultText.append(producedText);
                 }
-                tagHandler.endProcessingTag();
+                tagHandler.endProcessingTag(textStyleStack);
             }
 
             @Override

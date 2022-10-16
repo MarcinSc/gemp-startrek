@@ -21,7 +21,7 @@ public class ColorTagHandler implements TagHandler {
     }
 
     @Override
-    public void endProcessingTag() {
+    public void endProcessingTag(Array<TextStyle> textStyleStack) {
 
     }
 }

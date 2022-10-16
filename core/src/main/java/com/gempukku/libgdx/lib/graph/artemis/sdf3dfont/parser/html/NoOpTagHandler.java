@@ -11,7 +11,7 @@ public class NoOpTagHandler implements TagHandler {
     }
 
     @Override
-    public void endProcessingTag() {
+    public void endProcessingTag(Array<TextStyle> textStyleStack) {
 
     }
 }

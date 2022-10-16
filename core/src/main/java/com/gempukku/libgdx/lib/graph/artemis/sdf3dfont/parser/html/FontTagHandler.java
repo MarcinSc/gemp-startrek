@@ -29,7 +29,7 @@ public class FontTagHandler implements TagHandler {
     }
 
     @Override
-    public void endProcessingTag() {
+    public void endProcessingTag(Array<TextStyle> textStyleStack) {
 
     }
 }

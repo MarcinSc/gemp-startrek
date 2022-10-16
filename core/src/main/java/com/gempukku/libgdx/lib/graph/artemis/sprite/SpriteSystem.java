@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
@@ -39,7 +40,7 @@ public class SpriteSystem extends BaseSystem implements Disposable {
     private EvaluatePropertySystem evaluatePropertySystem;
     private EvaluatePropertySystem propertySystem;
 
-    private static final Vector2ValuePerVertex uvAttribute = new Vector2ValuePerVertex(new float[]{0, 0, 1, 0, 0, 1, 1, 1});
+    public static final Vector2ValuePerVertex uvAttribute = new Vector2ValuePerVertex(new float[]{0, 0, 1, 0, 0, 1, 1, 1});
 
     private final Matrix4 tempMatrix = new Matrix4();
     private final Vector3 tempVector3 = new Vector3();
@@ -193,13 +194,21 @@ public class SpriteSystem extends BaseSystem implements Disposable {
 
         Array<SpriteDefinitionAdapter> spriteComponentAdapters = new Array<>();
         for (SpriteDefinition spriteDefinition : sprite.getSprites()) {
-            TexturePagedSpriteBatchModel spriteBatchModel = spriteSystemMap.get(spriteDefinition.getSpriteSystemName());
-            SpriteDefinitionAdapter spriteComponentAdapter = new SpriteDefinitionAdapter(propertyContainer, evaluatePropertySystem,
-                    spriteBatchModel, spriteDefinition, spriteEntity);
+            SpriteDefinitionAdapter spriteComponentAdapter = addSprite(spriteEntity, propertyContainer, spriteDefinition);
             spriteComponentAdapters.add(spriteComponentAdapter);
         }
 
         spriteMap.put(entityId, spriteComponentAdapters);
+    }
+
+    public SpriteDefinitionAdapter addSprite(Entity spriteEntity, PropertyContainer propertyContainer, SpriteDefinition spriteDefinition) {
+        TexturePagedSpriteBatchModel spriteBatchModel = spriteSystemMap.get(spriteDefinition.getSpriteSystemName());
+        return new SpriteDefinitionAdapter(propertyContainer, evaluatePropertySystem,
+                spriteBatchModel, spriteDefinition, spriteEntity);
+    }
+
+    public void removeSprite(SpriteDefinitionAdapter spriteDefinitionAdapter) {
+        spriteDefinitionAdapter.dispose();
     }
 
     private void evaluatePropertyContainer(Entity entity, SpriteComponent spriteComponent, MapWritablePropertyContainer propertyContainer) {

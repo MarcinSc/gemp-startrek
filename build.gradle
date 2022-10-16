@@ -59,7 +59,8 @@ subprojects {
 	ext.appName = 'Gemp-StarTrek'
 	ext.texturePacker = [
 			"../internal/image/scene", "../assets/atlas", "scene",
-			"../internal/image/cards", "../assets/atlas", "card-templates"
+			"../internal/image/cards", "../assets/atlas", "card-templates",
+			"../internal/image/icons", "../assets/atlas", "icons"
 	]
 	repositories {
 		mavenCentral()

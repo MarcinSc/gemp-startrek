@@ -23,9 +23,11 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.layout.DefaultGlyphOffset
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.layout.GlyphOffseter;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.DefaultTextParser;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextParser;
+import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
 
 public class SDF3DTextSystem extends BaseEntitySystem {
     private BitmapFontSystem bitmapFontSystem;
+    private SpriteSystem spriteSystem;
     private TransformSystem transformSystem;
     private PipelineRendererSystem pipelineRendererSystem;
     private ComponentMapper<SDF3DTextComponent> sdf3DTextComponentMapper;
@@ -77,7 +79,7 @@ public class SDF3DTextSystem extends BaseEntitySystem {
         SDF3DTextComponent textComponent = sdf3DTextComponentMapper.get(entityId);
         for (SDFTextBlock textBlock : textComponent.getTextBlocks()) {
             SDFText text = new SDFText(glyphOffseter, textParser, spriteBatchModel, bitmapFontSystem,
-                    resolvedTransform, textBlock);
+                    spriteSystem, resolvedTransform, textBlock);
             texts.add(text);
         }
 

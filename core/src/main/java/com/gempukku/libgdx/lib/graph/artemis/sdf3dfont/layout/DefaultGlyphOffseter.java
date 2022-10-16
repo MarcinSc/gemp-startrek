@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.layout;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.Pool;
@@ -104,19 +105,31 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             if (i != startIndex + lineGlyphLength - 1 || !isSkippable(character)) {
                 BitmapFont font = getFont(textStyle);
                 BitmapFont.BitmapFontData fontData = font.getData();
-                BitmapFont.Glyph glyph = fontData.getGlyph(character);
                 float fontScale = getFontScale(textStyle);
 
-                float kerning = 0f;
-                if (lastCharacter != 0 && lastCharacterStyle == textStyle && getKerning(textStyle)) {
-                    kerning = fontData.getGlyph(lastCharacter).getKerning(character);
+                TextureRegion textureRegion = getTextureRegion(textStyle);
+                float ascent = font.getAscent() * fontScale;
+                if (textureRegion != null) {
+                    line.xAdvances.add(usedWidth);
+                    line.yAdvances.add(maxAscent - ascent);
+
+                    // TODO Again a magic number 5, which works for some reason
+                    usedWidth += 5 * (textureRegion.getRegionWidth() * ascent / textureRegion.getRegionHeight())
+                            + getLetterSpacing(textStyle) * fontScale;
+                } else {
+                    BitmapFont.Glyph glyph = fontData.getGlyph(character);
+
+                    float kerning = 0f;
+                    if (lastCharacter != 0 && lastCharacterStyle == textStyle && getKerning(textStyle)) {
+                        kerning = fontData.getGlyph(lastCharacter).getKerning(character);
+                    }
+                    line.xAdvances.add(usedWidth + kerning * fontScale);
+                    line.yAdvances.add(maxAscent - ascent);
+
+                    float glyphAdvance = glyph.xadvance + kerning + getLetterSpacing(textStyle);
+
+                    usedWidth += glyphAdvance * fontScale;
                 }
-                line.xAdvances.add(usedWidth + kerning * fontScale);
-                line.yAdvances.add(maxAscent - font.getAscent() * fontScale);
-
-                float glyphAdvance = glyph.xadvance + kerning + getLetterSpacing(textStyle);
-
-                usedWidth += glyphAdvance * fontScale;
 
                 lastCharacterStyle = textStyle;
                 lastCharacter = character;
@@ -134,7 +147,6 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
     }
 
     private float getFontDescent(BitmapFont font) {
-        BitmapFont.BitmapFontData fontData = font.getData();
         return font.getLineHeight() - font.getAscent();
     }
 
@@ -194,18 +206,26 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
             // If it's not the last character, or not whitespace - add the width
             if (i != startIndex + length - 1 || !isSkippable(character)) {
-                BitmapFont.BitmapFontData fontData = getFontData(textStyle);
+                BitmapFont font = getFont(textStyle);
+                BitmapFont.BitmapFontData fontData = font.getData();
                 BitmapFont.Glyph glyph = fontData.getGlyph(character);
 
                 float fontScale = getFontScale(textStyle);
 
-                float glyphAdvance = glyph.xadvance;
-                if (lastCharacter != 0 && lastCharacterStyle == textStyle && getKerning(textStyle)) {
-                    int kerning = fontData.getGlyph(lastCharacter).getKerning(character);
-                    glyphAdvance += kerning;
-                }
+                TextureRegion textureRegion = getTextureRegion(textStyle);
+                float ascent = font.getAscent() * fontScale;
+                if (textureRegion != null) {
+                    width += 5 * (textureRegion.getRegionWidth() * ascent / textureRegion.getRegionHeight())
+                            + getLetterSpacing(textStyle) * fontScale;
+                } else {
+                    float glyphAdvance = glyph.xadvance;
+                    if (lastCharacter != 0 && lastCharacterStyle == textStyle && getKerning(textStyle)) {
+                        int kerning = fontData.getGlyph(lastCharacter).getKerning(character);
+                        glyphAdvance += kerning;
+                    }
 
-                width += (glyphAdvance + getLetterSpacing(textStyle)) * fontScale;
+                    width += (glyphAdvance + getLetterSpacing(textStyle)) * fontScale;
+                }
 
                 lastCharacterStyle = textStyle;
                 lastCharacter = character;
@@ -244,6 +264,10 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
     private float getFontScale(TextStyle textStyle) {
         Float fontScale = (Float) textStyle.getAttribute(TextStyleConstants.FontScale);
         return fontScale != null ? fontScale : defaultFontScale;
+    }
+
+    private TextureRegion getTextureRegion(TextStyle textStyle) {
+        return (TextureRegion) textStyle.getAttribute(TextStyleConstants.ImageTextureRegion);
     }
 
     public static class DefaultGlyphOffsetText implements GlyphOffsetText, Pool.Poolable {

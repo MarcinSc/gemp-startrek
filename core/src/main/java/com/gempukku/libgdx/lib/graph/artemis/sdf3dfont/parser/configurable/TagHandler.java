@@ -6,5 +6,5 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 public interface TagHandler {
     String startProcessingTag(String tagParameters, Array<TextStyle> textStyleStack);
 
-    void endProcessingTag();
+    void endProcessingTag(Array<TextStyle> textStyleStack);
 }

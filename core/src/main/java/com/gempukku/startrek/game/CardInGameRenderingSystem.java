@@ -120,7 +120,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
         Array<String> keywords = cardDefinition.getKeywords();
         if (keywords != null) {
             for (String keyword : keywords) {
-                result.append("[width 0.52]").append(keyword).append("[/width] ");
+                result.append("[width 0.52]").append(keyword).append(".[/width] ");
             }
             result.append("\n");
         }
@@ -151,6 +151,8 @@ public class CardInGameRenderingSystem extends BaseSystem {
             verticalScale = 0f;
             float distanceFromCamera = 3f;
             float cardSeparation = 0.15f;
+            // Temporary
+            cardSeparation = 0.3f;
             Vector3 basePlayerHandPosition =
                     new Vector3(camera.position)
                             .add(new Vector3(camera.direction).scl(distanceFromCamera))
@@ -162,6 +164,8 @@ public class CardInGameRenderingSystem extends BaseSystem {
             for (Entity cardInHand : cardsInHand) {
                 float indexBias = index - (handSize / 2f) + 0.5f;
                 float cardScale = 0.5f;
+                // Temporary
+                cardScale = 1f;
                 transformSystem.setTransform(cardInHand, new Matrix4()
                         .translate(basePlayerHandPosition.x + cardSeparation * indexBias, basePlayerHandPosition.y, basePlayerHandPosition.z)// + 0.005f * Math.abs(indexBias))
                         .scale(cardScale, cardScale, cardScale)
