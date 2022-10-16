@@ -62,6 +62,8 @@ public class CardInGameRenderingSystem extends BaseSystem {
         if (playerPosition == PlayerPosition.Lower) {
             Camera camera = cameraSystem.getCamera();
             float verticalScale = 0.8f;
+            // Temporary
+            verticalScale = 0f;
             float distanceFromCamera = 3f;
             float cardSeparation = 0.15f;
             Vector3 basePlayerHandPosition =

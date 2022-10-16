@@ -4,7 +4,6 @@ import com.artemis.PooledComponent;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.util.Alignment;
 
 public class SDF3DTextComponent extends PooledComponent {
@@ -12,10 +11,10 @@ public class SDF3DTextComponent extends PooledComponent {
     private Vector3 rightVector = new Vector3(1, 0, 0);
     private Vector3 upVector = new Vector3(0, 1, 0);
     private Color color = new Color(1, 1, 1, 1);
-    private Array<SDFTextLine> lines = new Array<>();
+    private String text = "test text";
     private boolean wrap = true;
     private float targetWidth = 0f;
-    private float kerningMultiplier = 1f;
+    private boolean kerning = true;
     private float letterSpacing = 0f;
     private boolean scaleDownToFit = false;
     private float scaleDownMultiplier = 1.1f;
@@ -40,8 +39,8 @@ public class SDF3DTextComponent extends PooledComponent {
         return color;
     }
 
-    public Array<SDFTextLine> getLines() {
-        return lines;
+    public String getText() {
+        return text;
     }
 
     public Alignment getAlignment() {
@@ -84,12 +83,12 @@ public class SDF3DTextComponent extends PooledComponent {
         this.targetWidth = targetWidth;
     }
 
-    public float getKerningMultiplier() {
-        return kerningMultiplier;
+    public boolean getKerning() {
+        return kerning;
     }
 
-    public void setKerningMultiplier(float kerningMultiplier) {
-        this.kerningMultiplier = kerningMultiplier;
+    public void setKerning(boolean kerning) {
+        this.kerning = kerning;
     }
 
     public float getLetterSpacing() {
@@ -130,10 +129,10 @@ public class SDF3DTextComponent extends PooledComponent {
         rightVector.set(1, 0, 0);
         upVector.set(0, 1, 0);
         color.set(1, 1, 1, 1);
-        lines.clear();
+        text = "test text";
         wrap = true;
         targetWidth = 0f;
-        kerningMultiplier = 1f;
+        kerning = true;
         letterSpacing = 0f;
         scaleDownToFit = false;
         scaleDownMultiplier = 1.1f;

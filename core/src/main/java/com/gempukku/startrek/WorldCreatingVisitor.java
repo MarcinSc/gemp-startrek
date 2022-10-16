@@ -12,6 +12,8 @@ import com.gempukku.libgdx.lib.artemis.camera.TopDownCameraController;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
+import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
+import com.gempukku.libgdx.lib.artemis.font.RuntimeBitmapFontHandler;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
 import com.gempukku.libgdx.lib.artemis.input.InputProcessorSystem;
 import com.gempukku.libgdx.lib.artemis.property.PropertySystem;
@@ -20,6 +22,7 @@ import com.gempukku.libgdx.lib.artemis.texture.RuntimeTextureHandler;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
+import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextSystem;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.lib.graph.artemis.time.TimeKeepingSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
@@ -87,6 +90,8 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new WebsocketRemoteClientConnector<>(
                         new JsonDataSerializer(), new JsonValueServerSessionProducer(),
                         new JsonValueNetworkMessageMarshaller()),
+                new BitmapFontSystem(new RuntimeBitmapFontHandler()),
+                new SDF3DTextSystem("SdfText"),
                 new FontProviderSystem(),
                 new SpriteSystem(),
                 new CameraSystem(new TopDownCameraController()),
