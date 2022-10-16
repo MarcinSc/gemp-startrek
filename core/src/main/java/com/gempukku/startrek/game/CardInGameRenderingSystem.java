@@ -74,6 +74,10 @@ public class CardInGameRenderingSystem extends BaseSystem {
             // Cost
             SDFTextBlock costBlock = sdfText.getTextBlocks().get(2);
             costBlock.setText(String.valueOf(cardDefinition.getCost()));
+
+            // Species
+            SDFTextBlock raceBlock = sdfText.getTextBlocks().get(3);
+            raceBlock.setText(cardDefinition.getSpecies().toString());
         }
         getPlayerCards(owner).addCardInHand(card, cardRepresentation);
 

@@ -207,6 +207,51 @@
         "scaleDownToFit": true,
         "alignment": "center",
         "bitmapFontPath": "font/arial.fnt"
+      },
+      {
+        "transform": {
+          "val": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0.005,
+            0.054,
+            1
+          ]
+        },
+        "rightVector": {
+          "x": 0.5,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 0,
+          "z": 0.038
+        },
+        "width": 0.5,
+        "edge": 0.03,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "targetWidth": 500,
+        "kerning": true,
+        "scaleDownToFit": true,
+        "alignment": "center",
+        "bitmapFontPath": "font/arial.fnt"
       }
     ]
   }
