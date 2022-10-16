@@ -13,12 +13,17 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
+import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextComponent;
+import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDFTextBlock;
+import com.gempukku.startrek.card.CardDefinition;
+import com.gempukku.startrek.card.CardLookupSystem;
 
 public class CardInGameRenderingSystem extends BaseSystem {
     private SpawnSystem spawnSystem;
     private PlayerPositionSystem playerPositionSystem;
     private CameraSystem cameraSystem;
     private TransformSystem transformSystem;
+    private CardLookupSystem cardLookupSystem;
 
     private ObjectMap<PlayerPosition, PlayerCards> playerCardsMap = new ObjectMap<>();
 
@@ -46,9 +51,30 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
     private void cardInHandInserted(int i) {
         Entity card = world.getEntity(i);
-        String owner = card.getComponent(CardInHandComponent.class).getOwner();
+        CardInHandComponent cardInHand = card.getComponent(CardInHandComponent.class);
+        String owner = cardInHand.getOwner();
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardInHand.getCardId());
 
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full.template");
+        //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
+        SDF3DTextComponent sdfText = cardRepresentation.getComponent(SDF3DTextComponent.class);
+        if (sdfText != null) {
+            // Title
+            SDFTextBlock titleBlock = sdfText.getTextBlocks().get(0);
+            String titleText = (cardDefinition.isUnique() ? "• " : "") + cardDefinition.getTitle();
+            titleBlock.setText(titleText);
+
+            // Subtitle
+            String subtitle = cardDefinition.getSubtitle();
+            if (subtitle != null) {
+                SDFTextBlock subtitleBlock = sdfText.getTextBlocks().get(1);
+                subtitleBlock.setText(subtitle);
+            }
+
+            // Cost
+            SDFTextBlock costBlock = sdfText.getTextBlocks().get(2);
+            costBlock.setText(String.valueOf(cardDefinition.getCost()));
+        }
         getPlayerCards(owner).addCardInHand(card, cardRepresentation);
 
         layoutHand(owner);

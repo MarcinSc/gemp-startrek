@@ -30,6 +30,8 @@ import com.gempukku.libgdx.network.JsonDataSerializer;
 import com.gempukku.libgdx.network.client.WebsocketRemoteClientConnector;
 import com.gempukku.libgdx.network.json.JsonValueNetworkMessageMarshaller;
 import com.gempukku.libgdx.network.json.JsonValueServerSessionProducer;
+import com.gempukku.startrek.card.CardData;
+import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.common.ConnectionParamSystem;
 import com.gempukku.startrek.common.FontProviderSystem;
 import com.gempukku.startrek.common.IncomingUpdatesProcessor;
@@ -42,9 +44,12 @@ import java.io.Reader;
 
 public class WorldCreatingVisitor implements GameSceneVisitor<World> {
     private WorldConfigurationBuilder worldConfigurationBuilder;
+    private CardData cardData;
 
     public WorldCreatingVisitor(WorldConfigurationBuilder worldConfigurationBuilder) {
         this.worldConfigurationBuilder = worldConfigurationBuilder;
+        cardData = new CardData();
+        cardData.initializeCards();
     }
 
     @Override
@@ -101,6 +106,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new EvaluatePropertySystem(),
                 new IncomingUpdatesProcessor(),
 
+                new CardLookupSystem(cardData),
                 new CardInGameRenderingSystem(),
                 new PlayerPositionSystem());
 

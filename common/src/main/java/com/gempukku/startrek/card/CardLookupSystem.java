@@ -1,8 +1,6 @@
-package com.gempukku.startrek.server.game.card;
+package com.gempukku.startrek.card;
 
 import com.artemis.BaseSystem;
-import com.gempukku.startrek.card.CardData;
-import com.gempukku.startrek.card.CardDefinition;
 
 public class CardLookupSystem extends BaseSystem {
     private CardData cardData;

@@ -10,7 +10,7 @@ public class SDFTextBlock {
     private Vector3 rightVector = new Vector3(1, 0, 0);
     private Vector3 upVector = new Vector3(0, 1, 0);
     private Color color = new Color(1, 1, 1, 1);
-    private String text = "test text";
+    private String text = "";
     private boolean wrap = true;
     private float targetWidth = 0f;
     private boolean kerning = true;
@@ -40,6 +40,10 @@ public class SDFTextBlock {
 
     public String getText() {
         return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public Alignment getAlignment() {
