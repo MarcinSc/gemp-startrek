@@ -275,14 +275,60 @@
                 0,
                 1,
                 0,
-                0.025,
+                0.024,
                 0.005,
                 0.233,
                 1
               ]
             },
             "rightVector": {
-              "x": 0.52,
+              "x": 0.518,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.225
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "path": "atlas/scene.atlas",
+            "region": "playarea"
+          }
+        }
+      },
+      {
+        "spriteSystemName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                -0.29,
+                0.005,
+                0.233,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.06,
               "y": 0,
               "z": 0
             },

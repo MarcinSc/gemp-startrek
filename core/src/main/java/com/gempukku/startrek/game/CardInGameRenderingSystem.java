@@ -94,10 +94,23 @@ public class CardInGameRenderingSystem extends BaseSystem {
             // Text
             SDFTextBlock textBlock = sdfText.getTextBlocks().get(4);
             textBlock.setText(createCardText(cardDefinition));
+
+            // Icons
+            SDFTextBlock iconsBlock = sdfText.getTextBlocks().get(5);
+            iconsBlock.setText(createIconsText(cardDefinition));
         }
         getPlayerCards(owner).addCardInHand(card, cardRepresentation);
 
         layoutHand(owner);
+    }
+
+    private String createIconsText(CardDefinition cardDefinition) {
+        StringBuilder result = new StringBuilder();
+        for (String icon : cardDefinition.getIcons()) {
+            result.append("[icon " + icon + "] ");
+        }
+
+        return result.toString();
     }
 
     private String getCardTemplate(Affiliation affiliation) {
