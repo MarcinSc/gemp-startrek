@@ -19,6 +19,7 @@ import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
 import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 import com.gempukku.libgdx.lib.graph.artemis.Vector2ValuePerVertex;
 import com.gempukku.libgdx.lib.graph.artemis.Vector3ValuePerVertex;
+import com.gempukku.libgdx.lib.graph.artemis.VectorUtil;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.layout.GlyphOffsetLine;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.layout.GlyphOffsetText;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.layout.GlyphOffseter;
@@ -84,26 +85,29 @@ Color - character color
         if (parsedText.getNextUnbreakableChunkLength(0) == -1)
             return;
 
-        float width = sdfTextBlock.getRightVector().len();
-        float height = sdfTextBlock.getUpVector().len();
+        float widthInWorld = sdfTextBlock.getRightVector().len();
+        float heightInWorld = sdfTextBlock.getUpVector().len();
 
         try {
-            Vector3 normalizedRightVector = tempVector1.set(sdfTextBlock.getRightVector()).nor();
-            Vector3 normalizedUpVector = tempVector2.set(sdfTextBlock.getUpVector()).nor();
-
             float targetWidth = sdfTextBlock.getTargetWidth();
             boolean wrap = sdfTextBlock.isWrap();
 
             GlyphOffsetText offsetText;
             float scale;
             if (sdfTextBlock.isScaleDownToFit()) {
-                offsetText = layoutTextToFit(width, height, glyphOffseter, parsedText, sdfTextBlock.getTargetWidth(),
+                offsetText = layoutTextToFit(widthInWorld, heightInWorld, glyphOffseter, parsedText, sdfTextBlock.getTargetWidth(),
                         sdfTextBlock.getScaleDownMultiplier(), sdfTextBlock.isWrap());
-                scale = calculateScale(offsetText, width, height);
+                scale = calculateScale(offsetText, widthInWorld, heightInWorld);
             } else {
                 offsetText = glyphOffseter.offsetText(parsedText, targetWidth, wrap);
-                scale = width / targetWidth;
+                scale = widthInWorld / targetWidth;
             }
+
+            Vector3 unitRightVector = tempVector1.set(sdfTextBlock.getRightVector()).nor().scl(scale);
+            Vector3 unitUpVector = tempVector2.set(sdfTextBlock.getUpVector()).nor().scl(scale);
+
+            float widthInGlyph = widthInWorld / scale;
+            float heightInGlyph = heightInWorld / scale;
 
             ObjectMap<TextStyle, PropertyContainer> stylePropertyContainerMap = new ObjectMap<>();
 
@@ -111,14 +115,16 @@ Color - character color
 
             Matrix4 resultTransform = tempMatrix.set(transform).mul(sdfTextBlock.getTransform());
 
-            final float startY = alignment.applyY(offsetText.getTextHeight() * scale, height) - height / 2;
+            final float startY = alignment.applyY(offsetText.getTextHeight(), heightInGlyph) - heightInGlyph / 2;
 
             float lineY = 0;
             for (int lineIndex = 0; lineIndex < offsetText.getLineCount(); lineIndex++) {
                 GlyphOffsetLine line = offsetText.getLine(lineIndex);
+                float lineHeight = line.getHeight();
+
                 TextStyle lineStyle = offsetText.getLineStyle(lineIndex);
                 Alignment horizontalAlignment = getHorizontalAlignment(lineStyle);
-                final float startX = horizontalAlignment.applyX(line.getWidth() * scale, width) - width / 2;
+                final float startX = horizontalAlignment.applyX(line.getWidth(), widthInGlyph) - widthInGlyph / 2;
                 for (int glyphIndex = 0; glyphIndex < line.getGlyphCount(); glyphIndex++) {
                     char character = line.getGlyph(glyphIndex);
                     TextStyle textStyle = line.getGlyphStyle(glyphIndex);
@@ -127,36 +133,37 @@ Color - character color
 
                     float fontScale = getFontScale(textStyle);
 
+                    float charX = line.getGlyphXAdvance(glyphIndex);
+                    float charY = lineY + line.getGlyphYAdvance(glyphIndex);
+
                     TextureRegion textureRegion = getTextureRegion(textStyle);
                     if (textureRegion != null) {
                         SpriteDefinition spriteDefinition = new SpriteDefinition();
                         spriteDefinition.setSpriteSystemName(getSpriteSystemName(textStyle));
                         spriteDefinition.getProperties().put("UV", SpriteSystem.uvAttribute);
-                        float charX = line.getGlyphXAdvance(glyphIndex);
-                        // TODO: This 5* is a magic number, can't figure out why it works...
-                        float charY = lineY + 5 * line.getGlyphYAdvance(glyphIndex) + textureRegion.getRegionHeight();
-                        float[] positionFloatArray = createPositionFloatArray(resultTransform, normalizedRightVector, normalizedUpVector,
-                                startX, startY, charX, charY, scale, textureRegion.getRegionWidth(), textureRegion.getRegionHeight());
-                        spriteDefinition.getProperties().put("Position", new Vector3ValuePerVertex(positionFloatArray));
+                        float textureHeight = FontUtil.getFontAscent(bitmapFont);
+                        float textureWidth = textureHeight * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();
+                        Vector3ValuePerVertex positionFloatArray = VectorUtil.createSideSpritePosition(
+                                startX + charX, startY + charY,
+                                textureWidth, textureHeight,
+                                unitRightVector, unitUpVector,
+                                resultTransform);
+                        spriteDefinition.getProperties().put("Position", positionFloatArray);
                         spriteDefinition.getProperties().put("Texture", textureRegion);
 
                         spriteSystem.addSprite(null, null, spriteDefinition);
                     } else {
-                        float charX = line.getGlyphXAdvance(glyphIndex);
-                        // TODO: This 5* is a magic number, can't figure out why it works...
-                        float charY = lineY + 5 * line.getGlyphYAdvance(glyphIndex);
-
                         PropertyContainer stylePropertyContainer = getStylePropertyContainer(stylePropertyContainerMap, textStyle);
 
                         addGlyph(glyph, bitmapFont,
                                 resultTransform,
-                                normalizedRightVector, normalizedUpVector, stylePropertyContainer,
+                                unitRightVector, unitUpVector, stylePropertyContainer,
                                 fontScale,
                                 startX, startY,
-                                charX, charY, scale);
+                                charX, charY);
                     }
                 }
-                lineY += line.getHeight();
+                lineY += lineHeight;
             }
         } finally {
             parsedText.dispose();
@@ -242,31 +249,35 @@ Color - character color
 
     private void addGlyph(BitmapFont.Glyph glyph, BitmapFont bitmapFont,
                           Matrix4 resultTransform,
-                          Vector3 normalizedRightVector, Vector3 normalizedUpVector,
+                          Vector3 unitRightVector, Vector3 unitUpVector,
                           PropertyContainer basePropertyContainer,
                           float glyphScale,
                           float startX, float startY,
-                          float x, float y, float scale) {
-        x += glyph.xoffset * glyphScale;
-        y -= glyph.yoffset * glyphScale;
+                          float glyphX, float glyphY) {
+        float glyphXOffset = glyph.xoffset * glyphScale;
+        float glyphYOffset = glyph.yoffset * glyphScale;
 
-        float width = glyph.width * glyphScale;
-        float height = glyph.height * glyphScale;
+        float glyphWidth = glyph.width * glyphScale;
+        float glyphHeight = glyph.height * glyphScale;
 
-        float[] positionFloatArray = createPositionFloatArray(resultTransform, normalizedRightVector, normalizedUpVector, startX, startY, x, y, scale, width, height);
+        Vector3ValuePerVertex positionFloatArray = VectorUtil.createSideSpritePosition(
+                startX + glyphX + glyphXOffset, startY + glyphY - (glyphHeight + glyphYOffset),
+                glyphWidth, glyphHeight,
+                unitRightVector, unitUpVector,
+                resultTransform);
 
         TextureRegion fontTexture = bitmapFont.getRegion(glyph.page);
 
-        float[] uvFloatArray = createUVFloatArray(glyph);
+        Vector2ValuePerVertex uvFloatArray = createUVFloatArray(glyph);
 
         Vector3 position = tempVector3
-                .mulAdd(normalizedRightVector, startX + (x + width / 2) * scale)
-                .mulAdd(normalizedUpVector, startY + (y - height / 2) * scale)
+                .mulAdd(unitRightVector, startX + (glyphX + glyphWidth / 2))
+                .mulAdd(unitUpVector, startY + (glyphY + glyphHeight / 2))
                 .mul(resultTransform);
 
         HierarchicalPropertyContainer spriteContainer = new HierarchicalPropertyContainer(basePropertyContainer);
-        spriteContainer.setValue("Position", new Vector3ValuePerVertex(positionFloatArray));
-        spriteContainer.setValue("UV", new Vector2ValuePerVertex(uvFloatArray));
+        spriteContainer.setValue("Position", positionFloatArray);
+        spriteContainer.setValue("UV", uvFloatArray);
         spriteContainer.setValue("Font-Texture", fontTexture);
 
         DefaultRenderableSprite sprite = new DefaultRenderableSprite(spriteContainer);
@@ -309,9 +320,9 @@ Color - character color
         return positionVector;
     }
 
-    private float[] createUVFloatArray(BitmapFont.Glyph glyph) {
-        return new float[]{
-                glyph.u, glyph.v2, glyph.u2, glyph.v2, glyph.u, glyph.v, glyph.u2, glyph.v};
+    private Vector2ValuePerVertex createUVFloatArray(BitmapFont.Glyph glyph) {
+        return new Vector2ValuePerVertex(new float[]{
+                glyph.u, glyph.v2, glyph.u2, glyph.v2, glyph.u, glyph.v, glyph.u2, glyph.v});
     }
 
     private void removeText() {

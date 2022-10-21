@@ -12,7 +12,6 @@ import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyCo
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
 import com.gempukku.libgdx.graph.shader.property.MapWritablePropertyContainer;
-import com.gempukku.libgdx.graph.util.ValueOperations;
 import com.gempukku.libgdx.graph.util.sprite.MultiPageSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModelProducer;
@@ -25,7 +24,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformUpdated;
 import com.gempukku.libgdx.lib.graph.artemis.Vector2ValuePerVertex;
-import com.gempukku.libgdx.lib.graph.artemis.Vector3ValuePerVertex;
+import com.gempukku.libgdx.lib.graph.artemis.VectorUtil;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
 
 public class SpriteSystem extends BaseSystem implements Disposable {
@@ -115,31 +114,12 @@ public class SpriteSystem extends BaseSystem implements Disposable {
             SpritePositionProperty spritePositionProperty = (SpritePositionProperty) propertyValue;
 
             Matrix4 transform = transformSystem.getResolvedTransform(entity);
+
             Matrix4 resultTransform = tempMatrix.set(transform).mul(spritePositionProperty.getTransform());
             Vector3 rightVector = spritePositionProperty.getRightVector();
             Vector3 upVector = spritePositionProperty.getUpVector();
 
-            float[] positionAttributeFloatArray = new float[4 * 3];
-
-            tempVector3.setZero()
-                    .mulAdd(rightVector, -0.5f)
-                    .mulAdd(upVector, -0.5f).mul(resultTransform);
-            ValueOperations.copyVector3IntoArray(tempVector3, positionAttributeFloatArray, 0);
-            tempVector3.setZero()
-                    .mulAdd(rightVector, 0.5f)
-                    .mulAdd(upVector, -0.5f).mul(resultTransform);
-            ValueOperations.copyVector3IntoArray(tempVector3, positionAttributeFloatArray, 3);
-            tempVector3.setZero()
-                    .mulAdd(rightVector, -0.5f)
-                    .mulAdd(upVector, 0.5f).mul(resultTransform);
-            ValueOperations.copyVector3IntoArray(tempVector3, positionAttributeFloatArray, 6);
-            tempVector3.setZero()
-                    .mulAdd(rightVector, 0.5f)
-                    .mulAdd(upVector, 0.5f).mul(resultTransform);
-            ValueOperations.copyVector3IntoArray(tempVector3, positionAttributeFloatArray, 9);
-
-            Vector3ValuePerVertex positionPerVertex = new Vector3ValuePerVertex(positionAttributeFloatArray);
-            evaluateProperty.setResult(positionPerVertex);
+            evaluateProperty.setResult(VectorUtil.createCenterSpritePosition(1f, 1f, rightVector, upVector, resultTransform));
         }
     }
 

@@ -537,6 +537,8 @@ public class LoginScreenRenderer extends BaseSystem {
                     (Gdx.graphics.getHeight() - mainTable.getHeight()) / 2);
 
             initialized = true;
+
+            processLogin("test1", "testtest");
         }
     }
 }

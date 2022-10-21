@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
+import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.FontUtil;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.ParsedText;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants;
@@ -85,8 +86,8 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             if (i != startIndex + lineGlyphLength - 1 || !isSkippable(character)) {
                 BitmapFont font = getFont(textStyle);
                 float fontScale = getFontScale(textStyle);
-                maxDescent = Math.max(maxDescent, getFontDescent(font) * fontScale);
-                maxAscent = Math.max(maxAscent, font.getAscent() * fontScale);
+                maxDescent = Math.max(maxDescent, FontUtil.getFontDescent(font) * fontScale);
+                maxAscent = Math.max(maxAscent, FontUtil.getFontAscent(font) * fontScale);
             }
         }
 
@@ -110,14 +111,15 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                 float fontScale = getFontScale(textStyle);
 
                 TextureRegion textureRegion = getTextureRegion(textStyle);
-                float ascent = font.getAscent() * fontScale;
+                float ascent = FontUtil.getFontAscent(font) * fontScale;
                 if (textureRegion != null) {
                     line.xAdvances.add(usedWidth);
                     line.yAdvances.add(maxAscent - ascent);
 
-                    // TODO Again a magic number 5, which works for some reason
-                    usedWidth += 5 * (textureRegion.getRegionWidth() * ascent / textureRegion.getRegionHeight())
-                            + getLetterSpacing(textStyle) * fontScale;
+                    float textureHeight = ascent;
+                    float textureWidth = textureHeight * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();
+
+                    usedWidth += textureWidth + getLetterSpacing(textStyle) * fontScale;
                 } else {
                     BitmapFont.Glyph glyph = fontData.getGlyph(character);
 
@@ -146,10 +148,6 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         line.lineHeight = maxAscent + maxDescent;
 
         return line;
-    }
-
-    private float getFontDescent(BitmapFont font) {
-        return font.getLineHeight() - font.getAscent();
     }
 
     private int determineLineGlyphLength(ParsedText parsedText, float availableWidth, int startIndex, boolean wrap) {
@@ -219,7 +217,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                 float fontScale = getFontScale(textStyle);
 
                 TextureRegion textureRegion = getTextureRegion(textStyle);
-                float ascent = font.getAscent() * fontScale;
+                float ascent = FontUtil.getFontAscent(font) * fontScale;
                 if (textureRegion != null) {
                     width += 5 * (textureRegion.getRegionWidth() * ascent / textureRegion.getRegionHeight())
                             + getLetterSpacing(textStyle) * fontScale;
