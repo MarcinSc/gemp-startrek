@@ -268,8 +268,6 @@ Color - character color
 
         TextureRegion fontTexture = bitmapFont.getRegion(glyph.page);
 
-        Vector2ValuePerVertex uvFloatArray = createUVFloatArray(glyph);
-
         Vector3 position = tempVector3
                 .mulAdd(unitRightVector, startX + (glyphX + glyphWidth / 2))
                 .mulAdd(unitUpVector, startY + (glyphY + glyphHeight / 2))
@@ -277,7 +275,7 @@ Color - character color
 
         HierarchicalPropertyContainer spriteContainer = new HierarchicalPropertyContainer(basePropertyContainer);
         spriteContainer.setValue("Position", positionFloatArray);
-        spriteContainer.setValue("UV", uvFloatArray);
+        spriteContainer.setValue("UV", createUVFloatArray(glyph));
         spriteContainer.setValue("Font-Texture", fontTexture);
 
         DefaultRenderableSprite sprite = new DefaultRenderableSprite(spriteContainer);
