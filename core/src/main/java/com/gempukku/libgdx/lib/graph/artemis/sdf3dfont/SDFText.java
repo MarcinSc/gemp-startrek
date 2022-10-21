@@ -30,7 +30,6 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinitionAdapter;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
-import com.gempukku.libgdx.util.Alignment;
 
 public class SDFText implements Disposable {
     private static Matrix4 tempMatrix = new Matrix4();
@@ -111,11 +110,11 @@ Color - character color
 
             ObjectMap<TextStyle, PropertyContainer> stylePropertyContainerMap = new ObjectMap<>();
 
-            Alignment alignment = sdfTextBlock.getAlignment();
+            TextVerticalAlignment alignment = sdfTextBlock.getVerticalAlignment();
 
             Matrix4 resultTransform = tempMatrix.set(transform).mul(sdfTextBlock.getTransform());
 
-            final float startY = alignment.applyY(offsetText.getTextHeight(), heightInGlyph) - heightInGlyph / 2;
+            final float startY = alignment.apply(offsetText.getTextHeight(), heightInGlyph) - heightInGlyph / 2;
 
             float lineY = 0;
             for (int lineIndex = 0; lineIndex < offsetText.getLineCount(); lineIndex++) {
@@ -123,8 +122,8 @@ Color - character color
                 float lineHeight = line.getHeight();
 
                 TextStyle lineStyle = offsetText.getLineStyle(lineIndex);
-                Alignment horizontalAlignment = getHorizontalAlignment(lineStyle);
-                final float startX = horizontalAlignment.applyX(line.getWidth(), widthInGlyph) - widthInGlyph / 2;
+                TextHorizontalAlignment horizontalAlignment = getHorizontalAlignment(lineStyle);
+                final float startX = horizontalAlignment.apply(line.getWidth(), widthInGlyph) - widthInGlyph / 2;
                 for (int glyphIndex = 0; glyphIndex < line.getGlyphCount(); glyphIndex++) {
                     char character = line.getGlyph(glyphIndex);
                     TextStyle textStyle = line.getGlyphStyle(glyphIndex);
@@ -205,9 +204,9 @@ Color - character color
         return fontColor != null ? fontColor : sdfTextBlock.getColor();
     }
 
-    private Alignment getHorizontalAlignment(TextStyle textStyle) {
-        Alignment alignment = (Alignment) textStyle.getAttribute(TextStyleConstants.AlignmentHorizontal);
-        return alignment != null ? alignment : sdfTextBlock.getAlignment();
+    private TextHorizontalAlignment getHorizontalAlignment(TextStyle textStyle) {
+        TextHorizontalAlignment alignment = (TextHorizontalAlignment) textStyle.getAttribute(TextStyleConstants.AlignmentHorizontal);
+        return alignment != null ? alignment : sdfTextBlock.getHorizontalAlignment();
     }
 
     private TextureRegion getTextureRegion(TextStyle textStyle) {

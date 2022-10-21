@@ -3,7 +3,6 @@ package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.gempukku.libgdx.util.Alignment;
 
 public class SDFTextBlock {
     private Matrix4 transform = new Matrix4();
@@ -19,7 +18,8 @@ public class SDFTextBlock {
     private float scaleDownMultiplier = 1.1f;
     private float width = 0.5f;
     private float edge = 0.01f;
-    private Alignment alignment = Alignment.topLeft;
+    private TextHorizontalAlignment horizontalAlignment = TextHorizontalAlignment.left;
+    private TextVerticalAlignment verticalAlignment = TextVerticalAlignment.top;
     private String bitmapFontPath;
 
     public Matrix4 getTransform() {
@@ -46,12 +46,20 @@ public class SDFTextBlock {
         this.text = text;
     }
 
-    public Alignment getAlignment() {
-        return alignment;
+    public TextHorizontalAlignment getHorizontalAlignment() {
+        return horizontalAlignment;
     }
 
-    public void setAlignment(Alignment alignment) {
-        this.alignment = alignment;
+    public void setHorizontalAlignment(TextHorizontalAlignment horizontalAlignment) {
+        this.horizontalAlignment = horizontalAlignment;
+    }
+
+    public TextVerticalAlignment getVerticalAlignment() {
+        return verticalAlignment;
+    }
+
+    public void setVerticalAlignment(TextVerticalAlignment verticalAlignment) {
+        this.verticalAlignment = verticalAlignment;
     }
 
     public String getBitmapFontPath() {

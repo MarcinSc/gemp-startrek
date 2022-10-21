@@ -253,7 +253,8 @@
         "targetWidth": 500,
         "kerning": true,
         "scaleDownToFit": true,
-        "alignment": "left",
+        "verticalAlignment": "center",
+        "horizontalAlignment": "left",
         "bitmapFontPath": "font/arial.fnt"
       },
       {
@@ -298,7 +299,8 @@
         "targetWidth": 500,
         "kerning": true,
         "scaleDownToFit": true,
-        "alignment": "left",
+        "verticalAlignment": "center",
+        "horizontalAlignment": "left",
         "bitmapFontPath": "font/arial.fnt"
       },
       {
@@ -343,7 +345,8 @@
         "targetWidth": 200,
         "kerning": true,
         "scaleDownToFit": true,
-        "alignment": "center",
+        "verticalAlignment": "center",
+        "horizontalAlignment": "center",
         "bitmapFontPath": "font/arial.fnt"
       },
       {
@@ -388,7 +391,8 @@
         "targetWidth": 500,
         "kerning": true,
         "scaleDownToFit": true,
-        "alignment": "center",
+        "verticalAlignment": "center",
+        "horizontalAlignment": "left",
         "bitmapFontPath": "font/arial.fnt"
       },
       {
@@ -434,7 +438,8 @@
         "kerning": true,
         "scaleDownToFit": true,
         "scaleDownMultiplier": 1.05,
-        "alignment": "topLeft",
+        "verticalAlignment": "top",
+        "horizontalAlignment": "left",
         "bitmapFontPath": "font/arial.fnt"
       }
     ]
