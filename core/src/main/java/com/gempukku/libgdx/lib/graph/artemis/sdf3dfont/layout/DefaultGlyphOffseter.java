@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.FontUtil;
+import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.TextHorizontalAlignment;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.ParsedText;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants;
@@ -16,6 +17,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
     private float defaultLetterSpacing = 0f;
     private float defaultLineSpacing = 0f;
     private float defaultFontScale = 1f;
+    private TextHorizontalAlignment defaultHorizontalAlignment = TextHorizontalAlignment.left;
 
     public void setDefaultKerning(boolean defaultKerning) {
         this.defaultKerning = defaultKerning;
@@ -31,6 +33,10 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
     public void setDefaultFontScale(float defaultFontScale) {
         this.defaultFontScale = defaultFontScale;
+    }
+
+    public void setDefaultHorizontalAlignment(TextHorizontalAlignment defaultHorizontalAlignment) {
+        this.defaultHorizontalAlignment = defaultHorizontalAlignment;
     }
 
     @Override
@@ -95,7 +101,20 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
         TextStyle lineStyle = parsedText.getTextStyle(startIndex);
 
-        float usedWidth = getLinePaddingLeft(lineStyle);
+        float linePaddingLeft = getLinePaddingLeft(lineStyle);
+
+        float usedWidth = linePaddingLeft;
+        float justifiedSpace = 0;
+        if (getHorizontalAlignment(lineStyle) == TextHorizontalAlignment.justified
+                && !isEndOfLine(parsedText, startIndex, lineGlyphLength)) {
+            int spaceCount = countJustifiableSpaces(parsedText, startIndex, lineGlyphLength);
+            if (spaceCount > 0) {
+                float linePaddingRight = getLinePaddingRight(lineStyle);
+                justifiedSpace = availableWidth - linePaddingLeft - linePaddingRight;
+                justifiedSpace -= getTextWidthExcludingLastSkippable(parsedText, startIndex, lineGlyphLength);
+                justifiedSpace /= spaceCount;
+            }
+        }
 
         char lastCharacter = 0;
         TextStyle lastCharacterStyle = null;
@@ -116,8 +135,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                     line.xAdvances.add(usedWidth);
                     line.yAdvances.add(maxAscent - ascent);
 
-                    float textureHeight = ascent;
-                    float textureWidth = textureHeight * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();
+                    float textureWidth = ascent * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();
 
                     usedWidth += textureWidth + getLetterSpacing(textStyle) * fontScale;
                 } else {
@@ -131,6 +149,9 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                     line.yAdvances.add(maxAscent - ascent);
 
                     float glyphAdvance = glyph.xadvance + kerning + getLetterSpacing(textStyle);
+                    if (Character.isWhitespace(character)) {
+                        glyphAdvance += justifiedSpace;
+                    }
 
                     usedWidth += glyphAdvance * fontScale;
                 }
@@ -148,6 +169,32 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         line.lineHeight = maxAscent + maxDescent;
 
         return line;
+    }
+
+    private boolean isEndOfLine(ParsedText parsedText, int startIndex, int lineGlyphLength) {
+        // Ends with line break, or no further text after
+        if (parsedText.getCharAt(startIndex + lineGlyphLength - 1) == '\n'
+                || parsedText.getNextUnbreakableChunkLength(startIndex + lineGlyphLength) == -1)
+            return true;
+        return false;
+    }
+
+    private String assembleText(ParsedText parsedText, int startIndex, int glyphCount) {
+        StringBuilder result = new StringBuilder();
+        for (int i = startIndex; i < startIndex + glyphCount; i++) {
+            result.append(parsedText.getCharAt(i));
+        }
+        return result.toString();
+    }
+
+    private int countJustifiableSpaces(ParsedText parsedText, int startIndex, int glyphCount) {
+        int result = 0;
+        for (int i = startIndex; i < startIndex + glyphCount; i++) {
+            char character = parsedText.getCharAt(i);
+            if (i != startIndex + glyphCount - 1 && Character.isWhitespace(character))
+                result++;
+        }
+        return result;
     }
 
     private int determineLineGlyphLength(ParsedText parsedText, float availableWidth, int startIndex, boolean wrap) {
@@ -169,7 +216,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                 availableWidth -= getLinePaddingRight(lineStyle);
             }
 
-            float chunkWidth = getChunkWidthExcludingLastSkippable(parsedText, consumedGlyphIndex, chunkLength);
+            float chunkWidth = getTextWidthExcludingLastSkippable(parsedText, consumedGlyphIndex, chunkLength);
             if (wrap && !firstChunk && usedWidth + chunkWidth > availableWidth)
                 return consumedGlyphIndex - startIndex;
             usedWidth += chunkWidth;
@@ -199,7 +246,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         }
     }
 
-    private float getChunkWidthExcludingLastSkippable(ParsedText parsedText, int startIndex, int length) {
+    private float getTextWidthExcludingLastSkippable(ParsedText parsedText, int startIndex, int length) {
         float width = 0;
         char lastCharacter = 0;
         TextStyle lastCharacterStyle = null;
@@ -219,8 +266,8 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                 TextureRegion textureRegion = getTextureRegion(textStyle);
                 float ascent = FontUtil.getFontAscent(font) * fontScale;
                 if (textureRegion != null) {
-                    width += 5 * (textureRegion.getRegionWidth() * ascent / textureRegion.getRegionHeight())
-                            + getLetterSpacing(textStyle) * fontScale;
+                    float textureWidth = ascent * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();
+                    width += textureWidth + getLetterSpacing(textStyle) * fontScale;
                 } else {
                     float glyphAdvance = glyph.xadvance;
                     if (lastCharacter != 0 && lastCharacterStyle == textStyle && getKerning(textStyle)) {
@@ -272,6 +319,11 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
     private TextureRegion getTextureRegion(TextStyle textStyle) {
         return (TextureRegion) textStyle.getAttribute(TextStyleConstants.ImageTextureRegion);
+    }
+
+    private TextHorizontalAlignment getHorizontalAlignment(TextStyle lineStyle) {
+        TextHorizontalAlignment alignment = (TextHorizontalAlignment) lineStyle.getAttribute(TextStyleConstants.AlignmentHorizontal);
+        return alignment != null ? alignment : defaultHorizontalAlignment;
     }
 
     private float getLinePaddingLeft(TextStyle lineStyle) {

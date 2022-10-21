@@ -143,7 +143,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
         }
         String lore = cardDefinition.getLore();
         if (lore != null) {
-            result.append("[paddingLeft 20][paddingRight 20][width 0.46][scale 0.8][font font/arial-italic.fnt]").append(lore).append("[/font][/scale][/width][/paddingRight][/paddingLeft]");
+            result.append("[horAlign justified][paddingLeft 20][paddingRight 20][width 0.46][scale 0.8][font font/arial-italic.fnt]").append(lore).append("[/font][/scale][/width][/paddingRight][/paddingLeft][/horAlign]");
         }
 
         return result.toString();

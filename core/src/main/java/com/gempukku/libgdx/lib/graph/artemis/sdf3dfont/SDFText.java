@@ -227,6 +227,7 @@ Color - character color
         sdfTextStyle.setAttribute(TextStyleConstants.Kerning, sdfTextBlock.getKerning());
         sdfTextStyle.setAttribute(TextStyleConstants.Font, bitmapFontSystem.getBitmapFont(sdfTextBlock.getBitmapFontPath()));
         sdfTextStyle.setAttribute(TextStyleConstants.LetterSpacing, sdfTextBlock.getLetterSpacing());
+        sdfTextStyle.setAttribute(TextStyleConstants.AlignmentHorizontal, sdfTextBlock.getHorizontalAlignment());
         return sdfTextStyle;
     }
 

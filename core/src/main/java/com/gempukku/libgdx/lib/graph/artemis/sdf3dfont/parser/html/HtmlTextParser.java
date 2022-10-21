@@ -40,6 +40,9 @@ public class HtmlTextParser implements TextParser {
         tagTextParser.addTagHandler("/paddingLeft", new PopStyleTagHandler());
         tagTextParser.addTagHandler("paddingRight", new PaddingRightTagHandler());
         tagTextParser.addTagHandler("/paddingRight", new PopStyleTagHandler());
+        // Alignment
+        tagTextParser.addTagHandler("horAlign", new HorizontalAlignmentTagHandler());
+        tagTextParser.addTagHandler("/horAlign", new PopStyleTagHandler());
 
         // Image
         tagTextParser.addTagHandler("img", new ImageTagHandler(textureRegionResolver));
