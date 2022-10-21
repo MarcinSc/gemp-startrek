@@ -110,7 +110,7 @@ Color - character color
 
             ObjectMap<TextStyle, PropertyContainer> stylePropertyContainerMap = new ObjectMap<>();
 
-            TextVerticalAlignment alignment = sdfTextBlock.getVerticalAlignment();
+            TextVerticalAlignment alignment = getVerticalAlignment(offsetText.getTextStyle());
 
             Matrix4 resultTransform = tempMatrix.set(transform).mul(sdfTextBlock.getTransform());
 
@@ -202,6 +202,11 @@ Color - character color
     private Color getFontColor(TextStyle textStyle) {
         Color fontColor = (Color) textStyle.getAttribute(TextStyleConstants.FontColor);
         return fontColor != null ? fontColor : sdfTextBlock.getColor();
+    }
+
+    private TextVerticalAlignment getVerticalAlignment(TextStyle textStyle) {
+        TextVerticalAlignment alignment = (TextVerticalAlignment) textStyle.getAttribute(TextStyleConstants.AlignmentVertical);
+        return alignment != null ? alignment : sdfTextBlock.getVerticalAlignment();
     }
 
     private TextHorizontalAlignment getHorizontalAlignment(TextStyle textStyle) {

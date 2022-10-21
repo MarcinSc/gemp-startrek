@@ -8,6 +8,8 @@ public interface GlyphOffsetText extends Disposable {
 
     float getTextWidth();
 
+    TextStyle getTextStyle();
+
     int getLineCount();
 
     GlyphOffsetLine getLine(int index);

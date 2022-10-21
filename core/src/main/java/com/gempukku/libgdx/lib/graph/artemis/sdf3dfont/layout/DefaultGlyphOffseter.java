@@ -300,6 +300,11 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         }
 
         @Override
+        public TextStyle getTextStyle() {
+            return getLineStyle(0);
+        }
+
+        @Override
         public int getLineCount() {
             return lines.size;
         }
