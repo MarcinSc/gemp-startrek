@@ -18,6 +18,7 @@ import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextComponent;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDFTextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
+import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
 import com.gempukku.startrek.card.Affiliation;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
@@ -65,6 +66,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
         Affiliation affiliation = cardDefinition.getAffiliation();
         String cardTemplate = getCardTemplate(affiliation);
+
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
         TextureReference textureReference = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
         textureReference.setRegion(cardTemplate);
@@ -96,21 +98,16 @@ public class CardInGameRenderingSystem extends BaseSystem {
             textBlock.setText(createCardText(cardDefinition));
 
             // Icons
-            SDFTextBlock iconsBlock = sdfText.getTextBlocks().get(5);
-            iconsBlock.setText(createIconsText(cardDefinition));
+            Array<String> icons = cardDefinition.getIcons();
+            for (int iconIndex = 0; iconIndex < icons.size; iconIndex++) {
+                SpriteDefinition spriteDefinition = cardTemplateSprite.getSprites().get(1 + iconIndex);
+                TextureReference iconTextureReference = (TextureReference) spriteDefinition.getProperties().get("Texture");
+                iconTextureReference.setRegion(icons.get(iconIndex));
+            }
         }
         getPlayerCards(owner).addCardInHand(card, cardRepresentation);
 
         layoutHand(owner);
-    }
-
-    private String createIconsText(CardDefinition cardDefinition) {
-        StringBuilder result = new StringBuilder();
-        for (String icon : cardDefinition.getIcons()) {
-            result.append("[icon " + icon + "] ");
-        }
-
-        return result.toString();
     }
 
     private String getCardTemplate(Affiliation affiliation) {

@@ -4,30 +4,37 @@ size: 256, 64
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
-Cmd
+Blank
   rotate: false
   xy: 2, 2
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
-DS9
-  rotate: false
-  xy: 101, 2
-  size: 30, 30
-  orig: 30, 30
-  offset: 0, 0
-  index: -1
-Fed
+Cmd
   rotate: false
   xy: 35, 2
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
-Stf
+DS9
+  rotate: false
+  xy: 134, 2
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+Fed
   rotate: false
   xy: 68, 2
+  size: 31, 30
+  orig: 31, 30
+  offset: 0, 0
+  index: -1
+Stf
+  rotate: false
+  xy: 101, 2
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
