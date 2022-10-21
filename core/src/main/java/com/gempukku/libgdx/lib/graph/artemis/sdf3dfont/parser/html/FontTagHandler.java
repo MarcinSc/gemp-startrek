@@ -4,11 +4,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable.TagHandler;
+import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable.TagParsedText;
 
 import java.util.function.Function;
 
-public class FontTagHandler implements TagHandler {
+public class FontTagHandler extends PopStyleEndTagHandler {
     private Function<String, BitmapFont> fontResolver;
 
     public FontTagHandler(Function<String, BitmapFont> fontResolver) {
@@ -16,7 +16,7 @@ public class FontTagHandler implements TagHandler {
     }
 
     @Override
-    public String startProcessingTag(String tagParameters, Array<TextStyle> textStyleStack) {
+    public void processStartTag(String tagParameters, Array<TextStyle> textStyleStack, TagParsedText tagParsedText, StringBuilder resultText) {
         String fontName = tagParameters.trim();
 
         TextStyle lastStyle = textStyleStack.peek();
@@ -24,12 +24,5 @@ public class FontTagHandler implements TagHandler {
         duplicate.setAttribute(TextStyleConstants.Font, fontResolver.apply(fontName));
 
         textStyleStack.add(duplicate);
-
-        return null;
-    }
-
-    @Override
-    public void endProcessingTag(Array<TextStyle> textStyleStack) {
-
     }
 }

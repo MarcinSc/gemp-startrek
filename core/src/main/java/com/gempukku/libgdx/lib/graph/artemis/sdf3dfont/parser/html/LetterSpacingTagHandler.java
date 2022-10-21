@@ -3,11 +3,11 @@ package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.html;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable.TagHandler;
+import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable.TagParsedText;
 
-public class LetterSpacingTagHandler implements TagHandler {
+public class LetterSpacingTagHandler extends PopStyleEndTagHandler {
     @Override
-    public String startProcessingTag(String tagParameters, Array<TextStyle> textStyleStack) {
+    public void processStartTag(String tagParameters, Array<TextStyle> textStyleStack, TagParsedText tagParsedText, StringBuilder resultText) {
         float letterSpacing = Float.parseFloat(tagParameters.trim());
 
         TextStyle lastStyle = textStyleStack.peek();
@@ -15,12 +15,5 @@ public class LetterSpacingTagHandler implements TagHandler {
         duplicate.setAttribute(TextStyleConstants.LetterSpacing, letterSpacing);
 
         textStyleStack.add(duplicate);
-
-        return null;
-    }
-
-    @Override
-    public void endProcessingTag(Array<TextStyle> textStyleStack) {
-
     }
 }

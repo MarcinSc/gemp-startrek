@@ -3,13 +3,13 @@ package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 public class TagTextParser {
-    private char startTagCharacter;
-    private char endTagCharacter;
+    private char openTagCharacter;
+    private char closeTagCharacter;
     private char escapeCharacter;
 
-    public TagTextParser(char startTagCharacter, char endTagCharacter, char escapeCharacter) {
-        this.startTagCharacter = startTagCharacter;
-        this.endTagCharacter = endTagCharacter;
+    public TagTextParser(char openTagCharacter, char closeTagCharacter, char escapeCharacter) {
+        this.openTagCharacter = openTagCharacter;
+        this.closeTagCharacter = closeTagCharacter;
         this.escapeCharacter = escapeCharacter;
     }
 
@@ -25,7 +25,7 @@ public class TagTextParser {
                 resultBuilding.append(c);
                 escaping = false;
             } else {
-                if (c == startTagCharacter) {
+                if (c == openTagCharacter) {
                     if (insideTag) {
                         throw new GdxRuntimeException("Start of new tag inside a tag");
                     } else {
@@ -35,7 +35,7 @@ public class TagTextParser {
                         }
                         insideTag = true;
                     }
-                } else if (c == endTagCharacter) {
+                } else if (c == closeTagCharacter) {
                     if (!insideTag) {
                         throw new GdxRuntimeException("End of tag outside of a tag");
                     } else {

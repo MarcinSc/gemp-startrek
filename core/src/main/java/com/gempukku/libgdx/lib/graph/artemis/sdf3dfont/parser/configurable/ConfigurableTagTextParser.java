@@ -1,23 +1,28 @@
 package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.ParsedText;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextParser;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 
-import java.lang.StringBuilder;
 import java.util.function.Function;
 
 public class ConfigurableTagTextParser implements TextParser {
+    private char endTagCharacter;
     private Function<String, BitmapFont> fontResolver;
     private TagTextParser tagTextParser;
 
     private ObjectMap<String, TagHandler> tagHandlers = new ObjectMap<>();
 
-    public ConfigurableTagTextParser(Function<String, BitmapFont> fontResolver, char startTagCharacter, char endTagCharacter, char escapeCharacter) {
+    public ConfigurableTagTextParser(Function<String, BitmapFont> fontResolver,
+                                     char openTagCharacter, char closeTagCharacter, char escapeCharacter, char endTagCharacter) {
         this.fontResolver = fontResolver;
-        tagTextParser = new TagTextParser(startTagCharacter, endTagCharacter, escapeCharacter);
+        tagTextParser = new TagTextParser(openTagCharacter, closeTagCharacter, escapeCharacter);
+        this.endTagCharacter = endTagCharacter;
     }
 
     public void addTagHandler(String tag, TagHandler tagHandler) {
@@ -39,15 +44,19 @@ public class ConfigurableTagTextParser implements TextParser {
                 if (tagNameEnd < 0)
                     tagNameEnd = tag.length();
                 String tagName = tag.substring(0, tagNameEnd);
+                boolean startTag = true;
+                if (tagName.charAt(0) == endTagCharacter) {
+                    startTag = false;
+                    tagName = tagName.substring(1);
+                }
                 TagHandler tagHandler = tagHandlers.get(tagName);
                 if (tagHandler == null)
                     throw new GdxRuntimeException("Unable to find tag handler for tag: " + tagName);
-                String producedText = tagHandler.startProcessingTag(tag.substring(tagNameEnd), textStyleStack);
-                if (producedText != null) {
-                    result.addStyleIndex(resultText.length(), textStyleStack.peek());
-                    resultText.append(producedText);
+                if (startTag) {
+                    tagHandler.processStartTag(tag.substring(tagNameEnd), textStyleStack, result, resultText);
+                } else {
+                    tagHandler.processEndTag(textStyleStack, result, resultText);
                 }
-                tagHandler.endProcessingTag(textStyleStack);
             }
 
             @Override
@@ -61,57 +70,4 @@ public class ConfigurableTagTextParser implements TextParser {
         return result;
     }
 
-    public static class TagParsedText implements ParsedText, Pool.Poolable {
-        private IntArray textStyleStarts = new IntArray();
-        private Array<TextStyle> textStyleArray = new Array<>();
-        private String text;
-
-        public void setText(String text) {
-            this.text = text;
-        }
-
-        public void addStyleIndex(int index, TextStyle style) {
-            textStyleStarts.add(index);
-            textStyleArray.add(style);
-        }
-
-        @Override
-        public int getNextUnbreakableChunkLength(int startIndex) {
-            if (startIndex >= text.length())
-                return -1;
-            int textLength = text.length();
-            for (int i = startIndex; i < textLength; i++) {
-                char c = text.charAt(i);
-                if (Character.isWhitespace(c))
-                    return 1 + i - startIndex;
-            }
-            return textLength - startIndex;
-        }
-
-        @Override
-        public TextStyle getTextStyle(int glyphIndex) {
-            for (int i = 1; i < textStyleStarts.size; i++) {
-                if (textStyleStarts.get(i) > glyphIndex)
-                    return textStyleArray.get(i - 1);
-            }
-            return textStyleArray.get(textStyleArray.size - 1);
-        }
-
-        @Override
-        public char getCharAt(int glyphIndex) {
-            return text.charAt(glyphIndex);
-        }
-
-        @Override
-        public void dispose() {
-            Pools.free(this);
-        }
-
-        @Override
-        public void reset() {
-            textStyleStarts.clear();
-            textStyleArray.clear();
-            text = null;
-        }
-    }
 }

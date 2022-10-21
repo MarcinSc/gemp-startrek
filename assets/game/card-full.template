@@ -392,7 +392,7 @@
         "kerning": true,
         "scaleDownToFit": true,
         "verticalAlignment": "center",
-        "horizontalAlignment": "left",
+        "horizontalAlignment": "center",
         "bitmapFontPath": "font/arial.fnt"
       },
       {

@@ -3,11 +3,11 @@ package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.html;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable.TagHandler;
+import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable.TagParsedText;
 
-public class ScaleTagHandler implements TagHandler {
+public class ScaleTagHandler extends PopStyleEndTagHandler {
     @Override
-    public String startProcessingTag(String tagParameters, Array<TextStyle> textStyleStack) {
+    public void processStartTag(String tagParameters, Array<TextStyle> textStyleStack, TagParsedText tagParsedText, StringBuilder resultText) {
         Float scale = Float.parseFloat(tagParameters.trim());
 
         TextStyle lastTextStyle = textStyleStack.peek();
@@ -15,12 +15,5 @@ public class ScaleTagHandler implements TagHandler {
         duplicated.setAttribute(TextStyleConstants.FontScale, scale);
 
         textStyleStack.add(duplicated);
-
-        return null;
-    }
-
-    @Override
-    public void endProcessingTag(Array<TextStyle> textStyleStack) {
-
     }
 }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 
 public interface TagHandler {
-    String startProcessingTag(String tagParameters, Array<TextStyle> textStyleStack);
+    void processStartTag(String tagParameters, Array<TextStyle> textStyleStack, TagParsedText tagParsedText, StringBuilder resultText);
 
-    void endProcessingTag(Array<TextStyle> textStyleStack);
+    void processEndTag(Array<TextStyle> textStyleStack, TagParsedText tagParsedText, StringBuilder resultText);
 }

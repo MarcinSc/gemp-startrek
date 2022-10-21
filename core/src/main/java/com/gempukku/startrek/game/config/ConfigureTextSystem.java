@@ -37,7 +37,7 @@ public class ConfigureTextSystem extends BaseSystem {
                         return bitmapFontSystem.getBitmapFont(s);
                     }
                 },
-                imageTextureResolver, '[', ']', '\\');
+                imageTextureResolver, '[', ']', '\\', '/');
         htmlParser.addTagHandler("icon", new IconTagHandler("ditherTexture", iconTextureResolver));
 
         textSystem.setTextParser(htmlParser);
