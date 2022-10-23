@@ -6,7 +6,7 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyleConstants
 
 import java.util.function.Function;
 
-public class FontTagHandler extends PushPopStyleEndTagHandler {
+public class FontTagHandler extends PushPopStyleTagHandler {
     private Function<String, BitmapFont> fontResolver;
 
     public FontTagHandler(Function<String, BitmapFont> fontResolver) {

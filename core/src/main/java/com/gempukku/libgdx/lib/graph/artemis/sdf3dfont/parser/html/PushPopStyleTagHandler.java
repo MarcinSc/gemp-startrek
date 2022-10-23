@@ -5,7 +5,7 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable.TagHandler;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable.TagParsedText;
 
-public abstract class PushPopStyleEndTagHandler implements TagHandler {
+public abstract class PushPopStyleTagHandler implements TagHandler {
     @Override
     public final void processStartTag(String tagParameters, Array<TextStyle> textStyleStack, TagParsedText tagParsedText, StringBuilder resultText) {
         TextStyle lastTextStyle = textStyleStack.peek();
