@@ -17,7 +17,7 @@ public class CardDefinition {
     // Personnel specific
     private Species species;
     private Array<String> skills;
-    private Array<String> icons;
+    private Array<CardIcon> icons;
     private int integrity;
     private int cunning;
     private int strength;
@@ -71,7 +71,7 @@ public class CardDefinition {
         return keywords;
     }
 
-    public Array<String> getIcons() {
+    public Array<CardIcon> getIcons() {
         return icons;
     }
 

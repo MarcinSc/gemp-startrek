@@ -40,7 +40,9 @@ public class ConfigureTextSystem extends BaseSystem {
                 imageTextureResolver, '[', ']', '\\', '/');
         htmlParser.addTagHandler("icon", new IconTagHandler("ditherTexture", iconTextureResolver));
 
-        textSystem.setTextParser(htmlParser);
+        IconTagReplaceTextParser parser = new IconTagReplaceTextParser(htmlParser);
+
+        textSystem.setTextParser(parser);
     }
 
     @Override

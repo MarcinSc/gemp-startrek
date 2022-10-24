@@ -13,7 +13,7 @@
   "affiliationsText": "Bajoran/Federation Headquarters",
   "abilities": [
     {
-      "text": "You may play [icon DS9] cards, [NA] cards, and equipment at this mission.",
+      "text": "You may play [DS9] cards, [NA] cards, and equipment at this mission.",
       "type": "headquarterRequirements",
       "condition": "or(icon(DS9),icon(NA),type(equipment))"
     },

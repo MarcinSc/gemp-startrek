@@ -21,6 +21,7 @@ import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
 import com.gempukku.startrek.card.Affiliation;
 import com.gempukku.startrek.card.CardDefinition;
+import com.gempukku.startrek.card.CardIcon;
 import com.gempukku.startrek.card.CardLookupSystem;
 
 public class CardInGameRenderingSystem extends BaseSystem {
@@ -98,11 +99,11 @@ public class CardInGameRenderingSystem extends BaseSystem {
             textBlock.setText(createCardText(cardDefinition));
 
             // Icons
-            Array<String> icons = cardDefinition.getIcons();
+            Array<CardIcon> icons = cardDefinition.getIcons();
             for (int iconIndex = 0; iconIndex < icons.size; iconIndex++) {
                 SpriteDefinition spriteDefinition = cardTemplateSprite.getSprites().get(1 + iconIndex);
                 TextureReference iconTextureReference = (TextureReference) spriteDefinition.getProperties().get("Texture");
-                iconTextureReference.setRegion(icons.get(iconIndex));
+                iconTextureReference.setRegion(icons.get(iconIndex).name());
             }
         }
         getPlayerCards(owner).addCardInHand(card, cardRepresentation);
