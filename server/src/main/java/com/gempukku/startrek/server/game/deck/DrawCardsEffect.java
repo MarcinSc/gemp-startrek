@@ -10,11 +10,11 @@ import com.gempukku.startrek.game.hand.CardInHandComponent;
 import com.gempukku.startrek.server.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.server.game.card.CardComponent;
 import com.gempukku.startrek.server.game.card.CardZone;
-import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
+import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
-public class DrawCardsEffect extends EffectSystem {
+public class DrawCardsEffect extends OneTimeEffectSystem {
     private PlayerResolverSystem playerResolverSystem;
     private AmountResolverSystem amountResolverSystem;
     private ComponentMapper<CardInHandComponent> cardInHandComponentMapper;
@@ -25,7 +25,7 @@ public class DrawCardsEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, gameEffect.getMemory(), gameEffect.getData().getString("player"));
         PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);
         int amount = amountResolverSystem.resolveAmount(gameEffectEntity, gameEffect.getMemory(), gameEffect.getData().getString("amount"));
@@ -50,7 +50,5 @@ public class DrawCardsEffect extends EffectSystem {
         playerPublicStats.setHandCount(playerPublicStats.getHandCount() + cardsDrawn);
         playerPublicStats.setDeckCount(playerPublicStats.getDeckCount() - cardsDrawn);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
-
-        removeEffectFromStack(gameEffectEntity);
     }
 }

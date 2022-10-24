@@ -3,11 +3,11 @@ package com.gempukku.startrek.server.game.effect.setup;
 import com.artemis.Entity;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.server.common.ServerSpawnSystem;
-import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
+import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
-public class SetupMissionsEffect extends EffectSystem {
+public class SetupMissionsEffect extends OneTimeEffectSystem {
     private ServerSpawnSystem spawnSystem;
     private PlayerResolverSystem playerResolverSystem;
 
@@ -16,7 +16,7 @@ public class SetupMissionsEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         String player = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, gameEffect.getMemory(), gameEffect.getData().getString("player"));
         for (int missionIndex = 0; missionIndex < 5; missionIndex++) {
             Entity missionEntity = spawnSystem.spawnEntity("game/mission.template");
@@ -24,6 +24,5 @@ public class SetupMissionsEffect extends EffectSystem {
             mission.setOwner(player);
             mission.setMissionIndex(missionIndex);
         }
-        removeEffectFromStack(gameEffectEntity);
     }
 }

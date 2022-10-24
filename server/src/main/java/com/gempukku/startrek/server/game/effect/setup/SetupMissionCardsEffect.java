@@ -12,14 +12,14 @@ import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.server.game.card.CardComponent;
-import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
+import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
 import java.util.Comparator;
 import java.util.function.Consumer;
 
-public class SetupMissionCardsEffect extends EffectSystem {
+public class SetupMissionCardsEffect extends OneTimeEffectSystem {
     private CardLookupSystem cardLookupSystem;
     private EventSystem eventSystem;
     private PlayerResolverSystem playerResolverSystem;
@@ -31,7 +31,7 @@ public class SetupMissionCardsEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         String player = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, gameEffect.getMemory(), gameEffect.getData().getString("player"));
         Array<Entity> playerMissions = getAllPlayerMissions(player);
         playerMissions.sort(
@@ -56,7 +56,6 @@ public class SetupMissionCardsEffect extends EffectSystem {
             missionZone.setCardId(card.getCardId());
             eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
         }
-        removeEffectFromStack(gameEffectEntity);
     }
 
     private Array<Entity> getAllPlayerMissions(String player) {

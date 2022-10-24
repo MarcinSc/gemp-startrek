@@ -11,13 +11,13 @@ import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.server.game.card.CardComponent;
 import com.gempukku.startrek.server.game.card.CardZone;
 import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
-import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
+import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
 import java.util.function.Consumer;
 
-public class PlaceAllCardsInDrawDeckEffect extends EffectSystem {
+public class PlaceAllCardsInDrawDeckEffect extends OneTimeEffectSystem {
     private PlayerResolverSystem playerResolverSystem;
     private CardLookupSystem cardLookupSystem;
     private EventSystem eventSystem;
@@ -27,7 +27,7 @@ public class PlaceAllCardsInDrawDeckEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         String player = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, gameEffect.getMemory(), gameEffect.getData().getString("player"));
         Entity playerEntity = playerResolverSystem.findPlayerEntity(player);
         PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);
@@ -48,7 +48,5 @@ public class PlaceAllCardsInDrawDeckEffect extends EffectSystem {
                     }
                 });
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
-
-        removeEffectFromStack(gameEffectEntity);
     }
 }

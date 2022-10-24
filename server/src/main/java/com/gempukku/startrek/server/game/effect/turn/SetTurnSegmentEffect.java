@@ -6,10 +6,10 @@ import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.turn.TurnComponent;
 import com.gempukku.startrek.game.turn.TurnSegment;
-import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
+import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 
-public class SetTurnSegmentEffect extends EffectSystem {
+public class SetTurnSegmentEffect extends OneTimeEffectSystem {
     private EventSystem eventSystem;
 
     public SetTurnSegmentEffect() {
@@ -17,14 +17,12 @@ public class SetTurnSegmentEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         TurnSegment turnSegment = TurnSegment.valueOf(gameEffect.getData().getString("segment"));
         Entity turnEntity = LazyEntityUtil.findEntityWithComponent(world, TurnComponent.class);
         TurnComponent turn = turnEntity.getComponent(TurnComponent.class);
         turn.setTurnSegment(turnSegment);
 
         eventSystem.fireEvent(EntityUpdated.instance, turnEntity);
-
-        removeEffectFromStack(gameEffectEntity);
     }
 }
