@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.configurable;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -9,18 +8,13 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.ParsedText;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextParser;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
 
-import java.util.function.Function;
-
 public class ConfigurableTagTextParser implements TextParser {
     private char endTagCharacter;
-    private Function<String, BitmapFont> fontResolver;
     private TagTextParser tagTextParser;
 
     private ObjectMap<String, TagHandler> tagHandlers = new ObjectMap<>();
 
-    public ConfigurableTagTextParser(Function<String, BitmapFont> fontResolver,
-                                     char openTagCharacter, char closeTagCharacter, char escapeCharacter, char endTagCharacter) {
-        this.fontResolver = fontResolver;
+    public ConfigurableTagTextParser(char openTagCharacter, char closeTagCharacter, char escapeCharacter, char endTagCharacter) {
         tagTextParser = new TagTextParser(openTagCharacter, closeTagCharacter, escapeCharacter);
         this.endTagCharacter = endTagCharacter;
     }

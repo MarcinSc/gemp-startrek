@@ -19,7 +19,7 @@ public class HtmlTextParser implements TextParser {
 
     public HtmlTextParser(Function<String, BitmapFont> fontResolver, Function<String, TextureRegion> textureRegionResolver,
                           char openTagCharacter, char closeTagCharacter, char escapeCharacter, char endTagCharacter) {
-        tagTextParser = new ConfigurableTagTextParser(fontResolver, openTagCharacter, closeTagCharacter, escapeCharacter, endTagCharacter);
+        tagTextParser = new ConfigurableTagTextParser(openTagCharacter, closeTagCharacter, escapeCharacter, endTagCharacter);
         // Font
         tagTextParser.addTagHandler("font", new FontTagHandler(fontResolver));
         // Color
