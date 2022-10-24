@@ -9,8 +9,8 @@ import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
-import com.gempukku.startrek.game.FaceUpCardInPlayComponent;
-import com.gempukku.startrek.game.MissionZoneComponent;
+import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
+import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.server.game.card.CardComponent;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -23,8 +23,8 @@ public class SetupMissionCardsEffect extends EffectSystem {
     private CardLookupSystem cardLookupSystem;
     private EventSystem eventSystem;
     private PlayerResolverSystem playerResolverSystem;
-    private ComponentMapper<MissionZoneComponent> missionZoneComponentMapper;
-    private ComponentMapper<FaceUpCardInPlayComponent> faceUpCardInPlayComponentMapper;
+    private ComponentMapper<MissionComponent> missionStatusComponentMapper;
+    private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
 
     public SetupMissionCardsEffect() {
         super("setupMissionCards");
@@ -49,11 +49,11 @@ public class SetupMissionCardsEffect extends EffectSystem {
         for (int i = 0; i < playerMissions.size; i++) {
             Entity missionEntity = playerMissions.get(i);
             CardComponent card = missionEntity.getComponent(CardComponent.class);
-            MissionZoneComponent missionZone = missionZoneComponentMapper.create(missionEntity);
+            FaceUpCardInMissionComponent missionZone = faceUpCardInMissionComponentMapper.create(missionEntity);
+            missionZone.setMissionOwner(player);
             missionZone.setMissionIndex(i);
-            FaceUpCardInPlayComponent faceUpCard = faceUpCardInPlayComponentMapper.create(missionEntity);
-            faceUpCard.setOwner(player);
-            faceUpCard.setCardId(card.getCardId());
+            missionZone.setCardOwner(player);
+            missionZone.setCardId(card.getCardId());
             eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
         }
         removeEffectFromStack(gameEffectEntity);

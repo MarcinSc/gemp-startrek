@@ -23,6 +23,7 @@ import com.gempukku.startrek.card.Affiliation;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardIcon;
 import com.gempukku.startrek.card.CardLookupSystem;
+import com.gempukku.startrek.game.hand.CardInHandComponent;
 
 public class CardInGameRenderingSystem extends BaseSystem {
     private SpawnSystem spawnSystem;
