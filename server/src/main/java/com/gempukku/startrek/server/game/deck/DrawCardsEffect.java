@@ -5,11 +5,11 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
+import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.CardZone;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
 import com.gempukku.startrek.server.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.server.game.card.CardComponent;
-import com.gempukku.startrek.server.game.card.CardZone;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
@@ -39,7 +39,6 @@ public class DrawCardsEffect extends OneTimeEffectSystem {
             card.setCardZone(CardZone.HAND);
             CardInHandComponent cardInHand = cardInHandComponentMapper.create(cardEntity);
             cardInHand.setOwner(card.getOwner());
-            cardInHand.setCardId(card.getCardId());
             eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
             cardsDrawn++;
 

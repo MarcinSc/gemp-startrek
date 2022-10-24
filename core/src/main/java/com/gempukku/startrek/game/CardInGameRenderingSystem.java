@@ -57,10 +57,11 @@ public class CardInGameRenderingSystem extends BaseSystem {
     }
 
     private void cardInHandInserted(int i) {
-        Entity card = world.getEntity(i);
-        CardInHandComponent cardInHand = card.getComponent(CardInHandComponent.class);
+        Entity cardEntity = world.getEntity(i);
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        CardInHandComponent cardInHand = cardEntity.getComponent(CardInHandComponent.class);
         String owner = cardInHand.getOwner();
-        String cardId = cardInHand.getCardId();
+        String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
 
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full.template");
@@ -107,7 +108,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
                 iconTextureReference.setRegion(icons.get(iconIndex).name());
             }
         }
-        getPlayerCards(owner).addCardInHand(card, cardRepresentation);
+        getPlayerCards(owner).addCardInHand(cardEntity, cardRepresentation);
 
         layoutHand(owner);
     }

@@ -9,9 +9,9 @@ import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
+import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.game.mission.MissionComponent;
-import com.gempukku.startrek.server.game.card.CardComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
@@ -48,12 +48,10 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
                 });
         for (int i = 0; i < playerMissions.size; i++) {
             Entity missionEntity = playerMissions.get(i);
-            CardComponent card = missionEntity.getComponent(CardComponent.class);
             FaceUpCardInMissionComponent missionZone = faceUpCardInMissionComponentMapper.create(missionEntity);
             missionZone.setMissionOwner(player);
             missionZone.setMissionIndex(i);
             missionZone.setCardOwner(player);
-            missionZone.setCardId(card.getCardId());
             eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
         }
     }

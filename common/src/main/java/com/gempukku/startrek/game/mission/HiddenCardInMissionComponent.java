@@ -9,7 +9,6 @@ public class HiddenCardInMissionComponent extends Component implements OwnedComp
     private String missionOwner;
     private int missionIndex;
     private String cardOwner;
-    private String cardId;
 
     public String getMissionOwner() {
         return missionOwner;
@@ -25,14 +24,6 @@ public class HiddenCardInMissionComponent extends Component implements OwnedComp
 
     public void setMissionIndex(int missionIndex) {
         this.missionIndex = missionIndex;
-    }
-
-    public String getCardId() {
-        return cardId;
-    }
-
-    public void setCardId(String cardId) {
-        this.cardId = cardId;
     }
 
     @Override
