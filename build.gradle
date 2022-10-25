@@ -60,7 +60,8 @@ subprojects {
 	ext.texturePacker = [
 			"../internal/image/scene", "../assets/atlas", "scene",
 			"../internal/image/cards", "../assets/atlas", "card-templates",
-			"../internal/image/icons", "../assets/atlas", "icons"
+			"../internal/image/icons", "../assets/atlas", "icons",
+			"../internal/image/image/set1", "../assets/atlas", "set1cards"
 	]
 	repositories {
 		mavenCentral()
