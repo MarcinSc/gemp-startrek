@@ -64,7 +64,7 @@
           },
           "Texture": {
             "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "path": "atlas/card-templates.atlas",
+            "atlas": "atlas/card-templates.atlas",
             "region": "federation-template"
           }
         }
@@ -110,7 +110,7 @@
           },
           "Texture": {
             "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "path": "atlas/icons.atlas",
+            "atlas": "atlas/icons.atlas",
             "region": "Blank"
           }
         }
@@ -156,7 +156,7 @@
           },
           "Texture": {
             "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "path": "atlas/icons.atlas",
+            "atlas": "atlas/icons.atlas",
             "region": "Blank"
           }
         }
@@ -202,7 +202,7 @@
           },
           "Texture": {
             "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "path": "atlas/icons.atlas",
+            "atlas": "atlas/icons.atlas",
             "region": "Blank"
           }
         }

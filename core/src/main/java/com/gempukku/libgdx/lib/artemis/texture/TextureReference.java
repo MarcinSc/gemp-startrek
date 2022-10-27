@@ -3,19 +3,19 @@ package com.gempukku.libgdx.lib.artemis.texture;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluableProperty;
 
 public class TextureReference implements EvaluableProperty {
-    private String path;
+    private String atlas;
     private String region;
 
-    public String getPath() {
-        return path;
+    public String getAtlas() {
+        return atlas;
+    }
+
+    public void setAtlas(String atlas) {
+        this.atlas = atlas;
     }
 
     public String getRegion() {
         return region;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public void setRegion(String region) {

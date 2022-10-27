@@ -120,8 +120,9 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
         game.setGameId(gameId);
 
         spawnSystem.spawnEntity("game/textureDither.template");
-        spawnSystem.spawnEntity("game/playArea.template");
         spawnSystem.spawnEntity("game/camera.template");
+        world.process();
+        spawnSystem.spawnEntity("game/playArea.template");
 
         return world;
     }

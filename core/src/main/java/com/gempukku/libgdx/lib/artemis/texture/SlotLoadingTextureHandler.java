@@ -1,4 +1,4 @@
-package com.gempukku.startrek.game.config;
+package com.gempukku.libgdx.lib.artemis.texture;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
-import com.gempukku.libgdx.lib.artemis.texture.TextureHandler;
+import com.gempukku.startrek.game.config.ImageLoadNotifier;
 
 public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
     private int pageWidth;
@@ -52,7 +52,7 @@ public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
         return newPage;
     }
 
-    public void removeImage(String path, ImageLoadNotifier imageLoadNotifier) {
+    public void removeImage(String path) {
         for (SlotLoadingPage page : pages) {
             if (page.hasImage(path)) {
                 page.removeImage(path);
@@ -69,7 +69,7 @@ public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
                 return result;
             }
         }
-        return null;
+        return defaultTextureRegion;
     }
 
     public void update() {

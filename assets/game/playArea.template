@@ -64,7 +64,7 @@
           },
           "Texture": {
             "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
-            "path": "atlas/scene.atlas",
+            "atlas": "atlas/scene.atlas",
             "region": "playarea"
           }
         }

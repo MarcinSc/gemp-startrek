@@ -10,14 +10,14 @@ import com.gempukku.libgdx.lib.artemis.event.EventListener;
 
 public class TextureSystem extends BaseSystem {
     private TextureHandler defaultTextureHandler;
-    private ObjectMap<String, TextureHandler> configuredTextureHandler = new ObjectMap<>();
+    private final ObjectMap<String, TextureHandler> configuredTextureHandler = new ObjectMap<>();
 
     public void setDefaultTextureHandler(TextureHandler defaultTextureHandler) {
         this.defaultTextureHandler = defaultTextureHandler;
     }
 
-    public void addTextureHandler(String path, TextureHandler textureHandler) {
-        configuredTextureHandler.put(path, textureHandler);
+    public void addTextureHandler(String atlas, TextureHandler textureHandler) {
+        configuredTextureHandler.put(atlas, textureHandler);
     }
 
     public TextureRegion getTextureRegion(String atlas, String region) {
@@ -32,7 +32,7 @@ public class TextureSystem extends BaseSystem {
         EvaluableProperty propertyValue = evaluateProperty.getPropertyValue();
         if (propertyValue instanceof TextureReference) {
             TextureReference textureReference = (TextureReference) propertyValue;
-            TextureRegion textureRegion = getTextureRegion(textureReference.getPath(), textureReference.getRegion());
+            TextureRegion textureRegion = getTextureRegion(textureReference.getAtlas(), textureReference.getRegion());
             evaluateProperty.setResult(textureRegion);
         }
     }
