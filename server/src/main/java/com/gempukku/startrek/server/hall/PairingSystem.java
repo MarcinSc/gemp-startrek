@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
+import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.hall.GameHallComponent;
 import com.gempukku.startrek.hall.GameHallPlayerComponent;
@@ -16,7 +17,6 @@ import com.gempukku.startrek.hall.PlayedGameComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.hall.event.SearchForGame;
 import com.gempukku.startrek.hall.event.StopSearchingForGame;
-import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.game.StarTrekGameWebSocketHandler;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class PairingSystem extends BaseEntitySystem {
     private EventSystem eventSystem;
     private ComponentMapper<GameHallPlayerComponent> playerComponentMapper;
     private StarTrekServerDeckSystem deckSystem;
-    private ServerSpawnSystem spawnSystem;
+    private SpawnSystem spawnSystem;
     private StarTrekGameWebSocketHandler gameHandler;
 
     private Future<List<String>> finishedGamesFuture;

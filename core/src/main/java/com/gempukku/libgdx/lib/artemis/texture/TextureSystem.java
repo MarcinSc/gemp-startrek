@@ -3,25 +3,28 @@ package com.gempukku.libgdx.lib.artemis.texture;
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluableProperty;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluateProperty;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 
-public class TextureSystem extends BaseSystem implements Disposable {
-    private TextureHandler textureHandler;
+public class TextureSystem extends BaseSystem {
+    private TextureHandler defaultTextureHandler;
+    private ObjectMap<String, TextureHandler> configuredTextureHandler = new ObjectMap<>();
 
-    public TextureSystem(TextureHandler textureHandler) {
-        this.textureHandler = textureHandler;
+    public void setDefaultTextureHandler(TextureHandler defaultTextureHandler) {
+        this.defaultTextureHandler = defaultTextureHandler;
     }
 
-    @Override
-    protected void initialize() {
-        textureHandler.setupWithWorld(world);
+    public void addTextureHandler(String path, TextureHandler textureHandler) {
+        configuredTextureHandler.put(path, textureHandler);
     }
 
-    public TextureRegion getTextureRegion(String path, String region) {
-        return textureHandler.getTextureRegion(path, region);
+    public TextureRegion getTextureRegion(String atlas, String region) {
+        TextureHandler textureHandler = configuredTextureHandler.get(atlas);
+        if (textureHandler == null)
+            textureHandler = defaultTextureHandler;
+        return textureHandler.getTextureRegion(atlas, region);
     }
 
     @EventListener
@@ -36,11 +39,6 @@ public class TextureSystem extends BaseSystem implements Disposable {
 
     @Override
     protected void processSystem() {
-        textureHandler.update(world.getDelta());
-    }
 
-    @Override
-    public void dispose() {
-        textureHandler.dispose();
     }
 }

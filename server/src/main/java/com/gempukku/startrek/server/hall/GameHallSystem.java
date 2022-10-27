@@ -7,15 +7,15 @@ import com.artemis.EntitySubscription;
 import com.artemis.utils.IntBag;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
+import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.hall.GameHallComponent;
 import com.gempukku.startrek.hall.GameHallPlayerComponent;
-import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.hall.event.PlayerConnected;
 import com.gempukku.startrek.server.hall.event.PlayerDisconnected;
 
 public class GameHallSystem extends BaseSystem {
-    private ServerSpawnSystem spawnSystem;
+    private SpawnSystem spawnSystem;
     private EventSystem eventSystem;
 
     private Entity hallEntity;

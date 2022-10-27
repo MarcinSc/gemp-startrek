@@ -4,9 +4,9 @@ import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.hall.PlayedGameComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
-import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.game.StarTrekGameWebSocketHandler;
 import com.gempukku.startrek.server.hall.StarTrekHallContext;
 import com.gempukku.startrek.server.hall.StarTrekServerDeckSystem;
@@ -40,7 +40,7 @@ public class TemporaryUserCreation {
             playerDecks.put("test2", deckSystem.getPlayerDeck("test2", "temp"));
             String gameId = gameHandler.createGame(playerDecks);
 
-            ServerSpawnSystem spawnSystem = hallWorld.getSystem(ServerSpawnSystem.class);
+            SpawnSystem spawnSystem = hallWorld.getSystem(SpawnSystem.class);
             Entity hallGame = spawnSystem.spawnEntity("hall/hallGame.template");
             PlayedGameComponent game = hallGame.getComponent(PlayedGameComponent.class);
             game.setGameId(gameId);

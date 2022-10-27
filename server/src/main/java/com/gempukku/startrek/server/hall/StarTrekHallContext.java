@@ -4,9 +4,9 @@ import com.artemis.World;
 import com.artemis.WorldConfigurationBuilder;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
+import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.server.RemoteEntityManagerHandler;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
-import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.game.StarTrekGameWebSocketHandler;
 import com.gempukku.startrek.server.service.DummyGdx;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class StarTrekHallContext {
         WorldConfigurationBuilder worldConfigurationBuilder = new WorldConfigurationBuilder();
         worldConfigurationBuilder.with(
                 // Base systems
-                new ServerSpawnSystem(),
+                new SpawnSystem(),
                 new EventSystem(new RuntimeEntityEventDispatcher()),
 
                 // Specific system

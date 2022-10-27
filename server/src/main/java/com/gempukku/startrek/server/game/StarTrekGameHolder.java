@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
+import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.libgdx.network.server.RemoteEntityManagerHandler;
 import com.gempukku.startrek.LazyEntityUtil;
@@ -19,7 +20,6 @@ import com.gempukku.startrek.game.GameComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
-import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.server.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.server.game.condition.MemoryConditionHandler;
@@ -50,7 +50,7 @@ public class StarTrekGameHolder implements Disposable {
     public StarTrekGameHolder(CardData cardData) {
         gameWorld = createGameWorld(cardData);
 
-        ServerSpawnSystem spawnSystem = gameWorld.getSystem(ServerSpawnSystem.class);
+        SpawnSystem spawnSystem = gameWorld.getSystem(SpawnSystem.class);
         spawnSystem.spawnEntity("game/executionStack.template");
         gameEntity = spawnSystem.spawnEntity("game/game.template");
         gameWorld.process();
@@ -68,7 +68,7 @@ public class StarTrekGameHolder implements Disposable {
         WorldConfigurationBuilder worldConfigurationBuilder = new WorldConfigurationBuilder();
         worldConfigurationBuilder.with(
                 // Base systems
-                new ServerSpawnSystem(),
+                new SpawnSystem(),
                 new EventSystem(new RuntimeEntityEventDispatcher()),
 
                 // Specific systems
@@ -122,7 +122,7 @@ public class StarTrekGameHolder implements Disposable {
     }
 
     public void addPlayer(String username, StarTrekDeck deck) {
-        ServerSpawnSystem spawnSystem = gameWorld.getSystem(ServerSpawnSystem.class);
+        SpawnSystem spawnSystem = gameWorld.getSystem(SpawnSystem.class);
         Entity playerEntity = spawnSystem.spawnEntity("game/player.template");
         GamePlayerComponent player = playerEntity.getComponent(GamePlayerComponent.class);
         player.setName(username);
@@ -152,7 +152,7 @@ public class StarTrekGameHolder implements Disposable {
 
     private void spawnPlayerCards(Entity playerEntity) {
         CardLookupSystem cardLookupSystem = gameWorld.getSystem(CardLookupSystem.class);
-        ServerSpawnSystem spawnSystem = gameWorld.getSystem(ServerSpawnSystem.class);
+        SpawnSystem spawnSystem = gameWorld.getSystem(SpawnSystem.class);
 
         GamePlayerComponent gamePlayer = playerEntity.getComponent(GamePlayerComponent.class);
         PlayerDecklistComponent decklist = playerEntity.getComponent(PlayerDecklistComponent.class);

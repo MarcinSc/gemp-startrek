@@ -1,14 +1,14 @@
 package com.gempukku.startrek.server.game.effect.setup;
 
 import com.artemis.Entity;
+import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.game.mission.MissionComponent;
-import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
 public class SetupMissionsEffect extends OneTimeEffectSystem {
-    private ServerSpawnSystem spawnSystem;
+    private SpawnSystem spawnSystem;
     private PlayerResolverSystem playerResolverSystem;
 
     public SetupMissionsEffect() {

@@ -2,10 +2,10 @@ package com.gempukku.startrek.server.game.effect.setup;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.GameComponent;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
-import com.gempukku.startrek.server.common.ServerSpawnSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.stack.StackSystem;
@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SetupTurnOrderEffect extends EffectSystem {
-    private ServerSpawnSystem spawnSystem;
+    private SpawnSystem spawnSystem;
     private StackSystem stackSystem;
 
     public SetupTurnOrderEffect() {

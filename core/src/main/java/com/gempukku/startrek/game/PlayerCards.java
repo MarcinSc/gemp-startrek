@@ -5,20 +5,31 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class PlayerCards {
-    private Array<Entity> renderedCardsInHand = new Array<>();
-    private ObjectMap<Entity, Entity> renderedCards = new ObjectMap<>();
+    private ObjectMap<Entity, Entity> cardToRenderedMap = new ObjectMap<>();
+    private Array<Entity> renderedInHand = new Array<>();
+    private Array<MissionCards> missionCards = new Array<>();
+
+    public PlayerCards() {
+        for (int i = 0; i < 5; i++) {
+            missionCards.add(new MissionCards());
+        }
+    }
 
     public void addCardInHand(Entity card, Entity renderedCard) {
-        renderedCards.put(card, renderedCard);
-        renderedCardsInHand.add(renderedCard);
+        cardToRenderedMap.put(card, renderedCard);
+        renderedInHand.add(renderedCard);
+    }
+
+    public MissionCards getMissionCards(int missionIndex) {
+        return missionCards.get(missionIndex);
     }
 
     public void removeCardInHand(Entity card) {
-        Entity renderedCard = renderedCards.remove(card);
-        renderedCardsInHand.removeValue(renderedCard, true);
+        Entity renderedCard = cardToRenderedMap.remove(card);
+        renderedInHand.removeValue(renderedCard, true);
     }
 
     public Array<Entity> getCardsInHand() {
-        return renderedCardsInHand;
+        return renderedInHand;
     }
 }

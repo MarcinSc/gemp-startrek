@@ -18,7 +18,6 @@ import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
 import com.gempukku.libgdx.lib.artemis.input.InputProcessorSystem;
 import com.gempukku.libgdx.lib.artemis.property.PropertySystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
-import com.gempukku.libgdx.lib.artemis.texture.RuntimeTextureHandler;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
@@ -37,6 +36,7 @@ import com.gempukku.startrek.common.FontProviderSystem;
 import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.game.*;
 import com.gempukku.startrek.game.config.ConfigureTextSystem;
+import com.gempukku.startrek.game.config.ConfigureTextureSystem;
 import com.gempukku.startrek.hall.*;
 import com.gempukku.startrek.login.LoginScreenRenderer;
 
@@ -98,7 +98,6 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                         new JsonValueNetworkMessageMarshaller()),
 
                 new BitmapFontSystem(new RuntimeBitmapFontHandler()),
-                //new FontProviderSystem(),
                 new SDF3DTextSystem("SdfText"),
                 new ConfigureTextSystem(),
 
@@ -141,7 +140,8 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new HierarchySystem(),
                 new TransformSystem(),
                 new InputProcessorSystem(),
-                new TextureSystem(new RuntimeTextureHandler()),
+                new TextureSystem(),
+                new ConfigureTextureSystem(),
                 new PropertySystem(properties),
                 new PipelineRendererSystem(),
                 new ConnectionParamSystem(),
