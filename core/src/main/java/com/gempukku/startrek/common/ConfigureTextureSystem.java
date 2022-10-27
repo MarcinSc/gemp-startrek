@@ -1,10 +1,12 @@
-package com.gempukku.startrek.game.config;
+package com.gempukku.startrek.common;
 
 import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.Entity;
+import com.artemis.annotations.Wire;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.lib.artemis.texture.RuntimeTextureHandler;
 import com.gempukku.libgdx.lib.artemis.texture.SlotLoadingTextureHandler;
@@ -12,11 +14,16 @@ import com.gempukku.libgdx.lib.artemis.texture.TextureReference;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
+import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
+import com.gempukku.startrek.game.config.ImageLoadNotifier;
 
+@Wire(failOnNull = false)
 public class ConfigureTextureSystem extends BaseEntitySystem {
     public static final String ATLAS_NAME = "cardImages";
 
     private TextureSystem textureSystem;
+    @Wire(failOnNull = false)
+    private SpriteSystem spriteSystem;
     private SlotLoadingTextureHandler slotLoadingTextureHandler;
 
     private RuntimeTextureHandler defaultTextureHandler;
@@ -52,7 +59,20 @@ public class ConfigureTextureSystem extends BaseEntitySystem {
     }
 
     private void reloadSprite(String path) {
+        IntBag entities = getSubscription().getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity entity = world.getEntity(entities.get(i));
+            SpriteComponent sprite = entity.getComponent(SpriteComponent.class);
 
+            Array<SpriteDefinition> spriteDefinitions = sprite.getSprites();
+            for (int spriteIndex = 0; spriteIndex < spriteDefinitions.size; spriteIndex++) {
+                SpriteDefinition spriteDefinition = spriteDefinitions.get(spriteIndex);
+                TextureReference textureReference = (TextureReference) spriteDefinition.getProperties().get("Texture");
+                if (textureReference.getAtlas().equals(ATLAS_NAME) && textureReference.getRegion().equals(path)) {
+                    spriteSystem.updateSprite(entity.getId(), spriteIndex);
+                }
+            }
+        }
     }
 
     @Override

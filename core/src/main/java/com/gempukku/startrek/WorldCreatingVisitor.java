@@ -31,12 +31,12 @@ import com.gempukku.libgdx.network.json.JsonValueNetworkMessageMarshaller;
 import com.gempukku.libgdx.network.json.JsonValueServerSessionProducer;
 import com.gempukku.startrek.card.CardData;
 import com.gempukku.startrek.card.CardLookupSystem;
+import com.gempukku.startrek.common.ConfigureTextureSystem;
 import com.gempukku.startrek.common.ConnectionParamSystem;
 import com.gempukku.startrek.common.FontProviderSystem;
 import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.game.*;
 import com.gempukku.startrek.game.config.ConfigureTextSystem;
-import com.gempukku.startrek.game.config.ConfigureTextureSystem;
 import com.gempukku.startrek.hall.*;
 import com.gempukku.startrek.login.LoginScreenRenderer;
 

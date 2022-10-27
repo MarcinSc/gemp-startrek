@@ -100,6 +100,13 @@ public class SpriteSystem extends BaseSystem implements Disposable {
         addSprites(entityId, spriteEntity, sprite);
     }
 
+    public void updateSprite(int entityId, int spriteDefinitionIndex) {
+        Entity spriteEntity = world.getEntity(entityId);
+        SpriteComponent sprite = spriteEntity.getComponent(SpriteComponent.class);
+        Array<SpriteDefinitionAdapter> spriteDefinitionAdapters = spriteMap.get(entityId);
+        spriteDefinitionAdapters.get(spriteDefinitionIndex).updateSprite(sprite.getSprites().get(spriteDefinitionIndex));
+    }
+
     @EventListener
     public void transformUpdated(TransformUpdated transformUpdated, Entity entity) {
         int entityId = entity.getId();
