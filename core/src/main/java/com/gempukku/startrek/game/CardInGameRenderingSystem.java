@@ -71,8 +71,13 @@ public class CardInGameRenderingSystem extends BaseSystem {
         String cardTemplate = getCardTemplate(affiliation);
 
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
-        TextureReference textureReference = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
-        textureReference.setRegion(cardTemplate);
+        TextureReference cardTemplateTexture = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
+        cardTemplateTexture.setRegion(cardTemplate);
+
+        TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
+        String[] cardIdSplit = cardId.split("_");
+        String cardPath = "cardImages/set" + cardIdSplit[0] + "/" + cardIdSplit[1] + ".png";
+        cardImageTexture.setRegion(cardPath);
 
         SDF3DTextComponent sdfText = cardRepresentation.getComponent(SDF3DTextComponent.class);
         if (sdfText != null) {
@@ -102,10 +107,19 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
             // Icons
             Array<CardIcon> icons = cardDefinition.getIcons();
+            int nonStaffIcon = 0;
             for (int iconIndex = 0; iconIndex < icons.size; iconIndex++) {
-                SpriteDefinition spriteDefinition = cardTemplateSprite.getSprites().get(1 + iconIndex);
+                CardIcon icon = icons.get(iconIndex);
+                int spriteIconIndex;
+                if (icon == CardIcon.Stf || icon == CardIcon.Cmd) {
+                    spriteIconIndex = 2;
+                } else {
+                    spriteIconIndex = 3 + nonStaffIcon;
+                    nonStaffIcon++;
+                }
+                SpriteDefinition spriteDefinition = cardTemplateSprite.getSprites().get(spriteIconIndex);
                 TextureReference iconTextureReference = (TextureReference) spriteDefinition.getProperties().get("Texture");
-                iconTextureReference.setRegion(icons.get(iconIndex).name());
+                iconTextureReference.setRegion(icon.name());
             }
         }
         getPlayerCards(owner).addCardInHand(cardEntity, cardRepresentation);

@@ -5,6 +5,7 @@ import com.artemis.BaseEntitySystem;
 import com.artemis.Entity;
 import com.artemis.annotations.Wire;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -85,12 +86,14 @@ public class ConfigureTextureSystem extends BaseEntitySystem {
         defaultTextureHandler = new RuntimeTextureHandler();
         textureSystem.setDefaultTextureHandler(defaultTextureHandler);
 
-        slotLoadingTextureHandler = new SlotLoadingTextureHandler(2048, 2048, 310, 200, null);
+        slotLoadingTextureHandler = new SlotLoadingTextureHandler(2048, 2048, 310, 200,
+                new LocalFileHandleResolver(), textureSystem.getTextureRegion("atlas/icons.atlas", "Blank"));
         textureSystem.addTextureHandler(ATLAS_NAME, slotLoadingTextureHandler);
     }
 
     @Override
     protected void processSystem() {
+        slotLoadingTextureHandler.update();
         // Iterate through all Sprites and remove those that are no longer used
         ObjectSet<String> usedSprites = new ObjectSet<>();
         IntBag entities = getSubscription().getEntities();
@@ -105,10 +108,12 @@ public class ConfigureTextureSystem extends BaseEntitySystem {
             }
         }
 
-        for (String loadedPath : loadedPaths) {
+        ObjectSet.ObjectSetIterator<String> iterator = loadedPaths.iterator();
+        while (iterator.hasNext()) {
+            String loadedPath = iterator.next();
             if (!usedSprites.contains(loadedPath)) {
                 slotLoadingTextureHandler.removeImage(loadedPath);
-                loadedPaths.remove(loadedPath);
+                iterator.remove();
             }
         }
     }

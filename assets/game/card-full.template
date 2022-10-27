@@ -91,6 +91,52 @@
                 0,
                 1,
                 0,
+                -0.015,
+                -0.005,
+                -0.157,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.63,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.407
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "cardImages",
+            "region": "[cardImagePath]"
+          }
+        }
+      },
+      {
+        "spriteSystemName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
                 -0.289,
                 0.005,
                 0.133,

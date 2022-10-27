@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
+import com.badlogic.gdx.utils.*;
 import com.gempukku.startrek.game.config.ImageLoadNotifier;
 
 public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
@@ -73,7 +70,7 @@ public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
     }
 
     public void update() {
-        for (SlotLoadingPage page : pages) {
+        for (SlotLoadingPage page : new Array.ArrayIterable<>(pages)) {
             page.update();
         }
     }
@@ -117,18 +114,24 @@ public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
 
         public void addImage(String path, ImageLoadNotifier imageLoadNotifier) {
             assetManager.load(path, Pixmap.class);
+            LoadingImage loadingImage = insertIntoCells(path, imageLoadNotifier);
+            loading.add(loadingImage);
+            loadingImageMap.put(path, loadingImage);
+            remainingSpace--;
+        }
+
+        private LoadingImage insertIntoCells(String path, ImageLoadNotifier imageLoadNotifier) {
             LoadingImage loadingImage = null;
             for (int i = 0; i < loadingImages.length; i++) {
                 for (int j = 0; j < loadingImages[i].length; j++) {
                     if (loadingImages[i][j] == null) {
                         loadingImage = new LoadingImage(path, i, j, imageLoadNotifier);
                         loadingImages[i][j] = loadingImage;
+                        return loadingImage;
                     }
                 }
             }
-            loading.add(loadingImage);
-            loadingImageMap.put(path, loadingImage);
-            remainingSpace--;
+            throw new GdxRuntimeException("Unable to find space for the image");
         }
 
         public void removeImage(String path) {
@@ -144,8 +147,9 @@ public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
         public void update() {
             assetManager.update();
             for (LoadingImage loadingImage : loading) {
-                if (loadingImage.update())
+                if (loadingImage.update()) {
                     loading.remove(loadingImage);
+                }
             }
         }
 
@@ -188,7 +192,6 @@ public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
             public boolean update() {
                 if (assetManager.isLoaded(path)) {
                     Pixmap loadedPixmap = assetManager.get(path, Pixmap.class);
-                    assetManager.unload(path);
 
                     int loadedWidth = loadedPixmap.getWidth();
                     int loadedHeight = loadedPixmap.getHeight();
@@ -200,9 +203,11 @@ public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
                     int x = cellX * cellWidth + (cellWidth - loadedWidth) / 2;
                     int y = cellY * cellHeight + (cellHeight - loadedHeight) / 2;
 
-                    pixmap.drawPixmap(loadedPixmap, x, y);
+                    texture.draw(loadedPixmap, x, y);
                     textureRegion = new TextureRegion(texture, x, y, loadedWidth, loadedHeight);
                     notifier.textureLoaded(textureRegion);
+                    assetManager.unload(path);
+
                     return true;
                 }
                 return false;
