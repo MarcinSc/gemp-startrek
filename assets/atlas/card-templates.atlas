@@ -6,15 +6,22 @@ filter: Linear, Linear
 repeat: none
 bajoran-template
   rotate: false
-  xy: 2, 2
+  xy: 2, 516
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
 federation-template
   rotate: false
-  xy: 740, 2
+  xy: 740, 516
   size: 736, 1029
   orig: 736, 1029
+  offset: 0, 0
+  index: -1
+mission-template-small
+  rotate: false
+  xy: 2, 2
+  size: 736, 512
+  orig: 736, 512
   offset: 0, 0
   index: -1

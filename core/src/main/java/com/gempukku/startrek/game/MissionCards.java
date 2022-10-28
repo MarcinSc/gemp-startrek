@@ -11,4 +11,8 @@ public class MissionCards {
         renderedCards.put(card, renderedCard);
         this.renderedMission = renderedCard;
     }
+
+    public Entity getMissionCard() {
+        return renderedMission;
+    }
 }

@@ -22,9 +22,9 @@ public class PlayerPositionSystem extends BaseEntitySystem {
             playerPositions.put(playerName, PlayerPosition.Lower);
         } else {
             if (playerPositions.size == 1) {
-                playerPositions.put(playerName, PlayerPosition.Lower);
-            } else {
                 playerPositions.put(playerName, PlayerPosition.Upper);
+            } else {
+                playerPositions.put(playerName, PlayerPosition.Lower);
             }
         }
     }

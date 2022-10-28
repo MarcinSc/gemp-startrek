@@ -19,11 +19,9 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextComponent;
 import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDFTextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
-import com.gempukku.startrek.card.Affiliation;
-import com.gempukku.startrek.card.CardDefinition;
-import com.gempukku.startrek.card.CardIcon;
-import com.gempukku.startrek.card.CardLookupSystem;
+import com.gempukku.startrek.card.*;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
+import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
 
 public class CardInGameRenderingSystem extends BaseSystem {
     private SpawnSystem spawnSystem;
@@ -54,13 +52,53 @@ public class CardInGameRenderingSystem extends BaseSystem {
                             }
                         }
                 );
+        world.getAspectSubscriptionManager().get(Aspect.all(FaceUpCardInMissionComponent.class))
+                .addSubscriptionListener(
+                        new EntitySubscription.SubscriptionListener() {
+                            @Override
+                            public void inserted(IntBag entities) {
+                                for (int i = 0, s = entities.size(); s > i; ++i) {
+                                    faceUpCardInMissionInserted(entities.get(i));
+                                }
+                            }
+
+                            @Override
+                            public void removed(IntBag entities) {
+
+                            }
+                        }
+                );
     }
 
-    private void cardInHandInserted(int i) {
-        Entity cardEntity = world.getEntity(i);
+    private void faceUpCardInMissionInserted(int entityId) {
+        Entity cardEntity = world.getEntity(entityId);
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        CardInHandComponent cardInHand = cardEntity.getComponent(CardInHandComponent.class);
-        String owner = cardInHand.getOwner();
+        FaceUpCardInMissionComponent cardInMission = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
+        String owner = card.getOwner();
+        String cardId = card.getCardId();
+        int missionIndex = cardInMission.getMissionIndex();
+        String missionOwner = cardInMission.getMissionOwner();
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
+
+        if (cardDefinition.getType() == CardType.Mission) {
+            Entity cardRepresentation = spawnSystem.spawnEntity("game/mission-small.template");
+            SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
+
+            TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
+            String[] cardIdSplit = cardId.split("_");
+            String cardPath = "cardImages/set" + cardIdSplit[0] + "/" + cardIdSplit[1] + ".png";
+            cardImageTexture.setRegion(cardPath);
+
+            getPlayerCards(missionOwner).getMissionCards(missionIndex).setMissionCard(cardEntity, cardRepresentation);
+
+            layoutMissions(missionOwner);
+        }
+    }
+
+    private void cardInHandInserted(int entityId) {
+        Entity cardEntity = world.getEntity(entityId);
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        String owner = card.getOwner();
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
 
@@ -164,6 +202,34 @@ public class CardInGameRenderingSystem extends BaseSystem {
         }
 
         return result.toString();
+    }
+
+    private void layoutMissions(String username) {
+        float vertTrans = 1.2f;
+        float horTrans = 2f;
+        float yTrans = 0.1f;
+        float scale = 1.5f;
+        PlayerCards playerCards = getPlayerCards(username);
+        Matrix4 m4 = new Matrix4();
+        for (int i = 0; i < 5; i++) {
+            MissionCards missionCards = playerCards.getMissionCards(i);
+            Entity missionCard = missionCards.getMissionCard();
+            if (missionCard != null) {
+                PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(username);
+                System.out.println("Layout mission: " + playerPosition + " " + username);
+                float verticalTranslate = (playerPosition == PlayerPosition.Lower) ? vertTrans : -vertTrans;
+                float horizontalTranslate = (i - 2) * horTrans;
+                float yRotateDegrees = (playerPosition == PlayerPosition.Lower) ? 0f : 180f;
+
+                m4.idt()
+                        .translate(0, yTrans, verticalTranslate)
+                        .rotate(new Vector3(0, 1, 0), yRotateDegrees)
+                        .translate(horizontalTranslate, 0, 0)
+                        .scl(scale);
+
+                transformSystem.setTransform(missionCard, m4);
+            }
+        }
     }
 
     private void layoutHand(String username) {
