@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.PropertiesUtils;
+import com.gempukku.libgdx.lib.artemis.animation.AnimationDirectorSystem;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.camera.TopDownCameraController;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
@@ -101,6 +102,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new SDF3DTextSystem("SdfText"),
                 new ConfigureTextSystem(),
 
+                new AnimationDirectorSystem(),
                 new SpriteSystem(),
                 new CameraSystem(new TopDownCameraController()),
                 new EvaluatePropertySystem(),

@@ -38,4 +38,8 @@ public class CardData {
     public CardDefinition getCardDefinition(String cardId) {
         return cardDefinitions.get(cardId);
     }
+
+    public ObjectMap<String, CardDefinition> getCardDefinitions() {
+        return cardDefinitions;
+    }
 }
