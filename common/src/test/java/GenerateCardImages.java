@@ -39,12 +39,11 @@ public class GenerateCardImages {
                 int cardSet = Integer.parseInt(cardIdSplit[0]);
                 int cardNumber = Integer.parseInt(cardIdSplit[1]);
                 if (shouldSaveCard(cardSet, cardNumber)) {
+                    System.out.println("Generating card image: " + cardId);
                     File setFolder = new File(outputFolder, "set" + cardSet);
                     setFolder.mkdirs();
 
-                    String name = fileName;
-                    name = name.replace("[set]", setNumberFormat.format(cardSet));
-                    name = name.replace("[number]", cardNumberFormat.format(cardNumber));
+                    String name = getImageFileName(setNumberFormat, cardNumberFormat, cardSet, cardNumber);
                     File cardImage = new File(sourceImageFolder, name);
                     File outputImage = new File(setFolder, cardNumber + ".png");
 
@@ -66,6 +65,12 @@ public class GenerateCardImages {
         } catch (IOException exp) {
             exp.printStackTrace();
         }
+    }
+
+    private static String getImageFileName(NumberFormat setNumberFormat, NumberFormat cardNumberFormat, int cardSet, int cardNumber) {
+        return fileName
+                .replace("[set]", setNumberFormat.format(cardSet))
+                .replace("[number]", cardNumberFormat.format(cardNumber));
     }
 
     private static Rectangle getCardRectangle(CardDefinition cardDef) {
