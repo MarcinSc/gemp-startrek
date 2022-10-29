@@ -110,4 +110,8 @@ public class CardDefinition {
     public int getPoints() {
         return points;
     }
+
+    public String getAffiliationsText() {
+        return affiliationsText;
+    }
 }

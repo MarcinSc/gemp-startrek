@@ -126,6 +126,9 @@ public class CardInGameRenderingSystem extends BaseSystem {
             SDFTextBlock spanBlock = sdfText.getTextBlocks().get(2);
             String span = cardDefinition.getQuadrant() + "[scale 0.8]" + cardDefinition.getSpan() + "[/scale]";
             spanBlock.setText(span);
+            // Mission affiliations
+            SDFTextBlock affiliationsBlock = sdfText.getTextBlocks().get(3);
+            affiliationsBlock.setText(cardDefinition.getAffiliationsText());
         }
 
         return cardRepresentation;
