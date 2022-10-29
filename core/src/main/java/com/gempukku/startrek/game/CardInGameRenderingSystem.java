@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
@@ -31,6 +32,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
     private CardLookupSystem cardLookupSystem;
 
     private ObjectMap<PlayerPosition, PlayerCards> playerCardsMap = new ObjectMap<>();
+    private ObjectMap<PlayerPosition, ZonesStatus> playerZonesStatusMap = new ObjectMap<>();
 
     @Override
     protected void initialize() {
@@ -70,31 +72,6 @@ public class CardInGameRenderingSystem extends BaseSystem {
                 );
     }
 
-    private void faceUpCardInMissionInserted(int entityId) {
-        Entity cardEntity = world.getEntity(entityId);
-        CardComponent card = cardEntity.getComponent(CardComponent.class);
-        FaceUpCardInMissionComponent cardInMission = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
-        String owner = card.getOwner();
-        String cardId = card.getCardId();
-        int missionIndex = cardInMission.getMissionIndex();
-        String missionOwner = cardInMission.getMissionOwner();
-        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
-
-        if (cardDefinition.getType() == CardType.Mission) {
-            Entity cardRepresentation = spawnSystem.spawnEntity("game/mission-small.template");
-            SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
-
-            TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
-            String[] cardIdSplit = cardId.split("_");
-            String cardPath = "cardImages/set" + cardIdSplit[0] + "/" + cardIdSplit[1] + ".png";
-            cardImageTexture.setRegion(cardPath);
-
-            getPlayerCards(missionOwner).getMissionCards(missionIndex).setMissionCard(cardEntity, cardRepresentation);
-
-            layoutMissions(missionOwner);
-        }
-    }
-
     private void cardInHandInserted(int entityId) {
         Entity cardEntity = world.getEntity(entityId);
         CardComponent card = cardEntity.getComponent(CardComponent.class);
@@ -102,6 +79,44 @@ public class CardInGameRenderingSystem extends BaseSystem {
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
 
+        Entity cardRepresentation = createFullCard(cardId, cardDefinition);
+        getPlayerCards(owner).addCardInHand(cardEntity, cardRepresentation);
+
+        getZonesStatus(owner).setHandDrity(true);
+    }
+
+    private void faceUpCardInMissionInserted(int entityId) {
+        Entity cardEntity = world.getEntity(entityId);
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        FaceUpCardInMissionComponent cardInMission = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
+        String cardId = card.getCardId();
+        int missionIndex = cardInMission.getMissionIndex();
+        String missionOwner = cardInMission.getMissionOwner();
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
+
+        Entity cardRepresentation = createSmallCard(cardId, cardDefinition);
+        getPlayerCards(missionOwner).getMissionCards(missionIndex).setMissionCard(cardEntity, cardRepresentation);
+
+        getZonesStatus(missionOwner).setMissionsDirty(true);
+    }
+
+    private Entity createSmallCard(String cardId, CardDefinition cardDefinition) {
+        Entity cardRepresentation;
+        if (cardDefinition.getType() == CardType.Mission) {
+            cardRepresentation = spawnSystem.spawnEntity("game/mission-small.template");
+        } else {
+            throw new GdxRuntimeException("Type of card not implemented: " + cardDefinition.getType());
+        }
+        SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
+        TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
+        String[] cardIdSplit = cardId.split("_");
+        String cardPath = "cardImages/set" + cardIdSplit[0] + "/" + cardIdSplit[1] + ".png";
+        cardImageTexture.setRegion(cardPath);
+
+        return cardRepresentation;
+    }
+
+    private Entity createFullCard(String cardId, CardDefinition cardDefinition) {
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
 
@@ -160,9 +175,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
                 iconTextureReference.setRegion(icon.name());
             }
         }
-        getPlayerCards(owner).addCardInHand(cardEntity, cardRepresentation);
-
-        layoutHand(owner);
+        return cardRepresentation;
     }
 
     private String getCardTemplate(Affiliation affiliation) {
@@ -204,19 +217,17 @@ public class CardInGameRenderingSystem extends BaseSystem {
         return result.toString();
     }
 
-    private void layoutMissions(String username) {
+    private void layoutMissions(PlayerPosition playerPosition) {
         float vertTrans = 1.2f;
         float horTrans = 2f;
         float yTrans = 0.1f;
         float scale = 1.5f;
-        PlayerCards playerCards = getPlayerCards(username);
+        PlayerCards playerCards = getPlayerCards(playerPosition);
         Matrix4 m4 = new Matrix4();
         for (int i = 0; i < 5; i++) {
             MissionCards missionCards = playerCards.getMissionCards(i);
             Entity missionCard = missionCards.getMissionCard();
             if (missionCard != null) {
-                PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(username);
-                System.out.println("Layout mission: " + playerPosition + " " + username);
                 float verticalTranslate = (playerPosition == PlayerPosition.Lower) ? vertTrans : -vertTrans;
                 float horizontalTranslate = (i - 2) * horTrans;
                 float yRotateDegrees = (playerPosition == PlayerPosition.Lower) ? 0f : 180f;
@@ -232,11 +243,10 @@ public class CardInGameRenderingSystem extends BaseSystem {
         }
     }
 
-    private void layoutHand(String username) {
-        PlayerCards playerCards = getPlayerCards(username);
+    private void layoutHand(PlayerPosition playerPosition) {
+        PlayerCards playerCards = getPlayerCards(playerPosition);
         Array<Entity> cardsInHand = playerCards.getCardsInHand();
 
-        PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(username);
         if (playerPosition == PlayerPosition.Lower) {
             Camera camera = cameraSystem.getCamera();
             float verticalScale = 0.8f;
@@ -270,6 +280,10 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
     private PlayerCards getPlayerCards(String username) {
         PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(username);
+        return getPlayerCards(playerPosition);
+    }
+
+    private PlayerCards getPlayerCards(PlayerPosition playerPosition) {
         PlayerCards playerCards = playerCardsMap.get(playerPosition);
         if (playerCards == null) {
             playerCards = new PlayerCards();
@@ -278,8 +292,27 @@ public class CardInGameRenderingSystem extends BaseSystem {
         return playerCards;
     }
 
+    private ZonesStatus getZonesStatus(String username) {
+        PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(username);
+        ZonesStatus result = playerZonesStatusMap.get(playerPosition);
+        if (result == null) {
+            result = new ZonesStatus();
+            playerZonesStatusMap.put(playerPosition, result);
+        }
+        return result;
+    }
+
     @Override
     protected void processSystem() {
-
+        for (ObjectMap.Entry<PlayerPosition, ZonesStatus> playerZonesStatus : playerZonesStatusMap) {
+            ZonesStatus zonesStatus = playerZonesStatus.value;
+            if (zonesStatus.isHandDrity()) {
+                layoutHand(playerZonesStatus.key);
+            }
+            if (zonesStatus.isMissionsDirty()) {
+                layoutMissions(playerZonesStatus.key);
+            }
+            zonesStatus.cleanZones();
+        }
     }
 }
