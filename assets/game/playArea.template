@@ -2,22 +2,22 @@
   "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
     "localTransform": {
       "val": [
-        20,
+        30,
         0,
         0,
         0,
         0,
-        20,
+        30,
         0,
         0,
         0,
         0,
-        20,
+        30,
         0,
         0,
         -0.005,
         0,
-        20
+        30
       ]
     }
   },
