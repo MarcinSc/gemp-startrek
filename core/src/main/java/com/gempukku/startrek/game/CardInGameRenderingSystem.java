@@ -288,7 +288,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
                 transformSystem.setTransform(cardInHand, new Matrix4()
                         .translate(basePlayerHandPosition.x + cardSeparation * indexBias, basePlayerHandPosition.y, basePlayerHandPosition.z)// + 0.005f * Math.abs(indexBias))
                         .scale(cardScale, cardScale, cardScale)
-                        .rotate(1, 0, 0, 20)
+                        .rotate(1, 0, 0, 10)
                         .rotate(0, 1, 0, -indexBias * 1.5f)
                         .rotate(0, 0, 1, -2));
 
