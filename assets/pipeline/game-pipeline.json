@@ -5,13 +5,28 @@
     {
       "id": "1d08e096ec5a428280a7cd7753666d74",
       "type": "PipelineStart",
-      "x": 443.0,
+      "x": 490.0,
       "y": 870.0
+    },
+    {
+      "id": "32e097acf95945f985f8a20d53f03347",
+      "type": "ValueFloat",
+      "x": 50.0,
+      "y": 883.0,
+      "data": {
+        "v1": 2.0
+      }
+    },
+    {
+      "id": "3fa078b765214dc1acebbb779c4eceb8",
+      "type": "Multiply",
+      "x": 268.0,
+      "y": 977.0
     },
     {
       "id": "6c8280c9b68246bdb43ccdfbeff3d4f1",
       "type": "Property",
-      "x": 50.0,
+      "x": 97.0,
       "y": 778.0,
       "data": {
         "name": "Main Camera",
@@ -19,9 +34,15 @@
       }
     },
     {
+      "id": "817575ba34274f639e10ea228e986544",
+      "type": "RenderSize",
+      "x": 174.0,
+      "y": 155.0
+    },
+    {
       "id": "8497da9e51cb40cda9d20a7290b24251",
       "type": "GraphShaderRenderer",
-      "x": 337.0,
+      "x": 384.0,
       "y": 469.0,
       "data": {
         "renderOrder": "Shader_Unordered",
@@ -472,7 +493,7 @@
     {
       "id": "e24ec51e09a44f568fd0390574e05876",
       "type": "UIRenderer",
-      "x": 408.0,
+      "x": 455.0,
       "y": 201.0,
       "data": {
         "id": "Main"
@@ -481,8 +502,14 @@
     {
       "id": "end",
       "type": "PipelineEnd",
-      "x": 443.0,
+      "x": 490.0,
       "y": 50.0
+    },
+    {
+      "id": "f8d30b88dd074b25bc63e252a8de52a8",
+      "type": "RenderSize",
+      "x": 50.0,
+      "y": 950.0
     }
   ],
   "connections": [
@@ -493,10 +520,28 @@
       "toField": "input"
     },
     {
+      "fromNode": "32e097acf95945f985f8a20d53f03347",
+      "fromField": "value",
+      "toNode": "3fa078b765214dc1acebbb779c4eceb8",
+      "toField": "inputs"
+    },
+    {
+      "fromNode": "3fa078b765214dc1acebbb779c4eceb8",
+      "fromField": "output",
+      "toNode": "1d08e096ec5a428280a7cd7753666d74",
+      "toField": "size"
+    },
+    {
       "fromNode": "6c8280c9b68246bdb43ccdfbeff3d4f1",
       "fromField": "value",
       "toNode": "8497da9e51cb40cda9d20a7290b24251",
       "toField": "camera"
+    },
+    {
+      "fromNode": "817575ba34274f639e10ea228e986544",
+      "fromField": "size",
+      "toNode": "e24ec51e09a44f568fd0390574e05876",
+      "toField": "size"
     },
     {
       "fromNode": "8497da9e51cb40cda9d20a7290b24251",
@@ -509,6 +554,12 @@
       "fromField": "output",
       "toNode": "end",
       "toField": "input"
+    },
+    {
+      "fromNode": "f8d30b88dd074b25bc63e252a8de52a8",
+      "fromField": "size",
+      "toNode": "3fa078b765214dc1acebbb779c4eceb8",
+      "toField": "inputs"
     }
   ],
   "properties": [
