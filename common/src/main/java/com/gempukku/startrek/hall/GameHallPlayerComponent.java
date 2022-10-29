@@ -7,7 +7,7 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 @ReplicateToOwner
 public class GameHallPlayerComponent extends Component implements OwnedComponent {
     private String owner;
-    private String portrait;
+    private String avatar;
     private boolean waitingForGame;
     private String chosenStarterDeck;
     private String chosenPlayerDeck;
@@ -23,12 +23,12 @@ public class GameHallPlayerComponent extends Component implements OwnedComponent
         this.owner = owner;
     }
 
-    public String getPortrait() {
-        return portrait;
+    public String getAvatar() {
+        return avatar;
     }
 
-    public void setPortrait(String portrait) {
-        this.portrait = portrait;
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public boolean isWaitingForGame() {

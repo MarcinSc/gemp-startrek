@@ -117,7 +117,7 @@ public class HomeScreen extends Table implements HallScreen {
         middleContent.add().expand().fillY().row();
 
         Table rightContent = new Table(skin);
-        rightContent.add(new Image(textureSystem.getTextureRegion("images/portrait/" + gameHallPlayer.getPortrait() + ".png", gameHallPlayer.getPortrait()))).row();
+        rightContent.add(new Image(textureSystem.getTextureRegion("images/portrait/" + gameHallPlayer.getAvatar() + ".png", gameHallPlayer.getAvatar()))).row();
         rightTable = new Table(skin);
         rightTable.setColor(1, 1, 1, 0);
         rightContent.add(rightTable).expand().fillY().row();
