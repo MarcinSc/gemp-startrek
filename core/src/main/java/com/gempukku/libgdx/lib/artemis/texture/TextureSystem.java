@@ -3,6 +3,7 @@ package com.gempukku.libgdx.lib.artemis.texture;
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluableProperty;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluateProperty;
@@ -24,7 +25,10 @@ public class TextureSystem extends BaseSystem {
         TextureHandler textureHandler = configuredTextureHandler.get(atlas);
         if (textureHandler == null)
             textureHandler = defaultTextureHandler;
-        return textureHandler.getTextureRegion(atlas, region);
+        TextureRegion result = textureHandler.getTextureRegion(atlas, region);
+        if (result == null)
+            throw new GdxRuntimeException("Unable to resolve texture: " + atlas + ", " + region);
+        return result;
     }
 
     @EventListener

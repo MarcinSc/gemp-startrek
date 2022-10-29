@@ -200,6 +200,14 @@ public class CardInGameRenderingSystem extends BaseSystem {
                 TextureReference iconTextureReference = (TextureReference) spriteDefinition.getProperties().get("Texture");
                 iconTextureReference.setRegion(icon.name());
             }
+
+            //Stats
+            SDFTextBlock integrityBlock = sdfText.getTextBlocks().get(5);
+            integrityBlock.setText("I[scale 0.8]NTEGRITY[/scale] " + cardDefinition.getIntegrity());
+            SDFTextBlock cunningBlock = sdfText.getTextBlocks().get(6);
+            cunningBlock.setText("C[scale 0.8]UNNING[/scale] " + cardDefinition.getCunning());
+            SDFTextBlock strengthBlock = sdfText.getTextBlocks().get(7);
+            strengthBlock.setText("S[scale 0.8]TRENGTH[/scale] " + cardDefinition.getStrength());
         }
         return cardRepresentation;
     }
@@ -275,7 +283,6 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
         Camera camera = cameraSystem.getCamera();
         float verticalScale = 0.85f;
-        verticalScale = 0.4f;
         float distanceFromCamera = 3f;
         float cardSeparation = 0.15f;
         float cardScale = 0.4f;

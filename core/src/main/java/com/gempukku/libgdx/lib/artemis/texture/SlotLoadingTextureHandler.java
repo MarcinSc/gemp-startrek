@@ -115,7 +115,6 @@ public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
         public void addImage(String path, ImageLoadNotifier imageLoadNotifier) {
             assetManager.load(path, Pixmap.class);
             LoadingImage loadingImage = insertIntoCells(path, imageLoadNotifier);
-            System.out.println("Adding: " + loadingImage);
             loading.add(loadingImage);
             loadingImageMap.put(path, loadingImage);
             remainingSpace--;
