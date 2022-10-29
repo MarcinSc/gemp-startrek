@@ -109,10 +109,14 @@ public class CardInGameRenderingSystem extends BaseSystem {
             throw new GdxRuntimeException("Type of card not implemented: " + cardDefinition.getType());
         }
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
+
         TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
         String[] cardIdSplit = cardId.split("_");
         String cardPath = "cardImages/set" + cardIdSplit[0] + "/" + cardIdSplit[1] + ".png";
         cardImageTexture.setRegion(cardPath);
+
+        TextureReference missionTypeTexture = (TextureReference) cardTemplateSprite.getSprites().get(2).getProperties().get("Texture");
+        missionTypeTexture.setRegion(cardDefinition.getMissionType().name());
 
         SDF3DTextComponent sdfText = cardRepresentation.getComponent(SDF3DTextComponent.class);
         if (sdfText != null) {

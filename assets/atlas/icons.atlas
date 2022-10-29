@@ -1,68 +1,89 @@
 
 icons.png
-size: 512, 64
+size: 512, 128
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
 Baj
   rotate: false
-  xy: 234, 33
+  xy: 294, 48
   size: 30, 29
   orig: 30, 29
   offset: 0, 0
   index: -1
 Blank
   rotate: false
-  xy: 70, 32
+  xy: 36, 2
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Borg
   rotate: false
-  xy: 234, 2
+  xy: 327, 80
   size: 30, 29
   orig: 30, 29
   offset: 0, 0
   index: -1
 Car
   rotate: false
-  xy: 2, 32
+  xy: 2, 2
   size: 32, 30
   orig: 32, 30
   offset: 0, 0
   index: -1
 Cmd
   rotate: false
-  xy: 103, 32
+  xy: 228, 47
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 DS9
   rotate: false
-  xy: 202, 32
+  xy: 295, 79
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 Dom
   rotate: false
-  xy: 36, 32
+  xy: 228, 79
   size: 32, 30
   orig: 32, 30
   offset: 0, 0
   index: -1
 Fed
   rotate: false
-  xy: 136, 32
+  xy: 262, 79
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
+Headquarters
+  rotate: false
+  xy: 153, 36
+  size: 73, 73
+  orig: 73, 73
+  offset: 0, 0
+  index: -1
+Planet
+  rotate: false
+  xy: 2, 34
+  size: 74, 75
+  orig: 74, 75
+  offset: 0, 0
+  index: -1
+Space
+  rotate: false
+  xy: 78, 35
+  size: 73, 74
+  orig: 73, 74
+  offset: 0, 0
+  index: -1
 Stf
   rotate: false
-  xy: 169, 32
+  xy: 261, 47
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
