@@ -6,7 +6,6 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
@@ -17,6 +16,7 @@ import com.gempukku.startrek.hall.PlayedGameComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.hall.event.SearchForGame;
 import com.gempukku.startrek.hall.event.StopSearchingForGame;
+import com.gempukku.startrek.server.game.PlayerGameInfo;
 import com.gempukku.startrek.server.game.StarTrekGameWebSocketHandler;
 
 import java.util.List;
@@ -87,12 +87,10 @@ public class PairingSystem extends BaseEntitySystem {
         GameHallPlayerComponent player2 = playerComponentMapper.get(player2Entity);
 
         Array<String> players = new Array<>(new String[]{player1.getOwner(), player2.getOwner()});
-        ObjectMap<String, StarTrekDeck> playerDecks = new ObjectMap<>();
-        playerDecks.put(player1.getOwner(), findDeck(player1.getOwner(),
-                player1.getChosenStarterDeck(), player1.getChosenPlayerDeck()));
-        playerDecks.put(player2.getOwner(), findDeck(player2.getOwner(),
-                player2.getChosenStarterDeck(), player2.getChosenPlayerDeck()));
-        String gameId = gameHandler.createGame(playerDecks);
+        Array<PlayerGameInfo> playersInfo = new Array<>();
+        playersInfo.add(createPlayerGameInfo(player1));
+        playersInfo.add(createPlayerGameInfo(player2));
+        String gameId = gameHandler.createGame(playersInfo);
 
         Entity hallGame = spawnSystem.spawnEntity("hall/hallGame.template");
         PlayedGameComponent game = hallGame.getComponent(PlayedGameComponent.class);
@@ -108,6 +106,12 @@ public class PairingSystem extends BaseEntitySystem {
         GameHallComponent gameHall = gameHallEntity.getComponent(GameHallComponent.class);
         gameHall.setGameCount(gameHall.getGameCount() + 1);
         eventSystem.fireEvent(EntityUpdated.instance, gameHallEntity);
+    }
+
+    private PlayerGameInfo createPlayerGameInfo(GameHallPlayerComponent player) {
+        return new PlayerGameInfo(player.getOwner(), player.getOwner(),
+                player.getAvatar(), findDeck(player.getOwner(),
+                player.getChosenStarterDeck(), player.getChosenPlayerDeck()));
     }
 
     private StarTrekDeck findDeck(String username, String starterDeckId, String playerDeckId) {

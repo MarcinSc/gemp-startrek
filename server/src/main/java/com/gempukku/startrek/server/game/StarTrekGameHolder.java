@@ -121,18 +121,21 @@ public class StarTrekGameHolder implements Disposable {
         gameWorld.dispose();
     }
 
-    public void addPlayer(String username, StarTrekDeck deck) {
+    public void addPlayer(PlayerGameInfo playerGameInfo) {
         SpawnSystem spawnSystem = gameWorld.getSystem(SpawnSystem.class);
         Entity playerEntity = spawnSystem.spawnEntity("game/player.template");
         GamePlayerComponent player = playerEntity.getComponent(GamePlayerComponent.class);
-        player.setName(username);
+        player.setName(playerGameInfo.getUsername());
+        player.setDisplayName(playerGameInfo.getDisplayName());
+        player.setAvatar(playerGameInfo.getAvatar());
+        StarTrekDeck deck = playerGameInfo.getDeck();
         Array<String> cards = playerEntity.getComponent(PlayerDecklistComponent.class).getCards();
         cards.addAll(deck.getMissions());
         cards.addAll(deck.getDillemas());
         cards.addAll(deck.getDrawDeck());
 
         GameComponent game = gameEntity.getComponent(GameComponent.class);
-        game.getPlayers().add(username);
+        game.getPlayers().add(playerGameInfo.getUsername());
         EventSystem eventSystem = gameWorld.getSystem(EventSystem.class);
         eventSystem.fireEvent(EntityUpdated.instance, gameEntity);
 

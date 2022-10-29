@@ -1,10 +1,10 @@
 package com.gempukku.startrek.server.game;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.network.JsonDataSerializer;
 import com.gempukku.libgdx.network.server.RemoteEntityManagerHandler;
 import com.gempukku.libgdx.network.server.config.annotation.SerializeToClientsConfig;
-import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.service.CardDataService;
 import com.gempukku.startrek.server.websocket.OneConnectionPerUserIntoContext;
 import com.gempukku.startrek.server.websocket.WebSocketChannelConfig;
@@ -52,7 +52,7 @@ public class StarTrekGameWebSocketHandler extends TextWebSocketHandler implement
         return "/game";
     }
 
-    public String createGame(ObjectMap<String, StarTrekDeck> playerDecks) {
+    public String createGame(Array<PlayerGameInfo> players) {
         String gameId = UUID.randomUUID().toString();
 
         StarTrekGameHolder gameHolder = new StarTrekGameHolder(cardDataService.getCardData());
@@ -64,8 +64,8 @@ public class StarTrekGameWebSocketHandler extends TextWebSocketHandler implement
         gameContext.addNetworkEntitySerializationConfig(
                 new SerializeToClientsConfig());
 
-        for (ObjectMap.Entry<String, StarTrekDeck> playerDeck : playerDecks) {
-            gameHolder.addPlayer(playerDeck.key, playerDeck.value);
+        for (PlayerGameInfo playerGameInfo : players) {
+            gameHolder.addPlayer(playerGameInfo);
         }
         gameHolder.setupGame();
         gameHolder.processGame();

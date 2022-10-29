@@ -77,7 +77,6 @@ public class CardInGameRenderingSystem extends BaseSystem {
     }
 
     private void cardInHandInserted(int entityId) {
-        System.out.println("Inserted card in hand");
         Entity cardEntity = world.getEntity(entityId);
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         String owner = card.getOwner();
@@ -144,7 +143,6 @@ public class CardInGameRenderingSystem extends BaseSystem {
     }
 
     private Entity createFullCard(String cardId, CardDefinition cardDefinition) {
-        System.out.println("createFullCard");
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
 

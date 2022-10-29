@@ -3,10 +3,9 @@ package com.gempukku.startrek.server.service;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.hall.PlayedGameComponent;
-import com.gempukku.startrek.hall.StarTrekDeck;
+import com.gempukku.startrek.server.game.PlayerGameInfo;
 import com.gempukku.startrek.server.game.StarTrekGameWebSocketHandler;
 import com.gempukku.startrek.server.hall.StarTrekHallContext;
 import com.gempukku.startrek.server.hall.StarTrekServerDeckSystem;
@@ -35,10 +34,12 @@ public class TemporaryUserCreation {
             StarTrekServerDeckSystem deckSystem = hallWorld.getSystem(StarTrekServerDeckSystem.class);
 
             Array<String> players = new Array<>(new String[]{"test1", "test2"});
-            ObjectMap<String, StarTrekDeck> playerDecks = new ObjectMap<>();
-            playerDecks.put("test1", deckSystem.getPlayerDeck("test1", "temp"));
-            playerDecks.put("test2", deckSystem.getPlayerDeck("test2", "temp"));
-            String gameId = gameHandler.createGame(playerDecks);
+            Array<PlayerGameInfo> playersInfo = new Array<>();
+            playersInfo.add(new PlayerGameInfo("test1", "test1", "red-shirt-male",
+                    deckSystem.getPlayerDeck("test1", "temp")));
+            playersInfo.add(new PlayerGameInfo("test2", "test2", "red-shirt-male",
+                    deckSystem.getPlayerDeck("test2", "temp")));
+            String gameId = gameHandler.createGame(playersInfo);
 
             SpawnSystem spawnSystem = hallWorld.getSystem(SpawnSystem.class);
             Entity hallGame = spawnSystem.spawnEntity("hall/hallGame.template");
