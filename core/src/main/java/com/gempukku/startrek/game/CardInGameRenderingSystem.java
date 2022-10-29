@@ -132,7 +132,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
             pointsBlock.setText(String.valueOf(cardDefinition.getPoints()));
             // Span
             SDFTextBlock spanBlock = sdfText.getTextBlocks().get(2);
-            String span = cardDefinition.getQuadrant() + "[scale 0.8]" + cardDefinition.getSpan() + "[/scale]";
+            String span = cardDefinition.getQuadrant().getSymbol() + "[scale 0.8]" + cardDefinition.getSpan() + "[/scale]";
             spanBlock.setText(span);
             // Mission affiliations
             SDFTextBlock affiliationsBlock = sdfText.getTextBlocks().get(3);

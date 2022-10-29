@@ -3,7 +3,7 @@
   "missionType": "Planet",
   "unique": true,
   "title": "Security Briefing",
-  "quadrant": "A",
+  "quadrant": "Alpha",
   "span": 2,
   "points": 35,
   "requirements": "skillCount(Diplomacy,2),skillCount(Security,2),attributeTotalMoreThan(Cunning,32)",

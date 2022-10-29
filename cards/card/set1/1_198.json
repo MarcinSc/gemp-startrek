@@ -3,7 +3,7 @@
   "missionType": "Planet",
   "unique": true,
   "title": "Search for Survivors",
-  "quadrant": "A",
+  "quadrant": "Alpha",
   "span": 2,
   "points": 35,
   "requirements": "skill(Leadership),skill(Officer),skill(Programming),skill(Security),attributeTotalMoreThan(Strength,36)",

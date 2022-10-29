@@ -24,7 +24,7 @@ public class CardDefinition {
 
     // Mission specific
     private MissionType missionType;
-    private String quadrant;
+    private Quadrant quadrant;
     private int span;
     private int points;
     private String requirements;
@@ -99,7 +99,7 @@ public class CardDefinition {
         return missionType;
     }
 
-    public String getQuadrant() {
+    public Quadrant getQuadrant() {
         return quadrant;
     }
 

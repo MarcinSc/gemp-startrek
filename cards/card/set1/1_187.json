@@ -3,7 +3,7 @@
   "missionType": "Space",
   "unique": true,
   "title": "Mining Survey",
-  "quadrant": "A",
+  "quadrant": "Alpha",
   "span": 3,
   "points": 35,
   "requirements": "skill(Engineer),skill(Geology),skill(Physics),skill(Science),attributeTotalMoreThan(Cunning,34)",
