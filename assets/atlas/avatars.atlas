@@ -4,9 +4,16 @@ size: 256, 256
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
-red-shirt-male
+nameplate
   rotate: false
   xy: 2, 2
+  size: 200, 40
+  orig: 200, 40
+  offset: 0, 0
+  index: -1
+red-shirt-male
+  rotate: false
+  xy: 2, 44
   size: 200, 200
   orig: 200, 200
   offset: 0, 0

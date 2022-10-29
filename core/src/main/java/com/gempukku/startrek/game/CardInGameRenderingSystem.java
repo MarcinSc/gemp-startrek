@@ -275,6 +275,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
         Camera camera = cameraSystem.getCamera();
         float verticalScale = 0.85f;
+        verticalScale = 0.4f;
         float distanceFromCamera = 3f;
         float cardSeparation = 0.15f;
         float cardScale = 0.4f;

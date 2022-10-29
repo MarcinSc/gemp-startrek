@@ -72,6 +72,10 @@ public class SDF3DTextSystem extends BaseEntitySystem {
         if (spriteBatchModel == null) {
             initializeSpriteBatchModel();
         }
+        addSprites(entityId);
+    }
+
+    private void addSprites(int entityId) {
         Entity textEntity = world.getEntity(entityId);
         Matrix4 resolvedTransform = transformSystem.getResolvedTransform(textEntity);
 
@@ -96,11 +100,14 @@ public class SDF3DTextSystem extends BaseEntitySystem {
         }
     }
 
-    public void updateSDFTexts(int entityId) {
+    public void updateTexts(int entityId) {
+        removed(entityId);
+        addSprites(entityId);
+    }
+
+    public void updateText(int entityId, int textIndex) {
         Array<SDFText> texts = renderedTexts.get(entityId);
-        for (SDFText text : texts) {
-            text.updateSprites();
-        }
+        texts.get(textIndex).updateSprites();
     }
 
     @Override

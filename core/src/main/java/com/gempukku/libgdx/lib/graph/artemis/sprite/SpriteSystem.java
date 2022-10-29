@@ -89,7 +89,7 @@ public class SpriteSystem extends BaseSystem implements Disposable {
                 );
     }
 
-    public void updateSprite(int entityId) {
+    public void updateSprites(int entityId) {
         Entity spriteEntity = world.getEntity(entityId);
         SpriteComponent sprite = spriteEntity.getComponent(SpriteComponent.class);
 
@@ -111,7 +111,7 @@ public class SpriteSystem extends BaseSystem implements Disposable {
     public void transformUpdated(TransformUpdated transformUpdated, Entity entity) {
         int entityId = entity.getId();
         if (spriteMap.containsKey(entityId))
-            updateSprite(entity.getId());
+            updateSprites(entity.getId());
     }
 
     @EventListener

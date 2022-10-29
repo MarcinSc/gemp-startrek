@@ -109,8 +109,9 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new IncomingUpdatesProcessor(),
 
                 new CardLookupSystem(cardData),
+                new PlayerPositionSystem(),
                 new CardInGameRenderingSystem(),
-                new PlayerPositionSystem());
+                new PlayerInfoRenderingSystem());
 
         World world = new World(worldConfigurationBuilder.build());
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
