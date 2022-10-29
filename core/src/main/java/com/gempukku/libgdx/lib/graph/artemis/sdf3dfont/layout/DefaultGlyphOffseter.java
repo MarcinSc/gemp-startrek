@@ -105,8 +105,10 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
         float usedWidth = linePaddingLeft;
         float justifiedSpace = 0;
-        if (getHorizontalAlignment(lineStyle) == TextHorizontalAlignment.justified
-                && !isEndOfLine(parsedText, startIndex, lineGlyphLength)) {
+        TextHorizontalAlignment horizontalAlignment = getHorizontalAlignment(lineStyle);
+        if (horizontalAlignment == TextHorizontalAlignment.justifiedFragment
+                || (horizontalAlignment == TextHorizontalAlignment.justified
+                && !isEndOfLine(parsedText, startIndex, lineGlyphLength))) {
             int spaceCount = countJustifiableSpaces(parsedText, startIndex, lineGlyphLength);
             if (spaceCount > 0) {
                 float linePaddingRight = getLinePaddingRight(lineStyle);

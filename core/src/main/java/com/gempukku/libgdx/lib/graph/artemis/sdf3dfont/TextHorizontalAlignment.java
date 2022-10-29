@@ -1,7 +1,7 @@
 package com.gempukku.libgdx.lib.graph.artemis.sdf3dfont;
 
 public enum TextHorizontalAlignment {
-    center, left, right, justified;
+    center, left, right, justified, justifiedFragment;
 
     public float apply(float width, float availableWidth) {
         switch (this) {
