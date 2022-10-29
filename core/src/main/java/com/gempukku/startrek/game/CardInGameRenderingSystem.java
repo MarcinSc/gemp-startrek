@@ -104,6 +104,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
         Entity cardRepresentation;
         if (cardDefinition.getType() == CardType.Mission) {
             cardRepresentation = spawnSystem.spawnEntity("game/mission-small.template");
+            //cardRepresentation = spawnSystem.spawnEntity("game/mission-small-textboxes.template");
         } else {
             throw new GdxRuntimeException("Type of card not implemented: " + cardDefinition.getType());
         }
@@ -112,6 +113,16 @@ public class CardInGameRenderingSystem extends BaseSystem {
         String[] cardIdSplit = cardId.split("_");
         String cardPath = "cardImages/set" + cardIdSplit[0] + "/" + cardIdSplit[1] + ".png";
         cardImageTexture.setRegion(cardPath);
+
+        SDF3DTextComponent sdfText = cardRepresentation.getComponent(SDF3DTextComponent.class);
+        if (sdfText != null) {
+            // Title
+            SDFTextBlock titleBlock = sdfText.getTextBlocks().get(0);
+            titleBlock.setText(cardDefinition.getTitle());
+            // Points
+            SDFTextBlock pointsBlock = sdfText.getTextBlocks().get(1);
+            pointsBlock.setText(String.valueOf(cardDefinition.getPoints()));
+        }
 
         return cardRepresentation;
     }

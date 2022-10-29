@@ -114,6 +114,98 @@
             "region": "[cardImagePath]"
           }
         }
+      },
+      {
+        "spriteSystemName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0.055,
+                0.002,
+                -0.193,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.55,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.065
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "atlas/scene.atlas",
+            "region": "playarea"
+          }
+        }
+      },
+      {
+        "spriteSystemName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                -0.288,
+                0.002,
+                -0.069,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.08,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.08
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "atlas/scene.atlas",
+            "region": "playarea"
+          }
+        }
       }
     ]
   },
@@ -180,35 +272,35 @@
             0,
             1,
             0,
-            -0.288,
-            0.002,
-            -0.069,
+            0.06,
+            0.005,
+            -0.4,
             1
           ]
         },
         "rightVector": {
-          "x": 0.08,
+          "x": 0.47,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
           "y": 0,
-          "z": 0.08
+          "z": 0.028
         },
         "width": 0.5,
         "edge": 0.03,
         "color": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
+          "r": 0,
+          "g": 0,
+          "b": 0,
           "a": 1
         },
-        "targetWidth": 100,
+        "targetWidth": 500,
         "kerning": true,
         "scaleDownToFit": true,
         "verticalAlignment": "center",
-        "horizontalAlignment": "center",
+        "horizontalAlignment": "left",
         "bitmapFontPath": "font/arial.fnt"
       },
       {

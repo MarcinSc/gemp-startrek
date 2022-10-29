@@ -102,4 +102,8 @@ public class CardDefinition {
     public String getQuadrant() {
         return quadrant;
     }
+
+    public int getPoints() {
+        return points;
+    }
 }
