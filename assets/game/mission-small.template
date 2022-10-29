@@ -226,21 +226,21 @@
             0,
             1,
             0,
-            -0.209,
-            0.005,
-            -0.429,
+            -0.288,
+            0.002,
+            0.175,
             1
           ]
         },
         "rightVector": {
-          "x": 0.038,
+          "x": 0.08,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
           "y": 0,
-          "z": 0.038
+          "z": 0.08
         },
         "width": 0.5,
         "edge": 0.03,
@@ -250,7 +250,7 @@
           "b": 1,
           "a": 1
         },
-        "targetWidth": 200,
+        "targetWidth": 100,
         "kerning": true,
         "scaleDownToFit": true,
         "verticalAlignment": "center",

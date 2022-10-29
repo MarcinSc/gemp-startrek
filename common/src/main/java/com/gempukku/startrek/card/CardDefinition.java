@@ -103,6 +103,10 @@ public class CardDefinition {
         return quadrant;
     }
 
+    public int getSpan() {
+        return span;
+    }
+
     public int getPoints() {
         return points;
     }

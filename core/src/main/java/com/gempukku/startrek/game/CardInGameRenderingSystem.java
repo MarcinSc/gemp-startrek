@@ -122,6 +122,10 @@ public class CardInGameRenderingSystem extends BaseSystem {
             // Points
             SDFTextBlock pointsBlock = sdfText.getTextBlocks().get(1);
             pointsBlock.setText(String.valueOf(cardDefinition.getPoints()));
+            // Span
+            SDFTextBlock spanBlock = sdfText.getTextBlocks().get(2);
+            String span = cardDefinition.getQuadrant() + "[scale 0.8]" + cardDefinition.getSpan() + "[/scale]";
+            spanBlock.setText(span);
         }
 
         return cardRepresentation;
