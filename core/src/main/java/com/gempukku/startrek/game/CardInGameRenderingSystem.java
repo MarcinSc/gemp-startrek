@@ -33,6 +33,8 @@ public class CardInGameRenderingSystem extends BaseSystem {
     private CardLookupSystem cardLookupSystem;
     private AuthenticationHolderSystem authenticationHolderSystem;
 
+    private static final float[] deckRotation = new float[]{0f, -1f, 0.3f, 0.1f, -0.3f, -0.1f, 0f, 0.15f};
+
     private ObjectMap<PlayerPosition, PlayerCards> playerCardsMap = new ObjectMap<>();
     private ObjectMap<PlayerPosition, ZonesStatus> playerZonesStatusMap = new ObjectMap<>();
 
@@ -343,16 +345,127 @@ public class CardInGameRenderingSystem extends BaseSystem {
         return spawnSystem.spawnEntity("game/card-facedown.template");
     }
 
-    private void addFaceDownCardToHand(PlayerPosition playerPosition) {
+    private Entity addFaceDownCardToHand(PlayerPosition playerPosition) {
         Entity cardRepresentation = createFaceDownCard();
         getPlayerCards(playerPosition).addCardInHand(null, cardRepresentation);
+        return cardRepresentation;
+    }
 
-        getZonesStatus(playerPosition).setHandDrity(true);
+    private Entity addFaceDownCardToDeck(PlayerPosition playerPosition) {
+        Entity cardRepresentation = createFaceDownCard();
+        getPlayerCards(playerPosition).addCardInDeck(null, cardRepresentation);
+        return cardRepresentation;
+    }
+
+    private Entity addFaceDownCardToDilemmaPile(PlayerPosition playerPosition) {
+        Entity cardRepresentation = createFaceDownCard();
+        getPlayerCards(playerPosition).addCardInDilemmaPile(null, cardRepresentation);
+        return cardRepresentation;
     }
 
     @Override
     protected void processSystem() {
-        // Setup unknown player hands
+        setupUnknownPlayersHands();
+        setupPlayersDecks();
+        setupPlayersDillemaPiles();
+
+        for (ObjectMap.Entry<PlayerPosition, ZonesStatus> playerZonesStatus : playerZonesStatusMap) {
+            ZonesStatus zonesStatus = playerZonesStatus.value;
+            if (zonesStatus.isHandDrity()) {
+                layoutHand(playerZonesStatus.key);
+            }
+            if (zonesStatus.isMissionsDirty()) {
+                layoutMissions(playerZonesStatus.key);
+            }
+            zonesStatus.cleanZones();
+        }
+    }
+
+    private void setupPlayersDecks() {
+        for (ObjectMap.Entry<String, PlayerPosition> player : playerPositionSystem.getPlayerPositions()) {
+            String username = player.key;
+            PlayerPosition playerPosition = player.value;
+            Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
+            PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
+            int deckCount = getRenderedDeckSize(publicStats.getDeckCount());
+            PlayerCards playerCards = playerCardsMap.get(playerPosition);
+            int renderedCount = playerCards.getCardInDeckCount();
+            if (renderedCount > deckCount) {
+                int destroyCount = renderedCount - deckCount;
+                for (int i = 0; i < destroyCount; i++) {
+                    Entity removedCard = playerCards.removeOneCardInDeck();
+                    world.deleteEntity(removedCard);
+                }
+            } else if (renderedCount < deckCount) {
+                float xTranslate = 4f;
+                float zTranslate = 3.3f;
+                int createCount = deckCount - renderedCount;
+                for (int i = 0; i < createCount; i++) {
+                    Entity cardRepresentation = addFaceDownCardToDeck(playerPosition);
+                    int cardIndex = playerCards.getCardInDeckCount() - 1;
+
+                    float yRotation = (playerPosition == PlayerPosition.Lower) ? 0 : 180;
+                    yRotation += 3 * deckRotation[cardIndex];
+                    float zMove = playerPosition == PlayerPosition.Lower ? zTranslate : -zTranslate;
+
+                    transformSystem.setTransform(cardRepresentation,
+                            new Matrix4().idt()
+                                    .translate(xTranslate, 0f + cardIndex * 0.005f, zMove)
+                                    // A bit crooked
+                                    .rotate(0, 1, 0, yRotation));
+                }
+            }
+        }
+    }
+
+    private void setupPlayersDillemaPiles() {
+        for (ObjectMap.Entry<String, PlayerPosition> player : playerPositionSystem.getPlayerPositions()) {
+            String username = player.key;
+            PlayerPosition playerPosition = player.value;
+            Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
+            PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
+            int deckCount = getRenderedDeckSize(publicStats.getDilemmaCount());
+            PlayerCards playerCards = playerCardsMap.get(playerPosition);
+            int renderedCount = playerCards.getCardInDilemmaCount();
+            if (renderedCount > deckCount) {
+                int destroyCount = renderedCount - deckCount;
+                for (int i = 0; i < destroyCount; i++) {
+                    Entity removedCard = playerCards.removeOneCardInDilemmaPile();
+                    world.deleteEntity(removedCard);
+                }
+            } else if (renderedCount < deckCount) {
+                float xTranslate = -4f;
+                float zTranslate = 3.3f;
+                int createCount = deckCount - renderedCount;
+                for (int i = 0; i < createCount; i++) {
+                    Entity cardRepresentation = addFaceDownCardToDilemmaPile(playerPosition);
+                    int cardIndex = playerCards.getCardInDilemmaCount() - 1;
+
+                    float yRotation = (playerPosition == PlayerPosition.Lower) ? 0 : 180;
+                    yRotation += 3 * deckRotation[cardIndex];
+                    float zMove = playerPosition == PlayerPosition.Lower ? zTranslate : -zTranslate;
+
+                    transformSystem.setTransform(cardRepresentation,
+                            new Matrix4().idt()
+                                    .translate(xTranslate, 0f + cardIndex * 0.005f, zMove)
+                                    // A bit crooked
+                                    .rotate(0, 1, 0, yRotation));
+                }
+            }
+        }
+    }
+
+    private int getRenderedDeckSize(int realDeckSize) {
+        if (realDeckSize > 20)
+            return 8;
+        if (realDeckSize > 10)
+            return 7;
+        if (realDeckSize > 5)
+            return 6;
+        return realDeckSize;
+    }
+
+    private void setupUnknownPlayersHands() {
         for (ObjectMap.Entry<String, PlayerPosition> player : playerPositionSystem.getPlayerPositions()) {
             String username = player.key;
             if (!username.equals(authenticationHolderSystem.getUsername())) {
@@ -377,17 +490,6 @@ public class CardInGameRenderingSystem extends BaseSystem {
                     getZonesStatus(playerPosition).setHandDrity(true);
                 }
             }
-        }
-
-        for (ObjectMap.Entry<PlayerPosition, ZonesStatus> playerZonesStatus : playerZonesStatusMap) {
-            ZonesStatus zonesStatus = playerZonesStatus.value;
-            if (zonesStatus.isHandDrity()) {
-                layoutHand(playerZonesStatus.key);
-            }
-            if (zonesStatus.isMissionsDirty()) {
-                layoutMissions(playerZonesStatus.key);
-            }
-            zonesStatus.cleanZones();
         }
     }
 }
