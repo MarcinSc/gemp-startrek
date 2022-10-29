@@ -16,7 +16,9 @@ public class PlayerCards {
     }
 
     public void addCardInHand(Entity card, Entity renderedCard) {
-        cardToRenderedMap.put(card, renderedCard);
+        if (card != null) {
+            cardToRenderedMap.put(card, renderedCard);
+        }
         renderedInHand.add(renderedCard);
     }
 
@@ -24,9 +26,18 @@ public class PlayerCards {
         return missionCards.get(missionIndex);
     }
 
-    public void removeCardInHand(Entity card) {
+    public Entity removeOneCardInHand() {
+        return renderedInHand.removeIndex(renderedInHand.size - 1);
+    }
+
+    public Entity removeCardInHand(Entity card) {
         Entity renderedCard = cardToRenderedMap.remove(card);
         renderedInHand.removeValue(renderedCard, true);
+        return renderedCard;
+    }
+
+    public int getCardInHandCount() {
+        return renderedInHand.size;
     }
 
     public Array<Entity> getCardsInHand() {

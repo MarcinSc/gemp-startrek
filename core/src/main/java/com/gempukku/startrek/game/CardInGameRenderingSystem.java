@@ -21,6 +21,7 @@ import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDFTextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
 import com.gempukku.startrek.card.*;
+import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
 import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
 
@@ -30,6 +31,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
     private CameraSystem cameraSystem;
     private TransformSystem transformSystem;
     private CardLookupSystem cardLookupSystem;
+    private AuthenticationHolderSystem authenticationHolderSystem;
 
     private ObjectMap<PlayerPosition, PlayerCards> playerCardsMap = new ObjectMap<>();
     private ObjectMap<PlayerPosition, ZonesStatus> playerZonesStatusMap = new ObjectMap<>();
@@ -73,6 +75,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
     }
 
     private void cardInHandInserted(int entityId) {
+        System.out.println("Inserted card in hand");
         Entity cardEntity = world.getEntity(entityId);
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         String owner = card.getOwner();
@@ -139,6 +142,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
     }
 
     private Entity createFullCard(String cardId, CardDefinition cardDefinition) {
+        System.out.println("createFullCard");
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
 
@@ -269,31 +273,38 @@ public class CardInGameRenderingSystem extends BaseSystem {
         PlayerCards playerCards = getPlayerCards(playerPosition);
         Array<Entity> cardsInHand = playerCards.getCardsInHand();
 
-        if (playerPosition == PlayerPosition.Lower) {
-            Camera camera = cameraSystem.getCamera();
-            float verticalScale = 0.8f;
-            float distanceFromCamera = 3f;
-            float cardSeparation = 0.15f;
-            Vector3 basePlayerHandPosition =
-                    new Vector3(camera.position)
-                            .add(new Vector3(camera.direction).scl(distanceFromCamera))
-                            .add(new Vector3(camera.up).scl(-verticalScale));
-            Vector3 baseOpponentHandPosition = new Vector3(camera.position).add(camera.direction).add(new Vector3(camera.up).scl(verticalScale));
+        Camera camera = cameraSystem.getCamera();
+        float verticalScale = 0.85f;
+        float distanceFromCamera = 3f;
+        float cardSeparation = 0.15f;
+        float cardScale = 0.4f;
 
-            int index = 0;
-            int handSize = cardsInHand.size;
-            for (Entity cardInHand : cardsInHand) {
-                float indexBias = index - (handSize / 2f) + 0.5f;
-                float cardScale = 0.5f;
-                transformSystem.setTransform(cardInHand, new Matrix4()
-                        .translate(basePlayerHandPosition.x + cardSeparation * indexBias, basePlayerHandPosition.y, basePlayerHandPosition.z)// + 0.005f * Math.abs(indexBias))
-                        .scale(cardScale, cardScale, cardScale)
-                        .rotate(1, 0, 0, 10)
-                        .rotate(0, 1, 0, -indexBias * 1.5f)
-                        .rotate(0, 0, 1, -2));
+        Vector3 basePlayerHandPosition =
+                new Vector3(camera.position)
+                        .add(new Vector3(camera.direction).scl(distanceFromCamera))
+                        .add(new Vector3(camera.up).scl(-verticalScale));
+        Vector3 baseOpponentHandPosition =
+                new Vector3(camera.position)
+                        .add(new Vector3(camera.direction).scl(distanceFromCamera))
+                        .add(new Vector3(camera.up).scl(verticalScale));
 
-                index++;
-            }
+        Vector3 playerHandPosition = (playerPosition == PlayerPosition.Lower) ? basePlayerHandPosition : baseOpponentHandPosition;
+
+        int index = 0;
+        int handSize = cardsInHand.size;
+        for (Entity cardInHand : cardsInHand) {
+            float indexBias = index - (handSize / 2f) + 0.5f;
+            float rotateX = 10;
+            float rotateY = (playerPosition == PlayerPosition.Lower) ? -indexBias * 1.5f : 180 + indexBias * 1.5f;
+            float rotateZ = (playerPosition == PlayerPosition.Lower) ? -2 : 2;
+            transformSystem.setTransform(cardInHand, new Matrix4()
+                    .translate(playerHandPosition.x + cardSeparation * indexBias, playerHandPosition.y, playerHandPosition.z)// + 0.005f * Math.abs(indexBias))
+                    .scale(cardScale, cardScale, cardScale)
+                    .rotate(1, 0, 0, rotateX)
+                    .rotate(0, 1, 0, rotateY)
+                    .rotate(0, 0, 1, rotateZ));
+
+            index++;
         }
     }
 
@@ -316,6 +327,10 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
     private ZonesStatus getZonesStatus(String username) {
         PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(username);
+        return getZonesStatus(playerPosition);
+    }
+
+    private ZonesStatus getZonesStatus(PlayerPosition playerPosition) {
         ZonesStatus result = playerZonesStatusMap.get(playerPosition);
         if (result == null) {
             result = new ZonesStatus();
@@ -324,8 +339,46 @@ public class CardInGameRenderingSystem extends BaseSystem {
         return result;
     }
 
+    private Entity createFaceDownCard() {
+        return spawnSystem.spawnEntity("game/card-facedown.template");
+    }
+
+    private void addFaceDownCardToHand(PlayerPosition playerPosition) {
+        Entity cardRepresentation = createFaceDownCard();
+        getPlayerCards(playerPosition).addCardInHand(null, cardRepresentation);
+
+        getZonesStatus(playerPosition).setHandDrity(true);
+    }
+
     @Override
     protected void processSystem() {
+        // Setup unknown player hands
+        for (ObjectMap.Entry<String, PlayerPosition> player : playerPositionSystem.getPlayerPositions()) {
+            String username = player.key;
+            if (!username.equals(authenticationHolderSystem.getUsername())) {
+                PlayerPosition playerPosition = player.value;
+                Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
+                PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
+                int handCount = publicStats.getHandCount();
+                PlayerCards playerCards = playerCardsMap.get(playerPosition);
+                int renderedCount = playerCards.getCardInHandCount();
+                if (renderedCount > handCount) {
+                    int destroyCount = renderedCount - handCount;
+                    for (int i = 0; i < destroyCount; i++) {
+                        Entity removedCard = playerCards.removeOneCardInHand();
+                        world.deleteEntity(removedCard);
+                    }
+                    getZonesStatus(playerPosition).setHandDrity(true);
+                } else if (renderedCount < handCount) {
+                    int createCount = handCount - renderedCount;
+                    for (int i = 0; i < createCount; i++) {
+                        addFaceDownCardToHand(playerPosition);
+                    }
+                    getZonesStatus(playerPosition).setHandDrity(true);
+                }
+            }
+        }
+
         for (ObjectMap.Entry<PlayerPosition, ZonesStatus> playerZonesStatus : playerZonesStatusMap) {
             ZonesStatus zonesStatus = playerZonesStatus.value;
             if (zonesStatus.isHandDrity()) {

@@ -150,7 +150,8 @@ Color - character color
                         spriteDefinition.getProperties().put("Position", positionFloatArray);
                         spriteDefinition.getProperties().put("Texture", textureRegion);
 
-                        spriteSystem.addSprite(null, null, spriteDefinition);
+                        SpriteDefinitionAdapter sprite = spriteSystem.addSprite(null, null, spriteDefinition);
+                        externalSprites.add(sprite);
                     } else {
                         PropertyContainer stylePropertyContainer = getStylePropertyContainer(stylePropertyContainerMap, textStyle);
 
@@ -333,6 +334,10 @@ Color - character color
             spriteBatchModel.removeSprite(tagGraphSprite);
         }
         tagGraphSprites.clear();
+        for (SpriteDefinitionAdapter externalSprite : externalSprites) {
+            spriteSystem.removeSprite(externalSprite);
+        }
+        externalSprites.clear();
     }
 
     @Override
