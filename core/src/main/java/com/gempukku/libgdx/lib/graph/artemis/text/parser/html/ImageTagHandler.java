@@ -1,4 +1,4 @@
-package com.gempukku.startrek.game.config;
+package com.gempukku.libgdx.lib.graph.artemis.text.parser.html;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
@@ -9,18 +9,19 @@ import com.gempukku.libgdx.lib.graph.artemis.text.parser.configurable.TagParsedT
 
 import java.util.function.Function;
 
-public class IconTagHandler implements TagHandler {
-    private String spriteSystemName;
+public class ImageTagHandler implements TagHandler {
     private Function<String, TextureRegion> textureRegionResolver;
 
-    public IconTagHandler(String spriteSystemName, Function<String, TextureRegion> textureRegionResolver) {
-        this.spriteSystemName = spriteSystemName;
+    public ImageTagHandler(Function<String, TextureRegion> textureRegionResolver) {
         this.textureRegionResolver = textureRegionResolver;
     }
 
     @Override
     public void processStartTag(String tagParameters, Array<TextStyle> textStyleStack, TagParsedText tagParsedText, StringBuilder resultText) {
-        TextureRegion texture = textureRegionResolver.apply(tagParameters.trim());
+        tagParameters = tagParameters.trim();
+        String[] params = tagParameters.split(" ", 2);
+        String spriteSystemName = params[0];
+        TextureRegion texture = textureRegionResolver.apply(params[1]);
 
         TextStyle lastStyle = textStyleStack.peek();
         TextStyle duplicate = lastStyle.duplicate();
@@ -37,6 +38,6 @@ public class IconTagHandler implements TagHandler {
 
     @Override
     public void processEndTag(Array<TextStyle> textStyleStack, TagParsedText tagParsedText, StringBuilder resultText) {
-        
+
     }
 }

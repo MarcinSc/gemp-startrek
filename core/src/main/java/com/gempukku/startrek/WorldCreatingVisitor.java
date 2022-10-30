@@ -22,8 +22,8 @@ import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextSystem;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
+import com.gempukku.libgdx.lib.graph.artemis.text.TextSystem;
 import com.gempukku.libgdx.lib.graph.artemis.time.TimeKeepingSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
 import com.gempukku.libgdx.network.JsonDataSerializer;
@@ -99,7 +99,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                         new JsonValueNetworkMessageMarshaller()),
 
                 new BitmapFontSystem(new RuntimeBitmapFontHandler()),
-                new SDF3DTextSystem("SdfText"),
+                new TextSystem("SdfText"),
                 new ConfigureTextSystem(),
 
                 new AnimationDirectorSystem(),

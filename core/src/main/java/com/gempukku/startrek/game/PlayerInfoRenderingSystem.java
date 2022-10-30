@@ -12,17 +12,17 @@ import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.artemis.texture.TextureReference;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextComponent;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextSystem;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDFTextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
+import com.gempukku.libgdx.lib.graph.artemis.text.TextBlock;
+import com.gempukku.libgdx.lib.graph.artemis.text.TextComponent;
+import com.gempukku.libgdx.lib.graph.artemis.text.TextSystem;
 
 public class PlayerInfoRenderingSystem extends BaseEntitySystem {
     private PlayerPositionSystem playerPositionSystem;
     private CameraSystem cameraSystem;
     private SpawnSystem spawnSystem;
     private TransformSystem transformSystem;
-    private SDF3DTextSystem textSystem;
+    private TextSystem textSystem;
 
     private int addedPlayers = 0;
     private ObjectMap<String, Integer> displayedPoints = new ObjectMap<>();
@@ -46,8 +46,8 @@ public class PlayerInfoRenderingSystem extends BaseEntitySystem {
                 int playerPoints = playerStats.getPointCount();
                 if (playerPoints != displayedPoints.get(username)) {
                     Entity nameplateEntity = nameplates.get(username);
-                    SDF3DTextComponent textBlocks = nameplateEntity.getComponent(SDF3DTextComponent.class);
-                    SDFTextBlock pointsText = textBlocks.getTextBlocks().get(1);
+                    TextComponent textBlocks = nameplateEntity.getComponent(TextComponent.class);
+                    TextBlock pointsText = textBlocks.getTextBlocks().get(1);
                     pointsText.setText(String.valueOf(playerPoints));
                     displayedPoints.put(username, playerPoints);
                     textSystem.updateText(nameplateEntity.getId(), 1);
@@ -71,11 +71,11 @@ public class PlayerInfoRenderingSystem extends BaseEntitySystem {
             TextureReference avatarTexture = (TextureReference) sprites.getSprites().get(0).getProperties().get("Texture");
             avatarTexture.setRegion(player.getAvatar());
 
-            SDF3DTextComponent textBlocks = nameplateEntity.getComponent(SDF3DTextComponent.class);
-            SDFTextBlock displayNameText = textBlocks.getTextBlocks().get(0);
+            TextComponent textBlocks = nameplateEntity.getComponent(TextComponent.class);
+            TextBlock displayNameText = textBlocks.getTextBlocks().get(0);
             displayNameText.setText(player.getDisplayName());
 
-            SDFTextBlock pointsText = textBlocks.getTextBlocks().get(1);
+            TextBlock pointsText = textBlocks.getTextBlocks().get(1);
             pointsText.setText("0");
             displayedPoints.put(player.getName(), 0);
 

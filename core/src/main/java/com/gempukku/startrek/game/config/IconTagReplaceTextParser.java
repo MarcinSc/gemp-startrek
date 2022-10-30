@@ -1,8 +1,8 @@
 package com.gempukku.startrek.game.config;
 
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.ParsedText;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextParser;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.TextStyle;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.ParsedText;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextParser;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
 import com.gempukku.startrek.card.CardIcon;
 
 import java.util.regex.Matcher;

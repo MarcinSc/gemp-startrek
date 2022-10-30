@@ -16,10 +16,10 @@ import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.artemis.texture.TextureReference;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextComponent;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDFTextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
+import com.gempukku.libgdx.lib.graph.artemis.text.TextBlock;
+import com.gempukku.libgdx.lib.graph.artemis.text.TextComponent;
 import com.gempukku.startrek.card.*;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
@@ -122,20 +122,20 @@ public class CardInGameRenderingSystem extends BaseSystem {
         TextureReference missionTypeTexture = (TextureReference) cardTemplateSprite.getSprites().get(2).getProperties().get("Texture");
         missionTypeTexture.setRegion(cardDefinition.getMissionType().name());
 
-        SDF3DTextComponent sdfText = cardRepresentation.getComponent(SDF3DTextComponent.class);
-        if (sdfText != null) {
+        TextComponent text = cardRepresentation.getComponent(TextComponent.class);
+        if (text != null) {
             // Title
-            SDFTextBlock titleBlock = sdfText.getTextBlocks().get(0);
+            TextBlock titleBlock = text.getTextBlocks().get(0);
             titleBlock.setText(cardDefinition.getTitle());
             // Points
-            SDFTextBlock pointsBlock = sdfText.getTextBlocks().get(1);
+            TextBlock pointsBlock = text.getTextBlocks().get(1);
             pointsBlock.setText(String.valueOf(cardDefinition.getPoints()));
             // Span
-            SDFTextBlock spanBlock = sdfText.getTextBlocks().get(2);
+            TextBlock spanBlock = text.getTextBlocks().get(2);
             String span = cardDefinition.getQuadrant().getSymbol() + "[scale 0.8]" + cardDefinition.getSpan() + "[/scale]";
             spanBlock.setText(span);
             // Mission affiliations
-            SDFTextBlock affiliationsBlock = sdfText.getTextBlocks().get(3);
+            TextBlock affiliationsBlock = text.getTextBlocks().get(3);
             affiliationsBlock.setText(cardDefinition.getAffiliationsText());
         }
 
@@ -158,30 +158,30 @@ public class CardInGameRenderingSystem extends BaseSystem {
         String cardPath = "cardImages/set" + cardIdSplit[0] + "/" + cardIdSplit[1] + ".png";
         cardImageTexture.setRegion(cardPath);
 
-        SDF3DTextComponent sdfText = cardRepresentation.getComponent(SDF3DTextComponent.class);
-        if (sdfText != null) {
+        TextComponent text = cardRepresentation.getComponent(TextComponent.class);
+        if (text != null) {
             // Title
-            SDFTextBlock titleBlock = sdfText.getTextBlocks().get(0);
+            TextBlock titleBlock = text.getTextBlocks().get(0);
             String titleText = (cardDefinition.isUnique() ? "• " : "") + cardDefinition.getTitle();
             titleBlock.setText(titleText);
 
             // Subtitle
             String subtitle = cardDefinition.getSubtitle();
             if (subtitle != null) {
-                SDFTextBlock subtitleBlock = sdfText.getTextBlocks().get(1);
+                TextBlock subtitleBlock = text.getTextBlocks().get(1);
                 subtitleBlock.setText(subtitle);
             }
 
             // Cost
-            SDFTextBlock costBlock = sdfText.getTextBlocks().get(2);
+            TextBlock costBlock = text.getTextBlocks().get(2);
             costBlock.setText(String.valueOf(cardDefinition.getCost()));
 
             // Species
-            SDFTextBlock raceBlock = sdfText.getTextBlocks().get(3);
+            TextBlock raceBlock = text.getTextBlocks().get(3);
             raceBlock.setText(cardDefinition.getSpecies().toString());
 
             // Text
-            SDFTextBlock textBlock = sdfText.getTextBlocks().get(4);
+            TextBlock textBlock = text.getTextBlocks().get(4);
             textBlock.setText(createCardText(cardDefinition));
 
             // Icons
@@ -202,11 +202,11 @@ public class CardInGameRenderingSystem extends BaseSystem {
             }
 
             //Stats
-            SDFTextBlock integrityBlock = sdfText.getTextBlocks().get(5);
+            TextBlock integrityBlock = text.getTextBlocks().get(5);
             integrityBlock.setText("I[scale 0.8]NTEGRITY[/scale] " + cardDefinition.getIntegrity());
-            SDFTextBlock cunningBlock = sdfText.getTextBlocks().get(6);
+            TextBlock cunningBlock = text.getTextBlocks().get(6);
             cunningBlock.setText("C[scale 0.8]UNNING[/scale] " + cardDefinition.getCunning());
-            SDFTextBlock strengthBlock = sdfText.getTextBlocks().get(7);
+            TextBlock strengthBlock = text.getTextBlocks().get(7);
             strengthBlock.setText("S[scale 0.8]TRENGTH[/scale] " + cardDefinition.getStrength());
         }
         return cardRepresentation;

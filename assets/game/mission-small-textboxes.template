@@ -347,7 +347,7 @@
       }
     ]
   },
-  "com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextComponent": {
+  "com.gempukku.libgdx.lib.graph.artemis.text.TextComponent": {
     "textBlocks": [
       {
         "transform": {

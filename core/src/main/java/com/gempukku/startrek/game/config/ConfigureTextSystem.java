@@ -5,13 +5,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.SDF3DTextSystem;
-import com.gempukku.libgdx.lib.graph.artemis.sdf3dfont.parser.html.HtmlTextParser;
+import com.gempukku.libgdx.lib.graph.artemis.text.TextSystem;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.html.HtmlTextParser;
 
 import java.util.function.Function;
 
 public class ConfigureTextSystem extends BaseSystem {
-    private SDF3DTextSystem textSystem;
+    private TextSystem textSystem;
     private BitmapFontSystem bitmapFontSystem;
     private TextureSystem textureSystem;
 
