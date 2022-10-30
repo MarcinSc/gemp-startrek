@@ -6,7 +6,7 @@
     "center": {
       "x": 0,
       "y": 0,
-      "z": 0
+      "z": 0.2
     },
     "distance": 15,
     "yAxisAngle": 90,

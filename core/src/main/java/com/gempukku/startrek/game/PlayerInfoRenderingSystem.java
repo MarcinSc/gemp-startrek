@@ -81,7 +81,7 @@ public class PlayerInfoRenderingSystem extends BaseEntitySystem {
 
             PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(player.getName());
 
-            float zTranslate = playerPosition == PlayerPosition.Lower ? 0.13f : -0.13f;
+            float zTranslate = playerPosition == PlayerPosition.Lower ? 0.65f : -0.65f;
 
             Vector3 cameraRight = new Vector3(camera.direction).crs(camera.up);
 
