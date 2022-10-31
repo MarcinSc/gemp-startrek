@@ -4,7 +4,6 @@ import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
@@ -17,7 +16,7 @@ import com.gempukku.libgdx.graph.util.sprite.manager.MinimumSpriteRenderableMode
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
 
-public class SpriteBatchSystem extends BaseEntitySystem implements Disposable {
+public class SpriteBatchSystem extends BaseEntitySystem {
     private EvaluatePropertySystem evaluatePropertySystem;
     private PipelineRendererSystem pipelineRendererSystem;
 

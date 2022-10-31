@@ -7,7 +7,6 @@ import com.artemis.Entity;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
@@ -22,7 +21,7 @@ import com.gempukku.libgdx.lib.artemis.transform.TransformUpdated;
 import com.gempukku.libgdx.lib.graph.artemis.Vector2ValuePerVertex;
 import com.gempukku.libgdx.lib.graph.artemis.VectorUtil;
 
-public class SpriteSystem extends BaseEntitySystem implements Disposable {
+public class SpriteSystem extends BaseEntitySystem {
     private final IntMap<Array<SpriteDefinitionAdapter>> spriteMap = new IntMap<>();
 
     private ComponentMapper<SpriteComponent> spriteComponentMapper;
