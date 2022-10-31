@@ -4,10 +4,7 @@ import com.artemis.*;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.*;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.PropertyContainer;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
 import com.gempukku.libgdx.graph.plugin.models.GraphModels;
@@ -28,7 +25,7 @@ import com.gempukku.libgdx.lib.graph.artemis.VectorUtil;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
 
 public class SpriteSystem extends BaseSystem implements Disposable {
-    private final ObjectMap<String, TexturePagedSpriteBatchModel> spriteSystemMap = new ObjectMap<>();
+    private final ObjectMap<String, SpriteBatchModel> spriteSystemMap = new ObjectMap<>();
     private final IntMap<Array<SpriteDefinitionAdapter>> spriteMap = new IntMap<>();
 
     private ComponentMapper<SpriteComponent> spriteComponentMapper;
@@ -89,6 +86,10 @@ public class SpriteSystem extends BaseSystem implements Disposable {
                 );
     }
 
+    public SpriteBatchModel getSpriteBatchModel(String spriteSystemName) {
+        return spriteSystemMap.get(spriteSystemName);
+    }
+
     public void updateSprites(int entityId) {
         Entity spriteEntity = world.getEntity(entityId);
         SpriteComponent sprite = spriteEntity.getComponent(SpriteComponent.class);
@@ -139,27 +140,42 @@ public class SpriteSystem extends BaseSystem implements Disposable {
     }
 
     private void spriteSystemInserted(int entityId) {
-        SpriteSystemComponent spriteSystemComponent = spriteSystemComponentMapper.get(entityId);
+        SpriteSystemComponent spriteSystem = spriteSystemComponentMapper.get(entityId);
         GraphModels graphModels = pipelineRendererSystem.getPluginData(GraphModels.class);
 
-        String tag = spriteSystemComponent.getRenderTag();
-        TexturePagedSpriteBatchModel spriteModel = new TexturePagedSpriteBatchModel(graphModels, tag,
-                new SpriteBatchModelProducer() {
-                    @Override
-                    public SpriteBatchModel create(WritablePropertyContainer writablePropertyContainer) {
-                        return new MultiPageSpriteBatchModel(
-                                new MinimumSpriteRenderableModelManager(1, false, spriteSystemComponent.getSpritesPerPage(),
-                                        graphModels, tag), writablePropertyContainer);
-                    }
-                });
+        String tag = spriteSystem.getRenderTag();
+        SpriteBatchModel spriteModel = createSpriteBatchModel(spriteSystem, graphModels, tag);
 
         Entity entity = world.getEntity(entityId);
         WritablePropertyContainer propertyContainer = spriteModel.getPropertyContainer();
-        for (ObjectMap.Entry<String, Object> property : spriteSystemComponent.getProperties()) {
+        for (ObjectMap.Entry<String, Object> property : spriteSystem.getProperties()) {
             propertyContainer.setValue(property.key, evaluatePropertySystem.evaluateProperty(entity, property.value, Object.class));
         }
 
-        spriteSystemMap.put(spriteSystemComponent.getName(), spriteModel);
+        spriteSystemMap.put(spriteSystem.getName(), spriteModel);
+    }
+
+    private SpriteBatchModel createSpriteBatchModel(SpriteSystemComponent spriteSystem, GraphModels graphModels, String tag) {
+        SpriteSystemComponent.SystemType spriteSystemType = spriteSystem.getType();
+        if (spriteSystemType == SpriteSystemComponent.SystemType.TexturePaged) {
+            return new TexturePagedSpriteBatchModel(graphModels, tag,
+                    new SpriteBatchModelProducer() {
+                        @Override
+                        public SpriteBatchModel create(WritablePropertyContainer writablePropertyContainer) {
+                            return new MultiPageSpriteBatchModel(
+                                    new MinimumSpriteRenderableModelManager(
+                                            spriteSystem.getMinimumPages(), spriteSystem.isStaticBatch(), spriteSystem.getSpritesPerPage(),
+                                            graphModels, tag), writablePropertyContainer);
+                        }
+                    });
+        } else if (spriteSystemType == SpriteSystemComponent.SystemType.MultiPaged) {
+            return new MultiPageSpriteBatchModel(
+                    new MinimumSpriteRenderableModelManager(
+                            spriteSystem.getMinimumPages(), spriteSystem.isStaticBatch(), spriteSystem.getSpritesPerPage(),
+                            graphModels, tag));
+        } else {
+            throw new GdxRuntimeException("Unable to create SpriteBatchModel unknown type: " + spriteSystemType);
+        }
     }
 
     private void spriteSystemRemoved(int entityId) {
@@ -189,7 +205,7 @@ public class SpriteSystem extends BaseSystem implements Disposable {
     }
 
     public SpriteDefinitionAdapter addSprite(Entity spriteEntity, PropertyContainer propertyContainer, SpriteDefinition spriteDefinition) {
-        TexturePagedSpriteBatchModel spriteBatchModel = spriteSystemMap.get(spriteDefinition.getSpriteSystemName());
+        SpriteBatchModel spriteBatchModel = spriteSystemMap.get(spriteDefinition.getSpriteSystemName());
         return new SpriteDefinitionAdapter(propertyContainer, evaluatePropertySystem,
                 spriteBatchModel, spriteDefinition, spriteEntity);
     }

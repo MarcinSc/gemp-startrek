@@ -1,8 +1,8 @@
 {
   "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystemComponent": {
     "type": "TexturePaged",
-    "name": "ditherTexture",
-    "renderTag": "TextureDither",
+    "name": "ditherText",
+    "renderTag": "SdfText",
     "minimumPages": 1,
     "staticBatch": false
   }

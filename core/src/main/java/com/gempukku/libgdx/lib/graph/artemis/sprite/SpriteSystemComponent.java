@@ -4,10 +4,22 @@ import com.artemis.PooledComponent;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class SpriteSystemComponent extends PooledComponent {
+    public enum SystemType {
+        TexturePaged, MultiPaged
+    }
+
+    private SystemType type;
     private String name;
     private String renderTag;
+    private int minimumPages = 1;
+    private boolean staticBatch = true;
     private int spritesPerPage = 16383;
+
     private final ObjectMap<String, Object> properties = new ObjectMap<>();
+
+    public SystemType getType() {
+        return type;
+    }
 
     public String getName() {
         return name;
@@ -15,6 +27,14 @@ public class SpriteSystemComponent extends PooledComponent {
 
     public String getRenderTag() {
         return renderTag;
+    }
+
+    public int getMinimumPages() {
+        return minimumPages;
+    }
+
+    public boolean isStaticBatch() {
+        return staticBatch;
     }
 
     public int getSpritesPerPage() {
@@ -27,8 +47,11 @@ public class SpriteSystemComponent extends PooledComponent {
 
     @Override
     protected void reset() {
+        type = null;
         name = null;
         renderTag = null;
+        minimumPages = 1;
+        staticBatch = true;
         spritesPerPage = 16383;
         properties.clear();
     }

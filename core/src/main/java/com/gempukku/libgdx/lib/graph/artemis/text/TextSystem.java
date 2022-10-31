@@ -7,13 +7,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntMap;
-import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
-import com.gempukku.libgdx.graph.plugin.models.GraphModels;
-import com.gempukku.libgdx.graph.util.sprite.MultiPageSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
-import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModelProducer;
-import com.gempukku.libgdx.graph.util.sprite.TexturePagedSpriteBatchModel;
-import com.gempukku.libgdx.graph.util.sprite.manager.MinimumSpriteRenderableModelManager;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
@@ -34,19 +28,17 @@ public class TextSystem extends BaseEntitySystem {
 
     private final IntMap<Array<DisplayedText>> renderedTexts = new IntMap<>();
 
-    private SpriteBatchModel spriteBatchModel;
-
     private final GlyphOffseter glyphOffseter = new DefaultGlyphOffseter();
     private TextParser textParser;
-    private final String textTag;
+    private final String spriteSystemName;
 
-    public TextSystem(String textTag) {
-        this(textTag, new DefaultTextParser());
+    public TextSystem(String spriteSystemName) {
+        this(spriteSystemName, new DefaultTextParser());
     }
 
-    public TextSystem(String textTag, TextParser textParser) {
+    public TextSystem(String spriteSystemName, TextParser textParser) {
         super(Aspect.all(TextComponent.class));
-        this.textTag = textTag;
+        this.spriteSystemName = spriteSystemName;
         this.textParser = textParser;
     }
 
@@ -54,30 +46,16 @@ public class TextSystem extends BaseEntitySystem {
         this.textParser = textParser;
     }
 
-    private void initializeSpriteBatchModel() {
-        GraphModels graphModels = pipelineRendererSystem.getPluginData(GraphModels.class);
-        spriteBatchModel = new TexturePagedSpriteBatchModel(graphModels, textTag,
-                new SpriteBatchModelProducer() {
-                    @Override
-                    public SpriteBatchModel create(WritablePropertyContainer writablePropertyContainer) {
-                        return new MultiPageSpriteBatchModel(
-                                new MinimumSpriteRenderableModelManager(1, false, 1024, graphModels, textTag),
-                                writablePropertyContainer);
-                    }
-                });
-    }
-
     @Override
     protected void inserted(int entityId) {
-        if (spriteBatchModel == null) {
-            initializeSpriteBatchModel();
-        }
         addSprites(entityId);
     }
 
     private void addSprites(int entityId) {
         Entity textEntity = world.getEntity(entityId);
         Matrix4 resolvedTransform = transformSystem.getResolvedTransform(textEntity);
+
+        SpriteBatchModel spriteBatchModel = spriteSystem.getSpriteBatchModel(spriteSystemName);
 
         Array<DisplayedText> texts = new Array<>();
         TextComponent textComponent = textComponentMapper.get(entityId);

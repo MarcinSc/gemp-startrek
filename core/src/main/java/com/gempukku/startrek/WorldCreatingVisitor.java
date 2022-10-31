@@ -99,7 +99,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                         new JsonValueNetworkMessageMarshaller()),
 
                 new BitmapFontSystem(new RuntimeBitmapFontHandler()),
-                new TextSystem("SdfText"),
+                new TextSystem("ditherText"),
                 new ConfigureTextSystem(),
 
                 new AnimationDirectorSystem(),
@@ -116,15 +116,17 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
         World world = new World(worldConfigurationBuilder.build());
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
 
-        spawnSystem.spawnEntity("game/rendering.template");
-
+        // Setup
         Entity gameEntity = spawnSystem.spawnEntity("game/game.template");
         StarTrekGameComponent game = gameEntity.getComponent(StarTrekGameComponent.class);
         game.setGameId(gameId);
 
+        spawnSystem.spawnEntity("game/rendering.template");
         spawnSystem.spawnEntity("game/textureDither.template");
+        spawnSystem.spawnEntity("game/sdfText.template");
         spawnSystem.spawnEntity("game/camera.template");
         world.process();
+        // Create game entities
         spawnSystem.spawnEntity("game/playArea.template");
 
         return world;
