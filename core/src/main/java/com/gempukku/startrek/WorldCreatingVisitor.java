@@ -117,14 +117,12 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
 
         // Setup
-        Entity gameEntity = spawnSystem.spawnEntity("game/game.template");
+        spawnSystem.spawnEntities("game/gameSetup.entities");
+
+        Entity gameEntity = LazyEntityUtil.findEntityWithComponent(world, StarTrekGameComponent.class);
         StarTrekGameComponent game = gameEntity.getComponent(StarTrekGameComponent.class);
         game.setGameId(gameId);
 
-        spawnSystem.spawnEntity("game/rendering.template");
-        spawnSystem.spawnEntity("game/textureDither.template");
-        spawnSystem.spawnEntity("game/sdfText.template");
-        spawnSystem.spawnEntity("game/camera.template");
         world.process();
         // Create game entities
         spawnSystem.spawnEntity("game/playArea.template");

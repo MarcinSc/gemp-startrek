@@ -36,7 +36,7 @@ public class GenerateCardFiles {
                     }
                 });
         cardsJson.addChild("sets", setsArray);
-        IOUtil.writeText(cardsJson.toJson(JsonWriter.OutputType.json), new File(cardFolder, "cards.entities"));
+        IOUtil.writeText(cardsJson.toJson(JsonWriter.OutputType.json), new File(cardFolder, "cards.json"));
     }
 
     private static void processSetFolder(File setFolder) {

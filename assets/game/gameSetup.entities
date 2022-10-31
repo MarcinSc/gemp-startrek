@@ -1,0 +1,19 @@
+{
+  "entities": [
+    {
+      "tpl:extends": "game/game.template"
+    },
+    {
+      "tpl:extends": "game/rendering.template"
+    },
+    {
+      "tpl:extends": "game/textureDither.template"
+    },
+    {
+      "tpl:extends": "game/sdfText.template"
+    },
+    {
+      "tpl:extends": "game/camera.template"
+    }
+  ]
+}

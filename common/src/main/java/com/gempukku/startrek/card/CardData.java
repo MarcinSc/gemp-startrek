@@ -24,7 +24,7 @@ public class CardData {
                     }
                 });
 
-        JsonValue allCardsJson = JsonTemplateLoader.loadTemplateFromFile("card/cards.entities", new InternalFileHandleResolver());
+        JsonValue allCardsJson = JsonTemplateLoader.loadTemplateFromFile("card/cards.json", new InternalFileHandleResolver());
         JsonValue setsJson = allCardsJson.get("sets");
         for (JsonValue setJson : setsJson) {
             JsonValue cardsJson = setJson.get("cards");
