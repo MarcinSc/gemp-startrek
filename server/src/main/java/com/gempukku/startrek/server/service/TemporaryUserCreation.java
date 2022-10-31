@@ -39,7 +39,7 @@ public class TemporaryUserCreation {
                     deckSystem.getPlayerDeck("test1", "temp")));
             playersInfo.add(new PlayerGameInfo("test2", "test2", "red-shirt-male",
                     deckSystem.getPlayerDeck("test2", "temp")));
-            String gameId = gameHandler.createGame(playersInfo);
+            String gameId = gameHandler.createGame(playersInfo, true);
 
             SpawnSystem spawnSystem = hallWorld.getSystem(SpawnSystem.class);
             Entity hallGame = spawnSystem.spawnEntity("hall/hallGame.template");

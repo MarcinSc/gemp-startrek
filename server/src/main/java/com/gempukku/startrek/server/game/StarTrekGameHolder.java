@@ -47,8 +47,8 @@ public class StarTrekGameHolder implements Disposable {
 
     private final StackSystem stackSystem;
 
-    public StarTrekGameHolder(CardData cardData) {
-        gameWorld = createGameWorld(cardData);
+    public StarTrekGameHolder(CardData cardData, boolean test) {
+        gameWorld = createGameWorld(cardData, test);
 
         SpawnSystem spawnSystem = gameWorld.getSystem(SpawnSystem.class);
         spawnSystem.spawnEntity("game/executionStack.template");
@@ -64,7 +64,7 @@ public class StarTrekGameHolder implements Disposable {
         return gameWorld;
     }
 
-    private static World createGameWorld(CardData cardDataService) {
+    private static World createGameWorld(CardData cardDataService, boolean test) {
         WorldConfigurationBuilder worldConfigurationBuilder = new WorldConfigurationBuilder();
         worldConfigurationBuilder.with(
                 // Base systems
@@ -88,7 +88,7 @@ public class StarTrekGameHolder implements Disposable {
                 new SetupMissionCardsEffect(),
                 new PlaceAllDilemmasInDeckEffect(),
                 new PlaceAllCardsInDrawDeckEffect(),
-                new SetupTurnOrderEffect(),
+                new SetupTurnOrderEffect(test),
                 new SetTurnPlayerEffect(),
                 new SetTurnSegmentEffect(),
 

@@ -18,8 +18,11 @@ public class SetupTurnOrderEffect extends EffectSystem {
     private SpawnSystem spawnSystem;
     private StackSystem stackSystem;
 
-    public SetupTurnOrderEffect() {
+    private boolean test;
+
+    public SetupTurnOrderEffect(boolean test) {
         super("setupTurnOrder");
+        this.test = test;
     }
 
     @Override
@@ -45,7 +48,9 @@ public class SetupTurnOrderEffect extends EffectSystem {
             orderedPlayers.add(player);
         }
 
-        Collections.shuffle(orderedPlayers);
+        if (!test)
+            Collections.shuffle(orderedPlayers);
+
         return orderedPlayers;
     }
 }

@@ -52,10 +52,10 @@ public class StarTrekGameWebSocketHandler extends TextWebSocketHandler implement
         return "/game";
     }
 
-    public String createGame(Array<PlayerGameInfo> players) {
+    public String createGame(Array<PlayerGameInfo> players, boolean test) {
         String gameId = UUID.randomUUID().toString();
 
-        StarTrekGameHolder gameHolder = new StarTrekGameHolder(cardDataService.getCardData());
+        StarTrekGameHolder gameHolder = new StarTrekGameHolder(cardDataService.getCardData(), test);
 
         OneConnectionPerUserIntoContext gameContext = new OneConnectionPerUserIntoContext(
                 executor, gameHolder.getGameWorld().getSystem(RemoteEntityManagerHandler.class),

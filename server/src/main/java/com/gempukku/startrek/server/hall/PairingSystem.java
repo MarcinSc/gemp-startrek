@@ -90,7 +90,7 @@ public class PairingSystem extends BaseEntitySystem {
         Array<PlayerGameInfo> playersInfo = new Array<>();
         playersInfo.add(createPlayerGameInfo(player1));
         playersInfo.add(createPlayerGameInfo(player2));
-        String gameId = gameHandler.createGame(playersInfo);
+        String gameId = gameHandler.createGame(playersInfo, false);
 
         Entity hallGame = spawnSystem.spawnEntity("hall/hallGame.template");
         PlayedGameComponent game = hallGame.getComponent(PlayedGameComponent.class);

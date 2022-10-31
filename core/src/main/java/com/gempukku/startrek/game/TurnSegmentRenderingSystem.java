@@ -40,12 +40,12 @@ public class TurnSegmentRenderingSystem extends BaseSystem {
             lowerPlayerTurnProcedure = spawnSystem.spawnEntity("game/playerTurnProcedure.template");
             transformSystem.setTransform(lowerPlayerTurnProcedure,
                     new Matrix4()
-                            .translate(0, 0, -zTranslate));
+                            .translate(0, 0, zTranslate));
 
             upperPlayerTurnProcedure = spawnSystem.spawnEntity("game/playerTurnProcedure.template");
             transformSystem.setTransform(upperPlayerTurnProcedure,
                     new Matrix4()
-                            .translate(0, 0, zTranslate));
+                            .translate(0, 0, -zTranslate));
         }
 
         Entity turnSequenceEntity = LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class);
