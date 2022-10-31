@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 public class TextBlock {
+    private String spriteBatchName = null;
     private Matrix4 transform = new Matrix4();
     private Vector3 rightVector = new Vector3(1, 0, 0);
     private Vector3 upVector = new Vector3(0, 1, 0);
@@ -21,6 +22,10 @@ public class TextBlock {
     private TextHorizontalAlignment horizontalAlignment = TextHorizontalAlignment.left;
     private TextVerticalAlignment verticalAlignment = TextVerticalAlignment.top;
     private String bitmapFontPath;
+
+    public String getSpriteBatchName() {
+        return spriteBatchName;
+    }
 
     public Matrix4 getTransform() {
         return transform;

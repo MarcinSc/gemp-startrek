@@ -13,6 +13,7 @@ import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformUpdated;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
+import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteBatchSystem;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.GlyphOffseter;
@@ -21,6 +22,7 @@ import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextParser;
 
 public class TextSystem extends BaseEntitySystem {
     private BitmapFontSystem bitmapFontSystem;
+    private SpriteBatchSystem spriteBatchSystem;
     private SpriteSystem spriteSystem;
     private TransformSystem transformSystem;
     private PipelineRendererSystem pipelineRendererSystem;
@@ -30,16 +32,19 @@ public class TextSystem extends BaseEntitySystem {
 
     private final GlyphOffseter glyphOffseter = new DefaultGlyphOffseter();
     private TextParser textParser;
-    private final String spriteSystemName;
+    private String defaultSpriteBatchName;
 
-    public TextSystem(String spriteSystemName) {
-        this(spriteSystemName, new DefaultTextParser());
+    public TextSystem() {
+        this(new DefaultTextParser());
     }
 
-    public TextSystem(String spriteSystemName, TextParser textParser) {
+    public TextSystem(TextParser textParser) {
         super(Aspect.all(TextComponent.class));
-        this.spriteSystemName = spriteSystemName;
         this.textParser = textParser;
+    }
+
+    public void setDefaultSpriteBatchName(String defaultSpriteBatchName) {
+        this.defaultSpriteBatchName = defaultSpriteBatchName;
     }
 
     public void setTextParser(TextParser textParser) {
@@ -55,11 +60,15 @@ public class TextSystem extends BaseEntitySystem {
         Entity textEntity = world.getEntity(entityId);
         Matrix4 resolvedTransform = transformSystem.getResolvedTransform(textEntity);
 
-        SpriteBatchModel spriteBatchModel = spriteSystem.getSpriteBatchModel(spriteSystemName);
-
         Array<DisplayedText> texts = new Array<>();
         TextComponent textComponent = textComponentMapper.get(entityId);
         for (TextBlock textBlock : textComponent.getTextBlocks()) {
+            String spriteBatchName = textBlock.getSpriteBatchName();
+            if (spriteBatchName == null)
+                spriteBatchName = defaultSpriteBatchName;
+
+            SpriteBatchModel spriteBatchModel = spriteBatchSystem.getSpriteBatchModel(spriteBatchName);
+
             DisplayedText text = new DisplayedText(glyphOffseter, textParser, spriteBatchModel, bitmapFontSystem,
                     spriteSystem, resolvedTransform, textBlock);
             texts.add(text);

@@ -3,15 +3,15 @@ package com.gempukku.libgdx.lib.graph.artemis.sprite;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class SpriteDefinition {
-    private String spriteSystemName;
+    private String spriteBatchName;
     private ObjectMap<String, Object> properties = new ObjectMap<>();
 
-    public String getSpriteSystemName() {
-        return spriteSystemName;
+    public String getSpriteBatchName() {
+        return spriteBatchName;
     }
 
-    public void setSpriteSystemName(String spriteSystemName) {
-        this.spriteSystemName = spriteSystemName;
+    public void setSpriteBatchName(String spriteBatchName) {
+        this.spriteBatchName = spriteBatchName;
     }
 
     public ObjectMap<String, Object> getProperties() {

@@ -138,7 +138,7 @@ Color - character color
                     TextureRegion textureRegion = getTextureRegion(textStyle);
                     if (textureRegion != null) {
                         SpriteDefinition spriteDefinition = new SpriteDefinition();
-                        spriteDefinition.setSpriteSystemName(getSpriteSystemName(textStyle));
+                        spriteDefinition.setSpriteBatchName(getSpriteSystemName(textStyle));
                         spriteDefinition.getProperties().put("UV", SpriteSystem.uvAttribute);
                         float textureHeight = FontUtil.getFontAscent(bitmapFont);
                         float textureWidth = textureHeight * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();

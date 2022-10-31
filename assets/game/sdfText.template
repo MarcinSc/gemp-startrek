@@ -1,5 +1,5 @@
 {
-  "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystemComponent": {
+  "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteBatchComponent": {
     "type": "TexturePaged",
     "name": "ditherText",
     "renderTag": "SdfText",

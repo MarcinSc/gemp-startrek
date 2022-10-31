@@ -24,7 +24,7 @@
   "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent": {
     "sprites": [
       {
-        "spriteSystemName": "ditherTexture",
+        "spriteBatchName": "ditherTexture",
         "properties": {
           "UV": {
             "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
@@ -70,7 +70,7 @@
         }
       },
       {
-        "spriteSystemName": "ditherTexture",
+        "spriteBatchName": "ditherTexture",
         "properties": {
           "UV": {
             "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
@@ -116,7 +116,7 @@
         }
       },
       {
-        "spriteSystemName": "ditherTexture",
+        "spriteBatchName": "ditherTexture",
         "properties": {
           "UV": {
             "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
@@ -162,7 +162,7 @@
         }
       },
       {
-        "spriteSystemName": "ditherTexture",
+        "spriteBatchName": "ditherTexture",
         "properties": {
           "UV": {
             "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
@@ -208,7 +208,7 @@
         }
       },
       {
-        "spriteSystemName": "ditherTexture",
+        "spriteBatchName": "ditherTexture",
         "properties": {
           "UV": {
             "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
@@ -254,7 +254,7 @@
         }
       },
       {
-        "spriteSystemName": "ditherTexture",
+        "spriteBatchName": "ditherTexture",
         "properties": {
           "UV": {
             "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
@@ -300,7 +300,7 @@
         }
       },
       {
-        "spriteSystemName": "ditherTexture",
+        "spriteBatchName": "ditherTexture",
         "properties": {
           "UV": {
             "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"

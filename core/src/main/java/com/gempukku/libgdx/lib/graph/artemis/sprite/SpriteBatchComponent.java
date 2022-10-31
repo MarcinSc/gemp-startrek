@@ -3,7 +3,7 @@ package com.gempukku.libgdx.lib.graph.artemis.sprite;
 import com.artemis.PooledComponent;
 import com.badlogic.gdx.utils.ObjectMap;
 
-public class SpriteSystemComponent extends PooledComponent {
+public class SpriteBatchComponent extends PooledComponent {
     public enum SystemType {
         TexturePaged, MultiPaged
     }

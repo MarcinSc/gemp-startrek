@@ -42,6 +42,7 @@ public class ConfigureTextSystem extends BaseSystem {
 
         IconTagReplaceTextParser parser = new IconTagReplaceTextParser(htmlParser);
 
+        textSystem.setDefaultSpriteBatchName("ditherText");
         textSystem.setTextParser(parser);
     }
 

@@ -28,7 +28,7 @@ public class GameSetupTest {
     @Test
     public void gameSetupTest() {
         StarTrekDeck testDeck = createTestDeck();
-        StarTrekGameHolder gameHolder = new StarTrekGameHolder(cardData);
+        StarTrekGameHolder gameHolder = new StarTrekGameHolder(cardData, true);
         gameHolder.addPlayer(new PlayerGameInfo("test1", "test1", "test", testDeck));
         gameHolder.addPlayer(new PlayerGameInfo("test2", "test2", "test", testDeck));
         gameHolder.setupGame();
