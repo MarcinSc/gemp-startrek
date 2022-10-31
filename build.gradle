@@ -61,7 +61,8 @@ subprojects {
 			"../internal/image/scene", "../assets/atlas", "scene",
 			"../internal/image/cards", "../assets/atlas", "card-templates",
 			"../internal/image/icons", "../assets/atlas", "icons",
-			"../internal/image/avatar", "../assets/atlas", "avatars"
+			"../internal/image/avatar", "../assets/atlas", "avatars",
+			"../internal/image/ui", "../assets/atlas", "ui"
 	]
 	repositories {
 		mavenCentral()
