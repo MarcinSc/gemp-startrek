@@ -4,6 +4,7 @@ import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
+import com.artemis.annotations.Wire;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
@@ -13,12 +14,23 @@ import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.SpriteBatchModelProducer;
 import com.gempukku.libgdx.graph.util.sprite.TexturePagedSpriteBatchModel;
 import com.gempukku.libgdx.graph.util.sprite.manager.MinimumSpriteRenderableModelManager;
+import com.gempukku.libgdx.graph.util.sprite.model.QuadSpriteModel;
+import com.gempukku.libgdx.graph.util.sprite.model.SpriteModel;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
+import com.gempukku.libgdx.lib.artemis.shape.ShapeSystem;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
 
+// Should not be necessary, as we only want to make the ShapeSystem optional, but
+// that is what I consider a bug in Artemis, where it doesn't work, if you just
+// put it on field.
+@Wire(failOnNull = false)
 public class SpriteBatchSystem extends BaseEntitySystem {
     private EvaluatePropertySystem evaluatePropertySystem;
     private PipelineRendererSystem pipelineRendererSystem;
+    @Wire(failOnNull = false)
+    private ShapeSystem shapeSystem;
+
+    private SpriteModel defaultSpriteModel = new QuadSpriteModel();
 
     private ComponentMapper<SpriteBatchComponent> spriteBatchComponentMapper;
 
@@ -30,6 +42,10 @@ public class SpriteBatchSystem extends BaseEntitySystem {
 
     public SpriteBatchModel getSpriteBatchModel(String spriteBatchName) {
         return spriteBatchMap.get(spriteBatchName);
+    }
+
+    public void setDefaultSpriteModel(SpriteModel defaultSpriteModel) {
+        this.defaultSpriteModel = defaultSpriteModel;
     }
 
     @Override
@@ -49,8 +65,9 @@ public class SpriteBatchSystem extends BaseEntitySystem {
         spriteBatchMap.put(spriteSystem.getName(), spriteModel);
     }
 
-    private SpriteBatchModel createSpriteBatchModel(SpriteBatchComponent spriteSystem, GraphModels graphModels, String tag) {
-        SpriteBatchComponent.SystemType spriteSystemType = spriteSystem.getType();
+    private SpriteBatchModel createSpriteBatchModel(SpriteBatchComponent spriteBatch, GraphModels graphModels, String tag) {
+        SpriteModel spriteModel = getSpriteModel(spriteBatch);
+        SpriteBatchComponent.SystemType spriteSystemType = spriteBatch.getType();
         if (spriteSystemType == SpriteBatchComponent.SystemType.TexturePaged) {
             return new TexturePagedSpriteBatchModel(graphModels, tag,
                     new SpriteBatchModelProducer() {
@@ -58,17 +75,31 @@ public class SpriteBatchSystem extends BaseEntitySystem {
                         public SpriteBatchModel create(WritablePropertyContainer writablePropertyContainer) {
                             return new MultiPageSpriteBatchModel(
                                     new MinimumSpriteRenderableModelManager(
-                                            spriteSystem.getMinimumPages(), spriteSystem.isStaticBatch(), spriteSystem.getSpritesPerPage(),
-                                            graphModels, tag), writablePropertyContainer);
+                                            spriteBatch.getMinimumPages(), spriteBatch.isStaticBatch(), spriteBatch.getSpritesPerPage(),
+                                            graphModels, tag, spriteModel), writablePropertyContainer);
                         }
                     });
         } else if (spriteSystemType == SpriteBatchComponent.SystemType.MultiPaged) {
             return new MultiPageSpriteBatchModel(
                     new MinimumSpriteRenderableModelManager(
-                            spriteSystem.getMinimumPages(), spriteSystem.isStaticBatch(), spriteSystem.getSpritesPerPage(),
-                            graphModels, tag));
+                            spriteBatch.getMinimumPages(), spriteBatch.isStaticBatch(), spriteBatch.getSpritesPerPage(),
+                            graphModels, tag, spriteModel));
         } else {
             throw new GdxRuntimeException("Unable to create SpriteBatchModel unknown type: " + spriteSystemType);
+        }
+    }
+
+    private SpriteModel getSpriteModel(SpriteBatchComponent spriteBatch) {
+        String shapeName = spriteBatch.getShapeName();
+        if (shapeName != null) {
+            if (shapeSystem == null)
+                throw new GdxRuntimeException("Sprite batch has shape name defined, but no ShapeSystem is in context");
+
+            short[] indices = shapeSystem.getIndices(shapeName);
+            int vertexCount = shapeSystem.getVertexCount(shapeName);
+            return new DefaultSpriteModel(vertexCount, indices);
+        } else {
+            return defaultSpriteModel;
         }
     }
 
