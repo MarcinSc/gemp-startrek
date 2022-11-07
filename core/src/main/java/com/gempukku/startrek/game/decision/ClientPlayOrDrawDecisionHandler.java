@@ -32,15 +32,22 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     public void processNewDecision(JsonValue decisionData) {
         Stage stage = stageSystem.getStage();
 
-        Entity playerEntity = playerPositionSystem.getPlayerEntity(authenticationHolderSystem.getUsername());
-        PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
-        System.out.println("Deck count: " + publicStats.getDeckCount());
-        System.out.println("Counter count: " + publicStats.getCounterCount());
-        if (publicStats.getDeckCount() > 0 && publicStats.getCounterCount() > 0) {
-            Table table = new Table();
-            table.setFillParent(true);
-            VerticalGroup verticalGroup = new VerticalGroup();
+        Table table = new Table();
+        table.setFillParent(true);
 
+        VerticalGroup verticalGroup = new VerticalGroup();
+
+        Entity playerEntity = playerPositionSystem.getPlayerEntity(authenticationHolderSystem.getUsername());
+        checkForDraw(table, verticalGroup, playerEntity);
+
+        table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
+
+        stage.addActor(table);
+    }
+
+    private void checkForDraw(Table table, VerticalGroup verticalGroup, Entity playerEntity) {
+        PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
+        if (publicStats.getDeckCount() > 0 && publicStats.getCounterCount() > 0) {
             TextButton drawCardButton = new TextButton("Draw a card", stageSystem.getSkin(), UISettings.mainButtonStyle);
             drawCardButton.addListener(
                     new ClickListener() {
@@ -53,10 +60,19 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
                         }
                     });
             verticalGroup.addActor(drawCardButton);
-
-            table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
-
-            stage.addActor(table);
+        } else {
+            TextButton passButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.mainButtonStyle);
+            passButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            table.remove();
+                            ObjectMap<String, String> parameters = new ObjectMap<>();
+                            parameters.put("action", "pass");
+                            clientDecisionSystem.executeDecision(parameters);
+                        }
+                    });
+            verticalGroup.addActor(passButton);
         }
     }
 

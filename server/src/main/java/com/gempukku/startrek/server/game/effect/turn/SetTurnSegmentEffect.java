@@ -1,6 +1,7 @@
 package com.gempukku.startrek.server.game.effect.turn;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.LazyEntityUtil;
@@ -17,7 +18,7 @@ public class SetTurnSegmentEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
         TurnSegment turnSegment = TurnSegment.valueOf(gameEffect.getDataString("segment"));
         Entity turnEntity = LazyEntityUtil.findEntityWithComponent(world, TurnComponent.class);
         TurnComponent turn = turnEntity.getComponent(TurnComponent.class);

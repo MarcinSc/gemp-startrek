@@ -2,6 +2,7 @@ package com.gempukku.startrek.server.game.stack;
 
 import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
+import com.artemis.Component;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
@@ -25,6 +26,16 @@ public class StackSystem extends BaseEntitySystem {
     public Entity getTopMostStackEntity() {
         Array<Integer> entityIds = executionStack.getEntityIds();
         return world.getEntity(entityIds.get(entityIds.size - 1));
+    }
+
+    public Entity getTopMostStackEntityWithComponent(Class<? extends Component> clazz) {
+        Array<Integer> entityIds = executionStack.getEntityIds();
+        for (int i = entityIds.size - 1; i >= 0; i--) {
+            Entity entity = world.getEntity(entityIds.get(i));
+            if (entity.getComponent(clazz) != null)
+                return entity;
+        }
+        return null;
     }
 
     public void processStack() {

@@ -8,6 +8,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
+import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.stack.StackSystem;
@@ -33,6 +34,8 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
         PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         if (action.equals("draw") && publicStats.getCounterCount() > 0 && publicStats.getDeckCount() > 0) {
             return true;
+        } else if (action.equals("pass") && (publicStats.getCounterCount() == 0 || publicStats.getDeckCount() == 0)) {
+            return true;
         }
         return false;
     }
@@ -52,6 +55,10 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
             data.addChild("player", new JsonValue("username(" + decisionPlayer + ")"));
             gameEffect.setData(data);
             stackSystem.stackEntity(drawCardEffect);
+        } else if (action.equals("pass")) {
+            Entity effectMemoryEntity = stackSystem.getTopMostStackEntityWithComponent(EffectMemoryComponent.class);
+            EffectMemoryComponent effectMemory = effectMemoryEntity.getComponent(EffectMemoryComponent.class);
+            effectMemory.getMemory().put("playerFinished", "true");
         }
     }
 

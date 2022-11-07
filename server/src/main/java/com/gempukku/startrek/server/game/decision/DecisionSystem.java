@@ -33,10 +33,14 @@ public class DecisionSystem extends EffectSystem {
         PlayerDecisionComponent playerDecision = stackSystem.getTopMostStackEntity().getComponent(PlayerDecisionComponent.class);
         if (playerDecision != null && playerDecision.getOwner().equals(decisionMade.getOrigin())) {
             if (validateDecision(playerDecision, decisionMade.getParameters())) {
+                // Process and remove decision entity
                 Entity decisionEntity = stackSystem.removeTopStackEntity();
-                world.deleteEntity(decisionEntity);
+                Entity sendDecisionEntity = stackSystem.removeTopStackEntity();
                 processDecisionAnswer(playerDecision, decisionMade.getParameters());
+                world.deleteEntity(decisionEntity);
+                world.deleteEntity(sendDecisionEntity);
             } else {
+                System.out.println("Invalid decision made!");
                 // Invalid decision was made - next processing will re-create the decision
                 Entity decisionEntity = stackSystem.removeTopStackEntity();
                 world.deleteEntity(decisionEntity);
@@ -54,9 +58,9 @@ public class DecisionSystem extends EffectSystem {
     }
 
     @Override
-    public boolean processEndingEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    public boolean processEndingEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
         String player = gameEffect.getDataString("player");
-        Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, gameEffect.getMemory(), player);
+        Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, memory, player);
 
         Entity decisionEntity = world.createEntity();
         PlayerDecisionComponent decision = playerDecisionComponentMapper.create(decisionEntity);
@@ -88,7 +92,7 @@ public class DecisionSystem extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
         // Ignore
     }
 }

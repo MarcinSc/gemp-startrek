@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game.condition;
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.expression.Expression;
 import com.gempukku.startrek.expression.ExpressionSystem;
@@ -27,6 +28,30 @@ public class ConditionResolverSystem extends BaseSystem {
                         return true;
                     }
                 });
+        registerConditionHandler("and",
+                new ConditionHandler() {
+                    @Override
+                    public boolean resolveCondition(String type, Entity sourceEntity, ObjectMap<String, String> memory, Array<String> parameters) {
+                        for (String parameter : parameters) {
+                            if (!resolveBoolean(sourceEntity, memory, parameter))
+                                return false;
+                        }
+
+                        return true;
+                    }
+                });
+        registerConditionHandler("or",
+                new ConditionHandler() {
+                    @Override
+                    public boolean resolveCondition(String type, Entity sourceEntity, ObjectMap<String, String> memory, Array<String> parameters) {
+                        for (String parameter : parameters) {
+                            if (resolveBoolean(sourceEntity, memory, parameter))
+                                return true;
+                        }
+
+                        return false;
+                    }
+                });
     }
 
     public void registerConditionHandler(String effectType, ConditionHandler conditionHandler) {
@@ -39,7 +64,7 @@ public class ConditionResolverSystem extends BaseSystem {
             String type = expression.getType();
             ConditionHandler conditionHandler = conditionHandlers.get(type);
             if (conditionHandler == null)
-                throw new RuntimeException("Unable to find condition handler: " + type);
+                throw new GdxRuntimeException("Unable to find condition handler: " + type);
 
             boolean result = conditionHandler.resolveCondition(type, sourceEntity, memory, expression.getParameters());
             if (!result)

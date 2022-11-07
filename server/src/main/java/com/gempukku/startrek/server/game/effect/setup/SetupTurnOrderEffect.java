@@ -2,6 +2,7 @@ package com.gempukku.startrek.server.game.effect.setup;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.GameComponent;
@@ -26,7 +27,7 @@ public class SetupTurnOrderEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
         GameComponent game = LazyEntityUtil.findEntityWithComponent(world, GameComponent.class).getComponent(GameComponent.class);
 
         Entity turnSequenceEntity = spawnSystem.spawnEntity("game/turnSequence.template");

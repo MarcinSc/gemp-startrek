@@ -1,4 +1,7 @@
 {
+  "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
+    "memoryType": "playAndDrawCardsSegment"
+  },
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
     "type": "sequence",
     "data": {
@@ -14,19 +17,12 @@
         },
         {
           "type": "stackUntil",
-          "condition": "memoryHas(playerFinished,true),or(counterCount(currentPlayer,0),playerDeckCount(currentPlayer,0))",
+          "memory": true,
+          "condition": "memoryHas(playerFinished,true),or(counterCount(currentPlayer,0),deckCount(currentPlayer,0))",
           "action": {
-            "type": "sequence",
-            "actions": [
-              {
-                "type": "sendDecisionToPlayer",
-                "player": "currentPlayer",
-                "decisionType": "playOrDrawDecision"
-              },
-              {
-                "type": "playoutPlayOrDrawDecision"
-              }
-            ]
+            "type": "sendDecisionToPlayer",
+            "player": "currentPlayer",
+            "decisionType": "playOrDrawDecision"
           }
         }
       ]

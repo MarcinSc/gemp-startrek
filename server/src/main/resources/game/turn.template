@@ -1,5 +1,8 @@
 {
   "com.gempukku.startrek.game.turn.TurnComponent": {},
+  "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
+    "memoryType": "turn"
+  },
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
     "type": "sequence",
     "data": {

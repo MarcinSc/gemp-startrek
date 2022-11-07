@@ -1,6 +1,7 @@
 package com.gempukku.startrek.server.game.effect.setup;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.LazyEntityUtil;
@@ -27,8 +28,8 @@ public class PlaceAllDilemmasInDeckEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        String player = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, gameEffect.getMemory(),
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+        String player = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, memory,
                 gameEffect.getDataString("player"));
         Entity playerEntity = playerResolverSystem.findPlayerEntity(player);
         PlayerDilemmaPileComponent dilemmaPile = playerEntity.getComponent(PlayerDilemmaPileComponent.class);

@@ -22,6 +22,8 @@ import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
 import com.gempukku.startrek.server.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.server.game.condition.ConditionResolverSystem;
+import com.gempukku.startrek.server.game.condition.CounterCountConditionHandler;
+import com.gempukku.startrek.server.game.condition.DeckCountConditionHandler;
 import com.gempukku.startrek.server.game.condition.MemoryConditionHandler;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.decision.PlayOrDrawDecisionHandler;
@@ -83,6 +85,8 @@ public class StarTrekGameHolder implements Disposable {
 
                 new ConditionResolverSystem(),
                 new MemoryConditionHandler(),
+                new CounterCountConditionHandler(),
+                new DeckCountConditionHandler(),
 
                 // Setup effects
                 new SetupMissionsEffect(),

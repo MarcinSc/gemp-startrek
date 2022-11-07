@@ -4,38 +4,46 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
 import com.gempukku.startrek.server.game.condition.ConditionResolverSystem;
+import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 
 public class LoopEffect extends EffectSystem {
     private ConditionResolverSystem conditionResolverSystem;
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
+    private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;
 
     public LoopEffect() {
         super("stackUntil", "stackUntilInTurnOrder");
     }
 
     @Override
-    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
         String effectType = gameEffect.getType();
         if (effectType.equals("stackUntil")) {
-            stackUntil(gameEffectEntity, gameEffect);
+            stackUntil(gameEffectEntity, gameEffect, memory);
         } else if (effectType.equals("stackUntilInTurnOrder")) {
-            stackUntilInTurnOrder(gameEffectEntity, gameEffect);
+            stackUntilInTurnOrder(gameEffectEntity, gameEffect, memory);
         }
     }
 
-    private void stackUntil(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        boolean result = conditionResolverSystem.resolveBoolean(gameEffectEntity, gameEffect.getMemory(),
-                gameEffect.getDataString("condition"));
+    private void stackUntil(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+        String condition = gameEffect.getDataString("condition");
+        boolean result = conditionResolverSystem.resolveBoolean(gameEffectEntity, memory, condition);
         if (!result) {
             Entity stackedEntity = world.createEntity();
-            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
             JsonValue action = gameEffect.getClonedDataObject("action");
-            newGameEffect.setType(action.getString("type"));
+            String actionType = action.getString("type");
+            boolean createMemory = action.getBoolean("memory", false);
+            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
+            if (createMemory) {
+                effectMemoryComponentMapper.create(stackedEntity).setMemoryType("action - " + actionType);
+            }
+            newGameEffect.setType(actionType);
             newGameEffect.setData(action);
 
             stackEffect(stackedEntity);
@@ -44,15 +52,15 @@ public class LoopEffect extends EffectSystem {
         }
     }
 
-    private void stackUntilInTurnOrder(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        boolean condition = conditionResolverSystem.resolveBoolean(gameEffectEntity, gameEffect.getMemory(),
+    private void stackUntilInTurnOrder(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+        boolean condition = conditionResolverSystem.resolveBoolean(gameEffectEntity, memory,
                 gameEffect.getDataString("condition"));
         if (!condition) {
             TurnSequenceComponent turnSequence = LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class).
                     getComponent(TurnSequenceComponent.class);
             Array<String> players = turnSequence.getPlayers();
 
-            String playerIndex = gameEffect.getMemory().get("playerIndex");
+            String playerIndex = memory.get("playerIndex");
             int nextPlayerIndex = 0;
             if (playerIndex != null) {
                 nextPlayerIndex = Integer.parseInt(playerIndex) + 1;
@@ -63,13 +71,18 @@ public class LoopEffect extends EffectSystem {
 
             String player = players.get(nextPlayerIndex);
             JsonValue action = gameEffect.getClonedDataObject("action");
+            String actionType = action.getString("type");
+            boolean createMemory = action.getBoolean("memory", false);
 
             action.addChild("player", new JsonValue("username(" + player + ")"));
             Entity stackedEntity = world.createEntity();
             GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-            newGameEffect.setType(action.getString("type"));
+            if (createMemory) {
+                effectMemoryComponentMapper.create(stackedEntity).setMemoryType("action - " + actionType);
+            }
+            newGameEffect.setType(actionType);
             newGameEffect.setData(action);
-            gameEffect.getMemory().put("playerIndex", String.valueOf(nextPlayerIndex));
+            memory.put("playerIndex", String.valueOf(nextPlayerIndex));
 
             stackEffect(stackedEntity);
         } else {

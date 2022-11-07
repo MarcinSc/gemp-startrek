@@ -2,13 +2,11 @@ package com.gempukku.startrek.server.game.effect;
 
 import com.artemis.Component;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.server.JsonValueHandler;
 
 public class GameEffectComponent extends Component {
     private String type;
     private JsonValue data;
-    private ObjectMap<String, String> memory = new ObjectMap<>();
 
     public String getType() {
         return type;
@@ -34,7 +32,9 @@ public class GameEffectComponent extends Component {
         return data.getString(name);
     }
 
-    public ObjectMap<String, String> getMemory() {
-        return memory;
+    public boolean getDataBoolean(String name, boolean defaultValue) {
+        if (data.has(name))
+            return data.getBoolean(name);
+        return defaultValue;
     }
 }

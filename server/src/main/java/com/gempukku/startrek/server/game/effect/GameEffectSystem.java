@@ -2,11 +2,14 @@ package com.gempukku.startrek.server.game.effect;
 
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
+import com.gempukku.startrek.server.game.stack.StackSystem;
 
 public class GameEffectSystem extends BaseSystem {
+    private StackSystem stackSystem;
     private ObjectMap<String, GameEffectHandler> gameEffectHandlers = new ObjectMap<>();
 
     public void registerGameEffectHandler(String effectType, GameEffectHandler gameEffectHandler) {
@@ -22,7 +25,15 @@ public class GameEffectSystem extends BaseSystem {
             if (gameEffectHandler == null) {
                 throw new RuntimeException("Unable to find game effect handler for type: " + type);
             }
-            action.setFinishedProcessing(gameEffectHandler.processEndingEffect(gameEffectEntity, gameEffect));
+            Entity effectMemoryEntity = stackSystem.getTopMostStackEntityWithComponent(EffectMemoryComponent.class);
+            if (effectMemoryEntity == null)
+                throw new GdxRuntimeException("Unable to find an effect with memory on the stack");
+
+            EffectMemoryComponent effectMemory = effectMemoryEntity.getComponent(EffectMemoryComponent.class);
+            System.out.println("Processing effect: " + type);
+            System.out.println("Memory type: " + effectMemory.getMemoryType());
+            action.setFinishedProcessing(gameEffectHandler.processEndingEffect(gameEffectEntity, gameEffect,
+                    effectMemory.getMemory()));
         }
     }
 

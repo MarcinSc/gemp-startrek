@@ -17,17 +17,16 @@ public class RepeatEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
+    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
         String type = gameEffect.getType();
         if (type.equals("repeat")) {
-            repeat(gameEffectEntity, gameEffect);
+            repeat(gameEffectEntity, gameEffect, memory);
         } else if (type.equals("repeatForPlayer")) {
-            repeatForPlayer(gameEffectEntity, gameEffect);
+            repeatForPlayer(gameEffectEntity, gameEffect, memory);
         }
     }
 
-    private void repeat(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        ObjectMap<String, String> memory = gameEffect.getMemory();
+    private void repeat(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
         int times = amountResolverSystem.resolveAmount(gameEffectEntity, memory,
                 gameEffect.getDataString("times"));
 
@@ -53,8 +52,7 @@ public class RepeatEffect extends EffectSystem {
         }
     }
 
-    private void repeatForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        ObjectMap<String, String> memory = gameEffect.getMemory();
+    private void repeatForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
         int times = amountResolverSystem.resolveAmount(gameEffectEntity, memory,
                 gameEffect.getDataString("times"));
         String player = gameEffect.getDataString("player");

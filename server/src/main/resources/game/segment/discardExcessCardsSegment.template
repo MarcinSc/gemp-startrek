@@ -1,7 +1,11 @@
 {
+  "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
+    "memoryType": "discardExcessCardsSegment"
+  },
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
     "type": "sequence",
     "data": {
+      "memory": true,
       "actions": [
         {
           "type": "setTurnSegment",

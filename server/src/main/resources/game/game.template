@@ -1,13 +1,18 @@
 {
   "com.gempukku.startrek.game.GameComponent": {},
+  "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
+    "memoryType": "game"
+  },
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
     "type": "sequence",
     "data": {
       "actions": [
         {
           "type": "stackForEachPlayer",
+          "memory": true,
           "action": {
             "type": "sequenceForPlayer",
+            "memory": true,
             "actions": [
               {
                 "type": "setupMissions"
@@ -31,6 +36,7 @@
               },
               {
                 "type": "repeatForPlayer",
+                "memory": true,
                 "times": 7,
                 "action": {
                   "type": "drawCard"
