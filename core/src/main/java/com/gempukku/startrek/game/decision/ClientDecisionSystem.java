@@ -30,7 +30,7 @@ public class ClientDecisionSystem extends BaseEntitySystem {
     }
 
     public void executeDecision(ObjectMap<String, String> parameters) {
-        if (!processingDecision) {
+        if (processingDecision) {
             Entity decisionEntity = LazyEntityUtil.findEntityWithComponent(world, PlayerDecisionComponent.class);
             eventSystem.fireEvent(new DecisionMade(parameters), decisionEntity);
 

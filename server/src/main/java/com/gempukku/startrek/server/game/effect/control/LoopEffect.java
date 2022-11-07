@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
+import com.gempukku.startrek.server.JsonValueHandler;
 import com.gempukku.startrek.server.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -34,7 +35,7 @@ public class LoopEffect extends EffectSystem {
         if (!result) {
             Entity stackedEntity = world.createEntity();
             GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-            JsonValue action = gameEffect.getData().get("action");
+            JsonValue action = JsonValueHandler.clone(gameEffect.getData().get("action"));
             newGameEffect.setType(action.getString("type"));
             newGameEffect.setData(action);
 
@@ -62,9 +63,8 @@ public class LoopEffect extends EffectSystem {
                 nextPlayerIndex = 0;
 
             String player = players.get(nextPlayerIndex);
-            JsonValue action = gameEffect.getData().get("action");
+            JsonValue action = JsonValueHandler.clone(gameEffect.getData().get("action"));
 
-            action.remove("player");
             action.addChild("player", new JsonValue("username(" + player + ")"));
             Entity stackedEntity = world.createEntity();
             GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);

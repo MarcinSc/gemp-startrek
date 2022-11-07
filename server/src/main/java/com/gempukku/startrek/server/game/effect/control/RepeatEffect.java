@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.server.JsonValueHandler;
 import com.gempukku.startrek.server.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -39,7 +40,7 @@ public class RepeatEffect extends EffectSystem {
         if (executedTimes < times) {
             Entity stackedEntity = world.createEntity();
             GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-            JsonValue action = gameEffect.getData().get("action");
+            JsonValue action = JsonValueHandler.clone(gameEffect.getData().get("action"));
             newGameEffect.setType(action.getString("type"));
             newGameEffect.setData(action);
 
@@ -66,8 +67,7 @@ public class RepeatEffect extends EffectSystem {
         if (executedTimes < times) {
             Entity stackedEntity = world.createEntity();
             GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-            JsonValue action = gameEffect.getData().get("action");
-            action.remove("player");
+            JsonValue action = JsonValueHandler.clone(gameEffect.getData().get("action"));
             action.addChild("player", new JsonValue(player));
             newGameEffect.setType(action.getString("type"));
             newGameEffect.setData(action);

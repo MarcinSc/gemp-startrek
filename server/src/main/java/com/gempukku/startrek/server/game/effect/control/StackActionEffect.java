@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.GameComponent;
+import com.gempukku.startrek.server.JsonValueHandler;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 
@@ -43,9 +44,8 @@ public class StackActionEffect extends EffectSystem {
             removeEffectFromStack(gameEffectEntity);
         } else {
             String player = players.get(nextPlayerIndex);
-            JsonValue action = gameEffect.getData().get("action");
+            JsonValue action = JsonValueHandler.clone(gameEffect.getData().get("action"));
 
-            action.remove("player");
             action.addChild("player", new JsonValue("username(" + player + ")"));
             Entity stackedEntity = world.createEntity();
             GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
