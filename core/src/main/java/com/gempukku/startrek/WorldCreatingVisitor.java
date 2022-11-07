@@ -39,6 +39,8 @@ import com.gempukku.startrek.common.FontProviderSystem;
 import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.game.*;
 import com.gempukku.startrek.game.config.ConfigureTextSystem;
+import com.gempukku.startrek.game.decision.ClientDecisionSystem;
+import com.gempukku.startrek.game.decision.ClientPlayOrDrawDecisionHandler;
 import com.gempukku.startrek.hall.*;
 import com.gempukku.startrek.login.LoginScreenRenderer;
 
@@ -112,6 +114,12 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
 
                 new CardLookupSystem(cardData),
                 new PlayerPositionSystem(),
+
+                // Decision-related
+                new ClientDecisionSystem(),
+                new ClientPlayOrDrawDecisionHandler(),
+
+                // Rendering
                 new CardInGameRenderingSystem(),
                 new PlayerInfoRenderingSystem(),
                 new TurnSegmentRenderingSystem());

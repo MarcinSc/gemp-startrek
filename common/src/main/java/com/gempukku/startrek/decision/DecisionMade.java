@@ -2,7 +2,9 @@ package com.gempukku.startrek.decision;
 
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.network.EventFromClient;
+import com.gempukku.libgdx.network.SendToServer;
 
+@SendToServer
 public class DecisionMade extends EventFromClient {
     private ObjectMap<String, String> parameters;
 

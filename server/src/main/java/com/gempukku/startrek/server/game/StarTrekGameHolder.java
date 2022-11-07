@@ -25,11 +25,12 @@ import com.gempukku.startrek.server.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.server.game.condition.MemoryConditionHandler;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.decision.PlayOrDrawDecisionHandler;
-import com.gempukku.startrek.server.game.deck.DrawCardsEffect;
+import com.gempukku.startrek.server.game.deck.DrawCardEffect;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.deck.ShuffleDeckEffect;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 import com.gempukku.startrek.server.game.effect.control.LoopEffect;
+import com.gempukku.startrek.server.game.effect.control.RepeatEffect;
 import com.gempukku.startrek.server.game.effect.control.SequenceEffect;
 import com.gempukku.startrek.server.game.effect.control.StackActionEffect;
 import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
@@ -97,6 +98,7 @@ public class StarTrekGameHolder implements Disposable {
 
                 // Control game effects
                 new LoopEffect(),
+                new RepeatEffect(),
                 new SequenceEffect(),
                 new StackActionEffect(),
 
@@ -104,7 +106,7 @@ public class StarTrekGameHolder implements Disposable {
                 new PlayerCounterEffect(),
                 new ShuffleDeckEffect(),
                 new DecisionSystem(),
-                new DrawCardsEffect(),
+                new DrawCardEffect(),
 
                 // Decision handlers
                 new PlayOrDrawDecisionHandler(),

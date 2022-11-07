@@ -75,7 +75,7 @@ public class DecisionSystem extends EffectSystem {
         if (decisionTypeHandler == null)
             throw new RuntimeException("Unable to locate DecisionTypeHandler for type: " + decisionType);
 
-        return decisionTypeHandler.validateDecision(decisionType, playerDecision.getData(), parameters);
+        return decisionTypeHandler.validateDecision(playerDecision.getOwner(), playerDecision.getData(), parameters);
     }
 
     private void processDecisionAnswer(PlayerDecisionComponent playerDecision, ObjectMap<String, String> parameters) {
@@ -84,7 +84,7 @@ public class DecisionSystem extends EffectSystem {
         if (decisionTypeHandler == null)
             throw new RuntimeException("Unable to locate DecisionTypeHandler for type: " + decisionType);
 
-        decisionTypeHandler.processDecision(decisionType, playerDecision.getData(), parameters);
+        decisionTypeHandler.processDecision(playerDecision.getOwner(), playerDecision.getData(), parameters);
     }
 
     @Override

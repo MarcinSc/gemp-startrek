@@ -30,8 +30,11 @@
                 "deck": "drawDeck"
               },
               {
-                "type": "drawCards",
-                "amount": 7
+                "type": "repeatForPlayer",
+                "times": 7,
+                "action": {
+                  "type": "drawCard"
+                }
               }
             ]
           }

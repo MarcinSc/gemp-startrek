@@ -1,0 +1,6 @@
+{
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "drawCard",
+    "data": {}
+  }
+}

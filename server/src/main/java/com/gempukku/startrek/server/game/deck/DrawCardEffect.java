@@ -14,25 +14,25 @@ import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
-public class DrawCardsEffect extends OneTimeEffectSystem {
+public class DrawCardEffect extends OneTimeEffectSystem {
     private PlayerResolverSystem playerResolverSystem;
     private AmountResolverSystem amountResolverSystem;
     private ComponentMapper<CardInHandComponent> cardInHandComponentMapper;
     private EventSystem eventSystem;
 
-    public DrawCardsEffect() {
-        super("drawCards");
+    public DrawCardEffect() {
+        super("drawCard");
     }
 
     @Override
     protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, gameEffect.getMemory(), gameEffect.getData().getString("player"));
+        String player = gameEffect.getData().getString("player");
+        Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, gameEffect.getMemory(), player);
         PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);
-        int amount = amountResolverSystem.resolveAmount(gameEffectEntity, gameEffect.getMemory(), gameEffect.getData().getString("amount"));
 
         int cardsDrawn = 0;
         Array<Integer> cards = deck.getCards();
-        while (cards.size > 0 && amount > 0) {
+        if (cards.size > 0) {
             Entity cardEntity = world.getEntity(cards.removeIndex(cards.size - 1));
 
             CardComponent card = cardEntity.getComponent(CardComponent.class);
@@ -41,8 +41,6 @@ public class DrawCardsEffect extends OneTimeEffectSystem {
             cardInHand.setOwner(card.getOwner());
             eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
             cardsDrawn++;
-
-            amount--;
         }
 
         PlayerPublicStatsComponent playerPublicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
