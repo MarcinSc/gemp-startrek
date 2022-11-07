@@ -50,7 +50,7 @@ public class SequenceEffect extends EffectSystem {
     private void sequenceForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         JsonValue action = gameEffect.getData().get("actions");
         String stackedIndex = gameEffect.getMemory().get("stackedIndex");
-        String player = gameEffect.getData().getString("player");
+        String player = gameEffect.getDataString("player");
         int nextActionIndex = 0;
         if (stackedIndex != null) {
             nextActionIndex = Integer.parseInt(stackedIndex) + 1;

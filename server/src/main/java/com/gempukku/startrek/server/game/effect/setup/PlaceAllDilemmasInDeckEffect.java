@@ -28,7 +28,8 @@ public class PlaceAllDilemmasInDeckEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        String player = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, gameEffect.getMemory(), gameEffect.getData().getString("player"));
+        String player = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, gameEffect.getMemory(),
+                gameEffect.getDataString("player"));
         Entity playerEntity = playerResolverSystem.findPlayerEntity(player);
         PlayerDilemmaPileComponent dilemmaPile = playerEntity.getComponent(PlayerDilemmaPileComponent.class);
         PlayerPublicStatsComponent playerStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);

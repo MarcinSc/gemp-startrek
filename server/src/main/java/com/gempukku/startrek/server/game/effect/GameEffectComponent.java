@@ -25,6 +25,10 @@ public class GameEffectComponent extends Component {
         this.data = data;
     }
 
+    public String getDataString(String name) {
+        return getData().getString(name);
+    }
+
     public ObjectMap<String, String> getMemory() {
         return memory;
     }

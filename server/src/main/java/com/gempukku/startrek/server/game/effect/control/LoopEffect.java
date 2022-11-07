@@ -31,7 +31,7 @@ public class LoopEffect extends EffectSystem {
 
     private void stackUntil(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         boolean result = conditionResolverSystem.resolveBoolean(gameEffectEntity, gameEffect.getMemory(),
-                gameEffect.getData().getString("condition"));
+                gameEffect.getDataString("condition"));
         if (!result) {
             Entity stackedEntity = world.createEntity();
             GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
@@ -47,7 +47,7 @@ public class LoopEffect extends EffectSystem {
 
     private void stackUntilInTurnOrder(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         boolean condition = conditionResolverSystem.resolveBoolean(gameEffectEntity, gameEffect.getMemory(),
-                gameEffect.getData().getString("condition"));
+                gameEffect.getDataString("condition"));
         if (!condition) {
             TurnSequenceComponent turnSequence = LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class).
                     getComponent(TurnSequenceComponent.class);

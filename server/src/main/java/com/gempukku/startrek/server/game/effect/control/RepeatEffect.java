@@ -29,7 +29,8 @@ public class RepeatEffect extends EffectSystem {
 
     private void repeat(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         ObjectMap<String, String> memory = gameEffect.getMemory();
-        int times = amountResolverSystem.resolveAmount(gameEffectEntity, memory, gameEffect.getData().getString("times"));
+        int times = amountResolverSystem.resolveAmount(gameEffectEntity, memory,
+                gameEffect.getDataString("times"));
 
         int executedTimes = 0;
         String executed = memory.get("times");
@@ -55,8 +56,9 @@ public class RepeatEffect extends EffectSystem {
 
     private void repeatForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect) {
         ObjectMap<String, String> memory = gameEffect.getMemory();
-        int times = amountResolverSystem.resolveAmount(gameEffectEntity, memory, gameEffect.getData().getString("times"));
-        String player = gameEffect.getData().getString("player");
+        int times = amountResolverSystem.resolveAmount(gameEffectEntity, memory,
+                gameEffect.getDataString("times"));
+        String player = gameEffect.getDataString("player");
 
         int executedTimes = 0;
         String executed = memory.get("times");

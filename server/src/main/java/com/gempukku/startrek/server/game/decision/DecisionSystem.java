@@ -56,13 +56,13 @@ public class DecisionSystem extends EffectSystem {
 
     @Override
     public boolean processEndingEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        String player = gameEffect.getData().getString("player");
+        String player = gameEffect.getDataString("player");
         Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, gameEffect.getMemory(), player);
 
         Entity decisionEntity = world.createEntity();
         PlayerDecisionComponent decision = playerDecisionComponentMapper.create(decisionEntity);
         decision.setOwner(playerEntity.getComponent(GamePlayerComponent.class).getName());
-        decision.setDecisionType(gameEffect.getData().getString("decisionType"));
+        decision.setDecisionType(gameEffect.getDataString("decisionType"));
         decision.setData(JsonValueHandler.clone(gameEffect.getData().get("data")));
 
         stackEffect(decisionEntity);

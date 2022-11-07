@@ -28,7 +28,8 @@ public class PlaceAllCardsInDrawDeckEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        String player = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, gameEffect.getMemory(), gameEffect.getData().getString("player"));
+        String player = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, gameEffect.getMemory(),
+                gameEffect.getDataString("player"));
         Entity playerEntity = playerResolverSystem.findPlayerEntity(player);
         PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);
         PlayerPublicStatsComponent playerStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);

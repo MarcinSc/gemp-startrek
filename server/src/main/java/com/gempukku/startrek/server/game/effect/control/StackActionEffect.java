@@ -58,7 +58,7 @@ public class StackActionEffect extends EffectSystem {
     }
 
     private void stackActionTemplate(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        String template = gameEffect.getData().getString("template");
+        String template = gameEffect.getDataString("template");
 
         Entity spawnedAction = spawnSystem.spawnEntity(template);
 

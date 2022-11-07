@@ -8,6 +8,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
+import com.gempukku.startrek.server.JsonValueHandler;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.stack.StackSystem;
@@ -48,7 +49,9 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
 
             Entity drawCardEffect = spawnSystem.spawnEntity("game/effect/drawCardEffect.template");
             GameEffectComponent gameEffect = drawCardEffect.getComponent(GameEffectComponent.class);
-            gameEffect.getData().addChild("player", new JsonValue("username(" + decisionPlayer + ")"));
+            JsonValue data = JsonValueHandler.clone(gameEffect.getData());
+            data.addChild("player", new JsonValue("username(" + decisionPlayer + ")"));
+            gameEffect.setData(data);
             stackSystem.stackEntity(drawCardEffect);
         }
     }
