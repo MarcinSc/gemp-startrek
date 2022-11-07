@@ -11,10 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
+import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.common.UISettings;
+import com.gempukku.startrek.game.CardStorageSystem;
 import com.gempukku.startrek.game.PlayerPositionSystem;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.ability.ClientCardAbilitySystem;
@@ -36,6 +39,9 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     private ClientCardAbilitySystem clientCardAbilitySystem;
     private AmountResolverSystem amountResolverSystem;
     private CardFilterResolverSystem cardFilterResolverSystem;
+    private CardStorageSystem cardStorageSystem;
+    private HierarchySystem hierarchySystem;
+    private SpawnSystem spawnSystem;
 
     @Override
     protected void initialize() {
@@ -73,7 +79,9 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
             public void accept(Entity cardEntity) {
                 if (headquarterRequirements.accepts(null, null, cardEntity)
                         && cardFilter.accepts(null, null, cardEntity)) {
-                    System.out.println("Can be played: " + cardEntity);
+                    Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
+                    Entity selectionEntity = spawnSystem.spawnEntity("game/card-full-selection.template");
+                    hierarchySystem.addHierarchy(renderedCard, selectionEntity);
                 }
             }
         });

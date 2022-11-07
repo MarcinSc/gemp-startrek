@@ -26,6 +26,8 @@ import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
 import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
 
+import java.util.Arrays;
+
 public class CardInGameRenderingSystem extends BaseSystem {
     private SpawnSystem spawnSystem;
     private PlayerPositionSystem playerPositionSystem;
@@ -33,10 +35,10 @@ public class CardInGameRenderingSystem extends BaseSystem {
     private TransformSystem transformSystem;
     private CardLookupSystem cardLookupSystem;
     private AuthenticationHolderSystem authenticationHolderSystem;
+    private CardStorageSystem cardStorageSystem;
 
     private static final float[] deckRotation = new float[]{0f, -1f, 0.3f, 0.1f, -0.3f, -0.1f, 0f, 0.15f};
 
-    private ObjectMap<PlayerPosition, PlayerCards> playerCardsMap = new ObjectMap<>();
     private ObjectMap<PlayerPosition, ZonesStatus> playerZonesStatusMap = new ObjectMap<>();
 
     @Override
@@ -86,7 +88,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
         Entity cardRepresentation = createFullCard(cardId, cardDefinition);
         cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(entityId);
-        getPlayerCards(owner).addCardInHand(cardEntity, cardRepresentation);
+        cardStorageSystem.getPlayerCards(owner).addCardInHand(cardEntity, cardRepresentation);
 
         getZonesStatus(owner).setHandDrity(true);
     }
@@ -102,7 +104,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
         Entity cardRepresentation = createSmallCard(cardId, cardDefinition);
         cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(entityId);
-        getPlayerCards(missionOwner).getMissionCards(missionIndex).setMissionCard(cardEntity, cardRepresentation);
+        cardStorageSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).setMissionCard(cardEntity, cardRepresentation);
 
         getZonesStatus(missionOwner).setMissionsDirty(true);
     }
@@ -259,7 +261,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
         float horTrans = 2f;
         float yTrans = 0.1f;
         float scale = 1.5f;
-        PlayerCards playerCards = getPlayerCards(playerPosition);
+        PlayerCards playerCards = cardStorageSystem.getPlayerCards(playerPosition);
         Matrix4 m4 = new Matrix4();
         for (int i = 0; i < 5; i++) {
             MissionCards missionCards = playerCards.getMissionCards(i);
@@ -281,11 +283,13 @@ public class CardInGameRenderingSystem extends BaseSystem {
     }
 
     private void layoutHand(PlayerPosition playerPosition) {
-        PlayerCards playerCards = getPlayerCards(playerPosition);
+        PlayerCards playerCards = cardStorageSystem.getPlayerCards(playerPosition);
         Array<Entity> cardsInHand = playerCards.getCardsInHand();
 
         Camera camera = cameraSystem.getCamera();
         float verticalScale = 0.85f;
+        if (playerPosition == PlayerPosition.Lower)
+            verticalScale = 0.1f;
         float distanceFromCamera = 3f;
         float cardSeparation = 0.15f;
         float cardScale = 0.4f;
@@ -322,20 +326,6 @@ public class CardInGameRenderingSystem extends BaseSystem {
     private void cardInHandRemoved(int i) {
     }
 
-    private PlayerCards getPlayerCards(String username) {
-        PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(username);
-        return getPlayerCards(playerPosition);
-    }
-
-    private PlayerCards getPlayerCards(PlayerPosition playerPosition) {
-        PlayerCards playerCards = playerCardsMap.get(playerPosition);
-        if (playerCards == null) {
-            playerCards = new PlayerCards();
-            playerCardsMap.put(playerPosition, playerCards);
-        }
-        return playerCards;
-    }
-
     private ZonesStatus getZonesStatus(String username) {
         PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(username);
         return getZonesStatus(playerPosition);
@@ -356,19 +346,19 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
     private Entity addFaceDownCardToHand(PlayerPosition playerPosition) {
         Entity cardRepresentation = createFaceDownCard();
-        getPlayerCards(playerPosition).addCardInHand(null, cardRepresentation);
+        cardStorageSystem.getPlayerCards(playerPosition).addCardInHand(null, cardRepresentation);
         return cardRepresentation;
     }
 
     private Entity addFaceDownCardToDeck(PlayerPosition playerPosition) {
         Entity cardRepresentation = createFaceDownCard();
-        getPlayerCards(playerPosition).addCardInDeck(null, cardRepresentation);
+        cardStorageSystem.getPlayerCards(playerPosition).addCardInDeck(null, cardRepresentation);
         return cardRepresentation;
     }
 
     private Entity addFaceDownCardToDilemmaPile(PlayerPosition playerPosition) {
         Entity cardRepresentation = createFaceDownCard();
-        getPlayerCards(playerPosition).addCardInDilemmaPile(null, cardRepresentation);
+        cardStorageSystem.getPlayerCards(playerPosition).addCardInDilemmaPile(null, cardRepresentation);
         return cardRepresentation;
     }
 
@@ -397,7 +387,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
             Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
             PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
             int deckCount = getRenderedDeckSize(publicStats.getDeckCount());
-            PlayerCards playerCards = playerCardsMap.get(playerPosition);
+            PlayerCards playerCards = cardStorageSystem.getPlayerCards(playerPosition);
             int renderedCount = playerCards.getCardInDeckCount();
             if (renderedCount > deckCount) {
                 int destroyCount = renderedCount - deckCount;
@@ -434,7 +424,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
             Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
             PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
             int deckCount = getRenderedDeckSize(publicStats.getDilemmaCount());
-            PlayerCards playerCards = playerCardsMap.get(playerPosition);
+            PlayerCards playerCards = cardStorageSystem.getPlayerCards(playerPosition);
             int renderedCount = playerCards.getCardInDilemmaCount();
             if (renderedCount > deckCount) {
                 int destroyCount = renderedCount - deckCount;
@@ -482,7 +472,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
                 Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
                 PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
                 int handCount = publicStats.getHandCount();
-                PlayerCards playerCards = playerCardsMap.get(playerPosition);
+                PlayerCards playerCards = cardStorageSystem.getPlayerCards(playerPosition);
                 int renderedCount = playerCards.getCardInHandCount();
                 if (renderedCount > handCount) {
                     int destroyCount = renderedCount - handCount;
@@ -500,5 +490,12 @@ public class CardInGameRenderingSystem extends BaseSystem {
                 }
             }
         }
+    }
+
+    public static void main(String[] args) {
+        Matrix4 matrix4 = new Matrix4();
+        matrix4.translate(-0.367628f, 0, 0);
+        matrix4.rotate(0, 1, 0, 270);
+        System.out.println(Arrays.toString(matrix4.val));
     }
 }

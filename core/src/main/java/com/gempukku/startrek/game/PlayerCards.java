@@ -87,4 +87,8 @@ public class PlayerCards {
     public Array<Entity> getCardsInDilemmaPile() {
         return renderedInDilemmaPile;
     }
+
+    public Entity findRenderedCard(Entity cardEntity) {
+        return cardToRenderedMap.get(cardEntity);
+    }
 }

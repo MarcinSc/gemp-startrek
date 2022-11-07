@@ -118,6 +118,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
 
                 new CardLookupSystem(cardData),
                 new PlayerPositionSystem(),
+                new CardStorageSystem(),
 
                 // Card abilities
                 new ClientCardAbilitySystem(),

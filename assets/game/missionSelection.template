@@ -1,5 +1,27 @@
 {
   "com.gempukku.libgdx.lib.graph.artemis.selection.SelectParentComponent": {},
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
+    "localTransform": {
+      "val": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0.005,
+        0,
+        1
+      ]
+    }
+  },
   "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent": {
     "sprites": [
       {
@@ -24,21 +46,21 @@
                 0,
                 1,
                 0,
-                -0.02,
+                -0.2,
                 0,
-                -0.02,
+                -0.2,
                 1
               ]
             },
             "rightVector": {
-              "x": 0.04,
+              "x": 0.4,
               "y": 0,
               "z": 0
             },
             "upVector": {
               "x": 0,
               "y": 0,
-              "z": 0.04
+              "z": 0.4
             }
           },
           "Texture": {
@@ -70,21 +92,21 @@
                 0,
                 1,
                 0,
-                0.02,
+                0.2,
                 0,
-                -0.02,
+                -0.2,
                 1
               ]
             },
             "rightVector": {
-              "x": 0.04,
+              "x": 0.4,
               "y": 0,
               "z": 0
             },
             "upVector": {
               "x": 0,
               "y": 0,
-              "z": 0.04
+              "z": 0.4
             }
           },
           "Texture": {
@@ -116,21 +138,21 @@
                 0,
                 1,
                 0,
-                0.02,
+                0.2,
                 0,
-                0.02,
+                0.2,
                 1
               ]
             },
             "rightVector": {
-              "x": 0.04,
+              "x": 0.4,
               "y": 0,
               "z": 0
             },
             "upVector": {
               "x": 0,
               "y": 0,
-              "z": 0.04
+              "z": 0.4
             }
           },
           "Texture": {
@@ -162,21 +184,21 @@
                 0,
                 1,
                 0,
-                -0.02,
+                -0.2,
                 0,
-                0.02,
+                0.2,
                 1
               ]
             },
             "rightVector": {
-              "x": 0.04,
+              "x": 0.4,
               "y": 0,
               "z": 0
             },
             "upVector": {
               "x": 0,
               "y": 0,
-              "z": 0.04
+              "z": 0.4
             }
           },
           "Texture": {
