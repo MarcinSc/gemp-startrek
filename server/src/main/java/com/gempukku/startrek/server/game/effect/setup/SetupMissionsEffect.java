@@ -4,9 +4,9 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.game.mission.MissionComponent;
+import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
-import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
 public class SetupMissionsEffect extends OneTimeEffectSystem {
     private SpawnSystem spawnSystem;

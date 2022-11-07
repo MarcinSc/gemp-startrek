@@ -1,4 +1,4 @@
-package com.gempukku.startrek.server.game.amount;
+package com.gempukku.startrek.game.amount;
 
 import com.artemis.BaseSystem;
 import com.artemis.Entity;

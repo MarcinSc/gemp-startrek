@@ -1,4 +1,4 @@
-package com.gempukku.startrek.server.game.condition;
+package com.gempukku.startrek.game.condition;
 
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
@@ -11,7 +11,7 @@ import com.gempukku.startrek.expression.ExpressionSystem;
 public class ConditionResolverSystem extends BaseSystem {
     private ExpressionSystem expressionSystem;
 
-    private ObjectMap<String, ConditionHandler> conditionHandlers = new ObjectMap<>();
+    private final ObjectMap<String, ConditionHandler> conditionHandlers = new ObjectMap<>();
 
     public ConditionResolverSystem() {
         registerConditionHandler("false",

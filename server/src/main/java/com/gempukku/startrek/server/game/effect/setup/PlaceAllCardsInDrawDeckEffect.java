@@ -11,10 +11,10 @@ import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.CardZone;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
+import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
-import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
 import java.util.function.Consumer;
 

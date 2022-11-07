@@ -5,10 +5,10 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.LazyEntityUtil;
+import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
-import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
 public class SetTurnPlayerEffect extends OneTimeEffectSystem {
     private PlayerResolverSystem playerResolverSystem;

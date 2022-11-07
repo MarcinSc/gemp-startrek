@@ -12,16 +12,27 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
+import com.gempukku.startrek.card.CardDefinition;
+import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.common.UISettings;
+import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.PlayerPositionSystem;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
+import com.gempukku.startrek.game.ability.ClientCardAbilitySystem;
+import com.gempukku.startrek.game.ability.HeadquarterRequirements;
+import com.gempukku.startrek.game.card.CardFilteringSystem;
+
+import java.util.function.Consumer;
 
 public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements DecisionHandler {
     private AuthenticationHolderSystem authenticationHolderSystem;
     private ClientDecisionSystem clientDecisionSystem;
     private PlayerPositionSystem playerPositionSystem;
     private StageSystem stageSystem;
+    private CardFilteringSystem cardFilteringSystem;
+    private CardLookupSystem cardLookupSystem;
+    private ClientCardAbilitySystem clientCardAbilitySystem;
 
     @Override
     protected void initialize() {
@@ -36,13 +47,32 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
         table.setFillParent(true);
 
         VerticalGroup verticalGroup = new VerticalGroup();
-
-        Entity playerEntity = playerPositionSystem.getPlayerEntity(authenticationHolderSystem.getUsername());
+        String username = authenticationHolderSystem.getUsername();
+        Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
         checkForDraw(table, verticalGroup, playerEntity);
+        markPlayableCards(username, playerEntity);
 
         table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
 
         stage.addActor(table);
+    }
+
+    private void markPlayableCards(String username, Entity playerEntity) {
+        PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
+        int availableCounters = publicStats.getCounterCount();
+        Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + username + "))");
+        HeadquarterRequirements headquarterRequirements = clientCardAbilitySystem.getClientCardAbility(playerHeadquarter, HeadquarterRequirements.class);
+        cardFilteringSystem.forEachCardInHand(username, new Consumer<Entity>() {
+            @Override
+            public void accept(Entity cardEntity) {
+                CardComponent card = cardEntity.getComponent(CardComponent.class);
+                CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(card.getCardId());
+                if (cardDefinition.getCost() <= availableCounters
+                        && headquarterRequirements.getCardFilter().accepts(null, null, cardEntity)) {
+                } else {
+                }
+            }
+        });
     }
 
     private void checkForDraw(Table table, VerticalGroup verticalGroup, Entity playerEntity) {

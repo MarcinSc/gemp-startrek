@@ -8,9 +8,9 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
+import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
-import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
 public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTypeHandler {

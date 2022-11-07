@@ -7,9 +7,9 @@ import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.startrek.decision.DecisionMade;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
+import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
-import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 

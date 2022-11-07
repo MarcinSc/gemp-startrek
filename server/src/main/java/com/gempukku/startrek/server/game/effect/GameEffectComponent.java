@@ -5,8 +5,17 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.server.JsonValueHandler;
 
 public class GameEffectComponent extends Component {
+    private int sourceEntityId = -1;
     private String type;
     private JsonValue data;
+
+    public int getSourceEntityId() {
+        return sourceEntityId;
+    }
+
+    public void setSourceEntityId(int sourceEntityId) {
+        this.sourceEntityId = sourceEntityId;
+    }
 
     public String getType() {
         return type;

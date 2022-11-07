@@ -1,4 +1,4 @@
-package com.gempukku.startrek.server.game.condition;
+package com.gempukku.startrek.game.condition;
 
 import com.artemis.BaseSystem;
 

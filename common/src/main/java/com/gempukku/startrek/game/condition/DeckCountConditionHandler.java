@@ -1,18 +1,18 @@
-package com.gempukku.startrek.server.game.condition;
+package com.gempukku.startrek.game.condition;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
-import com.gempukku.startrek.server.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
+import com.gempukku.startrek.game.amount.AmountResolverSystem;
+import com.gempukku.startrek.game.player.PlayerResolverSystem;
 
-public class CounterCountConditionHandler extends ConditionSystem {
+public class DeckCountConditionHandler extends ConditionSystem {
     private PlayerResolverSystem playerResolverSystem;
     private AmountResolverSystem amountResolverSystem;
 
-    public CounterCountConditionHandler() {
-        super("counterCount");
+    public DeckCountConditionHandler() {
+        super("deckCount");
     }
 
     @Override
@@ -20,6 +20,6 @@ public class CounterCountConditionHandler extends ConditionSystem {
         Entity playerEntity = playerResolverSystem.resolvePlayer(sourceEntity, memory, parameters.get(0));
         int amount = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(1));
         PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
-        return publicStats.getCounterCount() == amount;
+        return publicStats.getDeckCount() == amount;
     }
 }

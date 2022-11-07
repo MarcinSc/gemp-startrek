@@ -9,11 +9,11 @@ import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.CardZone;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
+import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
-import com.gempukku.startrek.server.game.amount.AmountResolverSystem;
+import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
-import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
 public class DrawCardEffect extends OneTimeEffectSystem {
     private PlayerResolverSystem playerResolverSystem;

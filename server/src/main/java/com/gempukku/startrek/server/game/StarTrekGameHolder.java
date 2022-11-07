@@ -14,17 +14,12 @@ import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardData;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
-import com.gempukku.startrek.expression.ExpressionSystem;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.CommonGameWorldBuilder;
 import com.gempukku.startrek.game.GameComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
-import com.gempukku.startrek.server.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.server.game.condition.ConditionResolverSystem;
-import com.gempukku.startrek.server.game.condition.CounterCountConditionHandler;
-import com.gempukku.startrek.server.game.condition.DeckCountConditionHandler;
-import com.gempukku.startrek.server.game.condition.MemoryConditionHandler;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.decision.PlayOrDrawDecisionHandler;
 import com.gempukku.startrek.server.game.deck.DrawCardEffect;
@@ -39,7 +34,6 @@ import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
 import com.gempukku.startrek.server.game.effect.setup.*;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
-import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
 import java.util.function.Consumer;
@@ -69,6 +63,7 @@ public class StarTrekGameHolder implements Disposable {
 
     private static World createGameWorld(CardData cardDataService, boolean test) {
         WorldConfigurationBuilder worldConfigurationBuilder = new WorldConfigurationBuilder();
+        CommonGameWorldBuilder.createCommonSystems(worldConfigurationBuilder);
         worldConfigurationBuilder.with(
                 // Base systems
                 new SpawnSystem(),
@@ -76,17 +71,7 @@ public class StarTrekGameHolder implements Disposable {
 
                 // Specific systems
                 new CardLookupSystem(cardDataService),
-                new ExpressionSystem(),
                 new StackSystem(),
-
-                // Resolvers
-                new PlayerResolverSystem(),
-                new AmountResolverSystem(),
-
-                new ConditionResolverSystem(),
-                new MemoryConditionHandler(),
-                new CounterCountConditionHandler(),
-                new DeckCountConditionHandler(),
 
                 // Setup effects
                 new SetupMissionsEffect(),

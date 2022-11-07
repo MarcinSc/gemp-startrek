@@ -22,6 +22,7 @@ import com.gempukku.libgdx.lib.graph.artemis.text.TextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextComponent;
 import com.gempukku.startrek.card.*;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
+import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
 import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
 
@@ -84,6 +85,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
 
         Entity cardRepresentation = createFullCard(cardId, cardDefinition);
+        cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(entityId);
         getPlayerCards(owner).addCardInHand(cardEntity, cardRepresentation);
 
         getZonesStatus(owner).setHandDrity(true);
@@ -99,6 +101,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
 
         Entity cardRepresentation = createSmallCard(cardId, cardDefinition);
+        cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(entityId);
         getPlayerCards(missionOwner).getMissionCards(missionIndex).setMissionCard(cardEntity, cardRepresentation);
 
         getZonesStatus(missionOwner).setMissionsDirty(true);

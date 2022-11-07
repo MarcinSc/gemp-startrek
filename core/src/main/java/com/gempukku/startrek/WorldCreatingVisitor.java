@@ -38,6 +38,9 @@ import com.gempukku.startrek.common.ConnectionParamSystem;
 import com.gempukku.startrek.common.FontProviderSystem;
 import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.game.*;
+import com.gempukku.startrek.game.ability.ClientCardAbilitySystem;
+import com.gempukku.startrek.game.ability.HeadquarterRequirementsAbilityHandler;
+import com.gempukku.startrek.game.ability.NoOpClientCardAbilityHandler;
 import com.gempukku.startrek.game.config.ConfigureTextSystem;
 import com.gempukku.startrek.game.decision.ClientDecisionSystem;
 import com.gempukku.startrek.game.decision.ClientPlayOrDrawDecisionHandler;
@@ -59,7 +62,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
 
     @Override
     public World visitLoginScene() {
-        createCommonSystems();
+        createCommonClientSystems();
         worldConfigurationBuilder.with(new LoginScreenRenderer());
 
         World world = new World(worldConfigurationBuilder.build());
@@ -71,7 +74,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
 
     @Override
     public World visitHallScene() {
-        createCommonSystems();
+        createCommonClientSystems();
         worldConfigurationBuilder.with(
                 new DeckBoxRenderingSystem(),
                 new GameHallConnectionInitializer(),
@@ -93,7 +96,8 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
 
     @Override
     public World visitPlayingGameScene(String gameId) {
-        createCommonSystems();
+        CommonGameWorldBuilder.createCommonSystems(worldConfigurationBuilder);
+        createCommonClientSystems();
         worldConfigurationBuilder.with(
                 new GameConnectionInitializer(),
                 new GameConnectionLostHandling(),
@@ -114,6 +118,11 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
 
                 new CardLookupSystem(cardData),
                 new PlayerPositionSystem(),
+
+                // Card abilities
+                new ClientCardAbilitySystem(),
+                new NoOpClientCardAbilityHandler(),
+                new HeadquarterRequirementsAbilityHandler(),
 
                 // Decision-related
                 new ClientDecisionSystem(),
@@ -141,7 +150,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
         return world;
     }
 
-    private void createCommonSystems() {
+    private void createCommonClientSystems() {
         ObjectMap<String, String> properties = new ObjectMap<>();
         try (Reader reader = Gdx.files.internal("application.properties").reader()) {
             PropertiesUtils.load(properties, reader);

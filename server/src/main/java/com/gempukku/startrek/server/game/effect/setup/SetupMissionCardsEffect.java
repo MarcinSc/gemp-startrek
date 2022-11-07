@@ -11,11 +11,12 @@ import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.CardZone;
 import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.game.mission.MissionComponent;
+import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
-import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
 
 import java.util.Comparator;
 import java.util.function.Consumer;
@@ -26,6 +27,7 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
     private PlayerResolverSystem playerResolverSystem;
     private ComponentMapper<MissionComponent> missionStatusComponentMapper;
     private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
+    private ComponentMapper<CardComponent> cardComponentMapper;
 
     public SetupMissionCardsEffect() {
         super("setupMissionCards");
@@ -50,6 +52,8 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
                 });
         for (int i = 0; i < playerMissions.size; i++) {
             Entity missionEntity = playerMissions.get(i);
+            CardComponent card = cardComponentMapper.get(missionEntity);
+            card.setCardZone(CardZone.MISSIONS);
             FaceUpCardInMissionComponent missionZone = faceUpCardInMissionComponentMapper.create(missionEntity);
             missionZone.setMissionOwner(player);
             missionZone.setMissionIndex(i);

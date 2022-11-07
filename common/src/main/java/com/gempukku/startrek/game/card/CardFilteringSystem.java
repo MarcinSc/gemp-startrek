@@ -1,0 +1,72 @@
+package com.gempukku.startrek.game.card;
+
+import com.artemis.*;
+import com.artemis.utils.IntBag;
+import com.badlogic.gdx.utils.Array;
+import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.CardZone;
+import com.gempukku.startrek.game.filter.CardFilter;
+import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.hand.CardInHandComponent;
+
+import java.util.function.Consumer;
+
+public class CardFilteringSystem extends BaseSystem {
+    private ComponentMapper<CardInHandComponent> cardInHandComponentMapper;
+    private EntitySubscription cardInHandSubscription;
+    private ComponentMapper<CardComponent> cardComponentMapper;
+    private EntitySubscription cardSubscription;
+
+    private CardFilterResolverSystem cardFilterResolverSystem;
+
+    @Override
+    protected void initialize() {
+        cardInHandSubscription = world.getAspectSubscriptionManager().get(Aspect.all(CardInHandComponent.class));
+        cardSubscription = world.getAspectSubscriptionManager().get(Aspect.all(CardComponent.class));
+    }
+
+    public void forEachCardInHand(String username, Consumer<Entity> consumer) {
+        IntBag entities = cardInHandSubscription.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity cardInHandEntity = world.getEntity(entities.get(i));
+            CardInHandComponent cardInHand = cardInHandComponentMapper.get(cardInHandEntity);
+            if (cardInHand.getOwner().equals(username)) {
+                consumer.accept(cardInHandEntity);
+            }
+        }
+    }
+
+    public void forEachCardInPlay(Consumer<Entity> consumer) {
+        IntBag entities = cardSubscription.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity cardEntity = world.getEntity(entities.get(i));
+            CardComponent card = cardComponentMapper.get(cardEntity);
+            CardZone cardZone = card.getCardZone();
+            if (cardZone == CardZone.CORE || cardZone == CardZone.BRIG || cardZone == CardZone.MISSIONS) {
+                consumer.accept(cardEntity);
+            }
+        }
+    }
+
+    public Entity findFirstCardInPlay(String filter) {
+        CardFilter cardFilter = cardFilterResolverSystem.resolveCardFilter(filter);
+        Array<Entity> result = new Array<>();
+        forEachCardInPlay(
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity cardEntity) {
+                        if (result.size < 1 && cardFilter.accepts(null, null, cardEntity)) {
+                            result.add(cardEntity);
+                        }
+                    }
+                });
+        if (result.size > 0)
+            return result.get(0);
+        return null;
+    }
+
+    @Override
+    protected void processSystem() {
+
+    }
+}
