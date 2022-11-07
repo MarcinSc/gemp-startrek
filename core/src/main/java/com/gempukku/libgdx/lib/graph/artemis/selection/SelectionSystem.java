@@ -1,12 +1,11 @@
 package com.gempukku.libgdx.lib.graph.artemis.selection;
 
+import com.artemis.BaseSystem;
 import com.artemis.Entity;
-import com.artemis.EntitySystem;
 import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.collision.Ray;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
-import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
 import com.gempukku.libgdx.lib.artemis.picking.ShapePickingSystem;
 
@@ -17,8 +16,7 @@ import java.util.Set;
 // that is what I consider a bug in Artemis, where it doesn't work, if you just
 // put it on field.
 @Wire(failOnNull = false)
-public class SelectionSystem extends EntitySystem {
-    private EventSystem eventSystem;
+public class SelectionSystem extends BaseSystem {
     private ShapePickingSystem shapePickingSystem;
     private CameraSystem cameraSystem;
     @Wire(failOnNull = false)
@@ -72,7 +70,7 @@ public class SelectionSystem extends EntitySystem {
                     }
                 }
                 if (fireSelectionChaned)
-                    eventSystem.fireEvent(new SelectionChanged(), null);
+                    selectionDefinition.selectionChanged(selectedEntities);
             }
         }
     }

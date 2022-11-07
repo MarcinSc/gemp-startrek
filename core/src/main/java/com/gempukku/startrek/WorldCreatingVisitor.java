@@ -17,11 +17,14 @@ import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 import com.gempukku.libgdx.lib.artemis.font.RuntimeBitmapFontHandler;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
 import com.gempukku.libgdx.lib.artemis.input.InputProcessorSystem;
+import com.gempukku.libgdx.lib.artemis.picking.ShapePickingSystem;
 import com.gempukku.libgdx.lib.artemis.property.PropertySystem;
+import com.gempukku.libgdx.lib.artemis.shape.ShapeSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererSystem;
+import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionSystem;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteBatchSystem;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextSystem;
@@ -119,6 +122,10 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new CardLookupSystem(cardData),
                 new PlayerPositionSystem(),
                 new CardStorageSystem(),
+
+                new ShapeSystem(),
+                new ShapePickingSystem(),
+                new SelectionSystem(),
 
                 // Card abilities
                 new ClientCardAbilitySystem(),

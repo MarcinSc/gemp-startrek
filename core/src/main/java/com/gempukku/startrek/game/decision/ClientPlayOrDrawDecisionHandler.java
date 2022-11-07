@@ -12,8 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.Predicate;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
+import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionDefinition;
+import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
@@ -28,6 +31,7 @@ import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements DecisionHandler {
@@ -43,6 +47,7 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     private CardStorageSystem cardStorageSystem;
     private HierarchySystem hierarchySystem;
     private SpawnSystem spawnSystem;
+    private SelectionSystem selectionSystem;
 
     @Override
     protected void initialize() {
@@ -107,12 +112,6 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
         }
     }
 
-    private void executeCleanup(Array<Runnable> decisionCleanup) {
-        for (Runnable runnable : decisionCleanup) {
-            runnable.run();
-        }
-    }
-
     private void markPlayableCards(String username, Array<Runnable> decisionCleanup) {
         Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + username + "))");
         CardFilter headquarterRequirements = clientCardAbilitySystem.getClientCardAbility(playerHeadquarter, HeadquarterRequirements.class).getCardFilter();
@@ -140,6 +139,51 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
                 }
             }
         });
+
+        selectionSystem.startSelection(
+                new SelectionDefinition() {
+                    @Override
+                    public boolean isSelectionTriggered() {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean canDeselect(Set<Entity> selectedEntities, Entity selected) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean canSelect(Set<Entity> selectedEntities, Entity newSelected) {
+                        return true;
+                    }
+
+                    @Override
+                    public void selectionChanged(Set<Entity> selectedEntities) {
+                        
+                    }
+
+                    @Override
+                    public String getMask() {
+                        return "Selection";
+                    }
+
+                    @Override
+                    public Predicate<Entity> getEntityPredicate() {
+                        return new Predicate<Entity>() {
+                            @Override
+                            public boolean evaluate(Entity arg0) {
+                                return true;
+                            }
+                        };
+                    }
+                }
+        );
+    }
+
+    private void executeCleanup(Array<Runnable> decisionCleanup) {
+        for (Runnable runnable : decisionCleanup) {
+            runnable.run();
+        }
     }
 
     @Override

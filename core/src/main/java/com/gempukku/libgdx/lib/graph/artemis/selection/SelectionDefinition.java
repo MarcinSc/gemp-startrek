@@ -12,6 +12,8 @@ public interface SelectionDefinition {
 
     boolean canSelect(Set<Entity> selectedEntities, Entity newSelected);
 
+    void selectionChanged(Set<Entity> selectedEntities);
+
     String getMask();
 
     Predicate<Entity> getEntityPredicate();
