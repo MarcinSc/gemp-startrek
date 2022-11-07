@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Predicate;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.expression.Expression;
 import com.gempukku.startrek.expression.ExpressionSystem;
+import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
 
@@ -24,6 +25,8 @@ public class PlayerResolverSystem extends BaseSystem {
             return LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class).getComponent(TurnSequenceComponent.class).getCurrentPlayer();
         } else if (expression.getType().equals("username")) {
             return expression.getParameters().get(0);
+        } else if (expression.getType().equals("owner")) {
+            return sourceEntity.getComponent(CardComponent.class).getOwner();
         }
         throw new RuntimeException("Unable to find player resolver for filter: " + value);
     }

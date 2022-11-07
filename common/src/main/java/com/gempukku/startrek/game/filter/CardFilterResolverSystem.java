@@ -19,12 +19,7 @@ public class CardFilterResolverSystem extends BaseSystem {
                 new CardFilterHandler() {
                     @Override
                     public CardFilter resolveFilter(String filterType, Array<String> parameters) {
-                        Array<CardFilter> filters = new Array<>();
-                        for (String parameter : parameters) {
-                            filters.add(resolveCardFilter(parameter));
-                        }
-
-                        return new AndCardFilter(filters);
+                        return createAndFilter(parameters);
                     }
                 });
         registerFilterHandler("or",
@@ -64,6 +59,15 @@ public class CardFilterResolverSystem extends BaseSystem {
                         };
                     }
                 });
+    }
+
+    public CardFilter createAndFilter(Array<String> parameters) {
+        Array<CardFilter> filters = new Array<>();
+        for (String parameter : parameters) {
+            filters.add(resolveCardFilter(parameter));
+        }
+
+        return new AndCardFilter(filters);
     }
 
     public void registerFilterHandler(String effectType, CardFilterHandler conditionHandler) {

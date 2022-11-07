@@ -1,10 +1,12 @@
-package com.gempukku.startrek.server.game.deck;
+package com.gempukku.startrek.server.game.effect.deck;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
+import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
+import com.gempukku.startrek.server.game.deck.PlayerDilemmaPileComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 

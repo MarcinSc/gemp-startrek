@@ -4,15 +4,19 @@ import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.Predicate;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
+import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.ability.HeadquarterRequirements;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
+import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -57,9 +61,9 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
                                 + "playable,"
                                 + "condition(lessOrEqual(costToPlay,counterCount(username(" + decisionPlayer + "))))");
 
-                if (!headquarterRequirements.accepts(null, null, playedCardEntity)
-                        || !cardFilter.accepts(null, null, playedCardEntity))
-                    return false;
+                if (headquarterRequirements.accepts(null, null, playedCardEntity)
+                        && cardFilter.accepts(null, null, playedCardEntity))
+                    return true;
             }
         } catch (Exception exp) {
             // Ignore
@@ -87,9 +91,26 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
             EffectMemoryComponent effectMemory = effectMemoryEntity.getComponent(EffectMemoryComponent.class);
             effectMemory.getMemory().put("playerFinished", "true");
         } else if (action.equals("play")) {
-            int cardId = Integer.parseInt(result.get("cardId"));
-            Entity playedCardEntity = world.getEntity(cardId);
+            String cardId = result.get("cardId");
 
+            Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + decisionPlayer + "))");
+            FaceUpCardInMissionComponent cardInMission = playerHeadquarter.getComponent(FaceUpCardInMissionComponent.class);
+            Entity missionEntity = LazyEntityUtil.findEntityWithComponent(world, MissionComponent.class,
+                    new Predicate<Entity>() {
+                        @Override
+                        public boolean evaluate(Entity entity) {
+                            MissionComponent mission = entity.getComponent(MissionComponent.class);
+                            return mission.getOwner().equals(cardInMission.getMissionOwner())
+                                    && mission.getMissionIndex() == cardInMission.getMissionIndex();
+                        }
+                    });
+
+            Entity playCardEffect = spawnSystem.spawnEntity("game/effect/playCardEffect.template");
+            EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);
+            ObjectMap<String, String> memory = effectMemory.getMemory();
+            memory.put("playedCardId", String.valueOf(cardId));
+            memory.put("missionId", String.valueOf(missionEntity.getId()));
+            stackSystem.stackEntity(playCardEffect);
         }
     }
 

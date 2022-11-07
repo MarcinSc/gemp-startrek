@@ -24,18 +24,21 @@ import com.gempukku.startrek.server.game.ability.DilemmaEffectHandler;
 import com.gempukku.startrek.server.game.ability.TriggerAbilityHandler;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.decision.PlayOrDrawDecisionHandler;
-import com.gempukku.startrek.server.game.deck.DrawCardEffect;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
-import com.gempukku.startrek.server.game.deck.ShuffleDeckEffect;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
+import com.gempukku.startrek.server.game.effect.card.PayCardCostEffect;
 import com.gempukku.startrek.server.game.effect.control.LoopEffect;
 import com.gempukku.startrek.server.game.effect.control.RepeatEffect;
 import com.gempukku.startrek.server.game.effect.control.SequenceEffect;
 import com.gempukku.startrek.server.game.effect.control.StackActionEffect;
+import com.gempukku.startrek.server.game.effect.deck.DrawCardEffect;
+import com.gempukku.startrek.server.game.effect.deck.ShuffleDeckEffect;
 import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
 import com.gempukku.startrek.server.game.effect.setup.*;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
+import com.gempukku.startrek.server.game.effect.zone.MoveCardToMissionEffect;
+import com.gempukku.startrek.server.game.effect.zone.MoveCardToZoneEffect;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
 import java.util.function.Consumer;
@@ -98,6 +101,9 @@ public class StarTrekGameHolder implements Disposable {
                 new ShuffleDeckEffect(),
                 new DecisionSystem(),
                 new DrawCardEffect(),
+                new MoveCardToZoneEffect(),
+                new MoveCardToMissionEffect(),
+                new PayCardCostEffect(),
 
                 // Ability handlers
                 new TriggerAbilityHandler(),

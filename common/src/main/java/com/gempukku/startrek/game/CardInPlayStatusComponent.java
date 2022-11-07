@@ -1,9 +1,9 @@
 package com.gempukku.startrek.game;
 
 import com.artemis.Component;
-import com.gempukku.libgdx.network.server.config.annotation.ReplicateToClients;
+import com.gempukku.libgdx.network.server.config.annotation.ReplicateWithOthers;
 
-@ReplicateToClients
+@ReplicateWithOthers
 public class CardInPlayStatusComponent extends Component {
     private boolean stopped;
 

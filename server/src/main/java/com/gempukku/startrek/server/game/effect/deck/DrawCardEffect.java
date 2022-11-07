@@ -1,4 +1,4 @@
-package com.gempukku.startrek.server.game.deck;
+package com.gempukku.startrek.server.game.effect.deck;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
@@ -12,6 +12,7 @@ import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
+import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 

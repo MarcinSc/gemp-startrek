@@ -3,6 +3,7 @@ package com.gempukku.startrek.game.card;
 import com.artemis.*;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.CardZone;
 import com.gempukku.startrek.game.filter.CardFilter;
@@ -36,6 +37,17 @@ public class CardFilteringSystem extends BaseSystem {
         }
     }
 
+    public void forEachCard(Entity sourceEntity, ObjectMap<String, String> memory, String filter, Consumer<Entity> consumer) {
+        CardFilter cardFilter = cardFilterResolverSystem.resolveCardFilter(filter);
+        IntBag entities = cardSubscription.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity cardEntity = world.getEntity(entities.get(i));
+            if (cardFilter.accepts(sourceEntity, memory, cardEntity)) {
+                consumer.accept(cardEntity);
+            }
+        }
+    }
+
     public void forEachCardInPlay(Consumer<Entity> consumer) {
         IntBag entities = cardSubscription.getEntities();
         for (int i = 0; i < entities.size(); i++) {
@@ -50,12 +62,16 @@ public class CardFilteringSystem extends BaseSystem {
 
     public Entity findFirstCardInPlay(String filter) {
         CardFilter cardFilter = cardFilterResolverSystem.resolveCardFilter(filter);
+        return findFirstCardInPlay(null, null, cardFilter);
+    }
+
+    public Entity findFirstCardInPlay(Entity sourceEntity, ObjectMap<String, String> memory, CardFilter cardFilter) {
         Array<Entity> result = new Array<>();
         forEachCardInPlay(
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
-                        if (result.size < 1 && cardFilter.accepts(null, null, cardEntity)) {
+                        if (result.size < 1 && cardFilter.accepts(sourceEntity, memory, cardEntity)) {
                             result.add(cardEntity);
                         }
                     }
@@ -64,6 +80,7 @@ public class CardFilteringSystem extends BaseSystem {
             return result.get(0);
         return null;
     }
+
 
     @Override
     protected void processSystem() {

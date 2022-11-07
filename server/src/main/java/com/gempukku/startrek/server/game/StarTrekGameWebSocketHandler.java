@@ -108,7 +108,11 @@ public class StarTrekGameWebSocketHandler extends TextWebSocketHandler implement
                     new Runnable() {
                         @Override
                         public void run() {
-                            game.processGame();
+                            try {
+                                game.processGame();
+                            } catch (Exception exp) {
+                                exp.printStackTrace();
+                            }
                         }
                     });
         }

@@ -1,0 +1,31 @@
+{
+  "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
+    "memoryType": "playCard",
+    "memory": {
+      "playedCardId": "[cardId]",
+      "missionId": "[missionId]"
+    }
+  },
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "sequence",
+    "data": {
+      "actions": [
+        {
+          "type": "moveCardToZone",
+          "filter": "memory(playedCardId)",
+          "zone": "STACK"
+        },
+        {
+          "type": "payCardCost",
+          "cardMemory": "playedCardId"
+        },
+        {
+          "type": "moveCardToMission",
+          "filter": "memory(playedCardId)",
+          "missionMemory": "missionId",
+          "faceUp": "hasCard(memory(playedCardId),type(Ship))"
+        }
+      ]
+    }
+  }
+}

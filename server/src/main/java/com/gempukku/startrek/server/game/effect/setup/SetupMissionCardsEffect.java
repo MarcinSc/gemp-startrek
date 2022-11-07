@@ -57,7 +57,6 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
             FaceUpCardInMissionComponent missionZone = faceUpCardInMissionComponentMapper.create(missionEntity);
             missionZone.setMissionOwner(player);
             missionZone.setMissionIndex(i);
-            missionZone.setCardOwner(player);
             eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
         }
     }
