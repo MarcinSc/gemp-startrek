@@ -2,13 +2,13 @@ package com.gempukku.startrek.game.ability;
 
 import com.badlogic.gdx.utils.JsonValue;
 
-public class NoOpClientCardAbilityHandler extends ClientCardAbilityHandlerSystem {
+public class NoOpClientCardAbilityHandler extends CardAbilityHandlerSystem {
     public NoOpClientCardAbilityHandler() {
         super("trigger", "dilemmaEffect");
     }
 
     @Override
-    public ClientCardAbility resolveClientCardAbility(JsonValue cardAbility) {
+    public CardAbility resolveCardAbility(JsonValue cardAbility) {
         return null;
     }
 }

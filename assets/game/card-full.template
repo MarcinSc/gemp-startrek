@@ -22,6 +22,33 @@
       ]
     }
   },
+  "com.gempukku.libgdx.lib.artemis.picking.ShapePickableComponent": {
+    "transform": {
+      "val": [
+        0.715257,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "shape": "square",
+    "positionDataType": "position",
+    "pickingMask": [
+      "Selection"
+    ]
+  },
   "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent": {
     "sprites": [
       {

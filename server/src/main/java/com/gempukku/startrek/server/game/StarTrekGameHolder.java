@@ -20,6 +20,8 @@ import com.gempukku.startrek.game.GameComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
+import com.gempukku.startrek.server.game.ability.DilemmaEffectHandler;
+import com.gempukku.startrek.server.game.ability.TriggerAbilityHandler;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.decision.PlayOrDrawDecisionHandler;
 import com.gempukku.startrek.server.game.deck.DrawCardEffect;
@@ -96,6 +98,10 @@ public class StarTrekGameHolder implements Disposable {
                 new ShuffleDeckEffect(),
                 new DecisionSystem(),
                 new DrawCardEffect(),
+
+                // Ability handlers
+                new TriggerAbilityHandler(),
+                new DilemmaEffectHandler(),
 
                 // Decision handlers
                 new PlayOrDrawDecisionHandler(),

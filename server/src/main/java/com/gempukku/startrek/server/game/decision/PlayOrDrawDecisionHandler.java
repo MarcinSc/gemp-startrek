@@ -8,6 +8,11 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
+import com.gempukku.startrek.game.ability.CardAbilitySystem;
+import com.gempukku.startrek.game.ability.HeadquarterRequirements;
+import com.gempukku.startrek.game.card.CardFilteringSystem;
+import com.gempukku.startrek.game.filter.CardFilter;
+import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -19,6 +24,9 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
     private SpawnSystem spawnSystem;
     private StackSystem stackSystem;
     private EventSystem eventSystem;
+    private CardFilterResolverSystem cardFilterResolverSystem;
+    private CardFilteringSystem cardFilteringSystem;
+    private CardAbilitySystem cardAbilitySystem;
 
     @Override
     protected void initialize() {
@@ -27,15 +35,34 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
 
     @Override
     public boolean validateDecision(String decisionPlayer, JsonValue decisionData, ObjectMap<String, String> result) {
-        String action = result.get("action");
-        if (action == null)
-            return false;
-        Entity playerEntity = playerResolverSystem.findPlayerEntity(decisionPlayer);
-        PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
-        if (action.equals("draw") && publicStats.getCounterCount() > 0 && publicStats.getDeckCount() > 0) {
-            return true;
-        } else if (action.equals("pass") && (publicStats.getCounterCount() == 0 || publicStats.getDeckCount() == 0)) {
-            return true;
+        try {
+            String action = result.get("action");
+            if (action == null)
+                return false;
+            Entity playerEntity = playerResolverSystem.findPlayerEntity(decisionPlayer);
+            PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
+            if (action.equals("draw") && publicStats.getCounterCount() > 0 && publicStats.getDeckCount() > 0) {
+                return true;
+            } else if (action.equals("pass") && (publicStats.getCounterCount() == 0 || publicStats.getDeckCount() == 0)) {
+                return true;
+            } else if (action.equals("play")) {
+                int cardId = Integer.parseInt(result.get("cardId"));
+                Entity playedCardEntity = world.getEntity(cardId);
+                if (playedCardEntity == null)
+                    return false;
+                Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + decisionPlayer + "))");
+                CardFilter headquarterRequirements = cardAbilitySystem.getCardAbility(playerHeadquarter, HeadquarterRequirements.class).getCardFilter();
+                CardFilter cardFilter = cardFilterResolverSystem.resolveCardFilter(
+                        "or(type(Personnel),type(Ship),type(Equipment)),"
+                                + "playable,"
+                                + "condition(lessOrEqual(costToPlay,counterCount(username(" + decisionPlayer + "))))");
+
+                if (!headquarterRequirements.accepts(null, null, playedCardEntity)
+                        || !cardFilter.accepts(null, null, playedCardEntity))
+                    return false;
+            }
+        } catch (Exception exp) {
+            // Ignore
         }
         return false;
     }
@@ -59,6 +86,10 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
             Entity effectMemoryEntity = stackSystem.getTopMostStackEntityWithComponent(EffectMemoryComponent.class);
             EffectMemoryComponent effectMemory = effectMemoryEntity.getComponent(EffectMemoryComponent.class);
             effectMemory.getMemory().put("playerFinished", "true");
+        } else if (action.equals("play")) {
+            int cardId = Integer.parseInt(result.get("cardId"));
+            Entity playedCardEntity = world.getEntity(cardId);
+
         }
     }
 

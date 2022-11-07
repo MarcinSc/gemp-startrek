@@ -1,0 +1,7 @@
+{
+  "com.gempukku.libgdx.lib.artemis.input.UserInputComponent": {
+    "buttonSignal": {
+      "left": "selectToggle"
+    }
+  }
+}

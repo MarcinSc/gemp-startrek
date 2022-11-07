@@ -16,6 +16,9 @@
       "tpl:extends": "game/camera.template"
     },
     {
+      "tpl:extends": "game/userInput.template"
+    },
+    {
       "tpl:extends": "game/shape/square.template"
     }
   ]

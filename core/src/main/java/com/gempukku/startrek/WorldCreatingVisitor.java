@@ -17,6 +17,7 @@ import com.gempukku.libgdx.lib.artemis.font.BitmapFontSystem;
 import com.gempukku.libgdx.lib.artemis.font.RuntimeBitmapFontHandler;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
 import com.gempukku.libgdx.lib.artemis.input.InputProcessorSystem;
+import com.gempukku.libgdx.lib.artemis.input.UserInputSystem;
 import com.gempukku.libgdx.lib.artemis.picking.ShapePickingSystem;
 import com.gempukku.libgdx.lib.artemis.property.PropertySystem;
 import com.gempukku.libgdx.lib.artemis.shape.ShapeSystem;
@@ -41,8 +42,6 @@ import com.gempukku.startrek.common.ConnectionParamSystem;
 import com.gempukku.startrek.common.FontProviderSystem;
 import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.game.*;
-import com.gempukku.startrek.game.ability.ClientCardAbilitySystem;
-import com.gempukku.startrek.game.ability.HeadquarterRequirementsAbilityHandler;
 import com.gempukku.startrek.game.ability.NoOpClientCardAbilityHandler;
 import com.gempukku.startrek.game.config.ConfigureTextSystem;
 import com.gempukku.startrek.game.decision.ClientDecisionSystem;
@@ -128,13 +127,13 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new SelectionSystem(),
 
                 // Card abilities
-                new ClientCardAbilitySystem(),
                 new NoOpClientCardAbilityHandler(),
-                new HeadquarterRequirementsAbilityHandler(),
 
                 // Decision-related
                 new ClientDecisionSystem(),
                 new ClientPlayOrDrawDecisionHandler(),
+
+                new UserInputSystem(1),
 
                 // Rendering
                 new CardInGameRenderingSystem(),
