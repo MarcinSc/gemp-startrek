@@ -7,7 +7,6 @@ import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.startrek.decision.DecisionMade;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
-import com.gempukku.startrek.server.JsonValueHandler;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.player.PlayerResolverSystem;
@@ -63,7 +62,7 @@ public class DecisionSystem extends EffectSystem {
         PlayerDecisionComponent decision = playerDecisionComponentMapper.create(decisionEntity);
         decision.setOwner(playerEntity.getComponent(GamePlayerComponent.class).getName());
         decision.setDecisionType(gameEffect.getDataString("decisionType"));
-        decision.setData(JsonValueHandler.clone(gameEffect.getData().get("data")));
+        decision.setData(gameEffect.getClonedDataObject("data"));
 
         stackEffect(decisionEntity);
 

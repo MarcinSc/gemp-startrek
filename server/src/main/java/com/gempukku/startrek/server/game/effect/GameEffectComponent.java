@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game.effect;
 import com.artemis.Component;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.server.JsonValueHandler;
 
 public class GameEffectComponent extends Component {
     private String type;
@@ -17,16 +18,20 @@ public class GameEffectComponent extends Component {
         this.type = type;
     }
 
-    public JsonValue getData() {
-        return data;
-    }
-
     public void setData(JsonValue data) {
         this.data = data;
     }
 
+    public JsonValue getClonedData() {
+        return JsonValueHandler.clone(data);
+    }
+
+    public JsonValue getClonedDataObject(String name) {
+        return JsonValueHandler.clone(data.get(name));
+    }
+
     public String getDataString(String name) {
-        return getData().getString(name);
+        return data.getString(name);
     }
 
     public ObjectMap<String, String> getMemory() {

@@ -3,7 +3,6 @@ package com.gempukku.startrek.server.game.effect.control;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.startrek.server.JsonValueHandler;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 
@@ -25,7 +24,7 @@ public class SequenceEffect extends EffectSystem {
     }
 
     private void sequence(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        JsonValue action = gameEffect.getData().get("actions");
+        JsonValue action = gameEffect.getClonedDataObject("actions");
         String stackedIndex = gameEffect.getMemory().get("stackedIndex");
         int nextActionIndex = 0;
         if (stackedIndex != null) {
@@ -36,7 +35,7 @@ public class SequenceEffect extends EffectSystem {
             // Finished the effect - remove from stack
             removeEffectFromStack(gameEffectEntity);
         } else {
-            JsonValue actionToStack = JsonValueHandler.clone(action.get(nextActionIndex));
+            JsonValue actionToStack = action.get(nextActionIndex);
             Entity stackedEntity = world.createEntity();
             GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
             newGameEffect.setType(actionToStack.getString("type"));
@@ -48,7 +47,7 @@ public class SequenceEffect extends EffectSystem {
     }
 
     private void sequenceForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect) {
-        JsonValue action = gameEffect.getData().get("actions");
+        JsonValue action = gameEffect.getClonedDataObject("actions");
         String stackedIndex = gameEffect.getMemory().get("stackedIndex");
         String player = gameEffect.getDataString("player");
         int nextActionIndex = 0;
@@ -60,7 +59,7 @@ public class SequenceEffect extends EffectSystem {
             // Finished the effect - remove from stack
             removeEffectFromStack(gameEffectEntity);
         } else {
-            JsonValue actionToStack = JsonValueHandler.clone(action.get(nextActionIndex));
+            JsonValue actionToStack = action.get(nextActionIndex);
             Entity stackedEntity = world.createEntity();
             GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
             actionToStack.addChild("player", new JsonValue(player));
