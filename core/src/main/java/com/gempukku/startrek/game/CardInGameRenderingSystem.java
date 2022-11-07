@@ -288,8 +288,6 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
         Camera camera = cameraSystem.getCamera();
         float verticalScale = 0.85f;
-        if (playerPosition == PlayerPosition.Lower)
-            verticalScale = 0.1f;
         float distanceFromCamera = 3f;
         float cardSeparation = 0.15f;
         float cardScale = 0.4f;

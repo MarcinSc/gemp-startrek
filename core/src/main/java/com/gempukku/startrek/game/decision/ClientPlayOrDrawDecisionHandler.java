@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Value;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
@@ -54,19 +55,65 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
 
         Table table = new Table();
         table.setFillParent(true);
+        Array<Runnable> decisionCleanup = new Array<>();
+        decisionCleanup.add(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        table.remove();
+                    }
+                });
 
         VerticalGroup verticalGroup = new VerticalGroup();
         String username = authenticationHolderSystem.getUsername();
         Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
-        checkForDraw(table, verticalGroup, playerEntity);
-        markPlayableCards(username);
+        checkForDraw(table, verticalGroup, playerEntity, decisionCleanup);
+        markPlayableCards(username, decisionCleanup);
 
         table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
 
         stage.addActor(table);
     }
 
-    private void markPlayableCards(String username) {
+    private void checkForDraw(Table table, VerticalGroup verticalGroup, Entity playerEntity,
+                              Array<Runnable> decisionCleanup) {
+        PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
+        if (publicStats.getDeckCount() > 0 && publicStats.getCounterCount() > 0) {
+            TextButton drawCardButton = new TextButton("Draw a card", stageSystem.getSkin(), UISettings.mainButtonStyle);
+            drawCardButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            executeCleanup(decisionCleanup);
+                            ObjectMap<String, String> parameters = new ObjectMap<>();
+                            parameters.put("action", "draw");
+                            clientDecisionSystem.executeDecision(parameters);
+                        }
+                    });
+            verticalGroup.addActor(drawCardButton);
+        } else {
+            TextButton passButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.mainButtonStyle);
+            passButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            executeCleanup(decisionCleanup);
+                            ObjectMap<String, String> parameters = new ObjectMap<>();
+                            parameters.put("action", "pass");
+                            clientDecisionSystem.executeDecision(parameters);
+                        }
+                    });
+            verticalGroup.addActor(passButton);
+        }
+    }
+
+    private void executeCleanup(Array<Runnable> decisionCleanup) {
+        for (Runnable runnable : decisionCleanup) {
+            runnable.run();
+        }
+    }
+
+    private void markPlayableCards(String username, Array<Runnable> decisionCleanup) {
         Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + username + "))");
         CardFilter headquarterRequirements = clientCardAbilitySystem.getClientCardAbility(playerHeadquarter, HeadquarterRequirements.class).getCardFilter();
         CardFilter cardFilter = cardFilterResolverSystem.resolveCardFilter(
@@ -82,40 +129,17 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
                     Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
                     Entity selectionEntity = spawnSystem.spawnEntity("game/card-full-selection.template");
                     hierarchySystem.addHierarchy(renderedCard, selectionEntity);
+                    decisionCleanup.add(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    world.deleteEntity(selectionEntity);
+                                }
+                            }
+                    );
                 }
             }
         });
-    }
-
-    private void checkForDraw(Table table, VerticalGroup verticalGroup, Entity playerEntity) {
-        PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
-        if (publicStats.getDeckCount() > 0 && publicStats.getCounterCount() > 0) {
-            TextButton drawCardButton = new TextButton("Draw a card", stageSystem.getSkin(), UISettings.mainButtonStyle);
-            drawCardButton.addListener(
-                    new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            table.remove();
-                            ObjectMap<String, String> parameters = new ObjectMap<>();
-                            parameters.put("action", "draw");
-                            clientDecisionSystem.executeDecision(parameters);
-                        }
-                    });
-            verticalGroup.addActor(drawCardButton);
-        } else {
-            TextButton passButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.mainButtonStyle);
-            passButton.addListener(
-                    new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            table.remove();
-                            ObjectMap<String, String> parameters = new ObjectMap<>();
-                            parameters.put("action", "pass");
-                            clientDecisionSystem.executeDecision(parameters);
-                        }
-                    });
-            verticalGroup.addActor(passButton);
-        }
     }
 
     @Override
