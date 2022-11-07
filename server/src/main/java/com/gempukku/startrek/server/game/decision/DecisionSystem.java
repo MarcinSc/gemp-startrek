@@ -21,7 +21,7 @@ public class DecisionSystem extends EffectSystem {
     private ObjectMap<String, DecisionTypeHandler> decisionTypeHandlerMap = new ObjectMap<>();
 
     public DecisionSystem() {
-        super("sendDecisionToPlayer");
+        super("processDecision");
     }
 
     public void registerDecisionTypeHandler(String decisionType, DecisionTypeHandler decisionTypeHandler) {

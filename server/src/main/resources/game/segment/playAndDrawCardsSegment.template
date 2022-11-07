@@ -20,7 +20,7 @@
           "memory": true,
           "condition": "memoryHas(playerFinished,true),or(counterCount(currentPlayer,0),deckCount(currentPlayer,0))",
           "action": {
-            "type": "sendDecisionToPlayer",
+            "type": "processDecision",
             "player": "currentPlayer",
             "decisionType": "playOrDrawDecision"
           }
