@@ -1,0 +1,20 @@
+{
+  "type": "Personnel",
+  "affiliation": "NonAligned",
+  "cost": "2",
+  "title": "Bhavani",
+  "species": "Barzan",
+  "skills": [
+    "Diplomacy",
+    "Honor",
+    "Law",
+    "Leadership",
+    "Physics"
+  ],
+  "icons": [
+  ],
+  "integrity": 6,
+  "cunning": 5,
+  "strength": 4,
+  "lore": "\"The Barzan has been a society dependent on others for generations. We want that to end. The appearance of this stable wormhole in our space provides us with our first true natural resorce. We have neither the experience nor the technology to exploit it. But you do.\""
+}

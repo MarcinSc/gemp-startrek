@@ -1,0 +1,22 @@
+{
+  "type": "Personnel",
+  "affiliation": "NonAligned",
+  "cost": "2",
+  "unique": true,
+  "title": "Ty Kajada",
+  "subtitle": "Relentless Investigator",
+  "species": "Kobliad",
+  "skills": [
+    "Intelligence",
+    "Leadership",
+    "Programming",
+    "Security"
+  ],
+  "icons": [
+    "Cmd"
+  ],
+  "integrity": 4,
+  "cunning": 6,
+  "strength": 5,
+  "lore": "Officer for Kobliad Security who pursued the dangerous and devious Rao Vantika for 20 years. \"I know Vantika. I've learned to think as he thinks... He's alive. And he's on board this station.\""
+}

@@ -15,6 +15,9 @@
     "1_199": {
       "tpl:extends": "card/set1/1_199.json"
     },
+    "1_207": {
+      "tpl:extends": "card/set1/1_207.json"
+    },
     "1_210": {
       "tpl:extends": "card/set1/1_210.json"
     },
@@ -50,6 +53,15 @@
     },
     "1_291": {
       "tpl:extends": "card/set1/1_291.json"
+    },
+    "1_320": {
+      "tpl:extends": "card/set1/1_320.json"
+    },
+    "1_334": {
+      "tpl:extends": "card/set1/1_334.json"
+    },
+    "1_351": {
+      "tpl:extends": "card/set1/1_351.json"
     },
     "1_4": {
       "tpl:extends": "card/set1/1_4.json"

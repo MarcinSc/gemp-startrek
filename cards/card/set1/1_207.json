@@ -1,0 +1,20 @@
+{
+  "type": "Personnel",
+  "affiliation": "Bajoran",
+  "cost": "1",
+  "title": "Anara",
+  "species": "Bajoran",
+  "skills": [
+    "Engineer",
+    "Physics",
+    "Transporters"
+  ],
+  "icons": [
+    "Stf",
+    "DS9"
+  ],
+  "integrity": 5,
+  "cunning": 5,
+  "strength": 4,
+  "lore": "In the early years following the Occupation, Bajoran tours of duty aboard Deep Space 9 often lasted only a few months. The Militia hoped to train a number of junior officers in skills useful for the rebuilding efforts on Bajor."
+}

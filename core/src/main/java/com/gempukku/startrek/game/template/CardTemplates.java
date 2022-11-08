@@ -106,6 +106,8 @@ public class CardTemplates {
             return "federation-template";
         else if (affiliation == Affiliation.Bajoran)
             return "bajoran-template";
+        else if (affiliation == Affiliation.NonAligned)
+            return "nonAligned-template";
         return null;
     }
 

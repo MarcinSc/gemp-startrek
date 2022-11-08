@@ -19,18 +19,32 @@ public class StarTrekServerDeckSystem extends BaseSystem {
 
         temporaryDeck.getDillemas().add("1_4");
 
+        // Personnel - Bajoran
+        temporaryDeck.getDrawDeck().add("1_207");
+        temporaryDeck.getDrawDeck().add("1_207");
         temporaryDeck.getDrawDeck().add("1_210");
+        temporaryDeck.getDrawDeck().add("1_210");
+        temporaryDeck.getDrawDeck().add("1_214");
         temporaryDeck.getDrawDeck().add("1_214");
         temporaryDeck.getDrawDeck().add("1_217");
         temporaryDeck.getDrawDeck().add("1_225");
+        temporaryDeck.getDrawDeck().add("1_225");
+        // Personnel - Federation
         temporaryDeck.getDrawDeck().add("1_251");
         temporaryDeck.getDrawDeck().add("1_254");
         temporaryDeck.getDrawDeck().add("1_256");
+        temporaryDeck.getDrawDeck().add("1_256");
         temporaryDeck.getDrawDeck().add("1_265");
+        temporaryDeck.getDrawDeck().add("1_265");
+        temporaryDeck.getDrawDeck().add("1_278");
         temporaryDeck.getDrawDeck().add("1_278");
         temporaryDeck.getDrawDeck().add("1_280");
         temporaryDeck.getDrawDeck().add("1_285");
         temporaryDeck.getDrawDeck().add("1_291");
+        // Personnel - Non-Aligned
+        temporaryDeck.getDrawDeck().add("1_320");
+        temporaryDeck.getDrawDeck().add("1_334");
+        temporaryDeck.getDrawDeck().add("1_351");
     }
 
     public StarTrekDeck getStarterDeck(String starterDeckId) {

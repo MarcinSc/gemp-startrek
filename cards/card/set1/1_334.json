@@ -1,0 +1,18 @@
+{
+  "type": "Personnel",
+  "affiliation": "NonAligned",
+  "cost": "1",
+  "title": "Leyor",
+  "species": "Caldonian",
+  "skills": [
+    "Astometrics",
+    "Diplomacy",
+    "Science"
+  ],
+  "icons": [
+  ],
+  "integrity": 5,
+  "cunning": 5,
+  "strength": 6,
+  "lore": "The Caldonians are well-respected as scholars dedicated to pur research. Their representative in the Barzan wormhole negotiations was thus understandably intimidated by the potential administrative demands of a winning bid."
+}

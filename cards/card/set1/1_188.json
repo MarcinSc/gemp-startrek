@@ -15,7 +15,7 @@
     {
       "text": "You may play [DS9] cards, [NA] cards, and equipment at this mission.",
       "type": "headquarterRequirements",
-      "filter": "or(icon(DS9),icon(NA),type(equipment))"
+      "filter": "or(icon(DS9),affiliation(NonAligned),type(equipment))"
     },
     {
       "text": "When any player is about to move a ship between this mission and a [GQ] mission, do not add 2 to the span total of those missions.",

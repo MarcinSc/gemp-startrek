@@ -39,3 +39,16 @@ personnel-template-small
   orig: 736, 512
   offset: 0, 0
   index: -1
+
+card-templates2.png
+size: 1024, 2048
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+nonAligned-template
+  rotate: false
+  xy: 2, 2
+  size: 736, 1029
+  orig: 736, 1029
+  offset: 0, 0
+  index: -1

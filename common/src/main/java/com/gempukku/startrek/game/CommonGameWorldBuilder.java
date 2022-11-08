@@ -37,6 +37,7 @@ public class CommonGameWorldBuilder {
                 new CardFilterResolverSystem(),
                 new CardTypeFilterHandler(),
                 new CardIconFilterHandler(),
+                new AffiliationFilterHandler(),
                 new MissionTypeFilterHandler(),
                 new OwnerFilterHandler(),
                 new TitleFilterHandler(),
