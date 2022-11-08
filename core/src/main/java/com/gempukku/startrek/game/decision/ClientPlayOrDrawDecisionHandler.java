@@ -23,10 +23,10 @@ import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.common.UISettings;
 import com.gempukku.startrek.game.CardStorageSystem;
+import com.gempukku.startrek.game.PlayRequirements;
 import com.gempukku.startrek.game.PlayerPositionSystem;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
-import com.gempukku.startrek.game.ability.HeadquarterRequirements;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
@@ -156,18 +156,13 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     }
 
     private void markPlayableCards(String username) {
-        Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + username + "))");
-        CardFilter headquarterRequirements = cardAbilitySystem.getCardAbility(playerHeadquarter, HeadquarterRequirements.class).getCardFilter();
-        CardFilter cardFilter = cardFilterResolverSystem.resolveCardFilter(
-                "or(type(Personnel),type(Ship),type(Equipment)),"
-                        + "playable,"
-                        + "condition(lessOrEqual(costToPlay,counterCount(username(" + username + "))))");
+        CardFilter playFilter = PlayRequirements.createPlayRequirements(
+                username, cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
 
         cardFilteringSystem.forEachCardInHand(username, new Consumer<Entity>() {
             @Override
             public void accept(Entity cardEntity) {
-                if (headquarterRequirements.accepts(null, null, cardEntity)
-                        && cardFilter.accepts(null, null, cardEntity)) {
+                if (playFilter.accepts(null, null, cardEntity)) {
                     Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
                     Entity selectionEntity = spawnSystem.spawnEntity("game/card-full-selection.template");
                     hierarchySystem.addHierarchy(renderedCard, selectionEntity);
@@ -180,8 +175,6 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     private void startSelection() {
         selectionSystem.startSelection(
                 new SelectionDefinition() {
-                    private Array<Entity> tempArray = new Array<>();
-
                     @Override
                     public boolean isSelectionTriggered() {
                         Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);

@@ -32,7 +32,7 @@ public class CardAbilitySystem extends BaseSystem {
     public <T extends CardAbility> T getCardAbility(String cardId, Class<T> clazz) {
         Array<CardAbility> cardAbilities = abilitiesMap.get(cardId);
         for (CardAbility cardAbility : cardAbilities) {
-            if (clazz.isAssignableFrom(cardAbility.getClass()))
+            if (cardAbility != null && clazz.isAssignableFrom(cardAbility.getClass()))
                 return (T) cardAbility;
         }
         return null;

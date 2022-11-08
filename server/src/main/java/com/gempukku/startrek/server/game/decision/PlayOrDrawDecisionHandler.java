@@ -9,9 +9,9 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.LazyEntityUtil;
+import com.gempukku.startrek.game.PlayRequirements;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
-import com.gempukku.startrek.game.ability.HeadquarterRequirements;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
@@ -54,15 +54,11 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
                 Entity playedCardEntity = world.getEntity(cardId);
                 if (playedCardEntity == null)
                     return false;
-                Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + decisionPlayer + "))");
-                CardFilter headquarterRequirements = cardAbilitySystem.getCardAbility(playerHeadquarter, HeadquarterRequirements.class).getCardFilter();
-                CardFilter cardFilter = cardFilterResolverSystem.resolveCardFilter(
-                        "or(type(Personnel),type(Ship),type(Equipment)),"
-                                + "playable,"
-                                + "condition(lessOrEqual(costToPlay,counterCount(username(" + decisionPlayer + "))))");
 
-                if (headquarterRequirements.accepts(null, null, playedCardEntity)
-                        && cardFilter.accepts(null, null, playedCardEntity))
+                CardFilter playFilter = PlayRequirements.createPlayRequirements(
+                        decisionPlayer, cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
+
+                if (playFilter.accepts(null, null, playedCardEntity))
                     return true;
             }
         } catch (Exception exp) {

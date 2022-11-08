@@ -3,14 +3,13 @@ package com.gempukku.startrek.game.filter;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.startrek.card.CardDefinition;
-import com.gempukku.startrek.card.CardLookupSystem;
-import com.gempukku.startrek.game.CardComponent;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
+import com.gempukku.startrek.game.ability.CardAbilitySystem;
+import com.gempukku.startrek.game.ability.EventAbility;
+import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 
 public class PlayableFilterHandler extends CardFilterSystem {
-    private CardLookupSystem cardLookupSystem;
-    private CardFilteringSystem cardFilteringSystem;
+    private ConditionResolverSystem conditionResolverSystem;
+    private CardAbilitySystem cardAbilitySystem;
 
     public PlayableFilterHandler() {
         super("playable");
@@ -21,18 +20,15 @@ public class PlayableFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, ObjectMap<String, String> memory, Entity cardEntity) {
-                CardComponent card = cardEntity.getComponent(CardComponent.class);
-
-                CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardEntity);
-                return !cardDefinition.isUnique()
-                        || cantFindCardInPlayWithSameTitle(card, cardDefinition);
+                EventAbility cardAbility = cardAbilitySystem.getCardAbility(cardEntity, EventAbility.class);
+                if (cardAbility != null) {
+                    String condition = cardAbility.getCondition();
+                    if (condition != null && !conditionResolverSystem.resolveBoolean(sourceEntity, memory, condition)) {
+                        return false;
+                    }
+                }
+                return true;
             }
         };
-    }
-
-    private boolean cantFindCardInPlayWithSameTitle(CardComponent card, CardDefinition cardDefinition) {
-        Entity cardWithSameTitle = cardFilteringSystem.findFirstCardInPlay("title(" + cardDefinition.getTitle() + ")," +
-                "owner(username(" + card.getOwner() + "))");
-        return cardWithSameTitle == null;
     }
 }
