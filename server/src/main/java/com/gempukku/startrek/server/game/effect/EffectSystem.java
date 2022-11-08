@@ -22,11 +22,7 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
         }
     }
 
-    protected void removeEffectFromStack(Entity effectEntity) {
-        Entity topStackEntity = stackSystem.peekTopStackEntity();
-        if (topStackEntity != effectEntity)
-            throw new RuntimeException("The entity to remove is not top most on stack");
-
+    protected void removeTopEffectFromStack() {
         Entity entity = stackSystem.removeTopStackEntity();
         world.deleteEntity(entity);
     }
@@ -36,12 +32,12 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
     }
 
     @Override
-    public boolean processEndingEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
-        processEffect(gameEffectEntity, gameEffect, memory);
+    public boolean processEndingEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+        processEffect(sourceEntity, effectEntity, gameEffect, memory);
         return false;
     }
 
-    protected abstract void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory);
+    protected abstract void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory);
 
     @Override
     protected void processSystem() {

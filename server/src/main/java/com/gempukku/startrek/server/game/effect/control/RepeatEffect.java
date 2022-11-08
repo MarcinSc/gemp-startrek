@@ -17,17 +17,17 @@ public class RepeatEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    public void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         String type = gameEffect.getType();
         if (type.equals("repeat")) {
-            repeat(gameEffectEntity, gameEffect, memory);
+            repeat(effectEntity, gameEffect, memory);
         } else if (type.equals("repeatForPlayer")) {
-            repeatForPlayer(gameEffectEntity, gameEffect, memory);
+            repeatForPlayer(effectEntity, gameEffect, memory);
         }
     }
 
-    private void repeat(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
-        int times = amountResolverSystem.resolveAmount(gameEffectEntity, memory,
+    private void repeat(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+        int times = amountResolverSystem.resolveAmount(effectEntity, memory,
                 gameEffect.getDataString("times"));
 
         int executedTimes = 0;
@@ -48,12 +48,12 @@ public class RepeatEffect extends EffectSystem {
 
             stackEffect(stackedEntity);
         } else {
-            removeEffectFromStack(gameEffectEntity);
+            removeTopEffectFromStack();
         }
     }
 
-    private void repeatForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
-        int times = amountResolverSystem.resolveAmount(gameEffectEntity, memory,
+    private void repeatForPlayer(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+        int times = amountResolverSystem.resolveAmount(effectEntity, memory,
                 gameEffect.getDataString("times"));
         String player = gameEffect.getDataString("player");
 
@@ -76,7 +76,7 @@ public class RepeatEffect extends EffectSystem {
 
             stackEffect(stackedEntity);
         } else {
-            removeEffectFromStack(gameEffectEntity);
+            removeTopEffectFromStack();
         }
     }
 }

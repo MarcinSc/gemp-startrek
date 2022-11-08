@@ -19,8 +19,8 @@ public class SetTurnPlayerEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
-        String username = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, memory,
+    protected void processOneTimeEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+        String username = playerResolverSystem.resolvePlayerUsername(effectEntity, memory,
                 gameEffect.getDataString("player"));
         Entity turnSequenceEntity = LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class);
         TurnSequenceComponent turnSequence = turnSequenceEntity.getComponent(TurnSequenceComponent.class);

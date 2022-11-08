@@ -34,14 +34,14 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         String filter = gameEffect.getDataString("filter");
         int missionId = Integer.parseInt(memory.getValue(gameEffect.getDataString("missionMemory")));
-        boolean faceUp = conditionResolverSystem.resolveBoolean(gameEffectEntity, memory, gameEffect.getDataString("faceUp"));
+        boolean faceUp = conditionResolverSystem.resolveBoolean(effectEntity, memory, gameEffect.getDataString("faceUp"));
         Entity missionEntity = world.getEntity(missionId);
         MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
 
-        cardFilteringSystem.forEachCard(gameEffectEntity, memory, filter,
+        cardFilteringSystem.forEachCard(effectEntity, memory, filter,
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {

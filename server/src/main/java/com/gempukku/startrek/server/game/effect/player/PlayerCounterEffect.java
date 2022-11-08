@@ -20,11 +20,11 @@ public class PlayerCounterEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
-        int amount = amountResolverSystem.resolveAmount(gameEffectEntity, memory,
+    protected void processOneTimeEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+        int amount = amountResolverSystem.resolveAmount(effectEntity, memory,
                 gameEffect.getDataString("amount"));
 
-        Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, memory,
+        Entity playerEntity = playerResolverSystem.resolvePlayer(effectEntity, memory,
                 gameEffect.getDataString("player"));
         PlayerPublicStatsComponent playerCounter = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         playerCounter.setCounterCount(amount);

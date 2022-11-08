@@ -22,16 +22,16 @@ public class StackActionEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    public void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         String effectType = gameEffect.getType();
         if (effectType.equals("stackForEachPlayer")) {
-            stackForEachPlayerEffect(gameEffectEntity, gameEffect, memory);
+            stackForEachPlayerEffect(effectEntity, gameEffect, memory);
         } else if (effectType.equals("stackActionTemplate")) {
-            stackActionTemplate(gameEffectEntity, gameEffect, memory);
+            stackActionTemplate(effectEntity, gameEffect, memory);
         }
     }
 
-    private void stackForEachPlayerEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void stackForEachPlayerEffect(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         GameComponent game = LazyEntityUtil.findEntityWithComponent(world, GameComponent.class).getComponent(GameComponent.class);
         Array<String> players = game.getPlayers();
 
@@ -43,7 +43,7 @@ public class StackActionEffect extends EffectSystem {
 
         if (nextPlayerIndex == players.size) {
             // Finished all players - remove from stack
-            removeEffectFromStack(gameEffectEntity);
+            removeTopEffectFromStack();
         } else {
             String player = players.get(nextPlayerIndex);
             JsonValue action = gameEffect.getClonedDataObject("action");
@@ -64,12 +64,12 @@ public class StackActionEffect extends EffectSystem {
         }
     }
 
-    private void stackActionTemplate(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void stackActionTemplate(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         String template = gameEffect.getDataString("template");
 
         Entity spawnedAction = spawnSystem.spawnEntity(template);
 
-        removeEffectFromStack(gameEffectEntity);
+        removeTopEffectFromStack();
 
         stackEffect(spawnedAction);
     }

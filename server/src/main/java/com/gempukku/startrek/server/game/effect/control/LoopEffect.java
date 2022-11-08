@@ -22,18 +22,18 @@ public class LoopEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    public void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         String effectType = gameEffect.getType();
         if (effectType.equals("stackUntil")) {
-            stackUntil(gameEffectEntity, gameEffect, memory);
+            stackUntil(effectEntity, gameEffect, memory);
         } else if (effectType.equals("stackUntilInTurnOrder")) {
-            stackUntilInTurnOrder(gameEffectEntity, gameEffect, memory);
+            stackUntilInTurnOrder(effectEntity, gameEffect, memory);
         }
     }
 
-    private void stackUntil(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void stackUntil(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         String condition = gameEffect.getDataString("condition");
-        boolean result = conditionResolverSystem.resolveBoolean(gameEffectEntity, memory, condition);
+        boolean result = conditionResolverSystem.resolveBoolean(effectEntity, memory, condition);
         if (!result) {
             Entity stackedEntity = world.createEntity();
             JsonValue action = gameEffect.getClonedDataObject("action");
@@ -48,12 +48,12 @@ public class LoopEffect extends EffectSystem {
 
             stackEffect(stackedEntity);
         } else {
-            removeEffectFromStack(gameEffectEntity);
+            removeTopEffectFromStack();
         }
     }
 
-    private void stackUntilInTurnOrder(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
-        boolean condition = conditionResolverSystem.resolveBoolean(gameEffectEntity, memory,
+    private void stackUntilInTurnOrder(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+        boolean condition = conditionResolverSystem.resolveBoolean(effectEntity, memory,
                 gameEffect.getDataString("condition"));
         if (!condition) {
             TurnSequenceComponent turnSequence = LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class).
@@ -86,7 +86,7 @@ public class LoopEffect extends EffectSystem {
 
             stackEffect(stackedEntity);
         } else {
-            removeEffectFromStack(gameEffectEntity);
+            removeTopEffectFromStack();
         }
     }
 }

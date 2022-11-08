@@ -28,11 +28,11 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         String filter = gameEffect.getDataString("filter");
         CardZone zone = CardZone.valueOf(gameEffect.getDataString("zone"));
 
-        cardFilteringSystem.forEachCard(gameEffectEntity, memory, filter,
+        cardFilteringSystem.forEachCard(effectEntity, memory, filter,
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {

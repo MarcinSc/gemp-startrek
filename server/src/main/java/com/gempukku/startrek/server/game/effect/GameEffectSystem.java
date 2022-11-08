@@ -18,9 +18,13 @@ public class GameEffectSystem extends BaseSystem {
     }
 
     @EventListener
-    public void playoutGameEffect(ExecuteStackedAction action, Entity gameEffectEntity) {
-        GameEffectComponent gameEffect = gameEffectEntity.getComponent(GameEffectComponent.class);
+    public void playoutGameEffect(ExecuteStackedAction action, Entity effectEntity) {
+        GameEffectComponent gameEffect = effectEntity.getComponent(GameEffectComponent.class);
         if (gameEffect != null) {
+            Entity sourceEntity = null;
+            int sourceEntityId = gameEffect.getSourceEntityId();
+            if (sourceEntityId != -1)
+                sourceEntity = world.getEntity(sourceEntityId);
             String type = gameEffect.getType();
             GameEffectHandler gameEffectHandler = gameEffectHandlers.get(type);
             if (gameEffectHandler == null) {
@@ -32,7 +36,7 @@ public class GameEffectSystem extends BaseSystem {
 
             EffectMemoryComponent effectMemory = effectMemoryEntity.getComponent(EffectMemoryComponent.class);
             Memory memory = new Memory(effectMemory.getMemory());
-            action.setFinishedProcessing(gameEffectHandler.processEndingEffect(gameEffectEntity, gameEffect, memory));
+            action.setFinishedProcessing(gameEffectHandler.processEndingEffect(sourceEntity, effectEntity, gameEffect, memory));
         }
     }
 

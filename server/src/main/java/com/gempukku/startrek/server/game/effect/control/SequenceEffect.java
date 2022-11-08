@@ -17,16 +17,16 @@ public class SequenceEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         String effectType = gameEffect.getType();
         if (effectType.equals("sequence")) {
-            sequence(gameEffectEntity, gameEffect, memory);
+            sequence(effectEntity, gameEffect, memory);
         } else if (effectType.equals("sequenceForPlayer")) {
-            sequenceForPlayer(gameEffectEntity, gameEffect, memory);
+            sequenceForPlayer(effectEntity, gameEffect, memory);
         }
     }
 
-    private void sequence(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void sequence(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         JsonValue action = gameEffect.getClonedDataObject("actions");
         String stackedIndex = memory.getValue("stackedIndex");
         int nextActionIndex = 0;
@@ -36,7 +36,7 @@ public class SequenceEffect extends EffectSystem {
 
         if (nextActionIndex == action.size) {
             // Finished the effect - remove from stack
-            removeEffectFromStack(gameEffectEntity);
+            removeTopEffectFromStack();
         } else {
             JsonValue actionToStack = action.get(nextActionIndex);
             String actionType = actionToStack.getString("type");
@@ -54,7 +54,7 @@ public class SequenceEffect extends EffectSystem {
         }
     }
 
-    private void sequenceForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void sequenceForPlayer(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
         JsonValue action = gameEffect.getClonedDataObject("actions");
         String stackedIndex = memory.getValue("stackedIndex");
         String player = gameEffect.getDataString("player");
@@ -65,7 +65,7 @@ public class SequenceEffect extends EffectSystem {
 
         if (nextActionIndex == action.size) {
             // Finished the effect - remove from stack
-            removeEffectFromStack(gameEffectEntity);
+            removeTopEffectFromStack();
         } else {
             JsonValue actionToStack = action.get(nextActionIndex);
             String actionType = actionToStack.getString("type");
