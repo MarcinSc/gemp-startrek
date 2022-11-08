@@ -14,13 +14,18 @@
         },
         {
           "type": "placeCardInHandOnBottomOfDeck",
+          "player": "owner(self)",
           "filter": "any"
         }
       ],
       "effects": [
         {
-          "type": "drawCards",
-          "amount": "memory(cardCount)"
+          "type": "repeat",
+          "times": "memory(cardCount)",
+          "action": {
+            "type": "drawCard",
+            "player": "owner(self)"
+          }
         },
         {
           "type": "destroy",

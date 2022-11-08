@@ -33,6 +33,8 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String filter = gameEffect.getDataString("filter");
         CardZone zone = CardZone.valueOf(gameEffect.getDataString("zone"));
+        String fromZoneStr = gameEffect.getDataString("fromZone", null);
+        CardZone fromZone = (fromZoneStr != null) ? CardZone.valueOf(fromZoneStr) : null;
 
         cardFilteringSystem.forEachCard(sourceEntity, memory, filter,
                 new Consumer<Entity>() {
@@ -40,11 +42,21 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
                     public void accept(Entity cardEntity) {
                         CardComponent card = cardEntity.getComponent(CardComponent.class);
                         CardZone oldZone = card.getCardZone();
-                        removeCardFromCurrentZone(cardEntity, oldZone);
-                        addCardToNewZone(cardEntity, zone, card.getOwner());
-                        eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+                        if (fromZone == null || oldZone == fromZone) {
+                            removeCardFromCurrentZone(cardEntity, oldZone);
+                            addCardToNewZone(cardEntity, zone, card.getOwner());
+                            eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+                        }
                     }
                 });
+    }
+
+    public void removeCard(Entity cardEntity, CardZone fromZone) {
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        CardZone oldZone = card.getCardZone();
+        if (fromZone == null || oldZone == fromZone) {
+            removeCardFromCurrentZone(cardEntity, oldZone);
+        }
     }
 
     private void removeCardFromCurrentZone(Entity cardEntity, CardZone zone) {

@@ -38,7 +38,7 @@ public class RepeatEffect extends EffectSystem {
 
         if (executedTimes < times) {
             JsonValue action = gameEffect.getClonedDataObject("action");
-            Entity actionToStack = createActionFromJson(action);
+            Entity actionToStack = createActionFromJson(action, sourceEntity);
             executedTimes++;
             memory.setValue("times", String.valueOf(executedTimes));
 
@@ -62,7 +62,7 @@ public class RepeatEffect extends EffectSystem {
         if (executedTimes < times) {
             JsonValue action = gameEffect.getClonedDataObject("action");
             action.addChild("player", new JsonValue(player));
-            Entity actionToStack = createActionFromJson(action);
+            Entity actionToStack = createActionFromJson(action, sourceEntity);
 
             executedTimes++;
             memory.setValue("times", String.valueOf(executedTimes));

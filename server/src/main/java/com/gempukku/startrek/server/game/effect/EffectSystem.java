@@ -31,14 +31,15 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
         world.deleteEntity(entity);
     }
 
-    protected Entity createActionFromJson(JsonValue action) {
+    protected Entity createActionFromJson(JsonValue action, Entity sourceEntity) {
         Entity stackedEntity = world.createEntity();
         String actionType = action.getString("type");
         boolean createMemory = action.getBoolean("memory", false);
         GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-        if (createMemory) {
+        if (sourceEntity != null)
+            newGameEffect.setSourceEntityId(sourceEntity.getId());
+        if (createMemory)
             effectMemoryComponentMapper.create(stackedEntity).setMemoryType("action - " + actionType);
-        }
         newGameEffect.setType(actionType);
         newGameEffect.setData(action);
         return stackedEntity;

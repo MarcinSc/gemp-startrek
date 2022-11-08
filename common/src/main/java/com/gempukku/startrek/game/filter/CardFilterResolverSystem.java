@@ -35,6 +35,18 @@ public class CardFilterResolverSystem extends BaseSystem {
                         return new OrCardFilter(filters);
                     }
                 });
+        registerFilterHandler("any",
+                new CardFilterHandler() {
+                    @Override
+                    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+                        return new CardFilter() {
+                            @Override
+                            public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
+                                return true;
+                            }
+                        };
+                    }
+                });
         registerFilterHandler("not",
                 new CardFilterHandler() {
                     @Override

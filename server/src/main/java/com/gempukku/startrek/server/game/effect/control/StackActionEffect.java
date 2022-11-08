@@ -48,7 +48,7 @@ public class StackActionEffect extends EffectSystem {
             String player = players.get(nextPlayerIndex);
             JsonValue action = gameEffect.getClonedDataObject("action");
             action.addChild("player", new JsonValue("username(" + player + ")"));
-            Entity actionToStack = createActionFromJson(action);
+            Entity actionToStack = createActionFromJson(action, sourceEntity);
             memory.setValue("playerIndex", String.valueOf(nextPlayerIndex));
 
             stackEffect(actionToStack);

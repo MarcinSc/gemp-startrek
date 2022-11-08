@@ -7,7 +7,19 @@
     "zone": "CORE"
   },
   "falseEffect": {
-    "type": "playoutEventEffect",
-    "memoryCard": "playedCardId"
+    "type": "sequence",
+    "memory": "playEventIndex",
+    "actions": [
+      {
+        "type": "playoutEventEffect",
+        "memoryCard": "playedCardId"
+      },
+      {
+        "type": "moveCardToZone",
+        "filter": "memory(playedCardId)",
+        "fromZone": "STACK",
+        "zone": "DISCARD_PILE"
+      }
+    ]
   }
 }

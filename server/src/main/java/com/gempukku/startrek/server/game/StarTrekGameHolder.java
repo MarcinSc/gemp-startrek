@@ -26,10 +26,16 @@ import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.decision.PlayOrDrawDecisionHandler;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
+import com.gempukku.startrek.server.game.effect.card.DestroyEffect;
 import com.gempukku.startrek.server.game.effect.card.PayCardCostEffect;
 import com.gempukku.startrek.server.game.effect.control.*;
+import com.gempukku.startrek.server.game.effect.deck.DeckOperationsSystem;
 import com.gempukku.startrek.server.game.effect.deck.DrawCardEffect;
+import com.gempukku.startrek.server.game.effect.deck.PlaceCardInHandOnBottomOfDeckEffect;
 import com.gempukku.startrek.server.game.effect.deck.ShuffleDeckEffect;
+import com.gempukku.startrek.server.game.effect.discard.DiscardOperationsSystem;
+import com.gempukku.startrek.server.game.effect.memory.MemorizeAmountEffect;
+import com.gempukku.startrek.server.game.effect.play.PlayoutEventEffect;
 import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
 import com.gempukku.startrek.server.game.effect.setup.*;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
@@ -74,6 +80,8 @@ public class StarTrekGameHolder implements Disposable {
                 // Specific systems
                 new CardLookupSystem(cardDataService),
                 new StackSystem(),
+                new DeckOperationsSystem(),
+                new DiscardOperationsSystem(),
 
                 // Setup effects
                 new SetupMissionsEffect(),
@@ -94,14 +102,20 @@ public class StarTrekGameHolder implements Disposable {
                 new StackActionEffect(),
                 new ConditionEffect(),
 
+                // Core game effects
+                new PlayoutEventEffect(),
+
                 // Specific game effects
                 new PlayerCounterEffect(),
                 new ShuffleDeckEffect(),
                 new DecisionSystem(),
                 new DrawCardEffect(),
+                new PlaceCardInHandOnBottomOfDeckEffect(),
                 new MoveCardToZoneEffect(),
                 new MoveCardToMissionEffect(),
                 new PayCardCostEffect(),
+                new MemorizeAmountEffect(),
+                new DestroyEffect(),
 
                 // Ability handlers
                 new TriggerAbilityHandler(),

@@ -25,7 +25,7 @@ public class ConditionEffect extends EffectSystem {
         }
         removeTopEffectFromStack();
         if (action != null) {
-            Entity entityToStack = createActionFromJson(action);
+            Entity entityToStack = createActionFromJson(action, sourceEntity);
             stackEffect(entityToStack);
         }
     }

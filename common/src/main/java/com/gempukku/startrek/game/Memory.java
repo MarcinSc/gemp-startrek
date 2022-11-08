@@ -13,6 +13,13 @@ public class Memory {
         return memory.get(name);
     }
 
+    public String getValue(String name, String defaultValue) {
+        String result = memory.get(name);
+        if (result == null)
+            return defaultValue;
+        return result;
+    }
+
     public void setValue(String name, String value) {
         memory.put(name, value);
     }

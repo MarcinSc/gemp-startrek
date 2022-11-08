@@ -3,9 +3,7 @@ package com.gempukku.startrek.game;
 import com.artemis.WorldConfigurationBuilder;
 import com.gempukku.startrek.expression.ExpressionSystem;
 import com.gempukku.startrek.game.ability.*;
-import com.gempukku.startrek.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.game.amount.CostToPlayAmountHandler;
-import com.gempukku.startrek.game.amount.CounterCountAmountHandler;
+import com.gempukku.startrek.game.amount.*;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.*;
 import com.gempukku.startrek.game.filter.*;
@@ -23,6 +21,8 @@ public class CommonGameWorldBuilder {
                 new AmountResolverSystem(),
                 new CounterCountAmountHandler(),
                 new CostToPlayAmountHandler(),
+                new HandCountAmountHandler(),
+                new MemoryAmountHandler(),
 
                 // Condition resolvers
                 new ConditionResolverSystem(),

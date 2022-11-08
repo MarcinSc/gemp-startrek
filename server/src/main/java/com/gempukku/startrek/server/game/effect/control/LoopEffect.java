@@ -36,7 +36,7 @@ public class LoopEffect extends EffectSystem {
         boolean result = conditionResolverSystem.resolveBoolean(sourceEntity, memory, condition);
         if (!result) {
             JsonValue action = gameEffect.getClonedDataObject("action");
-            Entity actionToStack = createActionFromJson(action);
+            Entity actionToStack = createActionFromJson(action, sourceEntity);
             stackEffect(actionToStack);
         } else {
             removeTopEffectFromStack();
@@ -65,7 +65,7 @@ public class LoopEffect extends EffectSystem {
             action.addChild("player", new JsonValue("username(" + player + ")"));
             memory.setValue("playerIndex", String.valueOf(nextPlayerIndex));
 
-            Entity actionToStack = createActionFromJson(action);
+            Entity actionToStack = createActionFromJson(action, sourceEntity);
 
             stackEffect(actionToStack);
         } else {
