@@ -15,12 +15,18 @@ import com.gempukku.startrek.card.*;
 public class CardTemplates {
     public static Entity createSmallCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
         Entity cardRepresentation;
-        if (cardDefinition.getType() == CardType.Mission) {
+        CardType cardType = cardDefinition.getType();
+        if (cardType == CardType.Mission) {
             cardRepresentation = createSmallMissionCard(cardDefinition, spawnSystem);
-        } else if (cardDefinition.getType() == CardType.Personnel) {
+        } else if (cardType == CardType.Personnel) {
             cardRepresentation = createSmallPersonnelCard(cardDefinition, spawnSystem);
-        } else if (cardDefinition.getType() == CardType.Ship) {
+        } else if (cardType == CardType.Ship) {
             cardRepresentation = createSmallShipCard(cardDefinition, spawnSystem);
+        } else if (cardType == CardType.Event
+                || cardType == CardType.Equipment
+                || cardType == CardType.Interrupt
+                || cardType == CardType.Dilemma) {
+            cardRepresentation = createSmallUnaffilatedCard(cardDefinition, spawnSystem);
         } else {
             throw new GdxRuntimeException("Type of card not implemented: " + cardDefinition.getType());
         }
@@ -336,6 +342,23 @@ public class CardTemplates {
             // Stats
             TextBlock statsBlock = text.getTextBlocks().get(1);
             statsBlock.setText(cardDefinition.getRange() + " / " + cardDefinition.getWeapons() + " / " + cardDefinition.getShields());
+        }
+        return cardRepresentation;
+    }
+
+    private static Entity createSmallUnaffilatedCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/unaffiliated-small.template");
+
+        SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
+
+        TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
+        cardImageTexture.setRegion(cardDefinition.getCardImagePath());
+
+        TextComponent text = cardRepresentation.getComponent(TextComponent.class);
+        if (text != null) {
+            // Title
+            TextBlock titleBlock = text.getTextBlocks().get(0);
+            titleBlock.setText(cardDefinition.getTitle());
         }
         return cardRepresentation;
     }

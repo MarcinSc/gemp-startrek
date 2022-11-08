@@ -5,10 +5,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class MissionCards {
-    private ObjectMap<Entity, Entity> renderedCards = new ObjectMap<>();
-    private Array<Entity> playerTopLevelCardsInMission = new Array<>();
-    private Array<Entity> opponentTopLevelCardsInMission = new Array<>();
-    private ObjectMap<Entity, Array<Entity>> attachedCardsInMission = new ObjectMap<>();
+    private final ObjectMap<Entity, Entity> renderedCards = new ObjectMap<>();
+    private final Array<Entity> playerTopLevelCardsInMission = new Array<>();
+    private final Array<Entity> opponentTopLevelCardsInMission = new Array<>();
+    private final ObjectMap<Entity, Array<Entity>> attachedCardsInMission = new ObjectMap<>();
     private Entity missionCard;
 
     public void setMissionCard(Entity card, Entity renderedCard) {
@@ -21,7 +21,7 @@ public class MissionCards {
         return missionCard;
     }
 
-    public Entity getRenderedCard(Entity card) {
+    public Entity findRenderedCard(Entity card) {
         return renderedCards.get(card);
     }
 

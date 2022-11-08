@@ -5,16 +5,25 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class PlayerCards {
-    private ObjectMap<Entity, Entity> cardToRenderedMap = new ObjectMap<>();
-    private Array<Entity> cardsInHand = new Array<>();
-    private Array<Entity> cardsInDeck = new Array<>();
-    private Array<Entity> cardsInDilemmaPile = new Array<>();
-    private Array<MissionCards> missionCards = new Array<>();
+    private final ObjectMap<Entity, Entity> cardToRenderedMap = new ObjectMap<>();
+    private final Array<Entity> cardsInHand = new Array<>();
+    private final Array<Entity> cardsInDeck = new Array<>();
+    private final Array<Entity> cardsInDilemmaPile = new Array<>();
+    private final Array<Entity> cardsInCore = new Array<>();
+
+    private final Array<MissionCards> missionCards = new Array<>();
 
     public PlayerCards() {
         for (int i = 0; i < 5; i++) {
             missionCards.add(new MissionCards());
         }
+    }
+
+    public void addCardInCore(Entity card, Entity renderedCard) {
+        if (card != null) {
+            cardToRenderedMap.put(card, renderedCard);
+        }
+        cardsInCore.add(renderedCard);
     }
 
     public void addCardInHand(Entity card, Entity renderedCard) {
@@ -60,6 +69,12 @@ public class PlayerCards {
         return removeLast(cardsInDilemmaPile);
     }
 
+    public Entity removeCardInCore(Entity card) {
+        Entity renderedCard = cardToRenderedMap.remove(card);
+        cardsInCore.removeValue(renderedCard, true);
+        return renderedCard;
+    }
+
     private Entity removeLast(Array<Entity> deck) {
         return deck.removeIndex(deck.size - 1);
     }
@@ -88,7 +103,19 @@ public class PlayerCards {
         return cardsInDilemmaPile;
     }
 
-    public Entity findRenderedCard(Entity cardEntity) {
-        return cardToRenderedMap.get(cardEntity);
+    public Array<Entity> getCardsInCore() {
+        return cardsInCore;
+    }
+
+    public Entity findRenderedCard(Entity card) {
+        Entity result = cardToRenderedMap.get(card);
+        if (result == null) {
+            for (MissionCards missionCard : missionCards) {
+                result = missionCard.findRenderedCard(card);
+                if (result != null)
+                    return result;
+            }
+        }
+        return result;
     }
 }
