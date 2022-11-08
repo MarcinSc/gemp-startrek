@@ -1,8 +1,8 @@
 package com.gempukku.startrek.server.game.effect.setup;
 
 import com.artemis.Entity;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -17,7 +17,7 @@ public class SetupMissionsEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         String player = playerResolverSystem.resolvePlayerUsername(gameEffectEntity, memory,
                 gameEffect.getDataString("player"));
         for (int missionIndex = 0; missionIndex < 5; missionIndex++) {

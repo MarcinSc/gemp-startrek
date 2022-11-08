@@ -1,8 +1,8 @@
 package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.game.Memory;
 
 public interface CardFilter {
-    boolean accepts(Entity sourceEntity, ObjectMap<String, String> memory, Entity cardEntity);
+    boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity);
 }

@@ -3,7 +3,7 @@ package com.gempukku.startrek.server.game.effect.control;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -17,7 +17,7 @@ public class SequenceEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         String effectType = gameEffect.getType();
         if (effectType.equals("sequence")) {
             sequence(gameEffectEntity, gameEffect, memory);
@@ -26,9 +26,9 @@ public class SequenceEffect extends EffectSystem {
         }
     }
 
-    private void sequence(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    private void sequence(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         JsonValue action = gameEffect.getClonedDataObject("actions");
-        String stackedIndex = memory.get("stackedIndex");
+        String stackedIndex = memory.getValue("stackedIndex");
         int nextActionIndex = 0;
         if (stackedIndex != null) {
             nextActionIndex = Integer.parseInt(stackedIndex) + 1;
@@ -48,15 +48,15 @@ public class SequenceEffect extends EffectSystem {
             }
             newGameEffect.setType(actionType);
             newGameEffect.setData(actionToStack);
-            memory.put("stackedIndex", String.valueOf(nextActionIndex));
+            memory.setValue("stackedIndex", String.valueOf(nextActionIndex));
 
             stackEffect(stackedEntity);
         }
     }
 
-    private void sequenceForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    private void sequenceForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         JsonValue action = gameEffect.getClonedDataObject("actions");
-        String stackedIndex = memory.get("stackedIndex");
+        String stackedIndex = memory.getValue("stackedIndex");
         String player = gameEffect.getDataString("player");
         int nextActionIndex = 0;
         if (stackedIndex != null) {
@@ -78,7 +78,7 @@ public class SequenceEffect extends EffectSystem {
             actionToStack.addChild("player", new JsonValue(player));
             newGameEffect.setType(actionType);
             newGameEffect.setData(actionToStack);
-            memory.put("stackedIndex", String.valueOf(nextActionIndex));
+            memory.setValue("stackedIndex", String.valueOf(nextActionIndex));
 
             stackEffect(stackedEntity);
         }

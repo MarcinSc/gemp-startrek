@@ -4,10 +4,10 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.GameComponent;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -22,7 +22,7 @@ public class StackActionEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         String effectType = gameEffect.getType();
         if (effectType.equals("stackForEachPlayer")) {
             stackForEachPlayerEffect(gameEffectEntity, gameEffect, memory);
@@ -31,11 +31,11 @@ public class StackActionEffect extends EffectSystem {
         }
     }
 
-    private void stackForEachPlayerEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    private void stackForEachPlayerEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         GameComponent game = LazyEntityUtil.findEntityWithComponent(world, GameComponent.class).getComponent(GameComponent.class);
         Array<String> players = game.getPlayers();
 
-        String playerIndex = memory.get("playerIndex");
+        String playerIndex = memory.getValue("playerIndex");
         int nextPlayerIndex = 0;
         if (playerIndex != null) {
             nextPlayerIndex = Integer.parseInt(playerIndex) + 1;
@@ -58,13 +58,13 @@ public class StackActionEffect extends EffectSystem {
             }
             newGameEffect.setType(actionType);
             newGameEffect.setData(action);
-            memory.put("playerIndex", String.valueOf(nextPlayerIndex));
+            memory.setValue("playerIndex", String.valueOf(nextPlayerIndex));
 
             stackEffect(stackedEntity);
         }
     }
 
-    private void stackActionTemplate(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    private void stackActionTemplate(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         String template = gameEffect.getDataString("template");
 
         Entity spawnedAction = spawnSystem.spawnEntity(template);

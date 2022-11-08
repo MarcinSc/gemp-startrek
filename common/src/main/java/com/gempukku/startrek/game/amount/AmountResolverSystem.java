@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.expression.Expression;
 import com.gempukku.startrek.expression.ExpressionSystem;
+import com.gempukku.startrek.game.Memory;
 
 public class AmountResolverSystem extends BaseSystem {
     private ExpressionSystem expressionSystem;
@@ -17,7 +18,7 @@ public class AmountResolverSystem extends BaseSystem {
         amountHandlers.put(type, amountHandler);
     }
 
-    public int resolveAmount(Entity sourceEntity, ObjectMap<String, String> memory, String value) {
+    public int resolveAmount(Entity sourceEntity, Memory memory, String value) {
         Array<Expression> expressions = expressionSystem.parseExpression(value);
         if (expressions.size != 1)
             throw new GdxRuntimeException("Unable to resolve amount handler: " + value);

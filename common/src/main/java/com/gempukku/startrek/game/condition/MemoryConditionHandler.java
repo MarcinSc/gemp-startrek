@@ -2,7 +2,7 @@ package com.gempukku.startrek.game.condition;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.game.Memory;
 
 public class MemoryConditionHandler extends ConditionSystem {
     public MemoryConditionHandler() {
@@ -10,10 +10,10 @@ public class MemoryConditionHandler extends ConditionSystem {
     }
 
     @Override
-    public boolean resolveCondition(String type, Entity sourceEntity, ObjectMap<String, String> memory, Array<String> parameters) {
+    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
         String key = parameters.get(0);
         String value = parameters.get(1);
-        String stored = memory.get(key);
+        String stored = memory.getValue(key);
         return stored != null && stored.equals(value);
     }
 }

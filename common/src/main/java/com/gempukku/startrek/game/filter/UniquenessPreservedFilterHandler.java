@@ -2,10 +2,10 @@ package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 
 public class UniquenessPreservedFilterHandler extends CardFilterSystem {
@@ -20,7 +20,7 @@ public class UniquenessPreservedFilterHandler extends CardFilterSystem {
     public CardFilter resolveFilter(String filterType, Array<String> parameters) {
         return new CardFilter() {
             @Override
-            public boolean accepts(Entity sourceEntity, ObjectMap<String, String> memory, Entity cardEntity) {
+            public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
                 CardComponent card = cardEntity.getComponent(CardComponent.class);
 
                 CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardEntity);

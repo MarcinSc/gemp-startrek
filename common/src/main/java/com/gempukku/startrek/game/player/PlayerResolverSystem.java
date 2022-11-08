@@ -3,19 +3,19 @@ package com.gempukku.startrek.game.player;
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Predicate;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.expression.Expression;
 import com.gempukku.startrek.expression.ExpressionSystem;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
 
 public class PlayerResolverSystem extends BaseSystem {
     private ExpressionSystem expressionSystem;
 
-    public String resolvePlayerUsername(Entity sourceEntity, ObjectMap<String, String> memory, String value) {
+    public String resolvePlayerUsername(Entity sourceEntity, Memory memory, String value) {
         Array<Expression> expressions = expressionSystem.parseExpression(value);
         if (expressions.size > 1)
             throw new RuntimeException("Invalid number of expressoins to resolve player");
@@ -31,7 +31,7 @@ public class PlayerResolverSystem extends BaseSystem {
         throw new RuntimeException("Unable to find player resolver for filter: " + value);
     }
 
-    public Entity resolvePlayer(Entity sourceEntity, ObjectMap<String, String> memory, String value) {
+    public Entity resolvePlayer(Entity sourceEntity, Memory memory, String value) {
         return findPlayerEntity(resolvePlayerUsername(sourceEntity, memory, value));
     }
 

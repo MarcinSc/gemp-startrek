@@ -2,7 +2,7 @@ package com.gempukku.startrek.server.game.effect;
 
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
 public abstract class EffectSystem extends BaseSystem implements GameEffectHandler {
@@ -36,12 +36,12 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
     }
 
     @Override
-    public boolean processEndingEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    public boolean processEndingEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         processEffect(gameEffectEntity, gameEffect, memory);
         return false;
     }
 
-    protected abstract void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory);
+    protected abstract void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory);
 
     @Override
     protected void processSystem() {

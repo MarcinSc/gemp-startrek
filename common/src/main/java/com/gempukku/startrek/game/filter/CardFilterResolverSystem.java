@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.expression.Expression;
 import com.gempukku.startrek.expression.ExpressionSystem;
+import com.gempukku.startrek.game.Memory;
 
 public class CardFilterResolverSystem extends BaseSystem {
     private ExpressionSystem expressionSystem;
@@ -41,7 +42,7 @@ public class CardFilterResolverSystem extends BaseSystem {
                         CardFilter opposite = resolveCardFilter(parameters.get(0));
                         return new CardFilter() {
                             @Override
-                            public boolean accepts(Entity sourceEntity, ObjectMap<String, String> memory, Entity cardEntity) {
+                            public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
                                 return !opposite.accepts(sourceEntity, memory, cardEntity);
                             }
                         };
@@ -53,7 +54,7 @@ public class CardFilterResolverSystem extends BaseSystem {
                     public CardFilter resolveFilter(String filterType, Array<String> parameters) {
                         return new CardFilter() {
                             @Override
-                            public boolean accepts(Entity sourceEntity, ObjectMap<String, String> memory, Entity cardEntity) {
+                            public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
                                 return sourceEntity == cardEntity;
                             }
                         };

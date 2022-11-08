@@ -2,7 +2,7 @@ package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.game.Memory;
 
 public class MemoryFilterHandler extends CardFilterSystem {
     public MemoryFilterHandler() {
@@ -13,9 +13,9 @@ public class MemoryFilterHandler extends CardFilterSystem {
     public CardFilter resolveFilter(String filterType, Array<String> parameters) {
         return new CardFilter() {
             @Override
-            public boolean accepts(Entity sourceEntity, ObjectMap<String, String> memory, Entity cardEntity) {
+            public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
                 String matchingCardId = String.valueOf(cardEntity.getId());
-                String cardIds = memory.get(parameters.get(0));
+                String cardIds = memory.getValue(parameters.get(0));
                 if (cardIds == null)
                     return false;
                 String[] cardIdSplit = cardIds.split(",");

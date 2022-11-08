@@ -1,9 +1,9 @@
 package com.gempukku.startrek.server.game.effect.deck;
 
 import com.artemis.Entity;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
 import com.gempukku.startrek.server.game.deck.PlayerDilemmaPileComponent;
@@ -19,7 +19,7 @@ public class ShuffleDeckEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, memory,
                 gameEffect.getDataString("player"));
         String deckType = gameEffect.getDataString("deck");

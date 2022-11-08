@@ -2,12 +2,12 @@ package com.gempukku.startrek.server.game.effect.zone;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.CardInPlayStatusComponent;
 import com.gempukku.startrek.game.CardZone;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
@@ -34,9 +34,9 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         String filter = gameEffect.getDataString("filter");
-        int missionId = Integer.parseInt(memory.get(gameEffect.getDataString("missionMemory")));
+        int missionId = Integer.parseInt(memory.getValue(gameEffect.getDataString("missionMemory")));
         boolean faceUp = conditionResolverSystem.resolveBoolean(gameEffectEntity, memory, gameEffect.getDataString("faceUp"));
         Entity missionEntity = world.getEntity(missionId);
         MissionComponent mission = missionEntity.getComponent(MissionComponent.class);

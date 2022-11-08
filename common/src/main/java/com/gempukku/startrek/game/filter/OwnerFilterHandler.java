@@ -2,9 +2,9 @@ package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 
 public class OwnerFilterHandler extends CardFilterSystem {
@@ -28,7 +28,7 @@ public class OwnerFilterHandler extends CardFilterSystem {
         }
 
         @Override
-        public boolean accepts(Entity sourceEntity, ObjectMap<String, String> memory, Entity cardEntity) {
+        public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
             String username = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory, owner);
             return username.equals(cardEntity.getComponent(CardComponent.class).getOwner());
         }

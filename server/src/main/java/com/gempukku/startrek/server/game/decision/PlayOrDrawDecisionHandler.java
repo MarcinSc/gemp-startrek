@@ -9,6 +9,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.LazyEntityUtil;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.PlayRequirements;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
@@ -103,9 +104,9 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
 
             Entity playCardEffect = spawnSystem.spawnEntity("game/effect/playCardEffect.template");
             EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);
-            ObjectMap<String, String> memory = effectMemory.getMemory();
-            memory.put("playedCardId", String.valueOf(cardId));
-            memory.put("missionId", String.valueOf(missionEntity.getId()));
+            Memory memory = new Memory(effectMemory.getMemory());
+            memory.setValue("playedCardId", String.valueOf(cardId));
+            memory.setValue("missionId", String.valueOf(missionEntity.getId()));
             stackSystem.stackEntity(playCardEffect);
         }
     }

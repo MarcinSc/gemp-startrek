@@ -3,11 +3,11 @@ package com.gempukku.startrek.server.game.effect.deck;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.CardZone;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
@@ -27,7 +27,7 @@ public class DrawCardEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         String player = gameEffect.getDataString("player");
         Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, memory, player);
         PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);

@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.expression.Expression;
 import com.gempukku.startrek.expression.ExpressionSystem;
+import com.gempukku.startrek.game.Memory;
 
 public class ConditionResolverSystem extends BaseSystem {
     private ExpressionSystem expressionSystem;
@@ -17,21 +18,21 @@ public class ConditionResolverSystem extends BaseSystem {
         registerConditionHandler("false",
                 new ConditionHandler() {
                     @Override
-                    public boolean resolveCondition(String type, Entity sourceEntity, ObjectMap<String, String> memory, Array<String> parameters) {
+                    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
                         return false;
                     }
                 });
         registerConditionHandler("true",
                 new ConditionHandler() {
                     @Override
-                    public boolean resolveCondition(String type, Entity sourceEntity, ObjectMap<String, String> memory, Array<String> parameters) {
+                    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
                         return true;
                     }
                 });
         registerConditionHandler("and",
                 new ConditionHandler() {
                     @Override
-                    public boolean resolveCondition(String type, Entity sourceEntity, ObjectMap<String, String> memory, Array<String> parameters) {
+                    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
                         for (String parameter : parameters) {
                             if (!resolveBoolean(sourceEntity, memory, parameter))
                                 return false;
@@ -43,7 +44,7 @@ public class ConditionResolverSystem extends BaseSystem {
         registerConditionHandler("or",
                 new ConditionHandler() {
                     @Override
-                    public boolean resolveCondition(String type, Entity sourceEntity, ObjectMap<String, String> memory, Array<String> parameters) {
+                    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
                         for (String parameter : parameters) {
                             if (resolveBoolean(sourceEntity, memory, parameter))
                                 return true;
@@ -58,7 +59,7 @@ public class ConditionResolverSystem extends BaseSystem {
         conditionHandlers.put(effectType, conditionHandler);
     }
 
-    public boolean resolveBoolean(Entity sourceEntity, ObjectMap<String, String> memory, String value) {
+    public boolean resolveBoolean(Entity sourceEntity, Memory memory, String value) {
         Array<Expression> expressions = expressionSystem.parseExpression(value);
         for (Expression expression : expressions) {
             String type = expression.getType();

@@ -5,6 +5,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
@@ -30,10 +31,8 @@ public class GameEffectSystem extends BaseSystem {
                 throw new GdxRuntimeException("Unable to find an effect with memory on the stack");
 
             EffectMemoryComponent effectMemory = effectMemoryEntity.getComponent(EffectMemoryComponent.class);
-            System.out.println("Processing effect: " + type);
-            System.out.println("Memory type: " + effectMemory.getMemoryType());
-            action.setFinishedProcessing(gameEffectHandler.processEndingEffect(gameEffectEntity, gameEffect,
-                    effectMemory.getMemory()));
+            Memory memory = new Memory(effectMemory.getMemory());
+            action.setFinishedProcessing(gameEffectHandler.processEndingEffect(gameEffectEntity, gameEffect, memory));
         }
     }
 

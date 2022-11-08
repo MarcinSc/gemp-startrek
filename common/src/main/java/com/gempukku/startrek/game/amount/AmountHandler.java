@@ -2,8 +2,8 @@ package com.gempukku.startrek.game.amount;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.game.Memory;
 
 public interface AmountHandler {
-    int resolveAmount(String type, Entity sourceEntity, ObjectMap<String, String> memory, Array<String> parameters);
+    int resolveAmount(String type, Entity sourceEntity, Memory memory, Array<String> parameters);
 }

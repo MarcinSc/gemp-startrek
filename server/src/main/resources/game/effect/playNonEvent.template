@@ -1,0 +1,6 @@
+{
+  "type": "moveCardToMission",
+  "filter": "memory(playedCardId)",
+  "missionMemory": "missionId",
+  "faceUp": "hasCard(memory(playedCardId),type(Ship))"
+}

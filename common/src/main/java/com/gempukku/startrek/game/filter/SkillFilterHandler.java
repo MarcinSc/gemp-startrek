@@ -2,11 +2,11 @@ package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.PersonnelSkill;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 
 public class SkillFilterHandler extends CardFilterSystem {
@@ -22,7 +22,7 @@ public class SkillFilterHandler extends CardFilterSystem {
         PersonnelSkill skill = PersonnelSkill.valueOf(parameters.get(0));
         return new CardFilter() {
             @Override
-            public boolean accepts(Entity sourceEntity, ObjectMap<String, String> memory, Entity cardEntity) {
+            public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
                 int count = 1;
                 if (parameters.size > 1)
                     count = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(1));

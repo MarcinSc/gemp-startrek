@@ -2,7 +2,7 @@ package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.game.Memory;
 
 public class OrCardFilter implements CardFilter {
     private Array<CardFilter> filters;
@@ -12,7 +12,7 @@ public class OrCardFilter implements CardFilter {
     }
 
     @Override
-    public boolean accepts(Entity sourceEntity, ObjectMap<String, String> memory, Entity cardEntity) {
+    public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
         for (CardFilter filter : filters) {
             if (filter.accepts(sourceEntity, memory, cardEntity))
                 return true;

@@ -3,9 +3,9 @@ package com.gempukku.startrek.game.card;
 import com.artemis.*;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.CardZone;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
@@ -37,7 +37,7 @@ public class CardFilteringSystem extends BaseSystem {
         }
     }
 
-    public void forEachCard(Entity sourceEntity, ObjectMap<String, String> memory, String filter, Consumer<Entity> consumer) {
+    public void forEachCard(Entity sourceEntity, Memory memory, String filter, Consumer<Entity> consumer) {
         CardFilter cardFilter = cardFilterResolverSystem.resolveCardFilter(filter);
         IntBag entities = cardSubscription.getEntities();
         for (int i = 0; i < entities.size(); i++) {
@@ -65,7 +65,7 @@ public class CardFilteringSystem extends BaseSystem {
         return findFirstCardInPlay(null, null, cardFilter);
     }
 
-    public Entity findFirstCardInPlay(Entity sourceEntity, ObjectMap<String, String> memory, CardFilter cardFilter) {
+    public Entity findFirstCardInPlay(Entity sourceEntity, Memory memory, CardFilter cardFilter) {
         Array<Entity> result = new Array<>();
         forEachCardInPlay(
                 new Consumer<Entity>() {

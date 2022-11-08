@@ -2,12 +2,12 @@ package com.gempukku.startrek.server.game.effect.zone;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.CardInPlayStatusComponent;
 import com.gempukku.startrek.game.CardZone;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
 import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
@@ -28,7 +28,7 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    protected void processOneTimeEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         String filter = gameEffect.getDataString("filter");
         CardZone zone = CardZone.valueOf(gameEffect.getDataString("zone"));
 

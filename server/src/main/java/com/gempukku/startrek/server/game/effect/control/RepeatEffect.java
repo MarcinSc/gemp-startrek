@@ -3,7 +3,7 @@ package com.gempukku.startrek.server.game.effect.control;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -17,7 +17,7 @@ public class RepeatEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    public void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         String type = gameEffect.getType();
         if (type.equals("repeat")) {
             repeat(gameEffectEntity, gameEffect, memory);
@@ -26,12 +26,12 @@ public class RepeatEffect extends EffectSystem {
         }
     }
 
-    private void repeat(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    private void repeat(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         int times = amountResolverSystem.resolveAmount(gameEffectEntity, memory,
                 gameEffect.getDataString("times"));
 
         int executedTimes = 0;
-        String executed = memory.get("times");
+        String executed = memory.getValue("times");
         if (executed != null) {
             executedTimes = Integer.parseInt(executed);
         }
@@ -44,7 +44,7 @@ public class RepeatEffect extends EffectSystem {
             newGameEffect.setData(action);
 
             executedTimes++;
-            memory.put("times", String.valueOf(executedTimes));
+            memory.setValue("times", String.valueOf(executedTimes));
 
             stackEffect(stackedEntity);
         } else {
@@ -52,13 +52,13 @@ public class RepeatEffect extends EffectSystem {
         }
     }
 
-    private void repeatForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    private void repeatForPlayer(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         int times = amountResolverSystem.resolveAmount(gameEffectEntity, memory,
                 gameEffect.getDataString("times"));
         String player = gameEffect.getDataString("player");
 
         int executedTimes = 0;
-        String executed = memory.get("times");
+        String executed = memory.getValue("times");
         if (executed != null) {
             executedTimes = Integer.parseInt(executed);
         }
@@ -72,7 +72,7 @@ public class RepeatEffect extends EffectSystem {
             newGameEffect.setData(action);
 
             executedTimes++;
-            memory.put("times", String.valueOf(executedTimes));
+            memory.setValue("times", String.valueOf(executedTimes));
 
             stackEffect(stackedEntity);
         } else {

@@ -7,6 +7,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.startrek.decision.DecisionMade;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -58,7 +59,7 @@ public class DecisionSystem extends EffectSystem {
     }
 
     @Override
-    public boolean processEndingEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    public boolean processEndingEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         String player = gameEffect.getDataString("player");
         Entity playerEntity = playerResolverSystem.resolvePlayer(gameEffectEntity, memory, player);
 
@@ -92,7 +93,7 @@ public class DecisionSystem extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, ObjectMap<String, String> memory) {
+    protected void processEffect(Entity gameEffectEntity, GameEffectComponent gameEffect, Memory memory) {
         // Ignore
     }
 }
