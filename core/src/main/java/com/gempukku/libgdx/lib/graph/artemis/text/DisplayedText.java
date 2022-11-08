@@ -235,9 +235,6 @@ Color - character color
         float renderScale = 1f;
         do {
             GlyphOffsetText offsetText = glyphOffseter.offsetText(text, targetWidth * renderScale, wrap);
-            if (!textBlock.isScaleDownToFit())
-                return offsetText;
-
             if (offsetText.getTextWidth() * scale <= width && offsetText.getTextHeight() * scale <= height)
                 return offsetText;
 
