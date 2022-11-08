@@ -2,9 +2,7 @@ package com.gempukku.startrek.game;
 
 import com.artemis.WorldConfigurationBuilder;
 import com.gempukku.startrek.expression.ExpressionSystem;
-import com.gempukku.startrek.game.ability.CardAbilitySystem;
-import com.gempukku.startrek.game.ability.GrantSkillAbilityHandler;
-import com.gempukku.startrek.game.ability.HeadquarterRequirementsAbilityHandler;
+import com.gempukku.startrek.game.ability.*;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.amount.CostToPlayAmountHandler;
 import com.gempukku.startrek.game.amount.CounterCountAmountHandler;
@@ -50,6 +48,8 @@ public class CommonGameWorldBuilder {
 
                 // Card abilities
                 new CardAbilitySystem(),
+                new PlaysInCoreAbilityHandler(),
+                new OrderAbilityHandler(),
                 new HeadquarterRequirementsAbilityHandler(),
                 new GrantSkillAbilityHandler(),
 

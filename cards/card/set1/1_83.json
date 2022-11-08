@@ -1,0 +1,35 @@
+{
+  "type": "Event",
+  "cost": "3",
+  "title": "Cry \"Havoc!\"",
+  "keywords": [
+    "Maneuver"
+  ],
+  "abilities": [
+    {
+      "text": "Plays in your core.",
+      "type": "playsInCore"
+    },
+    {
+      "text": "[b]Order[/b] - Destroy this event to begin an engagement involving your Leadership personnel. If you win, randomly kill an opponent's personnel involved.",
+      "type": "order",
+      "costs": [
+        {
+          "type": "destroy",
+          "filter": "self"
+        }
+      ],
+      "effects": [
+        {
+          "type": "beginEngagement",
+          "involving": "your,skill(Leadership),type(Personnel)",
+          "winEffect": {
+            "type": "kill",
+            "filter": "random(not(your),type(Personnel))"
+          }
+        }
+      ]
+    }
+  ],
+  "lore": "\"'...and let slip the dogs of war.'\""
+}

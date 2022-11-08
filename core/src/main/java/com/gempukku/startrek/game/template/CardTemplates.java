@@ -168,6 +168,8 @@ public class CardTemplates {
     private static String getUnaffiliatedCardTemplate(CardType cardType) {
         if (cardType == CardType.Equipment)
             return "equipment-template";
+        else if (cardType == CardType.Event)
+            return "event-template";
         throw new GdxRuntimeException("Unable to resolve unaffiliated template: " + cardType);
     }
 

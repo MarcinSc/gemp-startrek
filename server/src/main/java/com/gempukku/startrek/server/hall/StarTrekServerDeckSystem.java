@@ -13,8 +13,15 @@ public class StarTrekServerDeckSystem extends BaseSystem {
 
         temporaryDeck.getDillemas().add("1_4");
 
+        // Equipment
         temporaryDeck.getDrawDeck().add("1_68");
 
+        // Event
+        temporaryDeck.getDrawDeck().add("1_83");
+        temporaryDeck.getDrawDeck().add("1_83");
+        temporaryDeck.getDrawDeck().add("1_83");
+
+        // Missions
         temporaryDeck.getMissions().add("1_170");
         temporaryDeck.getMissions().add("1_187");
         temporaryDeck.getMissions().add("1_188");
