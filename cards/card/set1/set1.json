@@ -87,6 +87,27 @@
     "1_4": {
       "tpl:extends": "card/set1/1_4.json"
     },
+    "1_41": {
+      "tpl:extends": "card/set1/1_41.json"
+    },
+    "1_43": {
+      "tpl:extends": "card/set1/1_43.json"
+    },
+    "1_48": {
+      "tpl:extends": "card/set1/1_48.json"
+    },
+    "1_50": {
+      "tpl:extends": "card/set1/1_50.json"
+    },
+    "1_52": {
+      "tpl:extends": "card/set1/1_52.json"
+    },
+    "1_57": {
+      "tpl:extends": "card/set1/1_57.json"
+    },
+    "1_60": {
+      "tpl:extends": "card/set1/1_60.json"
+    },
     "1_68": {
       "tpl:extends": "card/set1/1_68.json"
     },

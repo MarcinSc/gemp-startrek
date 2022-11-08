@@ -1,0 +1,44 @@
+{
+  "type": "Dilemma",
+  "dilemmaType": "Dual",
+  "cost": 3,
+  "title": "Stellar Core Fragment",
+  "abilities": [
+    {
+      "text": "Unless you have a personnel who has 2 Physics or a personnel who has 2 Science, your opponent chooses an Physics or Science personnel to be stopped. If your opponent cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
+      "type": "dilemmaEffect",
+      "effect": [
+        {
+          "type": "condition",
+          "condition": "or(countAtLeast(and(facingDilemma,skill(Physics)),2),countAtLeast(and(facingDilemma,skill(Science)),2))",
+          "falseEffect": {
+            "type": "condition",
+            "condition": "onMission(currentMission),or(skill(Physics),skill(Science))",
+            "trueEffect": [
+              {
+                "type": "opponentSelect",
+                "filter": "onMission(currentMission),or(skill(Physics),skill(Science))",
+                "memorize": "selectedCharacter"
+              },
+              {
+                "type": "stop",
+                "filter": "memory(selectedCharacter)"
+              }
+            ],
+            "falseEffect": [
+              {
+                "type": "stop",
+                "filter": "onMission(currentMission),type(personnel)"
+              },
+              {
+                "type": "putDilemmaInDilemmaPile",
+                "filter": "self"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "lore": "\"With my theories and their equipment, we might be able to alter the fragment's path.\""
+}

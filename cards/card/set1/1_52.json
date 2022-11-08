@@ -1,0 +1,40 @@
+{
+  "type": "Dilemma",
+  "dilemmaType": "Space",
+  "cost": 2,
+  "title": "Systems Diagnostic",
+  "abilities": [
+    {
+      "text": "Choose a personnel who has Engineer or Programming to be stopped. If you cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
+      "type": "dilemmaEffect",
+      "effect": [
+        {
+          "type": "condition",
+          "condition": "or(countAtLeast(facingDilemma,skill(Engineer),1),countAtLeast(facingDilemma,skill(Programming),1))",
+          "trueEffect": [
+            {
+              "type": "select",
+              "memory": "chosenCharacter",
+              "filter": "facingDilemma,type(Personnel),or(skill(Engineer),skill(Programming))"
+            },
+            {
+              "type": "stop",
+              "filter": "memory(chosenCharacter)"
+            }
+          ],
+          "falseEffect": [
+            {
+              "type": "stop",
+              "filter": "facingDilemma,type(Personnel)"
+            },
+            {
+              "type": "putInDilemmaPile",
+              "filter": "self"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "lore": "\"Isolated pockets of humanoids. It appears to be a pre-warp civilization at an early stage of industrial development.\""
+}

@@ -1,0 +1,34 @@
+{
+  "type": "Dilemma",
+  "dilemmaType": "Planet",
+  "cost": 1,
+  "title": "Triage",
+  "abilities": [
+    {
+      "text": "Choose a personnel who has Biology or Medical to be stopped. If you cannot, randomly select a personnel to be killed.",
+      "type": "dilemmaEffect",
+      "effect": [
+        {
+          "type": "condition",
+          "condition": "or(countAtLeast(facingDilemma,skill(Biology),1),countAtLeast(facingDilemma,skill(Medical),1))",
+          "trueEffect": [
+            {
+              "type": "select",
+              "memory": "chosenCharacter",
+              "filter": "facingDilemma,type(Personnel),or(skill(Biology),skill(Medical))"
+            },
+            {
+              "type": "stop",
+              "filter": "memory(chosenCharacter)"
+            }
+          ],
+          "falseEffect": {
+            "type": "kill",
+            "filter": "random(facingDilemma,type(Personnel))"
+          }
+        }
+      ]
+    }
+  ],
+  "lore": "\"Don't be afraid. There's a lot of bleeding, but it’s not as bad as it looks.\""
+}

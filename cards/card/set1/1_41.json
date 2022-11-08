@@ -1,0 +1,42 @@
+{
+  "type": "Dilemma",
+  "dilemmaType": "Dual",
+  "cost": 4,
+  "title": "Ornaran Threat",
+  "abilities": [
+    {
+      "text": "Randomly select a personnel to be stopped. Unless you have Diplomacy and Medical or 2 Security, that personnel is killed instead, then all your other personnel are stopped and this dilemma returns to its owner's dilemma pile.",
+      "type": "dilemmaEffect",
+      "effect": [
+        {
+          "type": "selectRandomly",
+          "memory": "selectedPersonnel",
+          "filter": "facingDilemma,type(Personnel)"
+        },
+        {
+          "type": "condition",
+          "condition": "or(and(countAtLeast(facingDilemma,skill(Diplomacy),1),countAtLeast(facingDilemma,skill(Medical))),countAtLeast(facingDilemma,skill(Security),2))",
+          "trueEffect": {
+            "type": "stop",
+            "filter": "memory(selectedPersonnel)"
+          },
+          "falseEffect": [
+            {
+              "type": "kill",
+              "filter": "memory(selectedPersonnel)"
+            },
+            {
+              "type": "stop",
+              "filter": "facingDilemma,not(memory(selectedPersonnel))"
+            },
+            {
+              "type": "putInDilemmaPile",
+              "filter": "self"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "lore": "\"You will take us to our planet. Leave us there with our medicine or this person dies.\""
+}

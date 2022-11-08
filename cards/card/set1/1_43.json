@@ -1,0 +1,54 @@
+{
+  "type": "Dilemma",
+  "dilemmaType": "Dual",
+  "cost": 2,
+  "title": "Pinned Down",
+  "abilities": [
+    {
+      "text": "Randomly select a personnel to be stopped. If you still have nine personnel remaining, randomly select a second personnel to be stopped. If you still have ten personnel remaining, randomly select a third personnel to be stopped.",
+      "type": "dilemmaEffect",
+      "effect": [
+        {
+          "type": "selectRandomly",
+          "memory": "selectedPersonnel1",
+          "filter": "facingDilemma,type(Personnel)"
+        },
+        {
+          "type": "stop",
+          "filter": "memory(selectedPersonnel1)"
+        },
+        {
+          "type": "condition",
+          "condition": "countAtLeast(and(facingDilemma,type(Personnel)),9)",
+          "trueEffect": [
+            {
+              "type": "selectRandomly",
+              "memory": "selectedPersonnel2",
+              "filter": "facingDilemma,type(Personnel)"
+            },
+            {
+              "type": "stop",
+              "filter": "memory(selectedPersonnel2)"
+            },
+            {
+              "type": "condition",
+              "condition": "countAtLeast(and(facingDilemma,type(Personnel)),10)",
+              "trueEffect": [
+                {
+                  "type": "selectRandomly",
+                  "memory": "selectedPersonnel3",
+                  "filter": "facingDilemma,type(Personnel)"
+                },
+                {
+                  "type": "stop",
+                  "filter": "memory(selectedPersonnel3)"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "lore": "\"Quick! Into the forest!\""
+}

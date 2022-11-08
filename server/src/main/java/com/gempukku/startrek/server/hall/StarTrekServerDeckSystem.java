@@ -21,12 +21,21 @@ public class StarTrekServerDeckSystem extends BaseSystem {
         temporaryDeck.getDillemas().add("1_33");
         temporaryDeck.getDillemas().add("1_34");
         temporaryDeck.getDillemas().add("1_34");
+        temporaryDeck.getDillemas().add("1_41");
+        temporaryDeck.getDillemas().add("1_43");
+        temporaryDeck.getDillemas().add("1_43");
+        temporaryDeck.getDillemas().add("1_48");
+        temporaryDeck.getDillemas().add("1_48");
+        temporaryDeck.getDillemas().add("1_50");
+        temporaryDeck.getDillemas().add("1_50");
+        temporaryDeck.getDillemas().add("1_52");
+        temporaryDeck.getDillemas().add("1_57");
+        temporaryDeck.getDillemas().add("1_60");
 
         // Equipment
         temporaryDeck.getDrawDeck().add("1_68");
 
         // Event
-        temporaryDeck.getDrawDeck().add("1_83");
         temporaryDeck.getDrawDeck().add("1_83");
         temporaryDeck.getDrawDeck().add("1_83");
         temporaryDeck.getDrawDeck().add("1_84");
