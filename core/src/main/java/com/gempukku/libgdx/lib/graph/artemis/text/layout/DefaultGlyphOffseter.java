@@ -1,6 +1,5 @@
 package com.gempukku.libgdx.lib.graph.artemis.text.layout;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
@@ -117,12 +116,9 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
         for (int i = startIndex; i < startIndex + lineGlyphLength; i++) {
             TextStyle textStyle = parsedText.getTextStyle(i);
-            char character = parsedText.getCharAt(i);
 
             // If it's not the last character, or not whitespace - layout the char
             if (i != startIndex + lineGlyphLength - 1 || !parsedText.isWhitespace(i)) {
-                BitmapFont font = getFont(textStyle);
-                BitmapFont.BitmapFontData fontData = font.getData();
                 float fontScale = getFontScale(textStyle);
 
                 TextureRegion textureRegion = getTextureRegion(textStyle);
@@ -135,8 +131,6 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
                     usedWidth += textureWidth + getLetterSpacing(textStyle) * fontScale;
                 } else {
-                    BitmapFont.Glyph glyph = fontData.getGlyph(character);
-
                     float kerning = 0f;
                     if (i > startIndex) {
                         kerning = parsedText.getKerning(i);
@@ -144,7 +138,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                     line.xAdvances.add(usedWidth + kerning * fontScale);
                     line.yAdvances.add(maxAscent - ascent);
 
-                    float glyphAdvance = glyph.xadvance + kerning + getLetterSpacing(textStyle);
+                    float glyphAdvance = parsedText.getWidth(i) + kerning + getLetterSpacing(textStyle);
                     if (parsedText.isWhitespace(i)) {
                         glyphAdvance += justifiedSpace;
                     }
@@ -251,19 +245,6 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             }
         }
         return width;
-    }
-
-    private BitmapFont.BitmapFontData getFontData(TextStyle textStyle) {
-        return getFont(textStyle).getData();
-    }
-
-    private BitmapFont getFont(TextStyle textStyle) {
-        return (BitmapFont) textStyle.getAttribute(TextStyleConstants.Font);
-    }
-
-    private Boolean getKerning(TextStyle textStyle) {
-        Boolean kerning = (Boolean) textStyle.getAttribute(TextStyleConstants.Kerning);
-        return kerning != null ? kerning : defaultKerning;
     }
 
     private float getLetterSpacing(TextStyle textStyle) {
