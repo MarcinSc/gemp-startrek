@@ -1,7 +1,9 @@
 package com.gempukku.libgdx.lib.graph.artemis.text.parser;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
+import com.gempukku.libgdx.lib.graph.artemis.text.FontUtil;
 
 public class DefaultTextParser implements TextParser {
     @Override
@@ -43,8 +45,29 @@ public class DefaultTextParser implements TextParser {
         }
 
         @Override
+        public float getDescent(TextStyle style) {
+            BitmapFont font = getFont(style);
+            return FontUtil.getFontDescent(font);
+        }
+
+        @Override
+        public float getAscent(TextStyle style) {
+            BitmapFont font = getFont(style);
+            return FontUtil.getFontAscent(font);
+        }
+
+        @Override
         public char getCharAt(int glyphIndex) {
             return text.charAt(glyphIndex);
+        }
+
+        @Override
+        public boolean isSkippable(int glyphIndex) {
+            return Character.isWhitespace(getCharAt(glyphIndex));
+        }
+
+        private BitmapFont getFont(TextStyle textStyle) {
+            return (BitmapFont) textStyle.getAttribute(TextStyleConstants.Font);
         }
 
         @Override

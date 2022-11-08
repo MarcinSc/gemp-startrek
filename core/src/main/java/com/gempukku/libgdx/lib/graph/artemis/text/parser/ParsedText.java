@@ -18,5 +18,11 @@ public interface ParsedText extends Disposable {
 
     TextStyle getTextStyle(int glyphIndex);
 
+    float getDescent(TextStyle style);
+
+    float getAscent(TextStyle style);
+
     char getCharAt(int glyphIndex);
+
+    boolean isSkippable(int glyphIndex);
 }

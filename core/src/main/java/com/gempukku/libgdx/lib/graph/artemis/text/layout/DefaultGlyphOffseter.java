@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
-import com.gempukku.libgdx.lib.graph.artemis.text.FontUtil;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextHorizontalAlignment;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.ParsedText;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
@@ -86,14 +85,12 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         float maxDescent = 0f;
         for (int i = startIndex; i < startIndex + lineGlyphLength; i++) {
             TextStyle textStyle = parsedText.getTextStyle(i);
-            char character = parsedText.getCharAt(i);
 
             // If it's not the last character, or not whitespace - use to calculate ascent/descent
-            if (i != startIndex + lineGlyphLength - 1 || !isSkippable(character)) {
-                BitmapFont font = getFont(textStyle);
+            if (i != startIndex + lineGlyphLength - 1 || !parsedText.isSkippable(i)) {
                 float fontScale = getFontScale(textStyle);
-                maxDescent = Math.max(maxDescent, FontUtil.getFontDescent(font) * fontScale);
-                maxAscent = Math.max(maxAscent, FontUtil.getFontAscent(font) * fontScale);
+                maxDescent = Math.max(maxDescent, parsedText.getDescent(textStyle) * fontScale);
+                maxAscent = Math.max(maxAscent, parsedText.getAscent(textStyle) * fontScale);
             }
         }
 
@@ -126,13 +123,13 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             char character = parsedText.getCharAt(i);
 
             // If it's not the last character, or not whitespace - layout the char
-            if (i != startIndex + lineGlyphLength - 1 || !isSkippable(character)) {
+            if (i != startIndex + lineGlyphLength - 1 || !parsedText.isSkippable(i)) {
                 BitmapFont font = getFont(textStyle);
                 BitmapFont.BitmapFontData fontData = font.getData();
                 float fontScale = getFontScale(textStyle);
 
                 TextureRegion textureRegion = getTextureRegion(textStyle);
-                float ascent = FontUtil.getFontAscent(font) * fontScale;
+                float ascent = parsedText.getAscent(textStyle) * fontScale;
                 if (textureRegion != null) {
                     line.xAdvances.add(usedWidth);
                     line.yAdvances.add(maxAscent - ascent);
@@ -181,14 +178,6 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         return false;
     }
 
-    private String assembleText(ParsedText parsedText, int startIndex, int glyphCount) {
-        StringBuilder result = new StringBuilder();
-        for (int i = startIndex; i < startIndex + glyphCount; i++) {
-            result.append(parsedText.getCharAt(i));
-        }
-        return result.toString();
-    }
-
     private int countJustifiableSpaces(ParsedText parsedText, int startIndex, int glyphCount) {
         int result = 0;
         for (int i = startIndex; i < startIndex + glyphCount; i++) {
@@ -234,7 +223,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
     private float getCharacterWidthIfSkippable(ParsedText parsedText, int glyphIndex) {
         char character = parsedText.getCharAt(glyphIndex);
-        if (isSkippable(character)) {
+        if (parsedText.isSkippable(glyphIndex)) {
             TextStyle textStyle = parsedText.getTextStyle(glyphIndex);
 
             BitmapFont.BitmapFontData fontData = getFontData(textStyle);
@@ -258,7 +247,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             char character = parsedText.getCharAt(i);
 
             // If it's not the last character, or not whitespace - add the width
-            if (i != startIndex + length - 1 || !isSkippable(character)) {
+            if (i != startIndex + length - 1 || !parsedText.isSkippable(i)) {
                 BitmapFont font = getFont(textStyle);
                 BitmapFont.BitmapFontData fontData = font.getData();
                 BitmapFont.Glyph glyph = fontData.getGlyph(character);
@@ -266,7 +255,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                 float fontScale = getFontScale(textStyle);
 
                 TextureRegion textureRegion = getTextureRegion(textStyle);
-                float ascent = FontUtil.getFontAscent(font) * fontScale;
+                float ascent = parsedText.getAscent(textStyle) * fontScale;
                 if (textureRegion != null) {
                     float textureWidth = ascent * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();
                     width += textureWidth + getLetterSpacing(textStyle) * fontScale;
@@ -285,10 +274,6 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             }
         }
         return width;
-    }
-
-    private boolean isSkippable(char character) {
-        return Character.isWhitespace(character);
     }
 
     private BitmapFont.BitmapFontData getFontData(TextStyle textStyle) {
