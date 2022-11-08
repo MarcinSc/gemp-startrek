@@ -215,16 +215,10 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
     }
 
     private float getCharacterWidthIfSkippable(ParsedText parsedText, int glyphIndex) {
-        char character = parsedText.getCharAt(glyphIndex);
         if (parsedText.isWhitespace(glyphIndex)) {
             TextStyle textStyle = parsedText.getTextStyle(glyphIndex);
-
-            BitmapFont.BitmapFontData fontData = getFontData(textStyle);
-            BitmapFont.Glyph glyph = fontData.getGlyph(character);
-
             float fontScale = getFontScale(textStyle);
-
-            return (glyph.xadvance + getLetterSpacing(textStyle)) * fontScale;
+            return (parsedText.getWidth(glyphIndex) + getLetterSpacing(textStyle)) * fontScale;
         } else {
             return 0f;
         }
@@ -235,13 +229,9 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
         for (int i = startIndex; i < startIndex + length; i++) {
             TextStyle textStyle = parsedText.getTextStyle(i);
-            char character = parsedText.getCharAt(i);
 
             // If it's not the last character, or not whitespace - add the width
             if (i != startIndex + length - 1 || !parsedText.isWhitespace(i)) {
-                BitmapFont font = getFont(textStyle);
-                BitmapFont.BitmapFontData fontData = font.getData();
-                BitmapFont.Glyph glyph = fontData.getGlyph(character);
 
                 float fontScale = getFontScale(textStyle);
 
@@ -251,7 +241,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                     float textureWidth = ascent * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();
                     width += textureWidth + getLetterSpacing(textStyle) * fontScale;
                 } else {
-                    float glyphAdvance = glyph.xadvance;
+                    float glyphAdvance = parsedText.getWidth(i);
                     if (i > startIndex) {
                         glyphAdvance += parsedText.getKerning(i);
                     }

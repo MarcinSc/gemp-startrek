@@ -24,6 +24,8 @@ public interface ParsedText extends Disposable {
 
     float getAscent(TextStyle style);
 
+    float getWidth(int glyphIndex);
+
     char getCharAt(int glyphIndex);
 
     boolean isWhitespace(int glyphIndex);

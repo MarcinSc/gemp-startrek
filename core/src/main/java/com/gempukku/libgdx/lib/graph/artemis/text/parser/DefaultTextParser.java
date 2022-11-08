@@ -75,6 +75,13 @@ public class DefaultTextParser implements TextParser {
         }
 
         @Override
+        public float getWidth(int glyphIndex) {
+            BitmapFont.BitmapFontData fontData = getFont(getTextStyle(glyphIndex)).getData();
+            BitmapFont.Glyph glyph = fontData.getGlyph(getCharAt(glyphIndex));
+            return glyph.xadvance;
+        }
+
+        @Override
         public char getCharAt(int glyphIndex) {
             return text.charAt(glyphIndex);
         }
