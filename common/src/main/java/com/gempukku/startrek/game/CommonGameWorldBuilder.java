@@ -31,6 +31,7 @@ public class CommonGameWorldBuilder {
                 new DeckCountConditionHandler(),
                 new LessOrEqualConditionHandler(),
                 new HasCardConditionHandler(),
+                new MemoryMatchesHandler(),
 
                 // Card filter resovlers
                 new CardFilterResolverSystem(),
@@ -46,6 +47,7 @@ public class CommonGameWorldBuilder {
                 new PlayableFilterHandler(),
                 new ConditionFilterHandler(),
                 new MemoryFilterHandler(),
+                new HasAbilityFilterHandler(),
 
                 // Card abilities
                 new CardAbilitySystem(),

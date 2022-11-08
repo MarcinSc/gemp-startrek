@@ -39,15 +39,7 @@ public class SequenceEffect extends EffectSystem {
             removeTopEffectFromStack();
         } else {
             JsonValue actionToStack = action.get(nextActionIndex);
-            String actionType = actionToStack.getString("type");
-            boolean createMemory = actionToStack.getBoolean("memory", false);
-            Entity stackedEntity = world.createEntity();
-            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-            if (createMemory) {
-                effectMemoryComponentMapper.create(stackedEntity).setMemoryType("action - " + actionType);
-            }
-            newGameEffect.setType(actionType);
-            newGameEffect.setData(actionToStack);
+            Entity stackedEntity = createActionFromJson(actionToStack);
             memory.setValue("stackedIndex", String.valueOf(nextActionIndex));
 
             stackEffect(stackedEntity);
@@ -67,20 +59,12 @@ public class SequenceEffect extends EffectSystem {
             // Finished the effect - remove from stack
             removeTopEffectFromStack();
         } else {
-            JsonValue actionToStack = action.get(nextActionIndex);
-            String actionType = actionToStack.getString("type");
-            boolean createMemory = actionToStack.getBoolean("memory", false);
-            Entity stackedEntity = world.createEntity();
-            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-            if (createMemory) {
-                effectMemoryComponentMapper.create(stackedEntity).setMemoryType("action - " + actionType);
-            }
-            actionToStack.addChild("player", new JsonValue(player));
-            newGameEffect.setType(actionType);
-            newGameEffect.setData(actionToStack);
+            JsonValue nextAction = action.get(nextActionIndex);
+            nextAction.addChild("player", new JsonValue(player));
+            Entity actionToStack = createActionFromJson(nextAction);
             memory.setValue("stackedIndex", String.valueOf(nextActionIndex));
 
-            stackEffect(stackedEntity);
+            stackEffect(actionToStack);
         }
     }
 }

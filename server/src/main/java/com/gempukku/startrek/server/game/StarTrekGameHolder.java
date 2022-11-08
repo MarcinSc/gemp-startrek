@@ -27,10 +27,7 @@ import com.gempukku.startrek.server.game.decision.PlayOrDrawDecisionHandler;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 import com.gempukku.startrek.server.game.effect.card.PayCardCostEffect;
-import com.gempukku.startrek.server.game.effect.control.LoopEffect;
-import com.gempukku.startrek.server.game.effect.control.RepeatEffect;
-import com.gempukku.startrek.server.game.effect.control.SequenceEffect;
-import com.gempukku.startrek.server.game.effect.control.StackActionEffect;
+import com.gempukku.startrek.server.game.effect.control.*;
 import com.gempukku.startrek.server.game.effect.deck.DrawCardEffect;
 import com.gempukku.startrek.server.game.effect.deck.ShuffleDeckEffect;
 import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
@@ -95,6 +92,7 @@ public class StarTrekGameHolder implements Disposable {
                 new RepeatEffect(),
                 new SequenceEffect(),
                 new StackActionEffect(),
+                new ConditionEffect(),
 
                 // Specific game effects
                 new PlayerCounterEffect(),

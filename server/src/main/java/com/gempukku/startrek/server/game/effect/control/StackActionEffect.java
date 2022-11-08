@@ -47,20 +47,11 @@ public class StackActionEffect extends EffectSystem {
         } else {
             String player = players.get(nextPlayerIndex);
             JsonValue action = gameEffect.getClonedDataObject("action");
-            String actionType = action.getString("type");
-            boolean createMemory = action.getBoolean("memory", false);
-
             action.addChild("player", new JsonValue("username(" + player + ")"));
-            Entity stackedEntity = world.createEntity();
-            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-            if (createMemory) {
-                effectMemoryComponentMapper.create(stackedEntity).setMemoryType("action - " + actionType);
-            }
-            newGameEffect.setType(actionType);
-            newGameEffect.setData(action);
+            Entity actionToStack = createActionFromJson(action);
             memory.setValue("playerIndex", String.valueOf(nextPlayerIndex));
 
-            stackEffect(stackedEntity);
+            stackEffect(actionToStack);
         }
     }
 

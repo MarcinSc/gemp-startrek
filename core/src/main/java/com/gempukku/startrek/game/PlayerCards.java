@@ -6,9 +6,9 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class PlayerCards {
     private ObjectMap<Entity, Entity> cardToRenderedMap = new ObjectMap<>();
-    private Array<Entity> renderedInHand = new Array<>();
-    private Array<Entity> renderedInDeck = new Array<>();
-    private Array<Entity> renderedInDilemmaPile = new Array<>();
+    private Array<Entity> cardsInHand = new Array<>();
+    private Array<Entity> cardsInDeck = new Array<>();
+    private Array<Entity> cardsInDilemmaPile = new Array<>();
     private Array<MissionCards> missionCards = new Array<>();
 
     public PlayerCards() {
@@ -21,21 +21,21 @@ public class PlayerCards {
         if (card != null) {
             cardToRenderedMap.put(card, renderedCard);
         }
-        renderedInHand.add(renderedCard);
+        cardsInHand.add(renderedCard);
     }
 
     public void addCardInDeck(Entity card, Entity renderedCard) {
         if (card != null) {
             cardToRenderedMap.put(card, renderedCard);
         }
-        renderedInDeck.add(renderedCard);
+        cardsInDeck.add(renderedCard);
     }
 
     public void addCardInDilemmaPile(Entity card, Entity renderedCard) {
         if (card != null) {
             cardToRenderedMap.put(card, renderedCard);
         }
-        renderedInDilemmaPile.add(renderedCard);
+        cardsInDilemmaPile.add(renderedCard);
     }
 
     public MissionCards getMissionCards(int missionIndex) {
@@ -43,21 +43,21 @@ public class PlayerCards {
     }
 
     public Entity removeOneCardInHand() {
-        return removeLast(renderedInHand);
+        return removeLast(cardsInHand);
     }
 
     public Entity removeCardInHand(Entity card) {
         Entity renderedCard = cardToRenderedMap.remove(card);
-        renderedInHand.removeValue(renderedCard, true);
+        cardsInHand.removeValue(renderedCard, true);
         return renderedCard;
     }
 
     public Entity removeOneCardInDeck() {
-        return removeLast(renderedInDeck);
+        return removeLast(cardsInDeck);
     }
 
     public Entity removeOneCardInDilemmaPile() {
-        return removeLast(renderedInDilemmaPile);
+        return removeLast(cardsInDilemmaPile);
     }
 
     private Entity removeLast(Array<Entity> deck) {
@@ -65,27 +65,27 @@ public class PlayerCards {
     }
 
     public int getCardInHandCount() {
-        return renderedInHand.size;
+        return cardsInHand.size;
     }
 
     public int getCardInDeckCount() {
-        return renderedInDeck.size;
+        return cardsInDeck.size;
     }
 
     public int getCardInDilemmaCount() {
-        return renderedInDilemmaPile.size;
+        return cardsInDilemmaPile.size;
     }
 
     public Array<Entity> getCardsInHand() {
-        return renderedInHand;
+        return cardsInHand;
     }
 
     public Array<Entity> getCardsInDeck() {
-        return renderedInDeck;
+        return cardsInDeck;
     }
 
     public Array<Entity> getCardsInDilemmaPile() {
-        return renderedInDilemmaPile;
+        return cardsInDilemmaPile;
     }
 
     public Entity findRenderedCard(Entity cardEntity) {

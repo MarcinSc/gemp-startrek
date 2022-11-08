@@ -1,3 +1,13 @@
 {
-  "type": "sequence"
+  "type": "condition",
+  "condition": "memoryMatches(playedCardId,hasAbility(PlaysInCore))",
+  "trueEffect": {
+    "type": "moveCardToZone",
+    "filter": "memory(playedCardId)",
+    "zone": "CORE"
+  },
+  "falseEffect": {
+    "type": "playoutEventEffect",
+    "memoryCard": "playedCardId"
+  }
 }

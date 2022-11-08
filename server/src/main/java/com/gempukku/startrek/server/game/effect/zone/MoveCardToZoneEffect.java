@@ -9,6 +9,7 @@ import com.gempukku.startrek.game.CardInPlayStatusComponent;
 import com.gempukku.startrek.game.CardZone;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
+import com.gempukku.startrek.game.core.CardInCoreComponent;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
 import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -21,6 +22,7 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
     private EventSystem eventSystem;
     private ComponentMapper<CardInHandComponent> cardInHandComponentMapper;
     private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
+    private ComponentMapper<CardInCoreComponent> cardInCoreComponentMapper;
     private ComponentMapper<CardInPlayStatusComponent> cardInPlayStatusComponentMapper;
 
     public MoveCardToZoneEffect() {
@@ -50,6 +52,8 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
             cardInHandComponentMapper.remove(cardEntity);
         } else if (zone == CardZone.MISSIONS) {
             faceUpCardInMissionComponentMapper.remove(cardEntity);
+        } else if (zone == CardZone.CORE) {
+            cardInCoreComponentMapper.remove(cardEntity);
         }
         cardInPlayStatusComponentMapper.remove(cardEntity);
     }
@@ -58,6 +62,8 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
         if (zone == CardZone.HAND) {
             CardInHandComponent cardInHand = cardInHandComponentMapper.create(cardEntity);
             cardInHand.setOwner(owner);
+        } else if (zone == CardZone.CORE) {
+            CardInCoreComponent cardInCore = cardInCoreComponentMapper.create(cardEntity);
         }
     }
 }

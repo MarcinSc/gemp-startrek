@@ -21,7 +21,7 @@
         },
         {
           "type": "condition",
-          "condition": "hasCard(memory(playedCardId),type(Event))",
+          "condition": "memoryMatches(playedCardId,type(Event))",
           "trueEffect": {
             "tpl:extends": "game/effect/playEvent.template"
           },

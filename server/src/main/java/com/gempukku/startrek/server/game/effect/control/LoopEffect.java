@@ -35,18 +35,9 @@ public class LoopEffect extends EffectSystem {
         String condition = gameEffect.getDataString("condition");
         boolean result = conditionResolverSystem.resolveBoolean(sourceEntity, memory, condition);
         if (!result) {
-            Entity stackedEntity = world.createEntity();
             JsonValue action = gameEffect.getClonedDataObject("action");
-            String actionType = action.getString("type");
-            boolean createMemory = action.getBoolean("memory", false);
-            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-            if (createMemory) {
-                effectMemoryComponentMapper.create(stackedEntity).setMemoryType("action - " + actionType);
-            }
-            newGameEffect.setType(actionType);
-            newGameEffect.setData(action);
-
-            stackEffect(stackedEntity);
+            Entity actionToStack = createActionFromJson(action);
+            stackEffect(actionToStack);
         } else {
             removeTopEffectFromStack();
         }
@@ -71,20 +62,12 @@ public class LoopEffect extends EffectSystem {
 
             String player = players.get(nextPlayerIndex);
             JsonValue action = gameEffect.getClonedDataObject("action");
-            String actionType = action.getString("type");
-            boolean createMemory = action.getBoolean("memory", false);
-
             action.addChild("player", new JsonValue("username(" + player + ")"));
-            Entity stackedEntity = world.createEntity();
-            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
-            if (createMemory) {
-                effectMemoryComponentMapper.create(stackedEntity).setMemoryType("action - " + actionType);
-            }
-            newGameEffect.setType(actionType);
-            newGameEffect.setData(action);
             memory.setValue("playerIndex", String.valueOf(nextPlayerIndex));
 
-            stackEffect(stackedEntity);
+            Entity actionToStack = createActionFromJson(action);
+
+            stackEffect(actionToStack);
         } else {
             removeTopEffectFromStack();
         }

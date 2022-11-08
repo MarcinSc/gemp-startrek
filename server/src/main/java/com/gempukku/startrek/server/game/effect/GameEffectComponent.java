@@ -34,7 +34,10 @@ public class GameEffectComponent extends Component {
     }
 
     public JsonValue getClonedDataObject(String name) {
-        return JsonValueHandler.clone(data.get(name));
+        if (!data.has(name))
+            return null;
+        JsonValue result = data.get(name);
+        return JsonValueHandler.clone(result);
     }
 
     public String getDataString(String name) {

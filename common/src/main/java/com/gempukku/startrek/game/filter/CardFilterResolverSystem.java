@@ -62,13 +62,18 @@ public class CardFilterResolverSystem extends BaseSystem {
                 });
     }
 
-    public CardFilter createAndFilter(Array<String> parameters) {
+    public CardFilter createAndFilter(Array<String> parameters, int startIndex) {
         Array<CardFilter> filters = new Array<>();
-        for (String parameter : parameters) {
+        for (int i = startIndex; i < parameters.size; i++) {
+            String parameter = parameters.get(i);
             filters.add(resolveCardFilter(parameter));
         }
 
         return new AndCardFilter(filters);
+    }
+
+    public CardFilter createAndFilter(Array<String> parameters) {
+        return createAndFilter(parameters, 0);
     }
 
     public void registerFilterHandler(String effectType, CardFilterHandler conditionHandler) {

@@ -37,16 +37,12 @@ public class RepeatEffect extends EffectSystem {
         }
 
         if (executedTimes < times) {
-            Entity stackedEntity = world.createEntity();
-            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
             JsonValue action = gameEffect.getClonedDataObject("action");
-            newGameEffect.setType(action.getString("type"));
-            newGameEffect.setData(action);
-
+            Entity actionToStack = createActionFromJson(action);
             executedTimes++;
             memory.setValue("times", String.valueOf(executedTimes));
 
-            stackEffect(stackedEntity);
+            stackEffect(actionToStack);
         } else {
             removeTopEffectFromStack();
         }
@@ -64,17 +60,14 @@ public class RepeatEffect extends EffectSystem {
         }
 
         if (executedTimes < times) {
-            Entity stackedEntity = world.createEntity();
-            GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
             JsonValue action = gameEffect.getClonedDataObject("action");
             action.addChild("player", new JsonValue(player));
-            newGameEffect.setType(action.getString("type"));
-            newGameEffect.setData(action);
+            Entity actionToStack = createActionFromJson(action);
 
             executedTimes++;
             memory.setValue("times", String.valueOf(executedTimes));
 
-            stackEffect(stackedEntity);
+            stackEffect(actionToStack);
         } else {
             removeTopEffectFromStack();
         }

@@ -71,13 +71,12 @@ public class MissionsLayout {
                     if (!missionParsedText.isWhitespace(indexInText)) {
                         float glyphScale = getScale(missionParsedText.getTextStyle(indexInText));
                         float glyphWidth = missionParsedText.getWidth(indexInText) * glyphScale;
-                        Entity entity = missionParsedText.getEntity(indexInText);
+                        Entity cardEntity = missionParsedText.getEntity(indexInText);
                         tempMatrix4.set(missionTransform);
                         tempMatrix4.translate(startX + line.getGlyphXAdvance(glyphIndex) + glyphWidth / 2f, 0, startY);
                         tempMatrix4.scl(glyphScale);
 
-                        Entity renderedMissionCard = missionCards.getRenderedCard(entity);
-                        transformSystem.setTransform(renderedMissionCard, tempMatrix4);
+                        transformSystem.setTransform(cardEntity, tempMatrix4);
                     }
                 }
                 startY += line.getHeight();
