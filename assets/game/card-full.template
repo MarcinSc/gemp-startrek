@@ -531,21 +531,21 @@
             0,
             1,
             0,
-            -0.182,
+            -0.188,
             0.005,
             0.403,
             1
           ]
         },
         "rightVector": {
-          "x": 0.125,
+          "x": 0.110,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
           "y": 0,
-          "z": 0.036
+          "z": 0.045
         },
         "width": 0.5,
         "edge": 0.1,
@@ -560,7 +560,7 @@
         "scaleDownToFit": true,
         "scaleDownMultiplier": 1.05,
         "verticalAlignment": "center",
-        "horizontalAlignment": "justifiedFragment",
+        "horizontalAlignment": "center",
         "bitmapFontPath": "font/arial.fnt"
       },
       {
@@ -585,14 +585,14 @@
           ]
         },
         "rightVector": {
-          "x": 0.125,
+          "x": 0.110,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
           "y": 0,
-          "z": 0.036
+          "z": 0.045
         },
         "width": 0.5,
         "edge": 0.1,
@@ -607,7 +607,7 @@
         "scaleDownToFit": true,
         "scaleDownMultiplier": 1.05,
         "verticalAlignment": "center",
-        "horizontalAlignment": "justifiedFragment",
+        "horizontalAlignment": "center",
         "bitmapFontPath": "font/arial.fnt"
       },
       {
@@ -632,14 +632,14 @@
           ]
         },
         "rightVector": {
-          "x": 0.125,
+          "x": 0.110,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
           "y": 0,
-          "z": 0.036
+          "z": 0.045
         },
         "width": 0.5,
         "edge": 0.1,
@@ -654,7 +654,7 @@
         "scaleDownToFit": true,
         "scaleDownMultiplier": 1.05,
         "verticalAlignment": "center",
-        "horizontalAlignment": "justifiedFragment",
+        "horizontalAlignment": "center",
         "bitmapFontPath": "font/arial.fnt"
       }
     ]
