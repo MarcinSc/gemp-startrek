@@ -22,16 +22,16 @@ public class StackActionEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    public void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String effectType = gameEffect.getType();
         if (effectType.equals("stackForEachPlayer")) {
-            stackForEachPlayerEffect(effectEntity, gameEffect, memory);
+            stackForEachPlayerEffect(sourceEntity, gameEffect, memory);
         } else if (effectType.equals("stackActionTemplate")) {
-            stackActionTemplate(effectEntity, gameEffect, memory);
+            stackActionTemplate(sourceEntity, gameEffect, memory);
         }
     }
 
-    private void stackForEachPlayerEffect(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void stackForEachPlayerEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         GameComponent game = LazyEntityUtil.findEntityWithComponent(world, GameComponent.class).getComponent(GameComponent.class);
         Array<String> players = game.getPlayers();
 
@@ -64,7 +64,7 @@ public class StackActionEffect extends EffectSystem {
         }
     }
 
-    private void stackActionTemplate(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void stackActionTemplate(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String template = gameEffect.getDataString("template");
 
         Entity spawnedAction = spawnSystem.spawnEntity(template);

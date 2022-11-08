@@ -17,16 +17,16 @@ public class SequenceEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String effectType = gameEffect.getType();
         if (effectType.equals("sequence")) {
-            sequence(effectEntity, gameEffect, memory);
+            sequence(sourceEntity, gameEffect, memory);
         } else if (effectType.equals("sequenceForPlayer")) {
-            sequenceForPlayer(effectEntity, gameEffect, memory);
+            sequenceForPlayer(sourceEntity, gameEffect, memory);
         }
     }
 
-    private void sequence(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void sequence(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         JsonValue action = gameEffect.getClonedDataObject("actions");
         String stackedIndex = memory.getValue("stackedIndex");
         int nextActionIndex = 0;
@@ -54,7 +54,7 @@ public class SequenceEffect extends EffectSystem {
         }
     }
 
-    private void sequenceForPlayer(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void sequenceForPlayer(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         JsonValue action = gameEffect.getClonedDataObject("actions");
         String stackedIndex = memory.getValue("stackedIndex");
         String player = gameEffect.getDataString("player");

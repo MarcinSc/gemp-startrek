@@ -32,12 +32,12 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
     }
 
     @Override
-    public boolean processEndingEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
-        processEffect(sourceEntity, effectEntity, gameEffect, memory);
+    public boolean processEndingEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+        processEffect(sourceEntity, gameEffect, memory);
         return false;
     }
 
-    protected abstract void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory);
+    protected abstract void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory);
 
     @Override
     protected void processSystem() {

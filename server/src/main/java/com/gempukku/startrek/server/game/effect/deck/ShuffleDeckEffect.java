@@ -19,8 +19,8 @@ public class ShuffleDeckEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
-        Entity playerEntity = playerResolverSystem.resolvePlayer(effectEntity, memory,
+    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+        Entity playerEntity = playerResolverSystem.resolvePlayer(sourceEntity, memory,
                 gameEffect.getDataString("player"));
         String deckType = gameEffect.getDataString("deck");
         if (deckType.equals("dilemmaDeck")) {

@@ -22,18 +22,18 @@ public class LoopEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    public void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String effectType = gameEffect.getType();
         if (effectType.equals("stackUntil")) {
-            stackUntil(effectEntity, gameEffect, memory);
+            stackUntil(sourceEntity, gameEffect, memory);
         } else if (effectType.equals("stackUntilInTurnOrder")) {
-            stackUntilInTurnOrder(effectEntity, gameEffect, memory);
+            stackUntilInTurnOrder(sourceEntity, gameEffect, memory);
         }
     }
 
-    private void stackUntil(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void stackUntil(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String condition = gameEffect.getDataString("condition");
-        boolean result = conditionResolverSystem.resolveBoolean(effectEntity, memory, condition);
+        boolean result = conditionResolverSystem.resolveBoolean(sourceEntity, memory, condition);
         if (!result) {
             Entity stackedEntity = world.createEntity();
             JsonValue action = gameEffect.getClonedDataObject("action");
@@ -52,8 +52,8 @@ public class LoopEffect extends EffectSystem {
         }
     }
 
-    private void stackUntilInTurnOrder(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
-        boolean condition = conditionResolverSystem.resolveBoolean(effectEntity, memory,
+    private void stackUntilInTurnOrder(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+        boolean condition = conditionResolverSystem.resolveBoolean(sourceEntity, memory,
                 gameEffect.getDataString("condition"));
         if (!condition) {
             TurnSequenceComponent turnSequence = LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class).

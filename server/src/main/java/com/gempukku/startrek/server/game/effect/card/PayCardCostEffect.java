@@ -20,7 +20,7 @@ public class PayCardCostEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         int cardId = Integer.parseInt(memory.getValue(gameEffect.getDataString("cardMemory")));
         Entity cardEntity = world.getEntity(cardId);
 

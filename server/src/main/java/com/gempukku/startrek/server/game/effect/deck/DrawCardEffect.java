@@ -27,9 +27,9 @@ public class DrawCardEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String player = gameEffect.getDataString("player");
-        Entity playerEntity = playerResolverSystem.resolvePlayer(effectEntity, memory, player);
+        Entity playerEntity = playerResolverSystem.resolvePlayer(sourceEntity, memory, player);
         PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);
 
         int cardsDrawn = 0;

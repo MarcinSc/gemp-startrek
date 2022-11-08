@@ -59,7 +59,7 @@ public class DecisionSystem extends EffectSystem {
     }
 
     @Override
-    public boolean processEndingEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    public boolean processEndingEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String player = gameEffect.getDataString("player");
         Entity playerEntity = playerResolverSystem.resolvePlayer(sourceEntity, memory, player);
 
@@ -93,7 +93,7 @@ public class DecisionSystem extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         // Ignore
     }
 }

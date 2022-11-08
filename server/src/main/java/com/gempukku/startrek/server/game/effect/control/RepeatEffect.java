@@ -17,17 +17,17 @@ public class RepeatEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity sourceEntity, Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
+    public void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String type = gameEffect.getType();
         if (type.equals("repeat")) {
-            repeat(effectEntity, gameEffect, memory);
+            repeat(sourceEntity, gameEffect, memory);
         } else if (type.equals("repeatForPlayer")) {
-            repeatForPlayer(effectEntity, gameEffect, memory);
+            repeatForPlayer(sourceEntity, gameEffect, memory);
         }
     }
 
-    private void repeat(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
-        int times = amountResolverSystem.resolveAmount(effectEntity, memory,
+    private void repeat(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+        int times = amountResolverSystem.resolveAmount(sourceEntity, memory,
                 gameEffect.getDataString("times"));
 
         int executedTimes = 0;
@@ -52,8 +52,8 @@ public class RepeatEffect extends EffectSystem {
         }
     }
 
-    private void repeatForPlayer(Entity effectEntity, GameEffectComponent gameEffect, Memory memory) {
-        int times = amountResolverSystem.resolveAmount(effectEntity, memory,
+    private void repeatForPlayer(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+        int times = amountResolverSystem.resolveAmount(sourceEntity, memory,
                 gameEffect.getDataString("times"));
         String player = gameEffect.getDataString("player");
 
