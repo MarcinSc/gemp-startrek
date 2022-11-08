@@ -1,0 +1,33 @@
+{
+  "type": "Event",
+  "cost": "2",
+  "title": "D'Arsay Archive",
+  "abilities": [
+    {
+      "text": "Count the number of cards in your hand, shuffle them, and place them on the bottom of your deck to draw an equal number of cards. Destroy this event.",
+      "type": "event",
+      "costs": [
+        {
+          "type": "memorizeAmount",
+          "memory": "cardCount",
+          "amount": "handCount(owner(self))"
+        },
+        {
+          "type": "placeCardInHandOnBottomOfDeck",
+          "filter": "any"
+        }
+      ],
+      "effects": [
+        {
+          "type": "drawCards",
+          "amount": "memory(cardCount)"
+        },
+        {
+          "type": "destroy",
+          "filter": "self"
+        }
+      ]
+    }
+  ],
+  "lore": "\"...it's using our ship - our alloys, our DNA - to create elements of its own culture.\""
+}

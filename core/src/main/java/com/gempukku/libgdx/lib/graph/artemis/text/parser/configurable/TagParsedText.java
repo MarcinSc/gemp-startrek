@@ -2,10 +2,7 @@ package com.gempukku.libgdx.lib.graph.artemis.text.parser.configurable;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.*;
 import com.gempukku.libgdx.lib.graph.artemis.text.FontUtil;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.CharacterParsedText;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
@@ -89,7 +86,10 @@ public class TagParsedText implements CharacterParsedText, Pool.Poolable {
             return ascent * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();
         } else {
             BitmapFont.BitmapFontData fontData = getFont(textStyle).getData();
-            BitmapFont.Glyph glyph = fontData.getGlyph(getCharAt(glyphIndex));
+            char charAt = getCharAt(glyphIndex);
+            BitmapFont.Glyph glyph = fontData.getGlyph(charAt);
+            if (glyph == null)
+                throw new GdxRuntimeException("Unable to resolve glyph for character: " + charAt);
             return glyph.xadvance;
         }
     }

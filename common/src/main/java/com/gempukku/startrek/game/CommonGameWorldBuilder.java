@@ -50,6 +50,7 @@ public class CommonGameWorldBuilder {
                 new CardAbilitySystem(),
                 new PlaysInCoreAbilityHandler(),
                 new OrderAbilityHandler(),
+                new EventAbilityHandler(),
                 new HeadquarterRequirementsAbilityHandler(),
                 new GrantSkillAbilityHandler(),
 
