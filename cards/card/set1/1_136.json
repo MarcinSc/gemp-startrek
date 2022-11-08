@@ -1,0 +1,26 @@
+{
+  "type": "Interrupt",
+  "title": "Render Assistance",
+  "keywords": [
+    "Maneuver"
+  ],
+  "abilities": [
+    {
+      "text": "When an engagement involving your ship begins, another one of your ships at that mission joins the engagement.",
+      "type": "interrupt",
+      "condition": "engagementBeginsInvolving(your,type(Ship))",
+      "effects": [
+        {
+          "type": "select",
+          "memory": "chosenShip",
+          "filter": "type(Ship),sameMissionAs(shipInvolvedInEngagement)"
+        },
+        {
+          "type": "joinEngagement",
+          "filter": "memory(chosenShip)"
+        }
+      ]
+    }
+  ],
+  "lore": "\"Who says there's never a Klingon around when you need one?\""
+}

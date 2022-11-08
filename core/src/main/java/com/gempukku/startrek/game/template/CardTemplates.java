@@ -64,9 +64,14 @@ public class CardTemplates {
             String titleText = (cardDefinition.isUnique() ? "• " : "") + cardDefinition.getTitle();
             titleBlock.setText(titleText);
 
-            // Cost
-            TextBlock costBlock = text.getTextBlocks().get(1);
-            costBlock.setText(String.valueOf(cardDefinition.getCost()));
+            if (cardType != CardType.Interrupt) {
+                // Cost
+                TextBlock costBlock = text.getTextBlocks().get(1);
+                costBlock.setText(String.valueOf(cardDefinition.getCost()));
+            } else {
+                TextBlock costBlock = text.getTextBlocks().get(1);
+                costBlock.setText("");
+            }
 
             // Type
             TextBlock typeBlock = text.getTextBlocks().get(2);
@@ -170,6 +175,8 @@ public class CardTemplates {
             return "equipment-template";
         else if (cardType == CardType.Event)
             return "event-template";
+        else if (cardType == CardType.Interrupt)
+            return "interrupt-template";
         throw new GdxRuntimeException("Unable to resolve unaffiliated template: " + cardType);
     }
 

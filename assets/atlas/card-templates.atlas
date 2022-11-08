@@ -1,61 +1,68 @@
 
 card-templates.png
-size: 4096, 2048
+size: 2048, 4096
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
 bajoran-template
   rotate: false
-  xy: 2, 1017
+  xy: 2, 2578
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
 cardback
   rotate: false
-  xy: 2, 2
+  xy: 1478, 3108
   size: 357, 499
   orig: 357, 499
   offset: 0, 0
   index: -1
 equipment-template
   rotate: false
-  xy: 740, 1017
+  xy: 2, 1547
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
 event-template
   rotate: false
-  xy: 1478, 1017
+  xy: 740, 2578
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
 federation-template
   rotate: false
-  xy: 2216, 1017
+  xy: 2, 516
+  size: 736, 1029
+  orig: 736, 1029
+  offset: 0, 0
+  index: -1
+interrupt-template
+  rotate: false
+  xy: 740, 1547
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
 mission-template-small
   rotate: false
-  xy: 2, 503
+  xy: 2, 2
   size: 736, 512
   orig: 736, 512
   offset: 0, 0
   index: -1
 nonAligned-template
   rotate: false
-  xy: 2954, 1017
+  xy: 740, 516
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
 personnel-template-small
   rotate: false
-  xy: 740, 503
+  xy: 740, 2
   size: 736, 512
   orig: 736, 512
   offset: 0, 0

@@ -1,5 +1,8 @@
 {
   "cards": {
+    "1_136": {
+      "tpl:extends": "card/set1/1_136.json"
+    },
     "1_170": {
       "tpl:extends": "card/set1/1_170.json"
     },

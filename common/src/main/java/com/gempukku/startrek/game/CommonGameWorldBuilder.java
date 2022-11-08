@@ -51,6 +51,7 @@ public class CommonGameWorldBuilder {
                 new PlaysInCoreAbilityHandler(),
                 new OrderAbilityHandler(),
                 new EventAbilityHandler(),
+                new InterruptAbilityHandler(),
                 new HeadquarterRequirementsAbilityHandler(),
                 new GrantSkillAbilityHandler(),
 
