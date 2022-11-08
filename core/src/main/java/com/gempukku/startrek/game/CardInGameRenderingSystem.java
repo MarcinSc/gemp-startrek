@@ -14,7 +14,9 @@ import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
+import com.gempukku.startrek.game.core.CardInCoreComponent;
 import com.gempukku.startrek.game.hand.CardInHandComponent;
+import com.gempukku.startrek.game.layout.CoreLayout;
 import com.gempukku.startrek.game.layout.HandLayout;
 import com.gempukku.startrek.game.layout.MissionsLayout;
 import com.gempukku.startrek.game.layout.PileLayout;
@@ -64,7 +66,9 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
                             @Override
                             public void removed(IntBag entities) {
-
+                                for (int i = 0, s = entities.size(); s > i; ++i) {
+                                    faceUpCardInMissionRemoved(entities.get(i));
+                                }
                             }
                         });
         world.getAspectSubscriptionManager().get(Aspect.all(FaceDownCardInMissionComponent.class))
@@ -79,9 +83,29 @@ public class CardInGameRenderingSystem extends BaseSystem {
 
                             @Override
                             public void removed(IntBag entities) {
-
+                                for (int i = 0, s = entities.size(); s > i; ++i) {
+                                    faceDownCardInMissionRemoved(entities.get(i));
+                                }
                             }
                         });
+        world.getAspectSubscriptionManager().get(Aspect.all(CardInCoreComponent.class))
+                .addSubscriptionListener(
+                        new EntitySubscription.SubscriptionListener() {
+                            @Override
+                            public void inserted(IntBag entities) {
+                                for (int i = 0, s = entities.size(); s > i; ++i) {
+                                    cardInCoreInserted(entities.get(i));
+                                }
+                            }
+
+                            @Override
+                            public void removed(IntBag entities) {
+                                for (int i = 0, s = entities.size(); s > i; ++i) {
+                                    cardInCoreRemoved(entities.get(i));
+                                }
+                            }
+                        });
+
     }
 
     private void cardInHandInserted(int entityId) {
@@ -109,12 +133,44 @@ public class CardInGameRenderingSystem extends BaseSystem {
         getZonesStatus(owner).setHandDrity(true);
     }
 
+    private void cardInCoreInserted(int entityId) {
+        Entity cardEntity = world.getEntity(entityId);
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        String owner = card.getOwner();
+        String cardId = card.getCardId();
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
+        Entity cardRepresentation = CardTemplates.createSmallCard(cardDefinition, spawnSystem);
+        cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(entityId);
+        cardStorageSystem.getPlayerCards(owner).addCardInCore(cardEntity, cardRepresentation);
+
+        getZonesStatus(owner).setCoreDirty(true);
+    }
+
+    private void cardInCoreRemoved(int entityId) {
+        Entity cardEntity = world.getEntity(entityId);
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        String owner = card.getOwner();
+        PlayerCards playerCards = cardStorageSystem.getPlayerCards(owner);
+        Entity renderedCard = playerCards.removeCardInCore(cardEntity);
+        world.deleteEntity(renderedCard);
+
+        getZonesStatus(owner).setCoreDirty(true);
+    }
+
     private void faceUpCardInMissionInserted(int entityId) {
         Entity cardEntity = world.getEntity(entityId);
         FaceUpCardInMissionComponent cardInMission = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
         int missionIndex = cardInMission.getMissionIndex();
         String missionOwner = cardInMission.getMissionOwner();
         addRevealedCardInMission(entityId, cardEntity, missionIndex, missionOwner);
+    }
+
+    private void faceUpCardInMissionRemoved(int entityId) {
+        Entity cardEntity = world.getEntity(entityId);
+        FaceUpCardInMissionComponent cardInMission = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
+        int missionIndex = cardInMission.getMissionIndex();
+        String missionOwner = cardInMission.getMissionOwner();
+        removeRevealedCardInMission(cardEntity, missionIndex, missionOwner);
     }
 
     private void faceDownCardInMissionInserted(int entityId) {
@@ -125,6 +181,14 @@ public class CardInGameRenderingSystem extends BaseSystem {
         addRevealedCardInMission(entityId, cardEntity, missionIndex, missionOwner);
     }
 
+    private void faceDownCardInMissionRemoved(int entityId) {
+        Entity cardEntity = world.getEntity(entityId);
+        FaceDownCardInMissionComponent cardInMission = cardEntity.getComponent(FaceDownCardInMissionComponent.class);
+        int missionIndex = cardInMission.getMissionIndex();
+        String missionOwner = cardInMission.getMissionOwner();
+        removeRevealedCardInMission(cardEntity, missionIndex, missionOwner);
+    }
+
     private Entity addRevealedCardInMission(int entityId, Entity cardEntity, int missionIndex, String missionOwner) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         String cardId = card.getCardId();
@@ -133,7 +197,7 @@ public class CardInGameRenderingSystem extends BaseSystem {
         Entity cardRepresentation = CardTemplates.createSmallCard(cardDefinition, spawnSystem);
         cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(entityId);
         if (cardDefinition.getType() == CardType.Mission) {
-            cardStorageSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).setMissionCard(cardEntity, cardRepresentation);
+            cardStorageSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).addMissionCard(cardEntity, cardRepresentation);
         } else {
             boolean playerMission = missionOwner.equals(card.getOwner());
             if (playerMission) {
@@ -146,6 +210,17 @@ public class CardInGameRenderingSystem extends BaseSystem {
         getZonesStatus(missionOwner).setMissionsDirty(true);
 
         return cardRepresentation;
+    }
+
+    private void removeRevealedCardInMission(Entity cardEntity, int missionIndex, String missionOwner) {
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        boolean playerMission = missionOwner.equals(card.getOwner());
+        MissionCards missionCards = cardStorageSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex);
+        if (playerMission) {
+            missionCards.removePlayerTopLevelCardInMission(cardEntity);
+        } else {
+            missionCards.removeOpponentTopLevelCardInMission(cardEntity);
+        }
     }
 
     private ZonesStatus getZonesStatus(String username) {
@@ -178,6 +253,9 @@ public class CardInGameRenderingSystem extends BaseSystem {
             }
             if (zonesStatus.isMissionsDirty()) {
                 MissionsLayout.layoutMissions(playerCards, playerPosition, transformSystem);
+            }
+            if (zonesStatus.isCoreDirty()) {
+                CoreLayout.layoutCore(playerCards, playerPosition, transformSystem);
             }
             zonesStatus.cleanZones();
         }

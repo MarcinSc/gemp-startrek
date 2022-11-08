@@ -9,16 +9,16 @@ public class MissionCards {
     private final Array<Entity> playerTopLevelCardsInMission = new Array<>();
     private final Array<Entity> opponentTopLevelCardsInMission = new Array<>();
     private final ObjectMap<Entity, Array<Entity>> attachedCardsInMission = new ObjectMap<>();
-    private Entity missionCard;
+    private final Array<Entity> missionCards = new Array<>();
 
-    public void setMissionCard(Entity card, Entity renderedCard) {
+    public void addMissionCard(Entity card, Entity renderedCard) {
         renderedCards.put(card, renderedCard);
         attachedCardsInMission.put(renderedCard, new Array<>());
-        this.missionCard = renderedCard;
+        missionCards.add(renderedCard);
     }
 
-    public Entity getMissionCard() {
-        return missionCard;
+    public Array<Entity> getMissionCards() {
+        return missionCards;
     }
 
     public Entity findRenderedCard(Entity card) {
@@ -60,7 +60,7 @@ public class MissionCards {
         opponentTopLevelCardsInMission.removeValue(renderedCard, true);
         return renderedCard;
     }
-//
+    //
 //    public void addAttachedCardInMission(Entity card, Entity attachedTo, Entity renderedCard) {
 //        renderedCards.put(card, renderedCard);
 //        Array<Entity> attachedCards = attachedCardsInMission.get(attachedTo);
