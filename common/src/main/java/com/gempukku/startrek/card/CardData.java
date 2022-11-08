@@ -30,7 +30,11 @@ public class CardData {
             JsonValue cardsJson = setJson.get("cards");
             for (JsonValue cardJson : cardsJson) {
                 String cardId = cardJson.name();
-                cardDefinitions.put(cardId, json.readValue(CardDefinition.class, cardJson));
+                CardDefinition cardDefinition = json.readValue(CardDefinition.class, cardJson);
+                String[] cardIdSplit = cardId.split("_");
+                String cardImagePath = "cardImages/set" + cardIdSplit[0] + "/" + cardIdSplit[1] + ".png";
+                cardDefinition.setCardImagePath(cardImagePath);
+                cardDefinitions.put(cardId, cardDefinition);
             }
         }
     }

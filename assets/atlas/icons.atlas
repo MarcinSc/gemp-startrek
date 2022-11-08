@@ -6,7 +6,7 @@ filter: Linear, Linear
 repeat: none
 Baj
   rotate: false
-  xy: 294, 48
+  xy: 393, 80
   size: 30, 29
   orig: 30, 29
   offset: 0, 0
@@ -20,7 +20,7 @@ Blank
   index: -1
 Borg
   rotate: false
-  xy: 327, 80
+  xy: 425, 80
   size: 30, 29
   orig: 30, 29
   offset: 0, 0
@@ -41,7 +41,7 @@ Cmd
   index: -1
 DS9
   rotate: false
-  xy: 295, 79
+  xy: 327, 47
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
@@ -60,11 +60,32 @@ Fed
   orig: 31, 30
   offset: 0, 0
   index: -1
+Fer
+  rotate: false
+  xy: 361, 79
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
 Headquarters
   rotate: false
   xy: 153, 36
   size: 73, 73
   orig: 73, 73
+  offset: 0, 0
+  index: -1
+Kli
+  rotate: false
+  xy: 359, 47
+  size: 30, 30
+  orig: 30, 30
+  offset: 0, 0
+  index: -1
+NA
+  rotate: false
+  xy: 261, 47
+  size: 31, 30
+  orig: 31, 30
   offset: 0, 0
   index: -1
 Planet
@@ -74,6 +95,13 @@ Planet
   orig: 74, 75
   offset: 0, 0
   index: -1
+Rom
+  rotate: false
+  xy: 295, 79
+  size: 31, 30
+  orig: 31, 30
+  offset: 0, 0
+  index: -1
 Space
   rotate: false
   xy: 78, 35
@@ -81,9 +109,16 @@ Space
   orig: 73, 74
   offset: 0, 0
   index: -1
+Sta
+  rotate: false
+  xy: 294, 47
+  size: 31, 30
+  orig: 31, 30
+  offset: 0, 0
+  index: -1
 Stf
   rotate: false
-  xy: 261, 47
+  xy: 328, 79
   size: 31, 30
   orig: 31, 30
   offset: 0, 0

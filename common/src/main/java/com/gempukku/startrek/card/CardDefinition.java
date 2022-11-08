@@ -4,6 +4,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 
 public class CardDefinition {
+    private String cardImagePath;
+
     private CardType type;
     private Affiliation affiliation;
     private int cost;
@@ -34,6 +36,14 @@ public class CardDefinition {
 
     // Dilemma specific
     private DilemmaType dilemmaType;
+
+    public String getCardImagePath() {
+        return cardImagePath;
+    }
+
+    public void setCardImagePath(String cardImagePath) {
+        this.cardImagePath = cardImagePath;
+    }
 
     public CardType getType() {
         return type;

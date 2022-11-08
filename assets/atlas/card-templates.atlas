@@ -32,3 +32,10 @@ mission-template-small
   orig: 736, 512
   offset: 0, 0
   index: -1
+personnel-template-small
+  rotate: false
+  xy: 740, 503
+  size: 736, 512
+  orig: 736, 512
+  offset: 0, 0
+  index: -1

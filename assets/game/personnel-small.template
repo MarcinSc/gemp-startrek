@@ -66,7 +66,7 @@
           "Texture": {
             "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
             "atlas": "atlas/card-templates.atlas",
-            "region": "mission-template-small"
+            "region": "personnel-template-small"
           }
         }
       },
@@ -158,7 +158,191 @@
           "Texture": {
             "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
             "atlas": "atlas/icons.atlas",
-            "region": "[mission type]"
+            "region": "[affiliation]"
+          }
+        }
+      },
+      {
+        "spriteBatchName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                -0.28,
+                0.002,
+                -0.085,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.08,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.08
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "atlas/icons.atlas",
+            "region": "Blank"
+          }
+        }
+      },
+      {
+        "spriteBatchName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                -0.28,
+                0.002,
+                -0.005,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.08,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.08
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "atlas/icons.atlas",
+            "region": "Blank"
+          }
+        }
+      },
+      {
+        "spriteBatchName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                -0.28,
+                0.002,
+                0.085,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.08,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.08
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "atlas/icons.atlas",
+            "region": "Blank"
+          }
+        }
+      },
+      {
+        "spriteBatchName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                -0.28,
+                0.002,
+                0.165,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.08,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.08
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "atlas/icons.atlas",
+            "region": "Blank"
           }
         }
       }
@@ -227,101 +411,9 @@
             0,
             1,
             0,
-            -0.288,
+            0.200,
             0.002,
-            -0.069,
-            1
-          ]
-        },
-        "rightVector": {
-          "x": 0.08,
-          "y": 0,
-          "z": 0
-        },
-        "upVector": {
-          "x": 0,
-          "y": 0,
-          "z": 0.08
-        },
-        "width": 0.5,
-        "edge": 0.03,
-        "color": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
-          "a": 1
-        },
-        "targetWidth": 100,
-        "kerning": true,
-        "scaleDownToFit": true,
-        "verticalAlignment": "center",
-        "horizontalAlignment": "center",
-        "bitmapFontPath": "font/arial.fnt"
-      },
-      {
-        "transform": {
-          "val": [
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            -0.288,
-            0.002,
-            0.175,
-            1
-          ]
-        },
-        "rightVector": {
-          "x": 0.08,
-          "y": 0,
-          "z": 0
-        },
-        "upVector": {
-          "x": 0,
-          "y": 0,
-          "z": 0.08
-        },
-        "width": 0.5,
-        "edge": 0.03,
-        "color": {
-          "r": 1,
-          "g": 1,
-          "b": 1,
-          "a": 1
-        },
-        "targetWidth": 100,
-        "kerning": true,
-        "scaleDownToFit": true,
-        "verticalAlignment": "center",
-        "horizontalAlignment": "center",
-        "bitmapFontPath": "font/arial.fnt"
-      },
-      {
-        "transform": {
-          "val": [
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0.055,
-            0.002,
-            0.195,
+            0.203,
             1
           ]
         },
