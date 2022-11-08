@@ -22,6 +22,8 @@ public class CardTemplates {
             cardRepresentation = createSmallMissionCard(cardDefinition, spawnSystem);
         } else if (cardDefinition.getType() == CardType.Personnel) {
             cardRepresentation = createSmallPersonnelCard(cardDefinition, spawnSystem);
+        } else if (cardDefinition.getType() == CardType.Ship) {
+            cardRepresentation = createSmallShipCard(cardDefinition, spawnSystem);
         } else {
             throw new GdxRuntimeException("Type of card not implemented: " + cardDefinition.getType());
         }
@@ -36,6 +38,8 @@ public class CardTemplates {
     public static Entity createFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
+
+        CardType cardType = cardDefinition.getType();
 
         Affiliation affiliation = cardDefinition.getAffiliation();
         String cardTemplate = getCardTemplate(affiliation);
@@ -65,9 +69,15 @@ public class CardTemplates {
             TextBlock costBlock = text.getTextBlocks().get(2);
             costBlock.setText(String.valueOf(cardDefinition.getCost()));
 
-            // Species
-            TextBlock raceBlock = text.getTextBlocks().get(3);
-            raceBlock.setText(cardDefinition.getSpecies().toString());
+            if (cardType == CardType.Personnel) {
+                // Species
+                TextBlock raceBlock = text.getTextBlocks().get(3);
+                raceBlock.setText(cardDefinition.getSpecies().toString());
+            } else if (cardType == CardType.Ship) {
+                // Class
+                TextBlock classBlock = text.getTextBlocks().get(3);
+                classBlock.setText("[font font/arial-italic.fnt]" + cardDefinition.getShipClass() + "[/font] Class");
+            }
 
             // Text
             TextBlock textBlock = text.getTextBlocks().get(4);
@@ -90,13 +100,23 @@ public class CardTemplates {
                 iconTextureReference.setRegion(icon.name());
             }
 
-            //Stats
-            TextBlock integrityBlock = text.getTextBlocks().get(5);
-            integrityBlock.setText("I[scale 0.8]NTEGRITY[/scale] " + cardDefinition.getIntegrity());
-            TextBlock cunningBlock = text.getTextBlocks().get(6);
-            cunningBlock.setText("C[scale 0.8]UNNING[/scale] " + cardDefinition.getCunning());
-            TextBlock strengthBlock = text.getTextBlocks().get(7);
-            strengthBlock.setText("S[scale 0.8]TRENGTH[/scale] " + cardDefinition.getStrength());
+            if (cardType == CardType.Personnel) {
+                // Stats
+                TextBlock integrityBlock = text.getTextBlocks().get(5);
+                integrityBlock.setText("I[scale 0.8]NTEGRITY[/scale] " + cardDefinition.getIntegrity());
+                TextBlock cunningBlock = text.getTextBlocks().get(6);
+                cunningBlock.setText("C[scale 0.8]UNNING[/scale] " + cardDefinition.getCunning());
+                TextBlock strengthBlock = text.getTextBlocks().get(7);
+                strengthBlock.setText("S[scale 0.8]TRENGTH[/scale] " + cardDefinition.getStrength());
+            } else if (cardType == CardType.Ship) {
+                // Stats
+                TextBlock rangeBlock = text.getTextBlocks().get(5);
+                rangeBlock.setText("R[scale 0.8]ANGE[/scale] " + cardDefinition.getRange());
+                TextBlock weaponsBlock = text.getTextBlocks().get(6);
+                weaponsBlock.setText("W[scale 0.8]EAPONS[/scale] " + cardDefinition.getWeapons());
+                TextBlock shieldsBlock = text.getTextBlocks().get(7);
+                shieldsBlock.setText("S[scale 0.8]HIELDS[/scale] " + cardDefinition.getShields());
+            }
         }
         return cardRepresentation;
     }
@@ -208,6 +228,46 @@ public class CardTemplates {
             // Stats
             TextBlock statsBlock = text.getTextBlocks().get(1);
             statsBlock.setText(cardDefinition.getIntegrity() + " / " + cardDefinition.getCunning() + " / " + cardDefinition.getStrength());
+        }
+        return cardRepresentation;
+    }
+
+    private static Entity createSmallShipCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/personnel-small.template");
+
+        SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
+
+        TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
+        cardImageTexture.setRegion(cardDefinition.getCardImagePath());
+
+        TextureReference affiliationTexture = (TextureReference) cardTemplateSprite.getSprites().get(2).getProperties().get("Texture");
+        affiliationTexture.setRegion(cardDefinition.getAffiliation().getIcon().name());
+
+        // Icons
+        Array<CardIcon> icons = cardDefinition.getIcons();
+        int nonStaffIcon = 0;
+        for (int iconIndex = 0; iconIndex < icons.size; iconIndex++) {
+            CardIcon icon = icons.get(iconIndex);
+            int spriteIconIndex;
+            if (icon == CardIcon.Stf || icon == CardIcon.Cmd) {
+                spriteIconIndex = 3;
+            } else {
+                spriteIconIndex = 4 + nonStaffIcon;
+                nonStaffIcon++;
+            }
+            SpriteDefinition spriteDefinition = cardTemplateSprite.getSprites().get(spriteIconIndex);
+            TextureReference iconTextureReference = (TextureReference) spriteDefinition.getProperties().get("Texture");
+            iconTextureReference.setRegion(icon.name());
+        }
+
+        TextComponent text = cardRepresentation.getComponent(TextComponent.class);
+        if (text != null) {
+            // Title
+            TextBlock titleBlock = text.getTextBlocks().get(0);
+            titleBlock.setText(cardDefinition.getTitle());
+            // Stats
+            TextBlock statsBlock = text.getTextBlocks().get(1);
+            statsBlock.setText(cardDefinition.getRange() + " / " + cardDefinition.getWeapons() + " / " + cardDefinition.getShields());
         }
         return cardRepresentation;
     }

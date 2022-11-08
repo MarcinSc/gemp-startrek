@@ -1,0 +1,21 @@
+{
+  "type": "Ship",
+  "affiliation": "Federation",
+  "cost": "6",
+  "title": "U.S.S. Akira",
+  "species": "Human",
+  "shipClass": "Akira",
+  "staffingRequirements": [
+    "Cmd",
+    "Stf",
+    "Stf",
+    "Stf"
+  ],
+  "icons": [
+    "DS9"
+  ],
+  "range": 8,
+  "weapons": 10,
+  "shields": 9,
+  "lore": "Starship designed for border defense after the dissolution of the Federation/Klingon treaty. The hull configuration of the Akira-class starship was something of an homage to the look of the earliest Starfleet exploratory vessels."
+}

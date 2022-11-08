@@ -24,6 +24,13 @@ public class CardDefinition {
     private int cunning;
     private int strength;
 
+    // Ship specific
+    private String shipClass;
+    private Array<CardIcon> staffingRequirements;
+    private int range;
+    private int weapons;
+    private int shields;
+
     // Mission specific
     private MissionType missionType;
     private Quadrant quadrant;
@@ -73,6 +80,10 @@ public class CardDefinition {
         return species;
     }
 
+    public String getShipClass() {
+        return shipClass;
+    }
+
     public Array<String> getSkills() {
         return skills;
     }
@@ -83,6 +94,18 @@ public class CardDefinition {
 
     public Array<CardIcon> getIcons() {
         return icons;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public int getWeapons() {
+        return weapons;
+    }
+
+    public int getShields() {
+        return shields;
     }
 
     public int getIntegrity() {

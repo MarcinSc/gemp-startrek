@@ -45,6 +45,10 @@ public class StarTrekServerDeckSystem extends BaseSystem {
         temporaryDeck.getDrawDeck().add("1_320");
         temporaryDeck.getDrawDeck().add("1_334");
         temporaryDeck.getDrawDeck().add("1_351");
+        // Ship - Federation
+        temporaryDeck.getDrawDeck().add("1_390");
+        temporaryDeck.getDrawDeck().add("1_390");
+        temporaryDeck.getDrawDeck().add("1_390");
     }
 
     public StarTrekDeck getStarterDeck(String starterDeckId) {
