@@ -87,7 +87,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             TextStyle textStyle = parsedText.getTextStyle(i);
 
             // If it's not the last character, or not whitespace - use to calculate ascent/descent
-            if (i != startIndex + lineGlyphLength - 1 || !parsedText.isSkippable(i)) {
+            if (i != startIndex + lineGlyphLength - 1 || !parsedText.isWhitespace(i)) {
                 float fontScale = getFontScale(textStyle);
                 maxDescent = Math.max(maxDescent, parsedText.getDescent(textStyle) * fontScale);
                 maxAscent = Math.max(maxAscent, parsedText.getAscent(textStyle) * fontScale);
@@ -115,15 +115,12 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             }
         }
 
-        char lastCharacter = 0;
-        TextStyle lastCharacterStyle = null;
-
         for (int i = startIndex; i < startIndex + lineGlyphLength; i++) {
             TextStyle textStyle = parsedText.getTextStyle(i);
             char character = parsedText.getCharAt(i);
 
             // If it's not the last character, or not whitespace - layout the char
-            if (i != startIndex + lineGlyphLength - 1 || !parsedText.isSkippable(i)) {
+            if (i != startIndex + lineGlyphLength - 1 || !parsedText.isWhitespace(i)) {
                 BitmapFont font = getFont(textStyle);
                 BitmapFont.BitmapFontData fontData = font.getData();
                 float fontScale = getFontScale(textStyle);
@@ -141,22 +138,19 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                     BitmapFont.Glyph glyph = fontData.getGlyph(character);
 
                     float kerning = 0f;
-                    if (lastCharacter != 0 && lastCharacterStyle == textStyle && getKerning(textStyle)) {
-                        kerning = fontData.getGlyph(lastCharacter).getKerning(character);
+                    if (i > startIndex) {
+                        kerning = parsedText.getKerning(i);
                     }
                     line.xAdvances.add(usedWidth + kerning * fontScale);
                     line.yAdvances.add(maxAscent - ascent);
 
                     float glyphAdvance = glyph.xadvance + kerning + getLetterSpacing(textStyle);
-                    if (Character.isWhitespace(character)) {
+                    if (parsedText.isWhitespace(i)) {
                         glyphAdvance += justifiedSpace;
                     }
 
                     usedWidth += glyphAdvance * fontScale;
                 }
-
-                lastCharacterStyle = textStyle;
-                lastCharacter = character;
             }
         }
         line.xAdvances.add(usedWidth);
@@ -181,8 +175,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
     private int countJustifiableSpaces(ParsedText parsedText, int startIndex, int glyphCount) {
         int result = 0;
         for (int i = startIndex; i < startIndex + glyphCount; i++) {
-            char character = parsedText.getCharAt(i);
-            if (i != startIndex + glyphCount - 1 && Character.isWhitespace(character))
+            if (i != startIndex + glyphCount - 1 && parsedText.isWhitespace(i))
                 result++;
         }
         return result;
@@ -223,7 +216,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
     private float getCharacterWidthIfSkippable(ParsedText parsedText, int glyphIndex) {
         char character = parsedText.getCharAt(glyphIndex);
-        if (parsedText.isSkippable(glyphIndex)) {
+        if (parsedText.isWhitespace(glyphIndex)) {
             TextStyle textStyle = parsedText.getTextStyle(glyphIndex);
 
             BitmapFont.BitmapFontData fontData = getFontData(textStyle);
@@ -239,15 +232,13 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
     private float getTextWidthExcludingLastSkippable(ParsedText parsedText, int startIndex, int length) {
         float width = 0;
-        char lastCharacter = 0;
-        TextStyle lastCharacterStyle = null;
 
         for (int i = startIndex; i < startIndex + length; i++) {
             TextStyle textStyle = parsedText.getTextStyle(i);
             char character = parsedText.getCharAt(i);
 
             // If it's not the last character, or not whitespace - add the width
-            if (i != startIndex + length - 1 || !parsedText.isSkippable(i)) {
+            if (i != startIndex + length - 1 || !parsedText.isWhitespace(i)) {
                 BitmapFont font = getFont(textStyle);
                 BitmapFont.BitmapFontData fontData = font.getData();
                 BitmapFont.Glyph glyph = fontData.getGlyph(character);
@@ -261,16 +252,12 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                     width += textureWidth + getLetterSpacing(textStyle) * fontScale;
                 } else {
                     float glyphAdvance = glyph.xadvance;
-                    if (lastCharacter != 0 && lastCharacterStyle == textStyle && getKerning(textStyle)) {
-                        int kerning = fontData.getGlyph(lastCharacter).getKerning(character);
-                        glyphAdvance += kerning;
+                    if (i > startIndex) {
+                        glyphAdvance += parsedText.getKerning(i);
                     }
 
                     width += (glyphAdvance + getLetterSpacing(textStyle)) * fontScale;
                 }
-
-                lastCharacterStyle = textStyle;
-                lastCharacter = character;
             }
         }
         return width;
@@ -380,6 +367,8 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         private int glyphCount;
         private FloatArray xAdvances = new FloatArray();
         private FloatArray yAdvances = new FloatArray();
+        private FloatArray widths = new FloatArray();
+        private FloatArray heights = new FloatArray();
 
         @Override
         public float getWidth() {
@@ -425,6 +414,8 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
             glyphCount = 0;
             xAdvances.clear();
             yAdvances.clear();
+            widths.clear();
+            heights.clear();
         }
     }
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.lib.graph.artemis.text.FontUtil;
 
 public class DefaultTextParser implements TextParser {
+
     @Override
     public ParsedText parseText(TextStyle defaultTextStyle, String text) {
         DefaultParsedText result = Pools.obtain(DefaultParsedText.class);
@@ -15,6 +16,7 @@ public class DefaultTextParser implements TextParser {
     }
 
     public static class DefaultParsedText implements ParsedText, Pool.Poolable {
+        private boolean defaultKerning = true;
         private TextStyle textStyle;
         private String text;
 
@@ -45,6 +47,22 @@ public class DefaultTextParser implements TextParser {
         }
 
         @Override
+        public float getKerning(int glyphIndex) {
+            TextStyle style = getTextStyle(glyphIndex);
+            if (!getKerning(style))
+                return 0f;
+            TextStyle lastStyle = getTextStyle(glyphIndex - 1);
+            if (lastStyle != style)
+                return 0f;
+
+            BitmapFont font = getFont(style);
+            BitmapFont.BitmapFontData fontData = font.getData();
+            char lastChar = getCharAt(glyphIndex - 1);
+            char currentChar = getCharAt(glyphIndex);
+            return fontData.getGlyph(lastChar).getKerning(currentChar);
+        }
+
+        @Override
         public float getDescent(TextStyle style) {
             BitmapFont font = getFont(style);
             return FontUtil.getFontDescent(font);
@@ -62,8 +80,13 @@ public class DefaultTextParser implements TextParser {
         }
 
         @Override
-        public boolean isSkippable(int glyphIndex) {
+        public boolean isWhitespace(int glyphIndex) {
             return Character.isWhitespace(getCharAt(glyphIndex));
+        }
+
+        private Boolean getKerning(TextStyle textStyle) {
+            Boolean kerning = (Boolean) textStyle.getAttribute(TextStyleConstants.Kerning);
+            return kerning != null ? kerning : defaultKerning;
         }
 
         private BitmapFont getFont(TextStyle textStyle) {
