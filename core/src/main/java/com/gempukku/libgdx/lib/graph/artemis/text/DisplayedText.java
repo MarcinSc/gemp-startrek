@@ -26,10 +26,7 @@ import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.GlyphOffsetLine;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.GlyphOffsetText;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.GlyphOffseter;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.ParsedText;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextParser;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyleConstants;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.*;
 
 public class DisplayedText implements Disposable {
     private static Matrix4 tempMatrix = new Matrix4();
@@ -38,7 +35,7 @@ public class DisplayedText implements Disposable {
     private static Vector3 tempVector3 = new Vector3();
 
     private GlyphOffseter glyphOffseter;
-    private TextParser textParser;
+    private CharacterTextParser textParser;
     private SpriteBatchModel spriteBatchModel;
     private BitmapFontSystem bitmapFontSystem;
     private Matrix4 transform;
@@ -59,7 +56,7 @@ Edge - character smoothing
 Color - character color
      */
 
-    public DisplayedText(GlyphOffseter glyphOffseter, TextParser textParser, SpriteBatchModel spriteBatchModel,
+    public DisplayedText(GlyphOffseter glyphOffseter, CharacterTextParser textParser, SpriteBatchModel spriteBatchModel,
                          BitmapFontSystem bitmapFontSystem, SpriteSystem spriteSystem,
                          Matrix4 transform, TextBlock textBlock) {
         this.glyphOffseter = glyphOffseter;
@@ -80,7 +77,7 @@ Color - character color
     private void addText() {
         TextStyle defaultTextStyle = createDefaultTextStyle();
 
-        ParsedText parsedText = textParser.parseText(defaultTextStyle, textBlock.getText());
+        CharacterParsedText parsedText = textParser.parseText(defaultTextStyle, textBlock.getText());
         if (parsedText.getNextUnbreakableChunkLength(0) == -1)
             return;
 
@@ -125,7 +122,7 @@ Color - character color
                 TextHorizontalAlignment horizontalAlignment = getHorizontalAlignment(lineStyle);
                 final float startX = horizontalAlignment.apply(line.getWidth(), widthInGlyph) - widthInGlyph / 2;
                 for (int glyphIndex = 0; glyphIndex < line.getGlyphCount(); glyphIndex++) {
-                    char character = line.getGlyph(glyphIndex);
+                    char character = parsedText.getCharAt(line.getStartIndex() + glyphIndex);
                     TextStyle textStyle = line.getGlyphStyle(glyphIndex);
                     BitmapFont bitmapFont = (BitmapFont) textStyle.getAttribute(TextStyleConstants.Font);
                     BitmapFont.Glyph glyph = bitmapFont.getData().getGlyph(character);

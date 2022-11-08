@@ -4,11 +4,11 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.ParsedText;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextParser;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.CharacterParsedText;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.CharacterTextParser;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
 
-public class ConfigurableTagTextParser implements TextParser {
+public class ConfigurableTagTextParser implements CharacterTextParser {
     private char endTagCharacter;
     private TagTextParser tagTextParser;
 
@@ -24,7 +24,7 @@ public class ConfigurableTagTextParser implements TextParser {
     }
 
     @Override
-    public ParsedText parseText(TextStyle defaultTextStyle, String text) {
+    public CharacterParsedText parseText(TextStyle defaultTextStyle, String text) {
         Array<TextStyle> textStyleStack = new Array<>();
         textStyleStack.add(defaultTextStyle);
 
@@ -63,5 +63,4 @@ public class ConfigurableTagTextParser implements TextParser {
         result.setText(resultText.toString());
         return result;
     }
-
 }

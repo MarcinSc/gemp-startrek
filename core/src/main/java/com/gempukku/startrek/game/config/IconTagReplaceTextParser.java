@@ -1,23 +1,23 @@
 package com.gempukku.startrek.game.config;
 
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.ParsedText;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextParser;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.CharacterParsedText;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.CharacterTextParser;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
 import com.gempukku.startrek.card.CardIcon;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IconTagReplaceTextParser implements TextParser {
+public class IconTagReplaceTextParser implements CharacterTextParser {
     private Pattern tagPattern = Pattern.compile("\\[([^]]+)]");
-    private TextParser delegate;
+    private CharacterTextParser delegate;
 
-    public IconTagReplaceTextParser(TextParser delegate) {
+    public IconTagReplaceTextParser(CharacterTextParser delegate) {
         this.delegate = delegate;
     }
 
     @Override
-    public ParsedText parseText(TextStyle defaultTextStyle, String text) {
+    public CharacterParsedText parseText(TextStyle defaultTextStyle, String text) {
         Matcher matcher = tagPattern.matcher(text);
         StringBuilder sb = new StringBuilder();
 

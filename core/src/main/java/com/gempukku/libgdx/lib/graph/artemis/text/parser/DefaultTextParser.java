@@ -5,17 +5,17 @@ import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.gempukku.libgdx.lib.graph.artemis.text.FontUtil;
 
-public class DefaultTextParser implements TextParser {
+public class DefaultTextParser implements CharacterTextParser {
 
     @Override
-    public ParsedText parseText(TextStyle defaultTextStyle, String text) {
+    public CharacterParsedText parseText(TextStyle defaultTextStyle, String text) {
         DefaultParsedText result = Pools.obtain(DefaultParsedText.class);
         result.setTextStyle(defaultTextStyle);
         result.setText(text);
         return result;
     }
 
-    public static class DefaultParsedText implements ParsedText, Pool.Poolable {
+    public static class DefaultParsedText implements CharacterParsedText, Pool.Poolable {
         private boolean defaultKerning = true;
         private TextStyle textStyle;
         private String text;
@@ -89,6 +89,11 @@ public class DefaultTextParser implements TextParser {
         @Override
         public boolean isWhitespace(int glyphIndex) {
             return Character.isWhitespace(getCharAt(glyphIndex));
+        }
+
+        @Override
+        public boolean isLineBreak(int glyphIndex) {
+            return getCharAt(glyphIndex) == '\n';
         }
 
         private Boolean getKerning(TextStyle textStyle) {

@@ -148,7 +148,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
     private boolean isEndOfLine(ParsedText parsedText, int startIndex, int lineGlyphLength) {
         // Ends with line break, or no further text after
-        if (parsedText.getCharAt(startIndex + lineGlyphLength - 1) == '\n'
+        if (parsedText.isLineBreak(startIndex + lineGlyphLength - 1)
                 || parsedText.getNextUnbreakableChunkLength(startIndex + lineGlyphLength) == -1)
             return true;
         return false;
@@ -189,7 +189,7 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
 
             consumedGlyphIndex += chunkLength;
 
-            if (parsedText.getCharAt(consumedGlyphIndex - 1) == '\n')
+            if (parsedText.isLineBreak(consumedGlyphIndex - 1))
                 return consumedGlyphIndex - startIndex;
 
             firstChunk = false;
@@ -334,6 +334,11 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         }
 
         @Override
+        public int getStartIndex() {
+            return glyphStartIndex;
+        }
+
+        @Override
         public float getGlyphXAdvance(int glyphIndex) {
             return xAdvances.get(glyphIndex);
         }
@@ -346,11 +351,6 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
         @Override
         public TextStyle getGlyphStyle(int glyphIndex) {
             return parsedText.getTextStyle(glyphStartIndex + glyphIndex);
-        }
-
-        @Override
-        public char getGlyph(int glyphIndex) {
-            return parsedText.getCharAt(glyphStartIndex + glyphIndex);
         }
 
         @Override

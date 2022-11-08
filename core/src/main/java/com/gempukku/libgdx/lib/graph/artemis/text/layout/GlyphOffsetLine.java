@@ -9,11 +9,11 @@ public interface GlyphOffsetLine {
 
     int getGlyphCount();
 
+    int getStartIndex();
+
     float getGlyphXAdvance(int glyphIndex);
 
     float getGlyphYAdvance(int glyphIndex);
 
     TextStyle getGlyphStyle(int glyphIndex);
-
-    char getGlyph(int glyphIndex);
 }

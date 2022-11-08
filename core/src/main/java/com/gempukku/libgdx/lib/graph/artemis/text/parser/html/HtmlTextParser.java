@@ -2,15 +2,15 @@ package com.gempukku.libgdx.lib.graph.artemis.text.parser.html;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.ParsedText;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextParser;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.CharacterParsedText;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.CharacterTextParser;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.configurable.ConfigurableTagTextParser;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.configurable.TagHandler;
 
 import java.util.function.Function;
 
-public class HtmlTextParser implements TextParser {
+public class HtmlTextParser implements CharacterTextParser {
     private ConfigurableTagTextParser tagTextParser;
 
     public HtmlTextParser(Function<String, BitmapFont> fontResolver, Function<String, TextureRegion> textureRegionResolver) {
@@ -44,7 +44,7 @@ public class HtmlTextParser implements TextParser {
     }
 
     @Override
-    public ParsedText parseText(TextStyle defaultTextStyle, String text) {
+    public CharacterParsedText parseText(TextStyle defaultTextStyle, String text) {
         return tagTextParser.parseText(defaultTextStyle, text);
     }
 }

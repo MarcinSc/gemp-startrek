@@ -17,8 +17,8 @@ import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteBatchSystem;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.GlyphOffseter;
+import com.gempukku.libgdx.lib.graph.artemis.text.parser.CharacterTextParser;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.DefaultTextParser;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextParser;
 
 public class TextSystem extends BaseEntitySystem {
     private BitmapFontSystem bitmapFontSystem;
@@ -31,14 +31,14 @@ public class TextSystem extends BaseEntitySystem {
     private final IntMap<Array<DisplayedText>> renderedTexts = new IntMap<>();
 
     private final GlyphOffseter glyphOffseter = new DefaultGlyphOffseter();
-    private TextParser textParser;
+    private CharacterTextParser textParser;
     private String defaultSpriteBatchName;
 
     public TextSystem() {
         this(new DefaultTextParser());
     }
 
-    public TextSystem(TextParser textParser) {
+    public TextSystem(CharacterTextParser textParser) {
         super(Aspect.all(TextComponent.class));
         this.textParser = textParser;
     }
@@ -47,7 +47,7 @@ public class TextSystem extends BaseEntitySystem {
         this.defaultSpriteBatchName = defaultSpriteBatchName;
     }
 
-    public void setTextParser(TextParser textParser) {
+    public void setTextParser(CharacterTextParser textParser) {
         this.textParser = textParser;
     }
 
