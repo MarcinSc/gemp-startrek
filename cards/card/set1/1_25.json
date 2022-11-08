@@ -1,0 +1,19 @@
+{
+  "type": "Dilemma",
+  "dilemmaType": "Dual",
+  "cost": 1,
+  "title": "Equipment Malfunction",
+  "abilities": [
+    {
+      "text": "Return all your equipment to their owner's hands.",
+      "type": "dilemmaEffect",
+      "effect": [
+        {
+          "type": "returnToHand",
+          "filter": "facingDilemma,type(Equipment)"
+        }
+      ]
+    }
+  ],
+  "lore": "\"Heh... must be the radiation.\""
+}

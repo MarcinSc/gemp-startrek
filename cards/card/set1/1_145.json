@@ -1,0 +1,30 @@
+{
+  "type": "Interrupt",
+  "title": "Ties of Blood and Water",
+  "abilities": [
+    {
+      "text": "When your [Baj] personnel is facing a dilemma, he or she gains all skills on a [Baj] personnel in your discard pile. This effect lasts until the end of that dilemma.",
+      "type": "interrupt",
+      "condition": "facingDilemma(your,species(Bajoran),type(Personnel))",
+      "effects": [
+        {
+          "type": "select",
+          "memory": "livingCharacter",
+          "filter": "your,species(Bajoran),type(Personnel),facesDilemma"
+        },
+        {
+          "type": "selectInDiscard",
+          "memory": "deadCharacter",
+          "filter": "species(Bajoran),type(Personnel)"
+        },
+        {
+          "type": "gainSkillsFrom",
+          "filter": "memory(livingCharacter)",
+          "fromFilter": "memory(deadCharacter)",
+          "until": "endOfDilemma"
+        }
+      ]
+    }
+  ],
+  "lore": "\"I saw so much death during the Occupation. I felt so much pain. But my father. He was my strength. And I... I couldn't stand to see that strength slipping away. So I ran. ... I owed it to my father to get it right this time.\""
+}

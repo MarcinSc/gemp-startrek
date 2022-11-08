@@ -3,6 +3,12 @@
     "1_136": {
       "tpl:extends": "card/set1/1_136.json"
     },
+    "1_145": {
+      "tpl:extends": "card/set1/1_145.json"
+    },
+    "1_17": {
+      "tpl:extends": "card/set1/1_17.json"
+    },
     "1_170": {
       "tpl:extends": "card/set1/1_170.json"
     },
@@ -33,6 +39,9 @@
     "1_225": {
       "tpl:extends": "card/set1/1_225.json"
     },
+    "1_25": {
+      "tpl:extends": "card/set1/1_25.json"
+    },
     "1_251": {
       "tpl:extends": "card/set1/1_251.json"
     },
@@ -60,8 +69,14 @@
     "1_320": {
       "tpl:extends": "card/set1/1_320.json"
     },
+    "1_33": {
+      "tpl:extends": "card/set1/1_33.json"
+    },
     "1_334": {
       "tpl:extends": "card/set1/1_334.json"
+    },
+    "1_34": {
+      "tpl:extends": "card/set1/1_34.json"
     },
     "1_351": {
       "tpl:extends": "card/set1/1_351.json"
@@ -74,6 +89,9 @@
     },
     "1_68": {
       "tpl:extends": "card/set1/1_68.json"
+    },
+    "1_8": {
+      "tpl:extends": "card/set1/1_8.json"
     },
     "1_83": {
       "tpl:extends": "card/set1/1_83.json"

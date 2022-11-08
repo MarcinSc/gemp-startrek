@@ -12,6 +12,15 @@ public class StarTrekServerDeckSystem extends BaseSystem {
         temporaryDeck.setDeckName("Deep Space Nine Starter Deck");
 
         temporaryDeck.getDillemas().add("1_4");
+        temporaryDeck.getDillemas().add("1_4");
+        temporaryDeck.getDillemas().add("1_8");
+        temporaryDeck.getDillemas().add("1_17");
+        temporaryDeck.getDillemas().add("1_17");
+        temporaryDeck.getDillemas().add("1_25");
+        temporaryDeck.getDillemas().add("1_33");
+        temporaryDeck.getDillemas().add("1_33");
+        temporaryDeck.getDillemas().add("1_34");
+        temporaryDeck.getDillemas().add("1_34");
 
         // Equipment
         temporaryDeck.getDrawDeck().add("1_68");
@@ -26,6 +35,8 @@ public class StarTrekServerDeckSystem extends BaseSystem {
         // Interrupts
         temporaryDeck.getDrawDeck().add("1_136");
         temporaryDeck.getDrawDeck().add("1_136");
+        temporaryDeck.getDrawDeck().add("1_145");
+        temporaryDeck.getDrawDeck().add("1_145");
 
         // Missions
         temporaryDeck.getMissions().add("1_170");

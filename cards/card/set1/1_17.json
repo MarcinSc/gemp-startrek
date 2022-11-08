@@ -1,0 +1,34 @@
+{
+  "type": "Dilemma",
+  "dilemmaType": "Space",
+  "cost": 1,
+  "title": "Command Decisions",
+  "abilities": [
+    {
+      "text": "Choose a personnel who has Leadership or Officer to be stopped. If you cannot, randomly select a personnel to be killed.",
+      "type": "dilemmaEffect",
+      "effect": [
+        {
+          "type": "condition",
+          "condition": "or(countAtLeast(facingDilemma,skill(Leadership),1),countAtLeast(facingDilemma,skill(Officer),1))",
+          "trueEffect": [
+            {
+              "type": "select",
+              "memory": "chosenCharacter",
+              "filter": "facingDilemma,type(Personnel),or(skill(Leadership),skill(Officer))"
+            },
+            {
+              "type": "stop",
+              "filter": "memory(chosenCharacter)"
+            }
+          ],
+          "falseEffect": {
+            "type": "kill",
+            "filter": "random(facingDilemma,type(Personnel))"
+          }
+        }
+      ]
+    }
+  ],
+  "lore": "Although there are as many command styles as there are ships in the fleet, all the best captains share the ability to make quick decisions in a crisis situation."
+}

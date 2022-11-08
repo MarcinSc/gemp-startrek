@@ -1,0 +1,42 @@
+{
+  "type": "Dilemma",
+  "dilemmaType": "Dual",
+  "cost": 2,
+  "title": "Limited Welcome",
+  "abilities": [
+    {
+      "text": "Randomly select nine personnel. All your other personnel are stopped. Place this dilemma on this mission.",
+      "type": "dilemmaEffect",
+      "effect": [
+        {
+          "type": "randomlySelect",
+          "amount": "9",
+          "memory": "selectedPersonnel",
+          "filter": "facingDilemma,type(Personnel)"
+        },
+        {
+          "type": "stop",
+          "filter": "facingDilemma,type(Personnel),not(memory(selectedPersonnel))"
+        },
+        {
+          "type": "placeOnMission",
+          "filter": "self"
+        }
+      ]
+    },
+    {
+      "text": "When you attempt this mission again, after your opponent draws dilemmas, he or she may take this dilemma and add it to those drawn.",
+      "type": "trigger",
+      "optional": "true",
+      "player": "opponent",
+      "condition": "attemptMission(self),afterDilemmasDrawn",
+      "effect": [
+        {
+          "type": "putIntoHand",
+          "filter": "self"
+        }
+      ]
+    }
+  ],
+  "lore": "\"I hope you'll forgive the darkness. We are not comfortable in the light.\""
+}

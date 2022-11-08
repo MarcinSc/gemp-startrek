@@ -1,23 +1,23 @@
 {
   "type": "Dilemma",
-  "dilemmaType": "Dual",
-  "cost": 3,
-  "title": "Antedean Assassins",
+  "dilemmaType": "Planet",
+  "cost": 2,
+  "title": "Authenticate Artifacts",
   "abilities": [
     {
-      "text": "Unless you have a personnel who has 2 Anthropology or a personnel who has 2 Telepathy, your opponent chooses an Anthropology or Telepathy personnel to be stopped.  If your opponent cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
+      "text": "Unless you have a personnel who has 2 Anthropology or a personnel who has 2 Archaeology, your opponent chooses an Anthropology or Archaeology personnel to be stopped. If your opponent cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
       "type": "dilemmaEffect",
       "effect": [
         {
           "type": "condition",
-          "condition": "or(countAtLeast(and(facingDilemma,skill(Anthropology)),2),countAtLeast(and(facingDilemma,skill(Telepathy)),2))",
+          "condition": "or(countAtLeast(skill(Anthropology),2),countAtLeast(skill(Archeology),2))",
           "falseEffect": {
             "type": "condition",
-            "condition": "onMission(currentMission),or(skill(Anthropology),skill(Telepathy))",
+            "condition": "onMission(currentMission),or(skill(Anthropology),skill(Archeology))",
             "trueEffect": [
               {
                 "type": "opponentSelect",
-                "filter": "onMission(currentMission),or(skill(Anthropology),skill(Telepathy))",
+                "filter": "onMission(currentMission),or(skill(Anthropology),skill(Archeology))",
                 "memorize": "selectedCharacter"
               },
               {
@@ -40,5 +40,5 @@
       ]
     }
   ],
-  "lore": "\"They were planning on blowing up the entire conference.\""
+  "lore": "\"You can tell Baran that I'm working as fast as I can.\""
 }

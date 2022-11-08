@@ -1,0 +1,34 @@
+{
+  "type": "Dilemma",
+  "dilemmaType": "Planet",
+  "cost": 1,
+  "title": "Kolaran Raiders",
+  "abilities": [
+    {
+      "text": "Choose a personnel who has Leadership or Security to be stopped. If you cannot, randomly select a personnel to be killed.",
+      "type": "dilemmaEffect",
+      "effect": [
+        {
+          "type": "condition",
+          "condition": "or(countAtLeast(facingDilemma,skill(Leadership),1),countAtLeast(facingDilemma,skill(Security),1))",
+          "trueEffect": [
+            {
+              "type": "select",
+              "memory": "chosenCharacter",
+              "filter": "facingDilemma,type(Personnel),or(skill(Leadership),skill(Security))"
+            },
+            {
+              "type": "stop",
+              "filter": "memory(chosenCharacter)"
+            }
+          ],
+          "falseEffect": {
+            "type": "kill",
+            "filter": "random(facingDilemma,type(Personnel))"
+          }
+        }
+      ]
+    }
+  ],
+  "lore": "\"Isolated pockets of humanoids. It appears to be a pre-warp civilization at an early stage of industrial development.\""
+}
