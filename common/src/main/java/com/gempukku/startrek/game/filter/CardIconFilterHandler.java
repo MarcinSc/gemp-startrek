@@ -31,7 +31,10 @@ public class CardIconFilterHandler extends CardFilterSystem {
         @Override
         public boolean accepts(Entity sourceEntity, ObjectMap<String, String> memory, Entity cardEntity) {
             CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardEntity.getComponent(CardComponent.class).getCardId());
-            for (CardIcon cardIcon : cardDefinition.getIcons()) {
+            Array<CardIcon> icons = cardDefinition.getIcons();
+            if (icons == null)
+                return false;
+            for (CardIcon cardIcon : icons) {
                 if (cardIcon == icon)
                     return true;
             }

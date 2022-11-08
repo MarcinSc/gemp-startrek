@@ -10,10 +10,7 @@ import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextComponent;
-import com.gempukku.startrek.card.Affiliation;
-import com.gempukku.startrek.card.CardDefinition;
-import com.gempukku.startrek.card.CardIcon;
-import com.gempukku.startrek.card.CardType;
+import com.gempukku.startrek.card.*;
 
 public class CardTemplates {
     public static Entity createSmallCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
@@ -36,13 +33,58 @@ public class CardTemplates {
     }
 
     public static Entity createFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full.template");
-        //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
-
         CardType cardType = cardDefinition.getType();
 
+        if (cardType == CardType.Personnel || cardType == CardType.Ship) {
+            return createAffiliatedFullCard(cardDefinition, spawnSystem, cardType);
+        } else if (cardType == CardType.Equipment || cardType == CardType.Event
+                || cardType == CardType.Interrupt || cardType == CardType.Dilemma) {
+            return createUnaffiliatedFullCard(cardDefinition, spawnSystem, cardType);
+        }
+        throw new GdxRuntimeException("Unable to create a full card for card type: " + cardType);
+    }
+
+    private static Entity createUnaffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType) {
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-unaffiliated.template");
+        //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
+
+        String cardTemplate = getUnaffiliatedCardTemplate(cardType);
+
+        SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
+        TextureReference cardTemplateTexture = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
+        cardTemplateTexture.setRegion(cardTemplate);
+
+        TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
+        cardImageTexture.setRegion(cardDefinition.getCardImagePath());
+
+        TextComponent text = cardRepresentation.getComponent(TextComponent.class);
+        if (text != null) {
+            // Title
+            TextBlock titleBlock = text.getTextBlocks().get(0);
+            String titleText = (cardDefinition.isUnique() ? "• " : "") + cardDefinition.getTitle();
+            titleBlock.setText(titleText);
+
+            // Cost
+            TextBlock costBlock = text.getTextBlocks().get(1);
+            costBlock.setText(String.valueOf(cardDefinition.getCost()));
+
+            // Type
+            TextBlock typeBlock = text.getTextBlocks().get(2);
+            typeBlock.setText(cardType.name());
+
+            // Text
+            TextBlock textBlock = text.getTextBlocks().get(3);
+            textBlock.setText(createCardText(cardDefinition));
+        }
+        return cardRepresentation;
+    }
+
+    private static Entity createAffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType) {
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-affiliated.template");
+        //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
+
         Affiliation affiliation = cardDefinition.getAffiliation();
-        String cardTemplate = getCardTemplate(affiliation);
+        String cardTemplate = getAffiliatedCardTemplate(affiliation);
 
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
         TextureReference cardTemplateTexture = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
@@ -85,19 +127,21 @@ public class CardTemplates {
 
             // Icons
             Array<CardIcon> icons = cardDefinition.getIcons();
-            int nonStaffIcon = 0;
-            for (int iconIndex = 0; iconIndex < icons.size; iconIndex++) {
-                CardIcon icon = icons.get(iconIndex);
-                int spriteIconIndex;
-                if (icon == CardIcon.Stf || icon == CardIcon.Cmd) {
-                    spriteIconIndex = 2;
-                } else {
-                    spriteIconIndex = 3 + nonStaffIcon;
-                    nonStaffIcon++;
+            if (icons != null) {
+                int nonStaffIcon = 0;
+                for (int iconIndex = 0; iconIndex < icons.size; iconIndex++) {
+                    CardIcon icon = icons.get(iconIndex);
+                    int spriteIconIndex;
+                    if (icon == CardIcon.Stf || icon == CardIcon.Cmd) {
+                        spriteIconIndex = 2;
+                    } else {
+                        spriteIconIndex = 3 + nonStaffIcon;
+                        nonStaffIcon++;
+                    }
+                    SpriteDefinition spriteDefinition = cardTemplateSprite.getSprites().get(spriteIconIndex);
+                    TextureReference iconTextureReference = (TextureReference) spriteDefinition.getProperties().get("Texture");
+                    iconTextureReference.setRegion(icon.name());
                 }
-                SpriteDefinition spriteDefinition = cardTemplateSprite.getSprites().get(spriteIconIndex);
-                TextureReference iconTextureReference = (TextureReference) spriteDefinition.getProperties().get("Texture");
-                iconTextureReference.setRegion(icon.name());
             }
 
             if (cardType == CardType.Personnel) {
@@ -121,23 +165,38 @@ public class CardTemplates {
         return cardRepresentation;
     }
 
-    private static String getCardTemplate(Affiliation affiliation) {
+    private static String getUnaffiliatedCardTemplate(CardType cardType) {
+        if (cardType == CardType.Equipment)
+            return "equipment-template";
+        throw new GdxRuntimeException("Unable to resolve unaffiliated template: " + cardType);
+    }
+
+    private static String getAffiliatedCardTemplate(Affiliation affiliation) {
         if (affiliation == Affiliation.Federation)
             return "federation-template";
         else if (affiliation == Affiliation.Bajoran)
             return "bajoran-template";
         else if (affiliation == Affiliation.NonAligned)
             return "nonAligned-template";
-        return null;
+        throw new GdxRuntimeException("Unable to resolve affiliated template: " + affiliation);
     }
 
     private static String createCardText(CardDefinition cardDefinition) {
         StringBuilder result = new StringBuilder();
-        Array<String> skills = cardDefinition.getSkills();
+        Array<PersonnelSkill> skills = cardDefinition.getSkills();
         if (skills != null) {
-            for (String skill : skills) {
-                result.append("[width 0.5][letterSpacing 5][color ff0000]•[/color][/letterSpacing]").append(skill).append("[/width] ");
+            for (PersonnelSkill skill : PersonnelSkill.values()) {
+                int count = 0;
+                for (PersonnelSkill charSkill : skills) {
+                    if (charSkill == skill)
+                        count++;
+                }
+                if (count > 0) {
+                    String countText = (count > 1) ? (count + " ") : "";
+                    result.append("[width 0.5][letterSpacing 5][color ff0000]•[/color][/letterSpacing]").append(countText).append(skill).append("[/width] ");
+                }
             }
+
             result.append("\n");
         }
         Array<String> keywords = cardDefinition.getKeywords();

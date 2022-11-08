@@ -1,0 +1,341 @@
+{
+  "com.gempukku.startrek.game.card.ServerCardReferenceComponent": {},
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
+    "localTransform": {
+      "val": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "com.gempukku.libgdx.lib.artemis.picking.ShapePickableComponent": {
+    "transform": {
+      "val": [
+        0.715257,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "shape": "square",
+    "positionDataType": "position",
+    "pickingMask": [
+      "Selection"
+    ]
+  },
+  "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent": {
+    "sprites": [
+      {
+        "spriteBatchName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.715257,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 1
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "atlas/card-templates.atlas",
+            "region": "federation-template"
+          }
+        }
+      },
+      {
+        "spriteBatchName": "ditherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                -0.015,
+                -0.005,
+                -0.157,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 0.63,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.407
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "cardImages",
+            "region": "[cardImagePath]"
+          }
+        }
+      }
+    ]
+  },
+  "com.gempukku.libgdx.lib.graph.artemis.text.TextComponent": {
+    "textBlocks": [
+      {
+        "transform": {
+          "val": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0.06,
+            0.005,
+            -0.420,
+            1
+          ]
+        },
+        "rightVector": {
+          "x": 0.47,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 0,
+          "z": 0.038
+        },
+        "width": 0.5,
+        "edge": 0.03,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "targetWidth": 500,
+        "kerning": true,
+        "scaleDownToFit": true,
+        "verticalAlignment": "center",
+        "horizontalAlignment": "left",
+        "bitmapFontPath": "font/arial.fnt",
+        "text": "[title]"
+      },
+      {
+        "transform": {
+          "val": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            -0.209,
+            0.005,
+            -0.429,
+            1
+          ]
+        },
+        "rightVector": {
+          "x": 0.038,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 0,
+          "z": 0.038
+        },
+        "width": 0.5,
+        "edge": 0.03,
+        "color": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "targetWidth": 200,
+        "kerning": true,
+        "scaleDownToFit": true,
+        "verticalAlignment": "center",
+        "horizontalAlignment": "center",
+        "bitmapFontPath": "font/arial.fnt",
+        "text": "[cost]"
+      },
+      {
+        "transform": {
+          "val": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0.005,
+            0.054,
+            1
+          ]
+        },
+        "rightVector": {
+          "x": 0.5,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 0,
+          "z": 0.038
+        },
+        "width": 0.5,
+        "edge": 0.03,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "targetWidth": 500,
+        "kerning": true,
+        "scaleDownToFit": true,
+        "verticalAlignment": "center",
+        "horizontalAlignment": "center",
+        "bitmapFontPath": "font/arial.fnt",
+        "text": "type"
+      },
+      {
+        "transform": {
+          "val": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0.012,
+            0.005,
+            0.262,
+            1
+          ]
+        },
+        "rightVector": {
+          "x": 0.524,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 0,
+          "z": 0.225
+        },
+        "width": 0.45,
+        "edge": 0.1,
+        "color": {
+          "r": 0,
+          "g": 0,
+          "b": 0,
+          "a": 1
+        },
+        "targetWidth": 600,
+        "kerning": true,
+        "scaleDownToFit": true,
+        "scaleDownMultiplier": 1.05,
+        "verticalAlignment": "top",
+        "horizontalAlignment": "left",
+        "bitmapFontPath": "font/arial.fnt",
+        "text": "[text]"
+      }
+    ]
+  }
+}

@@ -11,13 +11,15 @@ public class StarTrekServerDeckSystem extends BaseSystem {
         temporaryDeck.setDeckId("deckId");
         temporaryDeck.setDeckName("Deep Space Nine Starter Deck");
 
+        temporaryDeck.getDillemas().add("1_4");
+
+        temporaryDeck.getDrawDeck().add("1_68");
+
         temporaryDeck.getMissions().add("1_170");
         temporaryDeck.getMissions().add("1_187");
         temporaryDeck.getMissions().add("1_188");
         temporaryDeck.getMissions().add("1_198");
         temporaryDeck.getMissions().add("1_199");
-
-        temporaryDeck.getDillemas().add("1_4");
 
         // Personnel - Bajoran
         temporaryDeck.getDrawDeck().add("1_207");

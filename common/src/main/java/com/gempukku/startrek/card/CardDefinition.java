@@ -18,7 +18,7 @@ public class CardDefinition {
 
     // Personnel specific
     private Species species;
-    private Array<String> skills;
+    private Array<PersonnelSkill> skills;
     private Array<CardIcon> icons;
     private int integrity;
     private int cunning;
@@ -84,7 +84,7 @@ public class CardDefinition {
         return shipClass;
     }
 
-    public Array<String> getSkills() {
+    public Array<PersonnelSkill> getSkills() {
         return skills;
     }
 

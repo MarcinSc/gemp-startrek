@@ -18,7 +18,7 @@ cardback
   orig: 357, 499
   offset: 0, 0
   index: -1
-federation-template
+equipment-template
   rotate: false
   xy: 740, 1017
   size: 736, 1029
@@ -41,13 +41,20 @@ personnel-template-small
   index: -1
 
 card-templates2.png
-size: 1024, 2048
+size: 2048, 2048
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
-nonAligned-template
+federation-template
   rotate: false
   xy: 2, 2
+  size: 736, 1029
+  orig: 736, 1029
+  offset: 0, 0
+  index: -1
+nonAligned-template
+  rotate: false
+  xy: 740, 2
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0

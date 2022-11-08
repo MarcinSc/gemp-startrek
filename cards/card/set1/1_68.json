@@ -1,0 +1,14 @@
+{
+  "type": "Equipment",
+  "cost": "1",
+  "title": "Medical Tricorder",
+  "abilities": [
+    {
+      "text": "Each of your Medical personnel present gains Exobiology.",
+      "type": "grantSkill",
+      "filter": "your,type(Personnel),skill(Medical)",
+      "skill": "Exobiology"
+    }
+  ],
+  "lore": "\"Localized tenderness to the ulnar bone. No epidermal damage, moderate edema. ... the tricorder indicates this is a small stress fracture.\""
+}

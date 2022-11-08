@@ -3,6 +3,7 @@ package com.gempukku.startrek.game;
 import com.artemis.WorldConfigurationBuilder;
 import com.gempukku.startrek.expression.ExpressionSystem;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
+import com.gempukku.startrek.game.ability.GrantSkillAbilityHandler;
 import com.gempukku.startrek.game.ability.HeadquarterRequirementsAbilityHandler;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.amount.CostToPlayAmountHandler;
@@ -38,8 +39,10 @@ public class CommonGameWorldBuilder {
                 new CardTypeFilterHandler(),
                 new CardIconFilterHandler(),
                 new AffiliationFilterHandler(),
+                new SkillFilterHandler(),
                 new MissionTypeFilterHandler(),
                 new OwnerFilterHandler(),
+                new YourFilterHandler(),
                 new TitleFilterHandler(),
                 new PlayableFilterHandler(),
                 new ConditionFilterHandler(),
@@ -48,6 +51,7 @@ public class CommonGameWorldBuilder {
                 // Card abilities
                 new CardAbilitySystem(),
                 new HeadquarterRequirementsAbilityHandler(),
+                new GrantSkillAbilityHandler(),
 
                 // Other systems
                 new CardFilteringSystem()
