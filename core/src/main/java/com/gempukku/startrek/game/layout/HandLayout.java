@@ -10,23 +10,23 @@ import com.gempukku.startrek.game.PlayerCards;
 import com.gempukku.startrek.game.PlayerPosition;
 
 public class HandLayout {
+    private static final float VERTICAL_DISTANCE = 0.22f;//0.85f;
+    private static final float DISTANCE_FROM_CAMERA = 3f;
+    private static final float CARD_SEPARATION = 0.15f;
+    private static final float CARD_SCALE = 0.8f;//0.4f;
+
     public static void layoutHand(PlayerCards playerCards, PlayerPosition playerPosition,
                                   Camera camera, TransformSystem transformSystem) {
         Array<Entity> cardsInHand = playerCards.getCardsInHand();
 
-        float verticalScale = 0.85f;
-        float distanceFromCamera = 3f;
-        float cardSeparation = 0.15f;
-        float cardScale = 0.4f;
-
         Vector3 basePlayerHandPosition =
                 new Vector3(camera.position)
-                        .add(new Vector3(camera.direction).scl(distanceFromCamera))
-                        .add(new Vector3(camera.up).scl(-verticalScale));
+                        .add(new Vector3(camera.direction).scl(DISTANCE_FROM_CAMERA))
+                        .add(new Vector3(camera.up).scl(-VERTICAL_DISTANCE));
         Vector3 baseOpponentHandPosition =
                 new Vector3(camera.position)
-                        .add(new Vector3(camera.direction).scl(distanceFromCamera))
-                        .add(new Vector3(camera.up).scl(verticalScale));
+                        .add(new Vector3(camera.direction).scl(DISTANCE_FROM_CAMERA))
+                        .add(new Vector3(camera.up).scl(VERTICAL_DISTANCE));
 
         Vector3 playerHandPosition = (playerPosition == PlayerPosition.Lower) ? basePlayerHandPosition : baseOpponentHandPosition;
 
@@ -38,8 +38,8 @@ public class HandLayout {
             float rotateY = (playerPosition == PlayerPosition.Lower) ? -indexBias * 1.5f : 180 + indexBias * 1.5f;
             float rotateZ = (playerPosition == PlayerPosition.Lower) ? -2 : 2;
             transformSystem.setTransform(cardInHand, new Matrix4()
-                    .translate(playerHandPosition.x + cardSeparation * indexBias, playerHandPosition.y, playerHandPosition.z)// + 0.005f * Math.abs(indexBias))
-                    .scale(cardScale, cardScale, cardScale)
+                    .translate(playerHandPosition.x + CARD_SEPARATION * indexBias, playerHandPosition.y, playerHandPosition.z)// + 0.005f * Math.abs(indexBias))
+                    .scl(CARD_SCALE)
                     .rotate(1, 0, 0, rotateX)
                     .rotate(0, 1, 0, rotateY)
                     .rotate(0, 0, 1, rotateZ));

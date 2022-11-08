@@ -9,16 +9,20 @@ public class MissionCards {
     private Array<Entity> playerTopLevelCardsInMission = new Array<>();
     private Array<Entity> opponentTopLevelCardsInMission = new Array<>();
     private ObjectMap<Entity, Array<Entity>> attachedCardsInMission = new ObjectMap<>();
-    private Entity renderedMission;
+    private Entity missionCard;
 
     public void setMissionCard(Entity card, Entity renderedCard) {
         renderedCards.put(card, renderedCard);
         attachedCardsInMission.put(card, new Array<>());
-        this.renderedMission = renderedCard;
+        this.missionCard = card;
     }
 
     public Entity getMissionCard() {
-        return renderedMission;
+        return missionCard;
+    }
+
+    public Entity getRenderedCard(Entity card) {
+        return renderedCards.get(card);
     }
 
     public Array<Entity> getAttachedCards(Entity card) {
@@ -28,7 +32,7 @@ public class MissionCards {
     public void addPlayerTopLevelCardInMission(Entity card, Entity renderedCard) {
         renderedCards.put(card, renderedCard);
         attachedCardsInMission.put(card, new Array<>());
-        playerTopLevelCardsInMission.add(renderedCard);
+        playerTopLevelCardsInMission.add(card);
     }
 
     public Array<Entity> getPlayerTopLevelCardsInMission() {
@@ -37,14 +41,14 @@ public class MissionCards {
 
     public Entity removePlayerTopLevelCardInMission(Entity card) {
         Entity rendered = renderedCards.remove(card);
-        playerTopLevelCardsInMission.removeValue(rendered, true);
+        playerTopLevelCardsInMission.removeValue(card, true);
         return rendered;
     }
 
     public void addOpponentTopLevelCardInMission(Entity card, Entity renderedCard) {
         renderedCards.put(card, renderedCard);
         attachedCardsInMission.put(card, new Array<>());
-        opponentTopLevelCardsInMission.add(renderedCard);
+        opponentTopLevelCardsInMission.add(card);
     }
 
     public Array<Entity> getOpponentTopLevelCardsInMission() {
@@ -53,7 +57,7 @@ public class MissionCards {
 
     public Entity removeOpponentTopLevelCardInMission(Entity card) {
         Entity rendered = renderedCards.remove(card);
-        opponentTopLevelCardsInMission.removeValue(rendered, true);
+        opponentTopLevelCardsInMission.removeValue(card, true);
         return rendered;
     }
 //
