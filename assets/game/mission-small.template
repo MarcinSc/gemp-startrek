@@ -319,14 +319,14 @@
             0,
             1,
             0,
-            0.055,
+            0.048,
             0.002,
             0.195,
             1
           ]
         },
         "rightVector": {
-          "x": 0.55,
+          "x": 0.52,
           "y": 0,
           "z": 0
         },
@@ -348,7 +348,8 @@
         "scaleDownToFit": true,
         "verticalAlignment": "center",
         "horizontalAlignment": "center",
-        "bitmapFontPath": "font/arial.fnt"
+        "bitmapFontPath": "font/arial.fnt",
+        "text": "[affiliations]"
       }
     ]
   }

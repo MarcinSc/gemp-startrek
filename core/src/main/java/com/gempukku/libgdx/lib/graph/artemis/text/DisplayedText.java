@@ -162,6 +162,7 @@ Color - character color
                 }
                 lineY += lineHeight;
             }
+            offsetText.dispose();
         } finally {
             parsedText.dispose();
             Pools.free(defaultTextStyle);
@@ -240,6 +241,7 @@ Color - character color
 
             scale /= scaleDownMultiplier;
             renderScale *= scaleDownMultiplier;
+            offsetText.dispose();
         } while (true);
     }
 
