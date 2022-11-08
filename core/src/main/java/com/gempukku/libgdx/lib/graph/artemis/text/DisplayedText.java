@@ -186,7 +186,7 @@ Color - character color
     }
 
     private float getFontScale(TextStyle textStyle) {
-        Float fontScale = (Float) textStyle.getAttribute(TextStyleConstants.FontScale);
+        Float fontScale = (Float) textStyle.getAttribute(TextStyleConstants.GlyphScale);
         return fontScale != null ? fontScale : 1f;
     }
 
@@ -227,7 +227,7 @@ Color - character color
         TextStyle textStyle = Pools.obtain(TextStyle.class);
         textStyle.setAttribute(TextStyleConstants.Kerning, textBlock.getKerning());
         textStyle.setAttribute(TextStyleConstants.Font, bitmapFontSystem.getBitmapFont(textBlock.getBitmapFontPath()));
-        textStyle.setAttribute(TextStyleConstants.LetterSpacing, textBlock.getLetterSpacing());
+        textStyle.setAttribute(TextStyleConstants.GlyphSpacing, textBlock.getLetterSpacing());
         textStyle.setAttribute(TextStyleConstants.AlignmentHorizontal, textBlock.getHorizontalAlignment());
         return textStyle;
     }

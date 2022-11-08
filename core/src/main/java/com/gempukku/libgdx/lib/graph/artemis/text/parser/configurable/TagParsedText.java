@@ -1,6 +1,7 @@
 package com.gempukku.libgdx.lib.graph.artemis.text.parser.configurable;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.Pool;
@@ -50,6 +51,9 @@ public class TagParsedText implements ParsedText, Pool.Poolable {
     @Override
     public float getKerning(int glyphIndex) {
         TextStyle style = getTextStyle(glyphIndex);
+        if (getTextureRegion(style) != null)
+            // No kerning for images
+            return 0f;
         if (!getKerning(style))
             return 0f;
         TextStyle lastStyle = getTextStyle(glyphIndex - 1);
@@ -77,9 +81,17 @@ public class TagParsedText implements ParsedText, Pool.Poolable {
 
     @Override
     public float getWidth(int glyphIndex) {
-        BitmapFont.BitmapFontData fontData = getFont(getTextStyle(glyphIndex)).getData();
-        BitmapFont.Glyph glyph = fontData.getGlyph(getCharAt(glyphIndex));
-        return glyph.xadvance;
+        TextStyle textStyle = getTextStyle(glyphIndex);
+        TextureRegion textureRegion = getTextureRegion(textStyle);
+        if (textureRegion != null) {
+            // Scale texture to fit in ascent of the textStyle
+            float ascent = getAscent(textStyle);
+            return ascent * textureRegion.getRegionWidth() / textureRegion.getRegionHeight();
+        } else {
+            BitmapFont.BitmapFontData fontData = getFont(textStyle).getData();
+            BitmapFont.Glyph glyph = fontData.getGlyph(getCharAt(glyphIndex));
+            return glyph.xadvance;
+        }
     }
 
     @Override
@@ -90,6 +102,10 @@ public class TagParsedText implements ParsedText, Pool.Poolable {
     @Override
     public boolean isWhitespace(int glyphIndex) {
         return Character.isWhitespace(glyphIndex);
+    }
+
+    private TextureRegion getTextureRegion(TextStyle textStyle) {
+        return (TextureRegion) textStyle.getAttribute(TextStyleConstants.ImageTextureRegion);
     }
 
     private Boolean getKerning(TextStyle textStyle) {

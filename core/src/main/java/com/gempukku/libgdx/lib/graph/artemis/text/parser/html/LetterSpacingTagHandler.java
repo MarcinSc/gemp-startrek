@@ -7,6 +7,6 @@ public class LetterSpacingTagHandler extends PushPopStyleTagHandler {
     @Override
     protected void modifyTextStyle(TextStyle textStyle, String tagParameters) {
         float letterSpacing = Float.parseFloat(tagParameters.trim());
-        textStyle.setAttribute(TextStyleConstants.LetterSpacing, letterSpacing);
+        textStyle.setAttribute(TextStyleConstants.GlyphSpacing, letterSpacing);
     }
 }
