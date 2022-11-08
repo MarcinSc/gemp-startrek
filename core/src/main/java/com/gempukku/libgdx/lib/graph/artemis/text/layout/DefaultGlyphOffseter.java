@@ -116,14 +116,18 @@ public class DefaultGlyphOffseter implements GlyphOffseter {
                 float fontScale = getGlyphScale(textStyle);
 
                 float ascent = parsedText.getAscent(textStyle) * fontScale;
+                float descent = parsedText.getDescent(textStyle) * fontScale;
                 float kerning = 0f;
                 if (i > startIndex) {
                     kerning = parsedText.getKerning(i);
                 }
                 line.xAdvances.add(usedWidth + kerning * fontScale);
                 line.yAdvances.add(maxAscent - ascent);
+                float glyphWidth = parsedText.getWidth(i);
+                line.widths.add(glyphWidth);
+                line.heights.add(ascent + descent);
 
-                float glyphAdvance = parsedText.getWidth(i) + kerning + getLetterSpacing(textStyle);
+                float glyphAdvance = glyphWidth + kerning + getLetterSpacing(textStyle);
                 if (parsedText.isWhitespace(i)) {
                     glyphAdvance += justifiedSpace;
                 }
