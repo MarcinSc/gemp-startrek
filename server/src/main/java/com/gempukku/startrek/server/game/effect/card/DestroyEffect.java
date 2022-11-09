@@ -5,13 +5,13 @@ import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
-import com.gempukku.startrek.server.game.effect.zone.MoveCardToZoneEffect;
+import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 
 import java.util.function.Consumer;
 
 public class DestroyEffect extends OneTimeEffectSystem {
     private CardFilteringSystem cardFilteringSystem;
-    private MoveCardToZoneEffect moveCardToZoneEffect;
+    private ZoneOperations zoneOperations;
 
     public DestroyEffect() {
         super("destroy");
@@ -23,7 +23,7 @@ public class DestroyEffect extends OneTimeEffectSystem {
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
-                        moveCardToZoneEffect.removeCard(cardEntity, null);
+                        zoneOperations.removeFromCurrentZone(cardEntity);
                     }
                 });
     }

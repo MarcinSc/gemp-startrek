@@ -14,15 +14,15 @@ import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
-import com.gempukku.startrek.game.core.CardInCoreComponent;
-import com.gempukku.startrek.game.hand.CardInHandComponent;
 import com.gempukku.startrek.game.layout.CoreLayout;
 import com.gempukku.startrek.game.layout.HandLayout;
 import com.gempukku.startrek.game.layout.MissionsLayout;
 import com.gempukku.startrek.game.layout.PileLayout;
-import com.gempukku.startrek.game.mission.FaceDownCardInMissionComponent;
-import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.game.template.CardTemplates;
+import com.gempukku.startrek.game.zone.CardInCoreComponent;
+import com.gempukku.startrek.game.zone.CardInHandComponent;
+import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
+import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 
 public class CardInGameRenderingSystem extends BaseSystem {
     private SpawnSystem spawnSystem;

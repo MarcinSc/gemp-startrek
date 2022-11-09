@@ -29,11 +29,9 @@ import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 import com.gempukku.startrek.server.game.effect.card.DestroyEffect;
 import com.gempukku.startrek.server.game.effect.card.PayCardCostEffect;
 import com.gempukku.startrek.server.game.effect.control.*;
-import com.gempukku.startrek.server.game.effect.deck.DeckOperationsSystem;
 import com.gempukku.startrek.server.game.effect.deck.DrawCardEffect;
 import com.gempukku.startrek.server.game.effect.deck.PlaceCardInHandOnBottomOfDeckEffect;
 import com.gempukku.startrek.server.game.effect.deck.ShuffleDeckEffect;
-import com.gempukku.startrek.server.game.effect.discard.DiscardOperationsSystem;
 import com.gempukku.startrek.server.game.effect.memory.MemorizeAmountEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutEventEffect;
 import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
@@ -42,6 +40,7 @@ import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.effect.zone.MoveCardToMissionEffect;
 import com.gempukku.startrek.server.game.effect.zone.MoveCardToZoneEffect;
+import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
 import java.util.function.Consumer;
@@ -80,8 +79,7 @@ public class StarTrekGameHolder implements Disposable {
                 // Specific systems
                 new CardLookupSystem(cardDataService),
                 new StackSystem(),
-                new DeckOperationsSystem(),
-                new DiscardOperationsSystem(),
+                new ZoneOperations(),
 
                 // Setup effects
                 new SetupMissionsEffect(),

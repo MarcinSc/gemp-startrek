@@ -1,17 +1,11 @@
 package com.gempukku.startrek.server.game.effect.zone;
 
-import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
-import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.CardComponent;
-import com.gempukku.startrek.game.CardInPlayStatusComponent;
-import com.gempukku.startrek.game.CardZone;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
-import com.gempukku.startrek.game.core.CardInCoreComponent;
-import com.gempukku.startrek.game.hand.CardInHandComponent;
-import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
+import com.gempukku.startrek.game.zone.CardZone;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 
@@ -20,10 +14,7 @@ import java.util.function.Consumer;
 public class MoveCardToZoneEffect extends OneTimeEffectSystem {
     private CardFilteringSystem cardFilteringSystem;
     private EventSystem eventSystem;
-    private ComponentMapper<CardInHandComponent> cardInHandComponentMapper;
-    private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
-    private ComponentMapper<CardInCoreComponent> cardInCoreComponentMapper;
-    private ComponentMapper<CardInPlayStatusComponent> cardInPlayStatusComponentMapper;
+    private ZoneOperations zoneOperations;
 
     public MoveCardToZoneEffect() {
         super("moveCardToZone");
@@ -43,39 +34,10 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
                         CardComponent card = cardEntity.getComponent(CardComponent.class);
                         CardZone oldZone = card.getCardZone();
                         if (fromZone == null || oldZone == fromZone) {
-                            removeCardFromCurrentZone(cardEntity, oldZone);
-                            addCardToNewZone(cardEntity, zone, card.getOwner());
-                            eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+                            zoneOperations.removeFromCurrentZone(cardEntity);
+                            zoneOperations.moveToNewZone(cardEntity, zone);
                         }
                     }
                 });
-    }
-
-    public void removeCard(Entity cardEntity, CardZone fromZone) {
-        CardComponent card = cardEntity.getComponent(CardComponent.class);
-        CardZone oldZone = card.getCardZone();
-        if (fromZone == null || oldZone == fromZone) {
-            removeCardFromCurrentZone(cardEntity, oldZone);
-        }
-    }
-
-    private void removeCardFromCurrentZone(Entity cardEntity, CardZone zone) {
-        if (zone == CardZone.HAND) {
-            cardInHandComponentMapper.remove(cardEntity);
-        } else if (zone == CardZone.MISSIONS) {
-            faceUpCardInMissionComponentMapper.remove(cardEntity);
-        } else if (zone == CardZone.CORE) {
-            cardInCoreComponentMapper.remove(cardEntity);
-        }
-        cardInPlayStatusComponentMapper.remove(cardEntity);
-    }
-
-    private void addCardToNewZone(Entity cardEntity, CardZone zone, String owner) {
-        if (zone == CardZone.HAND) {
-            CardInHandComponent cardInHand = cardInHandComponentMapper.create(cardEntity);
-            cardInHand.setOwner(owner);
-        } else if (zone == CardZone.CORE) {
-            CardInCoreComponent cardInCore = cardInCoreComponentMapper.create(cardEntity);
-        }
     }
 }

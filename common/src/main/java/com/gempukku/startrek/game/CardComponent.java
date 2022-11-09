@@ -2,6 +2,7 @@ package com.gempukku.startrek.game;
 
 import com.artemis.Component;
 import com.gempukku.libgdx.network.server.config.annotation.ReplicateWithOthers;
+import com.gempukku.startrek.game.zone.CardZone;
 
 @ReplicateWithOthers
 public class CardComponent extends Component {

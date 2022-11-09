@@ -4,19 +4,19 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
-import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.game.CardComponent;
-import com.gempukku.startrek.game.CardZone;
 import com.gempukku.startrek.game.Memory;
-import com.gempukku.startrek.game.mission.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.game.mission.MissionComponent;
+import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
+import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
+import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 
 import java.util.Comparator;
 import java.util.function.Consumer;
@@ -28,6 +28,7 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
     private ComponentMapper<MissionComponent> missionStatusComponentMapper;
     private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
     private ComponentMapper<CardComponent> cardComponentMapper;
+    private ZoneOperations zoneOperations;
 
     public SetupMissionCardsEffect() {
         super("setupMissionCards");
@@ -35,9 +36,10 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        String player = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory,
+        String username = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory,
                 gameEffect.getDataString("player"));
-        Array<Entity> playerMissions = getAllPlayerMissions(player);
+        Entity playerEntity = playerResolverSystem.findPlayerEntity(username);
+        Array<Entity> playerMissions = getAllPlayerMissions(username);
         playerMissions.sort(
                 new Comparator<Entity>() {
                     @Override
@@ -52,12 +54,7 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
                 });
         for (int i = 0; i < playerMissions.size; i++) {
             Entity missionEntity = playerMissions.get(i);
-            CardComponent card = cardComponentMapper.get(missionEntity);
-            card.setCardZone(CardZone.MISSIONS);
-            FaceUpCardInMissionComponent missionZone = faceUpCardInMissionComponentMapper.create(missionEntity);
-            missionZone.setMissionOwner(player);
-            missionZone.setMissionIndex(i);
-            eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
+            zoneOperations.moveCardToMission(missionEntity, MissionOperations.findMission(world, playerEntity, i), true);
         }
     }
 

@@ -4,11 +4,11 @@ import com.artemis.*;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.CardComponent;
-import com.gempukku.startrek.game.CardZone;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
-import com.gempukku.startrek.game.hand.CardInHandComponent;
+import com.gempukku.startrek.game.zone.CardInHandComponent;
+import com.gempukku.startrek.game.zone.CardZone;
 
 import java.util.function.Consumer;
 

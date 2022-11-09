@@ -1,4 +1,4 @@
-package com.gempukku.startrek.game.hand;
+package com.gempukku.startrek.game.zone;
 
 import com.artemis.Component;
 import com.gempukku.libgdx.network.server.config.annotation.OwnedComponent;
