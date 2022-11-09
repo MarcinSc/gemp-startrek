@@ -16,9 +16,7 @@ public class SerializeToClientsConfig implements NetworkEntitySerializationConfi
     private boolean replicatesToUser(Component component, Class<? extends Component> componentClass, String username) {
         ReplicateToOwner replicateToOwner = componentClass.getAnnotation(ReplicateToOwner.class);
         if (replicateToOwner != null) {
-            if (component instanceof OwnedComponent && ((OwnedComponent) component).getOwner().equals(username))
-                return true;
-            if (component instanceof OwnedByMultipleComponent && ((OwnedByMultipleComponent) component).getOwners().contains(username, false))
+            if (component instanceof OwnedComponent && ((OwnedComponent) component).isOwnedBy(username))
                 return true;
         }
         return false;

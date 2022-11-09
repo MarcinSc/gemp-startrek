@@ -12,11 +12,14 @@ public class PlayerDecisionComponent extends Component implements OwnedComponent
     private JsonValue data;
 
     @Override
+    public boolean isOwnedBy(String username) {
+        return owner.equals(username);
+    }
+
     public String getOwner() {
         return owner;
     }
 
-    @Override
     public void setOwner(String owner) {
         this.owner = owner;
     }

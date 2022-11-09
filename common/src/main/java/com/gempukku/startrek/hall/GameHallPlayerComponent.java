@@ -7,6 +7,7 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 @ReplicateToOwner
 public class GameHallPlayerComponent extends Component implements OwnedComponent {
     private String owner;
+    private String displayName;
     private String avatar;
     private boolean waitingForGame;
     private String chosenStarterDeck;
@@ -14,13 +15,24 @@ public class GameHallPlayerComponent extends Component implements OwnedComponent
     private int maximumDeckCount;
 
     @Override
+    public boolean isOwnedBy(String username) {
+        return owner.equals(username);
+    }
+
     public String getOwner() {
         return owner;
     }
 
-    @Override
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getAvatar() {

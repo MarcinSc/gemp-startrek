@@ -31,9 +31,7 @@ public class ReplicateToClientsConfig implements NetworkEntityConfig {
         for (Component component : tempComponentBag) {
             Class<? extends Component> componentClass = component.getClass();
             if (componentClass.getAnnotation(ReplicateToOwner.class) != null) {
-                if (component instanceof OwnedComponent && ((OwnedComponent) component).getOwner().equals(username))
-                    return true;
-                if (component instanceof OwnedByMultipleComponent && ((OwnedByMultipleComponent) component).getOwners().contains(username, false))
+                if (component instanceof OwnedComponent && ((OwnedComponent) component).isOwnedBy(username))
                     return true;
             }
         }

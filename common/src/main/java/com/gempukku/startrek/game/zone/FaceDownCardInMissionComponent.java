@@ -11,11 +11,10 @@ public class FaceDownCardInMissionComponent extends Component implements OwnedCo
     private int missionIndex;
 
     @Override
-    public String getOwner() {
-        return owner;
+    public boolean isOwnedBy(String username) {
+        return owner.equals(username);
     }
 
-    @Override
     public void setOwner(String owner) {
         this.owner = owner;
     }

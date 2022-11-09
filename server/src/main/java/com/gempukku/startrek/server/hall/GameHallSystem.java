@@ -58,6 +58,7 @@ public class GameHallSystem extends BaseSystem {
 
         GameHallPlayerComponent player = playerEntity.getComponent(GameHallPlayerComponent.class);
         player.setOwner(username);
+        player.setDisplayName(username);
         player.setAvatar("red-shirt-male");
 
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);

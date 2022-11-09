@@ -11,7 +11,7 @@ public class CoreLayout {
     private static final float MAXIMUM_SCALE = 1.3f;
 
     private final static float CORE_CENTER_X_DISTANCE = 2.7f;
-    private final static float CORE_CENTER_Y_DISTANCE = 0f;
+    private final static float CORE_CENTER_Y_DISTANCE = 0.005f;
     private final static float CORE_CENTER_Z_DISTANCE = 3f;
 
     private static final float STACK_HORIZONTAL_GAP = 0.03f;

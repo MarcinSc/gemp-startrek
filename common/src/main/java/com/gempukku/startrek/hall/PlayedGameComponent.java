@@ -2,11 +2,11 @@ package com.gempukku.startrek.hall;
 
 import com.artemis.Component;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.network.server.config.annotation.OwnedByMultipleComponent;
+import com.gempukku.libgdx.network.server.config.annotation.OwnedComponent;
 import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 
 @ReplicateToOwner
-public class PlayedGameComponent extends Component implements OwnedByMultipleComponent {
+public class PlayedGameComponent extends Component implements OwnedComponent {
     private String gameId;
     private Array<String> owners;
 
@@ -19,11 +19,10 @@ public class PlayedGameComponent extends Component implements OwnedByMultipleCom
     }
 
     @Override
-    public Array<String> getOwners() {
-        return owners;
+    public boolean isOwnedBy(String username) {
+        return owners.contains(username, false);
     }
 
-    @Override
     public void setOwners(Array<String> owners) {
         this.owners = owners;
     }

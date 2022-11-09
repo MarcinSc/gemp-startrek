@@ -100,7 +100,7 @@ public class HomeScreen extends Table implements HallScreen {
         Table middleContent = new Table(skin);
         Label.LabelStyle usernameStyle = new Label.LabelStyle();
         usernameStyle.font = fontProvider.getFont("font/LABTSECB.ttf", 40);
-        Label usernameLabel = new Label(gameHallPlayer.getOwner(), usernameStyle);
+        Label usernameLabel = new Label(gameHallPlayer.getDisplayName(), usernameStyle);
         usernameLabel.setEllipsis(true);
         usernameLabel.setAlignment(Align.right);
         middleContent.add(usernameLabel).width(200).row();

@@ -16,7 +16,7 @@ public class PlayRequirements {
             CardFilteringSystem cardFilteringSystem,
             CardFilterResolverSystem cardFilterResolverSystem,
             CardAbilitySystem cardAbilitySystem) {
-        CardFilter eventFilter = createEventPlayRequirements(cardFilterResolverSystem);
+        CardFilter eventFilter = createEventPlayRequirements(username, cardFilterResolverSystem);
         CardFilter nonEventFilter = createNonEventPlayRequirements(
                 username, cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
 
@@ -44,8 +44,10 @@ public class PlayRequirements {
     }
 
     private static CardFilter createEventPlayRequirements(
+            String username,
             CardFilterResolverSystem cardFilterResolverSystem) {
         return cardFilterResolverSystem.resolveCardFilter(
-                "type(Event),playable");
+                "type(Event),playable," +
+                        "condition(lessOrEqual(costToPlay,counterCount(username(" + username + "))))");
     }
 }

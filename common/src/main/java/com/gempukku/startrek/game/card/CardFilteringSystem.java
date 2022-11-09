@@ -30,8 +30,8 @@ public class CardFilteringSystem extends BaseSystem {
         IntBag entities = cardInHandSubscription.getEntities();
         for (int i = 0; i < entities.size(); i++) {
             Entity cardInHandEntity = world.getEntity(entities.get(i));
-            CardInHandComponent cardInHand = cardInHandComponentMapper.get(cardInHandEntity);
-            if (cardInHand.getOwner().equals(username)) {
+            CardComponent card = cardInHandEntity.getComponent(CardComponent.class);
+            if (card.getOwner().equals(username)) {
                 consumer.accept(cardInHandEntity);
             }
         }
