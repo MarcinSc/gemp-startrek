@@ -27,6 +27,7 @@
     {
       "text": "When you attempt this mission again, after your opponent draws dilemmas, he or she may take this dilemma and add it to those drawn.",
       "type": "trigger",
+      "triggerType": "afterDilemmasDrawn",
       "optional": "true",
       "player": "opponent",
       "condition": "attemptMission(self),afterDilemmasDrawn",

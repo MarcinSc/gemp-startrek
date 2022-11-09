@@ -39,6 +39,10 @@ public class CardFilteringSystem extends BaseSystem {
 
     public void forEachCard(Entity sourceEntity, Memory memory, String filter, Consumer<Entity> consumer) {
         CardFilter cardFilter = cardFilterResolverSystem.resolveCardFilter(filter);
+        forEachCard(sourceEntity, memory, cardFilter, consumer);
+    }
+
+    public void forEachCard(Entity sourceEntity, Memory memory, CardFilter cardFilter, Consumer<Entity> consumer) {
         IntBag entities = cardSubscription.getEntities();
         for (int i = 0; i < entities.size(); i++) {
             Entity cardEntity = world.getEntity(entities.get(i));
@@ -59,7 +63,7 @@ public class CardFilteringSystem extends BaseSystem {
             Entity cardEntity = world.getEntity(entities.get(i));
             CardComponent card = cardComponentMapper.get(cardEntity);
             CardZone cardZone = card.getCardZone();
-            if (cardZone == CardZone.CORE || cardZone == CardZone.BRIG || cardZone == CardZone.MISSIONS
+            if (cardZone == CardZone.Core || cardZone == CardZone.Brig || cardZone == CardZone.Mission
                     && cardFilter.accepts(sourceEntity, memory, cardEntity)) {
                 consumer.accept(cardEntity);
             }
@@ -68,6 +72,26 @@ public class CardFilteringSystem extends BaseSystem {
 
     public Entity findFirstCardInPlay(String filter) {
         return findFirstCardInPlay(null, null, filter);
+    }
+
+    public boolean cantFindCard(Entity sourceEntity, Memory memory, CardFilter cardFilter) {
+        return findFirstCard(sourceEntity, memory, cardFilter) == null;
+    }
+
+    public Entity findFirstCard(Entity sourceEntity, Memory memory, CardFilter filter) {
+        Array<Entity> result = new Array<>();
+        forEachCard(sourceEntity, memory, filter,
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity cardEntity) {
+                        if (result.size < 1) {
+                            result.add(cardEntity);
+                        }
+                    }
+                });
+        if (result.size > 0)
+            return result.get(0);
+        return null;
     }
 
     public Entity findFirstCardInPlay(Entity sourceEntity, Memory memory, String filter) {

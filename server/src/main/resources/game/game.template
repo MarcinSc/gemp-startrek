@@ -41,7 +41,7 @@
                 "player": "memory(setupPlayer)"
               },
               {
-                "type": "repeat",
+                "type": "repeatTimes",
                 "times": 7,
                 "action": {
                   "type": "drawCard",

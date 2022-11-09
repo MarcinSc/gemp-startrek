@@ -1,0 +1,18 @@
+{
+  "type": "repeatUntilInTurnOrder",
+  "playerMemory": "activePlayer",
+  "condition": "equals(memory(playersPassed),playerCount)",
+  "action": {
+    "type": "processDecision",
+    "player": "memory(activePlayer)",
+    "decisionType": "mandatoryTriggerActions",
+    "data": {
+      "triggerType": "played"
+    },
+    "memoryData": {
+      "sourceId": "playedCardId",
+      "missionId": "missionId",
+      "usedIds": "usedIds"
+    }
+  }
+}

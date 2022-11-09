@@ -39,7 +39,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
     }
 
     @Override
-    public boolean validateDecision(String decisionPlayer, JsonValue decisionData, ObjectMap<String, String> result) {
+    public boolean validateDecision(String decisionPlayer, ObjectMap<String, String> decisionData, ObjectMap<String, String> result) {
         try {
             String action = result.get("action");
             if (action == null)
@@ -69,7 +69,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
     }
 
     @Override
-    public void processDecision(String decisionPlayer, JsonValue decisionData, ObjectMap<String, String> result) {
+    public void processDecision(String decisionPlayer, ObjectMap<String, String> decisionData, ObjectMap<String, String> result) {
         String action = result.get("action");
         if (action.equals("draw")) {
             Entity playerEntity = playerResolverSystem.findPlayerEntity(decisionPlayer);
@@ -78,9 +78,10 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
             eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
 
             Entity drawCardEffect = spawnSystem.spawnEntity("game/effect/drawCardEffect.template");
+            ObjectMap<String, String> memory = drawCardEffect.getComponent(EffectMemoryComponent.class).getMemory();
+            memory.put("player", decisionPlayer);
             GameEffectComponent gameEffect = drawCardEffect.getComponent(GameEffectComponent.class);
             JsonValue data = gameEffect.getClonedData();
-            data.addChild("player", new JsonValue("username(" + decisionPlayer + ")"));
             gameEffect.setData(data);
             stackSystem.stackEntity(drawCardEffect);
         } else if (action.equals("pass")) {

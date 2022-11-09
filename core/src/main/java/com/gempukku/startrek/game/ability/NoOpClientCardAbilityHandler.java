@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.JsonValue;
 
 public class NoOpClientCardAbilityHandler extends CardAbilityHandlerSystem {
     public NoOpClientCardAbilityHandler() {
-        super("trigger", "dilemmaEffect");
+        super("dilemmaEffect");
     }
 
     @Override

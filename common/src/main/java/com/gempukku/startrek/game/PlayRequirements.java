@@ -16,6 +16,17 @@ public class PlayRequirements {
             CardFilteringSystem cardFilteringSystem,
             CardFilterResolverSystem cardFilterResolverSystem,
             CardAbilitySystem cardAbilitySystem) {
+        OrCardFilter playabilityFilter = playabilityCheckFilter(username, cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
+        CardFilter handOwnedFilter = cardFilterResolverSystem.resolveCardFilter("zone(Hand),owner(username(" + username + "))");
+
+        Array<CardFilter> filters = new Array<>();
+        filters.add(handOwnedFilter);
+        filters.add(playabilityFilter);
+
+        return new AndCardFilter(filters);
+    }
+
+    private static OrCardFilter playabilityCheckFilter(String username, CardFilteringSystem cardFilteringSystem, CardFilterResolverSystem cardFilterResolverSystem, CardAbilitySystem cardAbilitySystem) {
         CardFilter eventFilter = createEventPlayRequirements(username, cardFilterResolverSystem);
         CardFilter nonEventFilter = createNonEventPlayRequirements(
                 username, cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
@@ -32,7 +43,7 @@ public class PlayRequirements {
             CardFilterResolverSystem cardFilterResolverSystem,
             CardAbilitySystem cardAbilitySystem) {
         Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + username + "))");
-        CardFilter headquarterRequirements = cardAbilitySystem.getCardAbility(playerHeadquarter, HeadquarterRequirements.class).getCardFilter();
+        CardFilter headquarterRequirements = cardAbilitySystem.getCardAbilities(playerHeadquarter, HeadquarterRequirements.class).get(0).getCardFilter();
         CardFilter nonEventCards = cardFilterResolverSystem.resolveCardFilter(
                 "or(type(Personnel),type(Ship),type(Equipment)),"
                         + "uniquenessPreserved,playable,"

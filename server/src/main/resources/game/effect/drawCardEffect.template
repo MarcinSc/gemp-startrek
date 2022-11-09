@@ -1,6 +1,13 @@
 {
+  "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
+    "memory": {
+      "player": "[playerToDraw]"
+    }
+  },
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
     "type": "drawCard",
-    "data": {}
+    "data": {
+      "player": "memory(player)"
+    }
   }
 }

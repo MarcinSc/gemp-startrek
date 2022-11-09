@@ -22,7 +22,7 @@ public class PlayoutEventEffect extends EffectSystem {
         String memoryName = gameEffect.getDataString("memoryCard");
         int cardId = Integer.parseInt(memory.getValue(memoryName));
         Entity cardEntity = world.getEntity(cardId);
-        EventAbility eventAbility = cardAbilitySystem.getCardAbility(cardEntity, EventAbility.class);
+        EventAbility eventAbility = cardAbilitySystem.getCardAbilities(cardEntity, EventAbility.class).get(0);
         boolean costsPaid = Boolean.parseBoolean(memory.getValue("costsPaid", "false"));
         if (!costsPaid) {
             JsonValue costs = eventAbility.getCosts();

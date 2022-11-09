@@ -26,8 +26,9 @@
     {
       "text": "When you play this personnel, you may draw a card.",
       "type": "trigger",
+      "triggerType": "play",
       "optional": true,
-      "condition": "played(self)",
+      "condition": "matches(self)",
       "effect": {
         "type": "drawCards",
         "amount": 1
@@ -36,7 +37,8 @@
     {
       "text": "When this personnel is killed, you must discard a card from hand.",
       "type": "trigger",
-      "condition": "killed(self)",
+      "triggerType": "killed",
+      "condition": "matches(self)",
       "effect": {
         "type": "chooseAndDiscard",
         "player": "owner(self)",

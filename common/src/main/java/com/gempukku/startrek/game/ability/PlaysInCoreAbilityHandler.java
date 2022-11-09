@@ -9,6 +9,6 @@ public class PlaysInCoreAbilityHandler extends CardAbilityHandlerSystem {
 
     @Override
     public CardAbility resolveCardAbility(JsonValue cardAbility) {
-        return new PlaysInCore();
+        return new PlaysInCoreAbility();
     }
 }

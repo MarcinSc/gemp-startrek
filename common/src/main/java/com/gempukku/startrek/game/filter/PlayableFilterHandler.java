@@ -20,14 +20,16 @@ public class PlayableFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                EventAbility cardAbility = cardAbilitySystem.getCardAbility(cardEntity, EventAbility.class);
-                if (cardAbility != null) {
+                Array<EventAbility> eventAbilities = cardAbilitySystem.getCardAbilities(cardEntity, EventAbility.class);
+                if (eventAbilities.size == 0)
+                    return true;
+                for (EventAbility cardAbility : eventAbilities) {
                     String condition = cardAbility.getCondition();
-                    if (condition != null && !conditionResolverSystem.resolveBoolean(sourceEntity, memory, condition)) {
-                        return false;
-                    }
+                    if (condition == null ||
+                            conditionResolverSystem.resolveBoolean(sourceEntity, memory, condition))
+                        return true;
                 }
-                return true;
+                return false;
             }
         };
     }

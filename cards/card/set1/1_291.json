@@ -24,6 +24,7 @@
     {
       "text": "When an engagement involving your [Fed] ship begins at this mission, if this personnel is aboard a ship, that ship may join that engagement.",
       "type": "trigger",
+      "triggerType": "engagementBegins",
       "optional": true,
       "condition": "engagementBeginsAt(missionLocation(self)),engagementInvolving(owned,type(ship),icon(Fed)),isOnboardShip(self)",
       "effect": {

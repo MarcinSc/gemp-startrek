@@ -1,7 +1,7 @@
 package com.gempukku.startrek.game.decision;
 
-import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.ObjectMap;
 
 public interface DecisionHandler {
-    void processNewDecision(JsonValue decisionData);
+    void processNewDecision(ObjectMap<String, String> decisionData);
 }

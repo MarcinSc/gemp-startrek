@@ -7,6 +7,7 @@ import com.gempukku.startrek.game.amount.*;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.*;
 import com.gempukku.startrek.game.filter.*;
+import com.gempukku.startrek.game.filter.trigger.TriggerConditionMatchesFilterHandler;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 
 public class CommonGameWorldBuilder {
@@ -20,15 +21,16 @@ public class CommonGameWorldBuilder {
                 // Amount resolvers
                 new AmountResolverSystem(),
                 new CounterCountAmountHandler(),
-                new CostToPlayAmountHandler(),
                 new HandCountAmountHandler(),
+                new DeckCountAmountHandler(),
+                new CostToPlayAmountHandler(),
                 new MemoryAmountHandler(),
+                new PlayerCountAmountHandler(),
 
                 // Condition resolvers
                 new ConditionResolverSystem(),
                 new MemoryConditionHandler(),
-                new CounterCountConditionHandler(),
-                new DeckCountConditionHandler(),
+                new EqualsConditionHandler(),
                 new LessOrEqualConditionHandler(),
                 new HasCardConditionHandler(),
                 new MemoryMatchesHandler(),
@@ -37,6 +39,7 @@ public class CommonGameWorldBuilder {
                 new CardFilterResolverSystem(),
                 new CardTypeFilterHandler(),
                 new CardIconFilterHandler(),
+                new CardZoneFilterHandler(),
                 new AffiliationFilterHandler(),
                 new SkillFilterHandler(),
                 new MissionTypeFilterHandler(),
@@ -48,6 +51,7 @@ public class CommonGameWorldBuilder {
                 new ConditionForMatchedFilterHandler(),
                 new MemoryFilterHandler(),
                 new HasAbilityFilterHandler(),
+                new TriggerConditionMatchesFilterHandler(),
 
                 // Card abilities
                 new CardAbilitySystem(),
@@ -55,8 +59,10 @@ public class CommonGameWorldBuilder {
                 new OrderAbilityHandler(),
                 new EventAbilityHandler(),
                 new InterruptAbilityHandler(),
+                new TriggerAbilityHandler(),
                 new HeadquarterRequirementsAbilityHandler(),
                 new GrantSkillAbilityHandler(),
+                new MoveCostModifierAbilityHandler(),
 
                 // Other systems
                 new CardFilteringSystem()

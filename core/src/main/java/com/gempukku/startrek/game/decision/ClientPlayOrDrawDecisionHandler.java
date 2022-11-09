@@ -8,13 +8,10 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.Predicate;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
 import com.gempukku.libgdx.lib.artemis.input.UserInputStateComponent;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
-import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionDefinition;
 import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
 import com.gempukku.libgdx.network.client.ServerEntityComponent;
@@ -32,9 +29,6 @@ import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
-
-import java.util.Set;
-import java.util.function.Consumer;
 
 public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements DecisionHandler {
     private AuthenticationHolderSystem authenticationHolderSystem;
@@ -55,14 +49,27 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     private TextButton playButton;
     private TextButton drawButton;
     private TextButton passButton;
-    private Array<Entity> selectionEntities = new Array<>();
+
+    private SelectionState selectionState;
 
     @Override
     protected void initialize() {
         clientDecisionSystem.registerDecisionHandler("playOrDrawDecision", this);
     }
 
-    private void initializeUI() {
+    private void initializeForDecisions() {
+        Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
+        CardFilter playRequirementsFilter = PlayRequirements.createPlayRequirements(authenticationHolderSystem.getUsername(),
+                cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
+
+        selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+                new SelectionCallback() {
+                    @Override
+                    public void selectionChanged(Array<Entity> selected) {
+                        enableButton(playButton, selected.size == 1);
+                    }
+                });
+
         table = new Table();
         table.setFillParent(true);
 
@@ -100,18 +107,20 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     }
 
     @Override
-    public void processNewDecision(JsonValue decisionData) {
+    public void processNewDecision(ObjectMap<String, String> decisionData) {
         if (table == null) {
-            initializeUI();
+            initializeForDecisions();
         }
         Stage stage = stageSystem.getStage();
 
         String username = authenticationHolderSystem.getUsername();
         Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
         checkForDraw(playerEntity);
+
+        selectionState.markPlayableCards();
+        selectionSystem.startSelection(selectionState);
+
         enableButton(playButton, false);
-        markPlayableCards(username);
-        startSelection();
 
         stage.addActor(table);
     }
@@ -155,93 +164,9 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
         enableButton(passButton, passPossible);
     }
 
-    private void markPlayableCards(String username) {
-        CardFilter playFilter = PlayRequirements.createPlayRequirements(
-                username, cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
-
-        cardFilteringSystem.forEachCardInHand(username, new Consumer<Entity>() {
-            @Override
-            public void accept(Entity cardEntity) {
-                if (playFilter.accepts(null, null, cardEntity)) {
-                    Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
-                    Entity selectionEntity = spawnSystem.spawnEntity("game/card-full-selection.template");
-                    hierarchySystem.addHierarchy(renderedCard, selectionEntity);
-                    selectionEntities.add(selectionEntity);
-                }
-            }
-        });
-    }
-
-    private void startSelection() {
-        selectionSystem.startSelection(
-                new SelectionDefinition() {
-                    @Override
-                    public boolean isSelectionTriggered() {
-                        Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
-                        UserInputStateComponent inputState = userInputStateEntity.getComponent(UserInputStateComponent.class);
-
-                        return inputState.getSignals().contains("selectToggle");
-                    }
-
-                    @Override
-                    public boolean canDeselect(Set<Entity> selectedEntities, Entity selected) {
-                        return hierarchySystem.getChildren(selected).iterator().hasNext();
-                    }
-
-                    @Override
-                    public boolean canSelect(Set<Entity> selectedEntities, Entity newSelected) {
-                        return hierarchySystem.getChildren(newSelected).iterator().hasNext();
-                    }
-
-                    @Override
-                    public void selectionChanged(Set<Entity> selectedEntities) {
-                        if (selectedEntities.size() == 1) {
-                            Entity selected = selectedEntities.iterator().next();
-                            Entity selection = null;
-                            enableButton(playButton, true);
-                            for (Entity selectionEntity : selectionEntities) {
-                                if (hierarchySystem.getParent(selectionEntity) != selected) {
-                                    world.deleteEntity(selectionEntity);
-                                } else {
-                                    selection = selectionEntity;
-                                }
-                            }
-                            selectionEntities.clear();
-                            selectionEntities.add(selection);
-                        } else {
-                            enableButton(playButton, false);
-                            for (Entity selectionEntity : selectionEntities) {
-                                world.deleteEntity(selectionEntity);
-                            }
-                            selectionEntities.clear();
-                            markPlayableCards(authenticationHolderSystem.getUsername());
-                        }
-                    }
-
-                    @Override
-                    public String getMask() {
-                        return "Selection";
-                    }
-
-                    @Override
-                    public Predicate<Entity> getEntityPredicate() {
-                        return new Predicate<Entity>() {
-                            @Override
-                            public boolean evaluate(Entity arg0) {
-                                return true;
-                            }
-                        };
-                    }
-                }
-        );
-    }
-
     private void executeCleanup() {
         table.remove();
-        for (Entity selectionEntity : selectionEntities) {
-            world.deleteEntity(selectionEntity);
-        }
-        selectionEntities.clear();
+        selectionState.cleanup();
         selectionSystem.finishSelection();
     }
 

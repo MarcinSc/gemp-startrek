@@ -20,7 +20,7 @@
       ],
       "effects": [
         {
-          "type": "repeat",
+          "type": "repeatTimes",
           "times": "memory(cardCount)",
           "action": {
             "type": "drawCard",

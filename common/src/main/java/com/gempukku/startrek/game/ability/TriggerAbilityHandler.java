@@ -1,8 +1,6 @@
-package com.gempukku.startrek.server.game.ability;
+package com.gempukku.startrek.game.ability;
 
 import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.startrek.game.ability.CardAbility;
-import com.gempukku.startrek.game.ability.CardAbilityHandlerSystem;
 
 public class TriggerAbilityHandler extends CardAbilityHandlerSystem {
     public TriggerAbilityHandler() {
@@ -11,9 +9,10 @@ public class TriggerAbilityHandler extends CardAbilityHandlerSystem {
 
     @Override
     public CardAbility resolveCardAbility(JsonValue cardAbility) {
+        String triggerType = cardAbility.getString("triggerType");
         boolean optional = cardAbility.getBoolean("optional", false);
         String condition = cardAbility.getString("condition");
         JsonValue effect = cardAbility.get("effect");
-        return new TriggerAbility(optional, condition, effect);
+        return new TriggerAbility(triggerType, optional, condition, effect);
     }
 }

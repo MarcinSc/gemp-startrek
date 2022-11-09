@@ -2,6 +2,7 @@ package com.gempukku.startrek.server.game.decision;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.startrek.decision.DecisionMade;
@@ -67,7 +68,27 @@ public class DecisionSystem extends EffectSystem {
         PlayerDecisionComponent decision = playerDecisionComponentMapper.create(decisionEntity);
         decision.setOwner(playerEntity.getComponent(GamePlayerComponent.class).getName());
         decision.setDecisionType(gameEffect.getDataString("decisionType"));
-        decision.setData(gameEffect.getClonedDataObject("data"));
+
+        JsonValue memoryData = gameEffect.getClonedDataObject("memoryData");
+        if (memoryData != null) {
+            ObjectMap<String, String> data = decision.getData();
+            for (JsonValue memoryDatum : memoryData) {
+                String name = memoryDatum.name();
+                String memoryName = memoryDatum.asString();
+                String value = memory.getValue(memoryName);
+                data.put(name, value);
+            }
+        }
+
+        JsonValue dataJson = gameEffect.getClonedDataObject("data");
+        if (dataJson != null) {
+            ObjectMap<String, String> data = decision.getData();
+            for (JsonValue jsonValue : dataJson) {
+                String name = jsonValue.name();
+                String value = jsonValue.asString();
+                data.put(name, value);
+            }
+        }
 
         stackEffect(decisionEntity);
 

@@ -4,7 +4,7 @@
     "memoryType": "turnSequence"
   },
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
-    "type": "stackUntilInTurnOrder",
+    "type": "repeatUntilInTurnOrder",
     "data": {
       "playerMemory": "turnPlayer",
       "condition": "false",

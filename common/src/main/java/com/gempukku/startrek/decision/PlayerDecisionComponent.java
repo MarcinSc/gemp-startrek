@@ -1,7 +1,7 @@
 package com.gempukku.startrek.decision;
 
 import com.artemis.Component;
-import com.badlogic.gdx.utils.JsonValue;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.network.server.config.annotation.OwnedComponent;
 import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 
@@ -9,7 +9,7 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 public class PlayerDecisionComponent extends Component implements OwnedComponent {
     private String owner;
     private String decisionType;
-    private JsonValue data;
+    private ObjectMap<String, String> data = new ObjectMap<>();
 
     @Override
     public boolean isOwnedBy(String username) {
@@ -32,11 +32,7 @@ public class PlayerDecisionComponent extends Component implements OwnedComponent
         this.decisionType = decisionType;
     }
 
-    public JsonValue getData() {
+    public ObjectMap<String, String> getData() {
         return data;
-    }
-
-    public void setData(JsonValue data) {
-        this.data = data;
     }
 }

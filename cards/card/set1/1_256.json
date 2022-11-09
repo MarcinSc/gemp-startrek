@@ -28,8 +28,9 @@
     {
       "text": "When you play this personnel, you may download a [DS9] ship.",
       "type": "trigger",
+      "triggerType": "played",
       "optional": true,
-      "condition": "played(self)",
+      "condition": "matches(self)",
       "effect": {
         "type": "download",
         "filter": "type(ship),icon(Deep Space Nine)",

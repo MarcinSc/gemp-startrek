@@ -16,14 +16,17 @@
           "amount": 7
         },
         {
-          "type": "stackUntil",
+          "type": "repeatUntil",
           "memory": true,
-          "condition": "memoryHas(playerFinished,true),or(counterCount(currentPlayer,0),deckCount(currentPlayer,0))",
+          "condition": "memoryHas(playerFinished,true),or(equals(counterCount(currentPlayer),0),equals(deckCount(currentPlayer),0))",
           "action": {
             "type": "processDecision",
             "player": "currentPlayer",
             "decisionType": "playOrDrawDecision"
           }
+        },
+        {
+          "type": "turnMissionCardsFaceDown"
         }
       ]
     }

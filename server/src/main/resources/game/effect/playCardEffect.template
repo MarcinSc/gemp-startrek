@@ -13,7 +13,7 @@
         {
           "type": "moveCardToZone",
           "filter": "memory(playedCardId)",
-          "zone": "STACK"
+          "zone": "Stack"
         },
         {
           "type": "payCardCost",
@@ -28,6 +28,12 @@
           "falseEffect": {
             "tpl:extends": "game/effect/playNonEvent.template"
           }
+        },
+        {
+          "tpl:extends": "game/effect/trigger/playMandatoryTriggers.template"
+        },
+        {
+          "tpl:extends": "game/effect/trigger/playOptionalTriggers.template"
         }
       ]
     }

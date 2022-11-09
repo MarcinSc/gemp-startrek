@@ -19,13 +19,11 @@
     },
     {
       "text": "When any player is about to move a ship between this mission and a [GQ] mission, do not add 2 to the span total of those missions.",
-      "type": "trigger",
-      "condition": "playerAboutToMove(any, from(self), to(icon(GQ)))",
-      "effect": [
-        {
-          "type": "cancelQuadrantPenalty"
-        }
-      ]
+      "type": "moveCostModifier",
+      "shipFilter": "any",
+      "fromFilter": "self",
+      "toFilter": "to(quarter(Gamma))",
+      "amount": "-2"
     }
   ],
   "lore": "[b]Deep Space 9:[/b] \"...this has become my home.\""

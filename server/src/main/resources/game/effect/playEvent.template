@@ -4,7 +4,7 @@
   "trueEffect": {
     "type": "moveCardToZone",
     "filter": "memory(playedCardId)",
-    "zone": "CORE"
+    "zone": "Core"
   },
   "falseEffect": {
     "type": "sequence",
@@ -17,8 +17,8 @@
       {
         "type": "moveCardToZone",
         "filter": "memory(playedCardId)",
-        "fromZone": "STACK",
-        "zone": "DISCARD_PILE"
+        "fromZone": "Stack",
+        "zone": "DiscardPile"
       }
     ]
   }

@@ -33,7 +33,7 @@ public class ZoneOperations extends BaseSystem {
     public void moveCardToHand(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
-        card.setCardZone(CardZone.HAND);
+        card.setCardZone(CardZone.Hand);
         CardInHandComponent cardInHand = cardInHandComponentMapper.create(cardEntity);
         cardInHand.setOwner(card.getOwner());
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
@@ -56,7 +56,7 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToStack(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.STACK);
+        card.setCardZone(CardZone.Stack);
         cardOnStackComponentMapper.create(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
@@ -68,7 +68,7 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToBrig(Entity cardEntity, Entity brigPlayerEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.BRIG);
+        card.setCardZone(CardZone.Brig);
         GamePlayerComponent gamePlayer = brigPlayerEntity.getComponent(GamePlayerComponent.class);
         CardInBrigComponent cardInBrig = cardInBrigComponentMapper.create(cardEntity);
         cardInBrig.setBrigOwner(gamePlayer.getName());
@@ -83,7 +83,7 @@ public class ZoneOperations extends BaseSystem {
     public void moveCardToMission(Entity cardEntity, Entity missionEntity, boolean faceUp) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
-        card.setCardZone(CardZone.MISSIONS);
+        card.setCardZone(CardZone.Mission);
         if (faceUp) {
             FaceUpCardInMissionComponent cardInMission = faceUpCardInMissionComponentMapper.create(cardEntity);
             cardInMission.setMissionOwner(mission.getOwner());
@@ -105,7 +105,7 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToCore(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.CORE);
+        card.setCardZone(CardZone.Core);
         cardInCoreComponentMapper.create(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
@@ -121,7 +121,7 @@ public class ZoneOperations extends BaseSystem {
         PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);
         PlayerPublicStatsComponent stats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         deck.getCards().insert(0, cardEntity.getId());
-        card.setCardZone(CardZone.DECK);
+        card.setCardZone(CardZone.Deck);
 
         stats.setDeckCount(stats.getDeckCount() + 1);
 
@@ -135,7 +135,7 @@ public class ZoneOperations extends BaseSystem {
         PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);
         PlayerPublicStatsComponent stats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         deck.getCards().add(cardEntity.getId());
-        card.setCardZone(CardZone.DECK);
+        card.setCardZone(CardZone.Deck);
 
         stats.setDeckCount(stats.getDeckCount() + 1);
 
@@ -172,7 +172,7 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToDiscardPile(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.DISCARD_PILE);
+        card.setCardZone(CardZone.DiscardPile);
         cardInDiscardComponentMapper.create(cardEntity);
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
         PlayerDiscardPileComponent discard = playerEntity.getComponent(PlayerDiscardPileComponent.class);
@@ -195,7 +195,7 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToBottomOfDilemmaPile(Entity cardEntity, boolean faceUp) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.DILLEMMA_PILE);
+        card.setCardZone(CardZone.DilemmaPile);
         CardInDilemmaPileComponent cardInDilemmaPile = cardInDilemmaPileComponentMapper.create(cardEntity);
         cardInDilemmaPile.setFaceUp(faceUp);
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
@@ -210,7 +210,7 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToTopOfDilemmaPile(Entity cardEntity, boolean faceUp) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.DILLEMMA_PILE);
+        card.setCardZone(CardZone.DilemmaPile);
         CardInDilemmaPileComponent cardInDilemmaPile = cardInDilemmaPileComponentMapper.create(cardEntity);
         cardInDilemmaPile.setFaceUp(faceUp);
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
@@ -256,16 +256,16 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveToNewZone(Entity cardEntity, CardZone zone) {
         switch (zone) {
-            case HAND:
+            case Hand:
                 moveCardToHand(cardEntity);
                 break;
-            case CORE:
+            case Core:
                 moveCardToCore(cardEntity);
                 break;
-            case STACK:
+            case Stack:
                 moveCardToStack(cardEntity);
                 break;
-            case DISCARD_PILE:
+            case DiscardPile:
                 moveCardToDiscardPile(cardEntity);
                 break;
             default:
@@ -277,28 +277,28 @@ public class ZoneOperations extends BaseSystem {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         CardZone zone = card.getCardZone();
         switch (zone) {
-            case HAND:
+            case Hand:
                 removeCardFromHand(cardEntity);
                 break;
-            case CORE:
+            case Core:
                 removeCardFromCore(cardEntity);
                 break;
-            case STACK:
+            case Stack:
                 removeCardFromStack(cardEntity);
                 break;
-            case BRIG:
+            case Brig:
                 removeCardFromBrig(cardEntity);
                 break;
-            case MISSIONS:
+            case Mission:
                 removeCardFromMission(cardEntity);
                 break;
-            case DECK:
+            case Deck:
                 removeCardFromDeck(cardEntity);
                 break;
-            case DISCARD_PILE:
+            case DiscardPile:
                 removeCardFromDiscardPile(cardEntity);
                 break;
-            case DILLEMMA_PILE:
+            case DilemmaPile:
                 removeCardFromDilemmaPile(cardEntity);
                 break;
         }

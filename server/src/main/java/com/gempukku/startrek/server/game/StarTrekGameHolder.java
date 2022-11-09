@@ -21,14 +21,18 @@ import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
 import com.gempukku.startrek.server.game.ability.DilemmaEffectHandler;
-import com.gempukku.startrek.server.game.ability.TriggerAbilityHandler;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
+import com.gempukku.startrek.server.game.decision.MandatoryTriggerActionsDecisionHandler;
 import com.gempukku.startrek.server.game.decision.PlayOrDrawDecisionHandler;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 import com.gempukku.startrek.server.game.effect.card.DestroyEffect;
 import com.gempukku.startrek.server.game.effect.card.PayCardCostEffect;
-import com.gempukku.startrek.server.game.effect.control.*;
+import com.gempukku.startrek.server.game.effect.card.TurnMissionCardsFaceDownEffect;
+import com.gempukku.startrek.server.game.effect.control.ConditionEffect;
+import com.gempukku.startrek.server.game.effect.control.RepeatEffect;
+import com.gempukku.startrek.server.game.effect.control.SequenceEffect;
+import com.gempukku.startrek.server.game.effect.control.StackActionEffect;
 import com.gempukku.startrek.server.game.effect.deck.DrawCardEffect;
 import com.gempukku.startrek.server.game.effect.deck.PlaceCardInHandOnBottomOfDeckEffect;
 import com.gempukku.startrek.server.game.effect.deck.ShuffleDeckEffect;
@@ -41,6 +45,7 @@ import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.effect.zone.MoveCardToMissionEffect;
 import com.gempukku.startrek.server.game.effect.zone.MoveCardToZoneEffect;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
+import com.gempukku.startrek.server.game.filter.ServerIdInFilterHandler;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
 import java.util.function.Consumer;
@@ -94,7 +99,6 @@ public class StarTrekGameHolder implements Disposable {
                 new GameEffectSystem(),
 
                 // Control game effects
-                new LoopEffect(),
                 new RepeatEffect(),
                 new SequenceEffect(),
                 new StackActionEffect(),
@@ -112,15 +116,19 @@ public class StarTrekGameHolder implements Disposable {
                 new MoveCardToZoneEffect(),
                 new MoveCardToMissionEffect(),
                 new PayCardCostEffect(),
+                new TurnMissionCardsFaceDownEffect(),
                 new MemorizeAmountEffect(),
                 new DestroyEffect(),
 
                 // Ability handlers
-                new TriggerAbilityHandler(),
                 new DilemmaEffectHandler(),
 
                 // Decision handlers
                 new PlayOrDrawDecisionHandler(),
+                new MandatoryTriggerActionsDecisionHandler(),
+
+                // Server card filters
+                new ServerIdInFilterHandler(),
 
                 // Network systems
                 new RemoteEntityManagerHandler(),
