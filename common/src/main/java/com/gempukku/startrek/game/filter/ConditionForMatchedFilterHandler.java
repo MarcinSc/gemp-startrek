@@ -5,11 +5,11 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 
-public class ConditionFilterHandler extends CardFilterSystem {
+public class ConditionForMatchedFilterHandler extends CardFilterSystem {
     private ConditionResolverSystem conditionResolverSystem;
 
-    public ConditionFilterHandler() {
-        super("condition");
+    public ConditionForMatchedFilterHandler() {
+        super("conditionForMatched");
     }
 
     @Override

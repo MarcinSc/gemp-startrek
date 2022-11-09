@@ -45,7 +45,7 @@ public class CommonGameWorldBuilder {
                 new TitleFilterHandler(),
                 new UniquenessPreservedFilterHandler(),
                 new PlayableFilterHandler(),
-                new ConditionFilterHandler(),
+                new ConditionForMatchedFilterHandler(),
                 new MemoryFilterHandler(),
                 new HasAbilityFilterHandler(),
 

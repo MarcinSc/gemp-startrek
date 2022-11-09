@@ -36,7 +36,7 @@ public class PlayRequirements {
         CardFilter nonEventCards = cardFilterResolverSystem.resolveCardFilter(
                 "or(type(Personnel),type(Ship),type(Equipment)),"
                         + "uniquenessPreserved,playable,"
-                        + "condition(lessOrEqual(costToPlay,counterCount(username(" + username + "))))");
+                        + "conditionForMatched(lessOrEqual(costToPlay,counterCount(username(" + username + "))))");
         Array<CardFilter> filters = new Array<>();
         filters.add(headquarterRequirements, nonEventCards);
 
@@ -48,6 +48,6 @@ public class PlayRequirements {
             CardFilterResolverSystem cardFilterResolverSystem) {
         return cardFilterResolverSystem.resolveCardFilter(
                 "type(Event),playable," +
-                        "condition(lessOrEqual(costToPlay,counterCount(username(" + username + "))))");
+                        "conditionForMatched(lessOrEqual(costToPlay,counterCount(username(" + username + "))))");
     }
 }
