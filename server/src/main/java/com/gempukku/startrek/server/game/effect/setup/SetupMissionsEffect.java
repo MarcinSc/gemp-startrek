@@ -20,6 +20,7 @@ public class SetupMissionsEffect extends OneTimeEffectSystem {
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String player = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory,
                 gameEffect.getDataString("player"));
+        System.out.println("Setup missions for: " + player);
         for (int missionIndex = 0; missionIndex < 5; missionIndex++) {
             Entity missionEntity = spawnSystem.spawnEntity("game/mission.template");
             MissionComponent mission = missionEntity.getComponent(MissionComponent.class);

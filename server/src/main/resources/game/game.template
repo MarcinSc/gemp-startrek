@@ -9,37 +9,43 @@
       "actions": [
         {
           "type": "stackForEachPlayer",
-          "memory": true,
+          "playerMemory": "setupPlayer",
           "action": {
-            "type": "sequenceForPlayer",
-            "memory": true,
+            "type": "sequence",
+            "memory": "setupSequence",
             "actions": [
               {
-                "type": "setupMissions"
+                "type": "setupMissions",
+                "player": "memory(setupPlayer)"
               },
               {
-                "type": "setupMissionCards"
+                "type": "setupMissionCards",
+                "player": "memory(setupPlayer)"
               },
               {
-                "type": "placeAllDilemmasInDilemmaDeck"
-              },
-              {
-                "type": "shuffleDeck",
-                "deck": "dilemmaDeck"
-              },
-              {
-                "type": "placeAllCardsInDrawDeck"
+                "type": "placeAllDilemmasInDilemmaDeck",
+                "player": "memory(setupPlayer)"
               },
               {
                 "type": "shuffleDeck",
-                "deck": "drawDeck"
+                "deck": "dilemmaDeck",
+                "player": "memory(setupPlayer)"
               },
               {
-                "type": "repeatForPlayer",
-                "memory": true,
+                "type": "placeAllCardsInDrawDeck",
+                "player": "memory(setupPlayer)"
+              },
+              {
+                "type": "shuffleDeck",
+                "deck": "drawDeck",
+                "player": "memory(setupPlayer)"
+              },
+              {
+                "type": "repeat",
                 "times": 7,
                 "action": {
-                  "type": "drawCard"
+                  "type": "drawCard",
+                  "player": "memory(setupPlayer)"
                 }
               }
             ]

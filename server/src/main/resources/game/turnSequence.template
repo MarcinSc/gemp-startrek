@@ -6,13 +6,14 @@
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
     "type": "stackUntilInTurnOrder",
     "data": {
+      "playerMemory": "turnPlayer",
       "condition": "false",
       "action": {
-        "type": "sequenceForPlayer",
-        "memory": true,
+        "type": "sequence",
         "actions": [
           {
-            "type": "setTurnPlayer"
+            "type": "setTurnPlayer",
+            "player": "memory(turnPlayer)"
           },
           {
             "type": "stackActionTemplate",

@@ -27,6 +27,8 @@ public class PlayerResolverSystem extends BaseSystem {
             return expression.getParameters().get(0);
         } else if (expression.getType().equals("owner")) {
             return sourceEntity.getComponent(CardComponent.class).getOwner();
+        } else if (expression.getType().equals("memory")) {
+            return memory.getValue(expression.getParameters().get(0));
         }
         throw new RuntimeException("Unable to find player resolver for filter: " + value);
     }

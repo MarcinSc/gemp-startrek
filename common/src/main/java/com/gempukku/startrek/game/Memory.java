@@ -23,4 +23,8 @@ public class Memory {
     public void setValue(String name, String value) {
         memory.put(name, value);
     }
+
+    public void removeValue(String name) {
+        memory.remove(name);
+    }
 }

@@ -13,7 +13,7 @@ public class RepeatEffect extends EffectSystem {
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
 
     public RepeatEffect() {
-        super("repeat", "repeatForPlayer");
+        super("repeat");
     }
 
     @Override
@@ -21,8 +21,6 @@ public class RepeatEffect extends EffectSystem {
         String type = gameEffect.getType();
         if (type.equals("repeat")) {
             repeat(sourceEntity, gameEffect, memory);
-        } else if (type.equals("repeatForPlayer")) {
-            repeatForPlayer(sourceEntity, gameEffect, memory);
         }
     }
 
@@ -44,31 +42,7 @@ public class RepeatEffect extends EffectSystem {
 
             stackEffect(actionToStack);
         } else {
-            removeTopEffectFromStack();
-        }
-    }
-
-    private void repeatForPlayer(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        int times = amountResolverSystem.resolveAmount(sourceEntity, memory,
-                gameEffect.getDataString("times"));
-        String player = gameEffect.getDataString("player");
-
-        int executedTimes = 0;
-        String executed = memory.getValue("times");
-        if (executed != null) {
-            executedTimes = Integer.parseInt(executed);
-        }
-
-        if (executedTimes < times) {
-            JsonValue action = gameEffect.getClonedDataObject("action");
-            action.addChild("player", new JsonValue(player));
-            Entity actionToStack = createActionFromJson(action, sourceEntity);
-
-            executedTimes++;
-            memory.setValue("times", String.valueOf(executedTimes));
-
-            stackEffect(actionToStack);
-        } else {
+            memory.removeValue("times");
             removeTopEffectFromStack();
         }
     }

@@ -13,7 +13,7 @@ public class SequenceEffect extends EffectSystem {
     private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;
 
     public SequenceEffect() {
-        super("sequence", "sequenceForPlayer");
+        super("sequence");
     }
 
     @Override
@@ -21,8 +21,6 @@ public class SequenceEffect extends EffectSystem {
         String effectType = gameEffect.getType();
         if (effectType.equals("sequence")) {
             sequence(sourceEntity, gameEffect, memory);
-        } else if (effectType.equals("sequenceForPlayer")) {
-            sequenceForPlayer(sourceEntity, gameEffect, memory);
         }
     }
 
@@ -36,6 +34,7 @@ public class SequenceEffect extends EffectSystem {
         }
 
         if (nextActionIndex == action.size) {
+            memory.removeValue(indexMemoryName);
             // Finished the effect - remove from stack
             removeTopEffectFromStack();
         } else {
@@ -44,29 +43,6 @@ public class SequenceEffect extends EffectSystem {
             memory.setValue(indexMemoryName, String.valueOf(nextActionIndex));
 
             stackEffect(stackedEntity);
-        }
-    }
-
-    private void sequenceForPlayer(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        JsonValue action = gameEffect.getClonedDataObject("actions");
-        String indexMemoryName = gameEffect.getDataString("memory", "stackedIndex");
-        String stackedIndex = memory.getValue(indexMemoryName);
-        String player = gameEffect.getDataString("player");
-        int nextActionIndex = 0;
-        if (stackedIndex != null) {
-            nextActionIndex = Integer.parseInt(stackedIndex) + 1;
-        }
-
-        if (nextActionIndex == action.size) {
-            // Finished the effect - remove from stack
-            removeTopEffectFromStack();
-        } else {
-            JsonValue nextAction = action.get(nextActionIndex);
-            nextAction.addChild("player", new JsonValue(player));
-            Entity actionToStack = createActionFromJson(nextAction, sourceEntity);
-            memory.setValue(indexMemoryName, String.valueOf(nextActionIndex));
-
-            stackEffect(actionToStack);
         }
     }
 }

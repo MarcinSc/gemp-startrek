@@ -46,6 +46,7 @@ public class LoopEffect extends EffectSystem {
     private void stackUntilInTurnOrder(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         boolean condition = conditionResolverSystem.resolveBoolean(sourceEntity, memory,
                 gameEffect.getDataString("condition"));
+        String playerMemoryName = gameEffect.getDataString("playerMemory");
         if (!condition) {
             TurnSequenceComponent turnSequence = LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class).
                     getComponent(TurnSequenceComponent.class);
@@ -61,14 +62,16 @@ public class LoopEffect extends EffectSystem {
                 nextPlayerIndex = 0;
 
             String player = players.get(nextPlayerIndex);
+            memory.setValue(playerMemoryName, player);
             JsonValue action = gameEffect.getClonedDataObject("action");
-            action.addChild("player", new JsonValue("username(" + player + ")"));
             memory.setValue("playerIndex", String.valueOf(nextPlayerIndex));
 
             Entity actionToStack = createActionFromJson(action, sourceEntity);
 
             stackEffect(actionToStack);
         } else {
+            memory.removeValue(playerMemoryName);
+            memory.removeValue("playerIndex");
             removeTopEffectFromStack();
         }
     }

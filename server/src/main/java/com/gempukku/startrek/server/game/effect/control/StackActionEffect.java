@@ -41,13 +41,16 @@ public class StackActionEffect extends EffectSystem {
             nextPlayerIndex = Integer.parseInt(playerIndex) + 1;
         }
 
+        String playerMemoryName = gameEffect.getDataString("playerMemory");
         if (nextPlayerIndex == players.size) {
+            memory.removeValue(playerMemoryName);
+            memory.removeValue("playerIndex");
             // Finished all players - remove from stack
             removeTopEffectFromStack();
         } else {
             String player = players.get(nextPlayerIndex);
+            memory.setValue(playerMemoryName, player);
             JsonValue action = gameEffect.getClonedDataObject("action");
-            action.addChild("player", new JsonValue("username(" + player + ")"));
             Entity actionToStack = createActionFromJson(action, sourceEntity);
             memory.setValue("playerIndex", String.valueOf(nextPlayerIndex));
 
