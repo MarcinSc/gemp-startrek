@@ -1,13 +1,20 @@
 
 scene.png
-size: 2048, 2048
+size: 512, 128
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
-playarea
+logo
   rotate: false
   xy: 2, 2
-  size: 1024, 1024
-  orig: 1024, 1024
+  size: 324, 124
+  orig: 324, 124
+  offset: 0, 0
+  index: -1
+playarea
+  rotate: false
+  xy: 328, 122
+  size: 4, 4
+  orig: 4, 4
   offset: 0, 0
   index: -1
