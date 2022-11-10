@@ -106,7 +106,7 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
         Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
         CardFilter triggerFilter = TriggerRequirements.createMandatoryTriggerRequirements(
                 authenticationHolderSystem.getUsername(), triggerType, usedIds,
-                cardFilteringSystem, cardFilterResolverSystem);
+                cardFilterResolverSystem);
         selectionState = new SelectionState(world, userInputStateEntity, triggerFilter,
                 sourceEntity, memory,
                 new SelectionCallback() {

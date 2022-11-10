@@ -47,7 +47,7 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
 
                 CardFilter triggerFilter = TriggerRequirements.createMandatoryTriggerRequirements(
                         decisionPlayer, decisionData.get("triggerType"), usedIds,
-                        cardFilteringSystem, cardFilterResolverSystem);
+                        cardFilterResolverSystem);
                 if (triggerFilter.accepts(sourceEntity, new Memory(decisionData), usedCardEntity))
                     return true;
             }
@@ -67,7 +67,7 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
 
         CardFilter triggerFilter = TriggerRequirements.createMandatoryTriggerRequirements(
                 username, decisionData.get("triggerType"), usedIds,
-                cardFilteringSystem, cardFilterResolverSystem);
+                cardFilterResolverSystem);
         return cardFilteringSystem.cantFindCard(sourceEntity, new Memory(decisionData), triggerFilter);
     }
 
