@@ -25,7 +25,7 @@ import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 
-public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem implements DecisionHandler {
+public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem implements DecisionHandler {
     private ClientDecisionSystem clientDecisionSystem;
     private CardFilteringSystem cardFilteringSystem;
     private CardFilterResolverSystem cardFilterResolverSystem;
@@ -45,7 +45,7 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
 
     @Override
     protected void initialize() {
-        clientDecisionSystem.registerDecisionHandler("mandatoryTriggerActions", this);
+        clientDecisionSystem.registerDecisionHandler("optionalTriggerActions", this);
     }
 
     private void initializeForDecision() {
@@ -108,7 +108,7 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
         memory = new Memory(decisionData);
 
         Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
-        CardFilter triggerFilter = TriggerRequirements.createMandatoryTriggerRequirements(
+        CardFilter triggerFilter = TriggerRequirements.createOptionalTriggerRequirements(
                 authenticationHolderSystem.getUsername(), triggerType, usedIds,
                 cardFilterResolverSystem);
         selectionState = new SelectionState(world, userInputStateEntity, triggerFilter,
@@ -132,7 +132,7 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
         Entity usedCardEntity = world.getEntity(serverEntityId);
         int entityId = usedCardEntity.getComponent(ServerEntityComponent.class).getEntityId();
 
-        int triggerIndex = TriggerRequirements.findUsableTriggerIndex(usedCardEntity, triggerType, false, memory,
+        int triggerIndex = TriggerRequirements.findUsableTriggerIndex(usedCardEntity, triggerType, true, memory,
                 cardAbilitySystem, conditionResolverSystem);
 
         ObjectMap<String, String> parameters = new ObjectMap<>();

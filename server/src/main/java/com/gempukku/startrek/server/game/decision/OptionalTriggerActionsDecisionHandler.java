@@ -14,7 +14,7 @@ import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
-public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implements DecisionTypeHandler {
+public class OptionalTriggerActionsDecisionHandler extends BaseSystem implements DecisionTypeHandler {
     private DecisionSystem decisionSystem;
     private CardFilteringSystem cardFilteringSystem;
     private CardFilterResolverSystem cardFilterResolverSystem;
@@ -25,7 +25,7 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
 
     @Override
     protected void initialize() {
-        decisionSystem.registerDecisionTypeHandler("mandatoryTriggerActions", this);
+        decisionSystem.registerDecisionTypeHandler("optionalTriggerActions", this);
     }
 
     @Override
@@ -53,11 +53,11 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
                 String usedIds = decisionData.get("usedIds", "");
 
                 String triggerType = decisionData.get("triggerType");
-                CardFilter triggerFilter = TriggerRequirements.createMandatoryTriggerRequirements(
+                CardFilter triggerFilter = TriggerRequirements.createOptionalTriggerRequirements(
                         decisionPlayer, triggerType, usedIds,
                         cardFilterResolverSystem);
                 if (triggerFilter.accepts(sourceEntity, new Memory(decisionData), usedCardEntity)) {
-                    int usableTriggerIndex = TriggerRequirements.findUsableTriggerIndex(usedCardEntity, triggerType, false,
+                    int usableTriggerIndex = TriggerRequirements.findUsableTriggerIndex(usedCardEntity, triggerType, true,
                             new Memory(decisionData), cardAbilitySystem, conditionResolverSystem);
                     if (usableTriggerIndex == triggerIndex) {
                         return true;
@@ -71,17 +71,7 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
     }
 
     private boolean canPass(String username, ObjectMap<String, String> decisionData) {
-        Entity sourceEntity = null;
-        String sourceIdStr = decisionData.get("sourceId");
-        if (sourceIdStr != null)
-            sourceEntity = world.getEntity(Integer.parseInt(sourceIdStr));
-
-        String usedIds = decisionData.get("usedIds", "");
-
-        CardFilter triggerFilter = TriggerRequirements.createMandatoryTriggerRequirements(
-                username, decisionData.get("triggerType"), usedIds,
-                cardFilterResolverSystem);
-        return cardFilteringSystem.cantFindCard(sourceEntity, new Memory(decisionData), triggerFilter);
+        return true;
     }
 
     @Override

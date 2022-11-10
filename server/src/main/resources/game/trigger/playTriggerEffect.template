@@ -1,0 +1,16 @@
+{
+  "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
+    "memoryType": "playTrigger",
+    "memory": {
+      "usedCardId": "[cardId]",
+      "triggerIndex": "[triggerIndex]"
+    }
+  },
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "playoutTrigger",
+    "data": {
+      "cardMemory": "usedCardId",
+      "triggerIndexMemory": "triggerIndex"
+    }
+  }
+}

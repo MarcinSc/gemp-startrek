@@ -27,14 +27,14 @@ public class TriggerConditionMatchesFilterHandler extends CardFilterSystem {
                 Array<TriggerAbility> triggerAbilities = cardAbilitySystem.getCardAbilities(cardEntity, TriggerAbility.class);
                 if (triggerAbilities.size == 0)
                     return false;
-                boolean optional = conditionResolverSystem.resolveBoolean(sourceEntity, memory, optionalCondition);
+                boolean optional = conditionResolverSystem.resolveBoolean(cardEntity, memory, optionalCondition);
 
                 for (TriggerAbility triggerAbility : triggerAbilities) {
                     if (triggerAbility.isOptional() == optional
                             && triggerAbility.getTriggerType().equals(triggerType)) {
                         String triggerCondition = triggerAbility.getCondition();
                         if (triggerCondition == null ||
-                                conditionResolverSystem.resolveBoolean(sourceEntity, memory, triggerCondition)) {
+                                conditionResolverSystem.resolveBoolean(cardEntity, memory, triggerCondition)) {
                             return true;
                         }
                     }

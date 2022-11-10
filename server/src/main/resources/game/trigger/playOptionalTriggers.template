@@ -11,7 +11,8 @@
     },
     "memoryData": {
       "sourceId": "playedCardId",
-      "missionId": "missionId"
+      "missionId": "missionId",
+      "usedIds": "usedIds"
     }
   }
 }
