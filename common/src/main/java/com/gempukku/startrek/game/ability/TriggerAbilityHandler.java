@@ -12,7 +12,8 @@ public class TriggerAbilityHandler extends CardAbilityHandlerSystem {
         String triggerType = cardAbility.getString("triggerType");
         boolean optional = cardAbility.getBoolean("optional", false);
         String condition = cardAbility.getString("condition");
+        JsonValue cost = cardAbility.get("cost");
         JsonValue effect = cardAbility.get("effect");
-        return new TriggerAbility(triggerType, optional, condition, effect);
+        return new TriggerAbility(triggerType, optional, condition, cost, effect);
     }
 }

@@ -30,8 +30,8 @@
       "optional": true,
       "condition": "matches(self)",
       "effect": {
-        "type": "drawCards",
-        "amount": 1
+        "type": "drawCard",
+        "player": "owner(self)"
       }
     },
     {

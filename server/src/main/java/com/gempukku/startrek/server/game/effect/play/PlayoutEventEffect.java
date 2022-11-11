@@ -39,7 +39,6 @@ public class PlayoutEventEffect extends EffectSystem {
         }
         if (costsPaid) {
             JsonValue effects = eventAbility.getEffects();
-            ;
             int resolvedEffectIndex = Integer.parseInt(memory.getValue("effectIndex", "-1"));
             int nextEffectIndex = resolvedEffectIndex + 1;
             if (nextEffectIndex < effects.size) {
