@@ -24,9 +24,6 @@
             "player": "currentPlayer",
             "decisionType": "playOrDrawDecision"
           }
-        },
-        {
-          "type": "turnMissionCardsFaceDown"
         }
       ]
     }

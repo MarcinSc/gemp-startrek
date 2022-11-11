@@ -31,7 +31,6 @@ import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 import com.gempukku.startrek.server.game.effect.card.DestroyEffect;
 import com.gempukku.startrek.server.game.effect.card.PayCardCostEffect;
-import com.gempukku.startrek.server.game.effect.card.TurnMissionCardsFaceDownEffect;
 import com.gempukku.startrek.server.game.effect.control.ConditionEffect;
 import com.gempukku.startrek.server.game.effect.control.RepeatEffect;
 import com.gempukku.startrek.server.game.effect.control.SequenceEffect;
@@ -127,7 +126,6 @@ public class StarTrekGameHolder implements Disposable {
                 new MoveCardToZoneEffect(),
                 new MoveCardToMissionEffect(),
                 new PayCardCostEffect(),
-                new TurnMissionCardsFaceDownEffect(),
                 new ClearMemoryEffect(),
                 new MemorizeAmountEffect(),
                 new DestroyEffect(),
