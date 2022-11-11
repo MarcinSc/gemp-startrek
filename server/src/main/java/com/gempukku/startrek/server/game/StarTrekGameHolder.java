@@ -173,7 +173,6 @@ public class StarTrekGameHolder implements Disposable {
                         spawnPlayerCards(entity);
                     }
                 });
-        //setupTurnSequence();
     }
 
     private void spawnPlayerCards(Entity playerEntity) {

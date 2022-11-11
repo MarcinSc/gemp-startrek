@@ -1,67 +1,92 @@
 package com.gempukku.startrek.server.game;
 
-import com.artemis.Entity;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.headless.HeadlessFiles;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.DummyApplication;
-import com.gempukku.libgdx.lib.artemis.event.EventSystem;
-import com.gempukku.startrek.card.CardData;
-import com.gempukku.startrek.decision.DecisionMade;
-import com.gempukku.startrek.decision.PlayerDecisionComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
-import com.gempukku.startrek.server.game.stack.StackSystem;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class GameSetupTest {
-    private static CardData cardData;
-
-    @BeforeClass
-    public static void initialize() {
-        Gdx.app = new DummyApplication();
-        Gdx.files = new HeadlessFiles();
-        cardData = new CardData();
-        cardData.initializeCards();
-    }
-
+public class GameSetupTest extends AbstractGameTest {
     @Test
     public void gameSetupTest() {
         StarTrekDeck testDeck = createTestDeck();
-        StarTrekGameHolder gameHolder = new StarTrekGameHolder(cardData, true);
-        gameHolder.addPlayer(new PlayerGameInfo("test1", "test1", "test", testDeck));
-        gameHolder.addPlayer(new PlayerGameInfo("test2", "test2", "test", testDeck));
-        gameHolder.setupGame();
-        gameHolder.processGame();
+        setupGame(testDeck, testDeck);
 
-        StackSystem stackSystem = gameHolder.getGameWorld().getSystem(StackSystem.class);
-        EventSystem eventSystem = gameHolder.getGameWorld().getSystem(EventSystem.class);
-
-        Entity decisionEntity = stackSystem.getTopMostStackEntity();
-        PlayerDecisionComponent decision = decisionEntity.getComponent(PlayerDecisionComponent.class);
-
-        ObjectMap<String, String> decisionParams = new ObjectMap<>();
-
-        DecisionMade decisionMade = new DecisionMade(decisionParams);
-        decisionMade.setOrigin(decision.getOwner());
-
-        eventSystem.fireEvent(decisionMade, decisionEntity);
+        sendDecision("test1");
     }
 
     private StarTrekDeck createTestDeck() {
         StarTrekDeck testDeck = new StarTrekDeck();
-        testDeck.setDeckId("deckId");
-        testDeck.setDeckName("Example deck");
+        testDeck.getDillemas().add("1_4");
+        testDeck.getDillemas().add("1_4");
+        testDeck.getDillemas().add("1_8");
+        testDeck.getDillemas().add("1_17");
+        testDeck.getDillemas().add("1_17");
+        testDeck.getDillemas().add("1_25");
+        testDeck.getDillemas().add("1_33");
+        testDeck.getDillemas().add("1_33");
+        testDeck.getDillemas().add("1_34");
+        testDeck.getDillemas().add("1_34");
+        testDeck.getDillemas().add("1_41");
+        testDeck.getDillemas().add("1_43");
+        testDeck.getDillemas().add("1_43");
+        testDeck.getDillemas().add("1_48");
+        testDeck.getDillemas().add("1_48");
+        testDeck.getDillemas().add("1_50");
+        testDeck.getDillemas().add("1_50");
+        testDeck.getDillemas().add("1_52");
+        testDeck.getDillemas().add("1_57");
+        testDeck.getDillemas().add("1_60");
 
-        testDeck.getMissions().add("12_40");
-        testDeck.getMissions().add("12_42");
-        testDeck.getMissions().add("29_36");
-        testDeck.getMissions().add("7_45");
-        testDeck.getMissions().add("30_32");
+        // Equipment
+        testDeck.getDrawDeck().add("1_68");
 
-        testDeck.getDillemas().add("37_2");
+        // Event
+        testDeck.getDrawDeck().add("1_83");
+        testDeck.getDrawDeck().add("1_83");
+        testDeck.getDrawDeck().add("1_84");
+        testDeck.getDrawDeck().add("1_84");
 
-        testDeck.getDrawDeck().add("12_58");
+        // Interrupts
+        testDeck.getDrawDeck().add("1_136");
+        testDeck.getDrawDeck().add("1_136");
+        testDeck.getDrawDeck().add("1_145");
+        testDeck.getDrawDeck().add("1_145");
+
+        // Missions
+        testDeck.getMissions().add("1_170");
+        testDeck.getMissions().add("1_187");
+        testDeck.getMissions().add("1_188");
+        testDeck.getMissions().add("1_198");
+        testDeck.getMissions().add("1_199");
+
+        // Personnel - Bajoran
+        testDeck.getDrawDeck().add("1_207");
+        testDeck.getDrawDeck().add("1_207");
+        testDeck.getDrawDeck().add("1_210");
+        testDeck.getDrawDeck().add("1_210");
+        testDeck.getDrawDeck().add("1_214");
+        testDeck.getDrawDeck().add("1_214");
+        testDeck.getDrawDeck().add("1_217");
+        testDeck.getDrawDeck().add("1_225");
+        testDeck.getDrawDeck().add("1_225");
+        // Personnel - Federation
+        testDeck.getDrawDeck().add("1_251");
+        testDeck.getDrawDeck().add("1_254");
+        testDeck.getDrawDeck().add("1_256");
+        testDeck.getDrawDeck().add("1_256");
+        testDeck.getDrawDeck().add("1_265");
+        testDeck.getDrawDeck().add("1_265");
+        testDeck.getDrawDeck().add("1_278");
+        testDeck.getDrawDeck().add("1_278");
+        testDeck.getDrawDeck().add("1_280");
+        testDeck.getDrawDeck().add("1_285");
+        testDeck.getDrawDeck().add("1_291");
+        // Personnel - Non-Aligned
+        testDeck.getDrawDeck().add("1_320");
+        testDeck.getDrawDeck().add("1_334");
+        testDeck.getDrawDeck().add("1_351");
+        // Ship - Federation
+        testDeck.getDrawDeck().add("1_390");
+        testDeck.getDrawDeck().add("1_390");
+        testDeck.getDrawDeck().add("1_390");
         return testDeck;
     }
 }

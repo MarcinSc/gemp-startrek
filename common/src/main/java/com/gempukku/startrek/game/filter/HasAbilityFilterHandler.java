@@ -22,7 +22,7 @@ public class HasAbilityFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                return cardAbilitySystem.getCardAbilities(cardEntity, cardAbilityType) != null;
+                return cardAbilitySystem.getCardAbilities(cardEntity, cardAbilityType).size > 0;
             }
         };
     }

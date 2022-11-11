@@ -77,7 +77,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
             publicStats.setCounterCount(publicStats.getCounterCount() - 1);
             eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
 
-            Entity drawCardEffect = spawnSystem.spawnEntity("game/effect/drawCardEffect.template");
+            Entity drawCardEffect = spawnSystem.spawnEntity("game/draw/drawCardEffect.template");
             ObjectMap<String, String> memory = drawCardEffect.getComponent(EffectMemoryComponent.class).getMemory();
             memory.put("player", decisionPlayer);
             GameEffectComponent gameEffect = drawCardEffect.getComponent(GameEffectComponent.class);

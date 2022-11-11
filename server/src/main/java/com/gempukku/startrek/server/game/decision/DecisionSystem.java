@@ -31,7 +31,7 @@ public class DecisionSystem extends EffectSystem {
     }
 
     @EventListener
-    public void decisionMade(DecisionMade decisionMade, Entity entity) {
+    public boolean decisionMade(DecisionMade decisionMade, Entity entity) {
         PlayerDecisionComponent playerDecision = stackSystem.getTopMostStackEntity().getComponent(PlayerDecisionComponent.class);
         if (playerDecision != null && playerDecision.getOwner().equals(decisionMade.getOrigin())) {
             if (validateDecision(playerDecision, decisionMade.getParameters())) {
@@ -41,13 +41,14 @@ public class DecisionSystem extends EffectSystem {
                 processDecisionAnswer(playerDecision, decisionMade.getParameters());
                 world.deleteEntity(decisionEntity);
                 world.deleteEntity(sendDecisionEntity);
+                return true;
             } else {
-                System.out.println("Invalid decision made!");
                 // Invalid decision was made - next processing will re-create the decision
                 Entity decisionEntity = stackSystem.removeTopStackEntity();
                 world.deleteEntity(decisionEntity);
             }
         }
+        return false;
     }
 
     @EventListener
