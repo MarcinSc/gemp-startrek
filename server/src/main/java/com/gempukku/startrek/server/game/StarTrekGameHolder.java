@@ -40,6 +40,7 @@ import com.gempukku.startrek.server.game.effect.deck.ShuffleDeckEffect;
 import com.gempukku.startrek.server.game.effect.memory.ClearMemoryEffect;
 import com.gempukku.startrek.server.game.effect.memory.MemorizeAmountEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutEventEffect;
+import com.gempukku.startrek.server.game.effect.play.PlayoutTriggerEffect;
 import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
 import com.gempukku.startrek.server.game.effect.setup.*;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
@@ -108,6 +109,7 @@ public class StarTrekGameHolder implements Disposable {
 
                 // Core game effects
                 new PlayoutEventEffect(),
+                new PlayoutTriggerEffect(),
 
                 // Specific game effects
                 new PlayerCounterEffect(),

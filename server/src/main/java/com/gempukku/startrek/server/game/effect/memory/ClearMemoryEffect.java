@@ -12,6 +12,10 @@ public class ClearMemoryEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        memory.removeValue(gameEffect.getDataString("memory"));
+        String memoryList = gameEffect.getDataString("memory");
+        String[] memories = memoryList.split(",");
+        for (String memoryName : memories) {
+            memory.removeValue(memoryName);
+        }
     }
 }

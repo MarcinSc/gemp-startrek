@@ -47,6 +47,9 @@ public class PlayoutEventEffect extends EffectSystem {
                 stackEffect(createActionFromJson(effect, cardEntity));
                 memory.setValue("effectIndex", String.valueOf(nextEffectIndex));
             } else {
+                memory.removeValue("costsPaid");
+                memory.removeValue("costIndex");
+                memory.removeValue("effectIndex");
                 removeTopEffectFromStack();
             }
         }
