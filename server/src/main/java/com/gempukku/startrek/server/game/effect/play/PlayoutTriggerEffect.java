@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game.effect.play;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.ability.TriggerAbility;
@@ -11,6 +12,7 @@ import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 
 public class PlayoutTriggerEffect extends EffectSystem {
     private CardAbilitySystem cardAbilitySystem;
+    private ServerEntityIdSystem serverEntityIdSystem;
 
     public PlayoutTriggerEffect() {
         super("playoutTrigger");
@@ -19,8 +21,8 @@ public class PlayoutTriggerEffect extends EffectSystem {
     @Override
     protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String memoryName = gameEffect.getDataString("cardMemory");
-        int cardId = Integer.parseInt(memory.getValue(memoryName));
-        Entity cardEntity = world.getEntity(cardId);
+        String cardId = memory.getValue(memoryName);
+        Entity cardEntity = serverEntityIdSystem.findfromId(cardId);
         String triggerIndexMemory = gameEffect.getDataString("triggerIndexMemory");
         int triggerIndex = Integer.parseInt(memory.getValue(triggerIndexMemory));
 

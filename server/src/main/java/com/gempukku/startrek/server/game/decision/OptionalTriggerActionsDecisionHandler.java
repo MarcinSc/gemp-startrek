@@ -4,6 +4,7 @@ import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.TriggerRequirements;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
@@ -22,6 +23,7 @@ public class OptionalTriggerActionsDecisionHandler extends BaseSystem implements
     private SpawnSystem spawnSystem;
     private CardAbilitySystem cardAbilitySystem;
     private ConditionResolverSystem conditionResolverSystem;
+    private ServerEntityIdSystem serverEntityIdSystem;
 
     @Override
     protected void initialize() {
@@ -38,8 +40,8 @@ public class OptionalTriggerActionsDecisionHandler extends BaseSystem implements
             if (action.equals("pass") && canPass(decisionPlayer, decisionData)) {
                 return true;
             } else if (action.equals("use")) {
-                int cardId = Integer.parseInt(result.get("cardId"));
-                Entity usedCardEntity = world.getEntity(cardId);
+                String cardId = result.get("cardId");
+                Entity usedCardEntity = serverEntityIdSystem.findfromId(cardId);
                 if (usedCardEntity == null)
                     return false;
 
@@ -48,7 +50,7 @@ public class OptionalTriggerActionsDecisionHandler extends BaseSystem implements
                 Entity sourceEntity = null;
                 String sourceIdStr = decisionData.get("sourceId");
                 if (sourceIdStr != null)
-                    sourceEntity = world.getEntity(Integer.parseInt(sourceIdStr));
+                    sourceEntity = serverEntityIdSystem.findfromId(sourceIdStr);
 
                 String usedIds = decisionData.get("usedIds", "");
 
@@ -84,7 +86,7 @@ public class OptionalTriggerActionsDecisionHandler extends BaseSystem implements
             memory.put("playersPassed", String.valueOf(playersPassed + 1));
         } else if (action.equals("use")) {
             // Execute the use action
-            int cardId = Integer.parseInt(result.get("cardId"));
+            String cardId = result.get("cardId");
             int triggerIndex = Integer.parseInt(result.get("triggerIndex"));
 
             Entity memoryEntity = stackSystem.getTopMostStackEntityWithComponent(EffectMemoryComponent.class);
@@ -95,7 +97,7 @@ public class OptionalTriggerActionsDecisionHandler extends BaseSystem implements
             Entity playCardEffect = spawnSystem.spawnEntity("game/trigger/playTriggerEffect.template");
             EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);
             Memory triggerMemory = new Memory(effectMemory.getMemory());
-            triggerMemory.setValue("usedCardId", String.valueOf(cardId));
+            triggerMemory.setValue("usedCardId", cardId);
             triggerMemory.setValue("triggerIndex", String.valueOf(triggerIndex));
             stackSystem.stackEntity(playCardEffect);
         }

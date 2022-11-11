@@ -1,15 +1,18 @@
-package com.gempukku.startrek.game.condition;
+package com.gempukku.startrek.server.game.condition;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
+import com.gempukku.startrek.game.condition.ConditionSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 
 public class MemoryMatchesHandler extends ConditionSystem {
     private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
+    private ServerEntityIdSystem serverEntityIdSystem;
 
     public MemoryMatchesHandler() {
         super("memoryMatches");
@@ -21,9 +24,8 @@ public class MemoryMatchesHandler extends ConditionSystem {
         CardFilter cardFilter = cardFilterResolverSystem.createAndFilter(parameters, 1);
         String cardIds = memory.getValue(memoryName);
         String[] cardIdsSplit = cardIds.split(",");
-        for (String cardIdStr : cardIdsSplit) {
-            int cardId = Integer.parseInt(cardIdStr);
-            Entity entity = world.getEntity(cardId);
+        for (String cardId : cardIdsSplit) {
+            Entity entity = serverEntityIdSystem.findfromId(cardId);
             if (cardFilter.accepts(sourceEntity, memory, entity))
                 return true;
         }

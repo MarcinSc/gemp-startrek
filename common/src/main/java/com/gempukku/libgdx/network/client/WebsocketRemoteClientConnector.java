@@ -58,7 +58,7 @@ public class WebsocketRemoteClientConnector<T> extends BaseSystem {
         serverConnectionEntity = world.createEntity();
     }
 
-    private void sendEventToServer(EntityEvent event, int entityId) {
+    private void sendEventToServer(EntityEvent event, String entityId) {
         NetworkMessage<T> message = new NetworkMessage<T>(entityId, NetworkMessage.Type.EVENT, dataSerializer.serializeEvent(event));
 
         serverSession.sendMessage(message);

@@ -5,6 +5,7 @@ import com.artemis.WorldConfigurationBuilder;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.libgdx.network.server.RemoteEntityManagerHandler;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
 import com.gempukku.startrek.server.game.StarTrekGameWebSocketHandler;
@@ -26,7 +27,11 @@ public class StarTrekHallContext {
     @PostConstruct
     public void buildHallEntityWorld() {
         WorldConfigurationBuilder worldConfigurationBuilder = new WorldConfigurationBuilder();
+        ServerEntityIdSystem serverEntityIdSystem = new ServerEntityIdSystem();
         worldConfigurationBuilder.with(
+                // Entity id
+                serverEntityIdSystem,
+
                 // Base systems
                 new SpawnSystem(),
                 new EventSystem(new RuntimeEntityEventDispatcher()),
@@ -37,7 +42,7 @@ public class StarTrekHallContext {
                 new StarTrekServerDeckSystem(),
 
                 // Network systems
-                new RemoteEntityManagerHandler(),
+                new RemoteEntityManagerHandler(serverEntityIdSystem),
                 new NetworkEntityConfigurationSystem());
 
         hallEntityWorld = new World(worldConfigurationBuilder.build());

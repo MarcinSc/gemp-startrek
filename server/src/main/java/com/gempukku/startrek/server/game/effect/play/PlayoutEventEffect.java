@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game.effect.play;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.ability.EventAbility;
@@ -13,6 +14,7 @@ import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 public class PlayoutEventEffect extends EffectSystem {
     private ConditionResolverSystem conditionResolverSystem;
     private CardAbilitySystem cardAbilitySystem;
+    private ServerEntityIdSystem serverEntityIdSystem;
 
     public PlayoutEventEffect() {
         super("playoutEventEffect");
@@ -21,8 +23,8 @@ public class PlayoutEventEffect extends EffectSystem {
     @Override
     protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String memoryName = gameEffect.getDataString("memoryCard");
-        int cardId = Integer.parseInt(memory.getValue(memoryName));
-        Entity cardEntity = world.getEntity(cardId);
+        String cardId = memory.getValue(memoryName);
+        Entity cardEntity = serverEntityIdSystem.findfromId(cardId);
         EventAbility eventAbility = cardAbilitySystem.getCardAbilities(cardEntity, EventAbility.class).get(0);
         boolean costsPaid = Boolean.parseBoolean(memory.getValue("costsPaid", "false"));
         if (!costsPaid) {

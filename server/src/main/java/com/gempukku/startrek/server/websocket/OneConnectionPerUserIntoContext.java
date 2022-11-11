@@ -108,7 +108,7 @@ public class OneConnectionPerUserIntoContext implements NetworkEntitySerializati
                                 if (entityEvent.getClass().getAnnotation(SendToServer.class) != null) {
                                     SerializingClientConnection<JsonValue> websocketClientConnection = clientConnections.get(session);
                                     if (websocketClientConnection != null) {
-                                        websocketClientConnection.eventReceived(messageJson.getInt("id"), messageJson.get("data"));
+                                        websocketClientConnection.eventReceived(messageJson.getString("id"), messageJson.get("data"));
                                     }
                                 }
                             }

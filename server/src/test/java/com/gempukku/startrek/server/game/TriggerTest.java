@@ -23,10 +23,7 @@ public class TriggerTest extends AbstractGameTest {
         sendDecisionSuccessfully("test1", "action", "pass");
         sendDecisionSuccessfully("test2", "action", "pass");
 
-        sendDecisionSuccessfully("test1",
-                "action", "use",
-                "cardId", String.valueOf(card.getId()),
-                "triggerIndex", "0");
+        useTriggerSuccessfully(card, 0);
 
         assertEquals(1, getCardsInHand("test1").size);
     }

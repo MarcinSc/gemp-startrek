@@ -9,6 +9,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.libgdx.network.server.RemoteEntityManagerHandler;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardData;
@@ -21,6 +22,7 @@ import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
 import com.gempukku.startrek.server.game.ability.DilemmaEffectHandler;
+import com.gempukku.startrek.server.game.condition.MemoryMatchesHandler;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.decision.MandatoryTriggerActionsDecisionHandler;
 import com.gempukku.startrek.server.game.decision.OptionalTriggerActionsDecisionHandler;
@@ -48,6 +50,7 @@ import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.effect.zone.MoveCardToMissionEffect;
 import com.gempukku.startrek.server.game.effect.zone.MoveCardToZoneEffect;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
+import com.gempukku.startrek.server.game.filter.MemoryFilterHandler;
 import com.gempukku.startrek.server.game.filter.ServerIdInFilterHandler;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
@@ -79,7 +82,11 @@ public class StarTrekGameHolder implements Disposable {
     private static World createGameWorld(CardData cardDataService, boolean test) {
         WorldConfigurationBuilder worldConfigurationBuilder = new WorldConfigurationBuilder();
         CommonGameWorldBuilder.createCommonSystems(worldConfigurationBuilder);
+        ServerEntityIdSystem serverEntityIdSystem = new ServerEntityIdSystem();
         worldConfigurationBuilder.with(
+                // Entity id
+                serverEntityIdSystem,
+
                 // Base systems
                 new SpawnSystem(),
                 new EventSystem(new RuntimeEntityEventDispatcher()),
@@ -133,11 +140,15 @@ public class StarTrekGameHolder implements Disposable {
                 new MandatoryTriggerActionsDecisionHandler(),
                 new OptionalTriggerActionsDecisionHandler(),
 
+                // Server condition resolvers
+                new MemoryMatchesHandler(),
+
                 // Server card filters
+                new MemoryFilterHandler(),
                 new ServerIdInFilterHandler(),
 
                 // Network systems
-                new RemoteEntityManagerHandler(),
+                new RemoteEntityManagerHandler(serverEntityIdSystem),
                 new NetworkEntityConfigurationSystem());
 
         return new World(worldConfigurationBuilder.build());

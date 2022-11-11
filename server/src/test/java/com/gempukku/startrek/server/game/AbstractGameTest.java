@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.DummyApplication;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
+import com.gempukku.libgdx.network.id.ServerEntityIdComponent;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardData;
 import com.gempukku.startrek.card.CardDefinition;
@@ -137,6 +138,13 @@ public abstract class AbstractGameTest {
     protected boolean playCard(Entity playedCard) {
         return sendDecision("test1",
                 "action", "play",
-                "cardId", String.valueOf(playedCard.getId()));
+                "cardId", playedCard.getComponent(ServerEntityIdComponent.class).getId());
+    }
+
+    protected void useTriggerSuccessfully(Entity usedCard, int triggerIndex) {
+        assertTrue(sendDecision("test1",
+                "action", "use",
+                "cardId", usedCard.getComponent(ServerEntityIdComponent.class).getId(),
+                "triggerIndex", String.valueOf(triggerIndex)));
     }
 }

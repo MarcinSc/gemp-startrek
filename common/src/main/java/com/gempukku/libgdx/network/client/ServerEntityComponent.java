@@ -3,13 +3,13 @@ package com.gempukku.libgdx.network.client;
 import com.artemis.Component;
 
 public class ServerEntityComponent extends Component {
-    private int entityId;
+    private String entityId;
 
-    public int getEntityId() {
+    public String getEntityId() {
         return entityId;
     }
 
-    public void setEntityId(int entityId) {
+    public void setEntityId(String entityId) {
         this.entityId = entityId;
     }
 }

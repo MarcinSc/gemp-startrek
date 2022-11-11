@@ -34,7 +34,6 @@ public class CommonGameWorldBuilder {
                 new EqualsConditionHandler(),
                 new LessOrEqualConditionHandler(),
                 new HasCardConditionHandler(),
-                new MemoryMatchesHandler(),
 
                 // Card filter resovlers
                 new CardFilterResolverSystem(),
@@ -50,7 +49,6 @@ public class CommonGameWorldBuilder {
                 new UniquenessPreservedFilterHandler(),
                 new PlayableFilterHandler(),
                 new ConditionForMatchedFilterHandler(),
-                new MemoryFilterHandler(),
                 new HasAbilityFilterHandler(),
                 new TriggerConditionMatchesFilterHandler(),
 

@@ -12,35 +12,35 @@ public class IncomingInformationPacket<T> {
         EVENT, CREATE_ENTITY, MODIFY_ENTITY, DESTROY_ENTITY;
     }
 
-    private int entityId;
+    private String entityId;
     private Type type;
     private List<T> entityData;
     private EntityEvent event;
 
-    private IncomingInformationPacket(int entityId, Type type, List<T> entityData, EntityEvent event) {
+    private IncomingInformationPacket(String entityId, Type type, List<T> entityData, EntityEvent event) {
         this.entityId = entityId;
         this.type = type;
         this.entityData = entityData;
         this.event = event;
     }
 
-    public static <T> IncomingInformationPacket<T> event(int entityId, EntityEvent event) {
+    public static <T> IncomingInformationPacket<T> event(String entityId, EntityEvent event) {
         return new IncomingInformationPacket<T>(entityId, Type.EVENT, null, event);
     }
 
-    public  static <T> IncomingInformationPacket<T> create(int entityId, List<T> entityData) {
+    public static <T> IncomingInformationPacket<T> create(String entityId, List<T> entityData) {
         return new IncomingInformationPacket<T>(entityId, Type.CREATE_ENTITY, entityData, null);
     }
 
-    public static <T> IncomingInformationPacket<T> update(int entityId, List<T> entityData) {
+    public static <T> IncomingInformationPacket<T> update(String entityId, List<T> entityData) {
         return new IncomingInformationPacket<T>(entityId, Type.MODIFY_ENTITY, entityData, null);
     }
 
-    public static <T> IncomingInformationPacket<T> destroy(int entityId) {
+    public static <T> IncomingInformationPacket<T> destroy(String entityId) {
         return new IncomingInformationPacket<T>(entityId, Type.DESTROY_ENTITY, null, null);
     }
 
-    public int getEntityId() {
+    public String getEntityId() {
         return entityId;
     }
 

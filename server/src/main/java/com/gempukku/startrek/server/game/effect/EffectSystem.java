@@ -4,12 +4,14 @@ import com.artemis.BaseSystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
 public abstract class EffectSystem extends BaseSystem implements GameEffectHandler {
     private GameEffectSystem gameEffectSystem;
     private StackSystem stackSystem;
+    private ServerEntityIdSystem serverEntityIdSystem;
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
     private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;
 
@@ -37,7 +39,7 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
         boolean createMemory = action.getBoolean("memory", false);
         GameEffectComponent newGameEffect = gameEffectComponentMapper.create(stackedEntity);
         if (sourceEntity != null)
-            newGameEffect.setSourceEntityId(sourceEntity.getId());
+            newGameEffect.setSourceEntityId(serverEntityIdSystem.getEntityId(sourceEntity));
         if (createMemory)
             effectMemoryComponentMapper.create(stackedEntity).setMemoryType("action - " + actionType);
         newGameEffect.setType(actionType);

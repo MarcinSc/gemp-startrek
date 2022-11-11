@@ -21,12 +21,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHandler {
-    private Map<String, ClientConnection> clientConnectionMap = new HashMap<>();
-    private Multimap<ClientConnection, Integer> clientTrackingEntities = HashMultimap.create();
-
     private EventSystem eventSystem;
+
+    private final Map<String, ClientConnection> clientConnectionMap = new HashMap<>();
+    private final Multimap<ClientConnection, String> clientTrackingEntities = HashMultimap.create();
+    private final Array<NetworkEntityConfig> networkEntityConfigArray = new Array<>();
+
+    private final EntityIdMapper entityIdMapper;
     private EntitySubscription allEntitiesSubscription;
-    private Array<NetworkEntityConfig> networkEntityConfigArray = new Array<>();
+
+    public RemoteEntityManagerHandler(EntityIdMapper entityIdMapper) {
+        this.entityIdMapper = entityIdMapper;
+    }
 
     @Override
     public void initialize() {
@@ -53,9 +59,10 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
                     @Override
                     public void eventDispatched(EntityEvent event, Entity entity) {
                         if (event.getClass().getAnnotation(SendToClients.class) != null) {
+                            String entityId = entityIdMapper.getEntityId(entity);
                             for (ClientConnection clientConnection : clientConnectionMap.values()) {
-                                if (clientTracksEntity(clientConnection, entity.getId()))
-                                    clientConnection.eventSent(entity.getId(), event);
+                                if (clientTracksEntity(clientConnection, entityId))
+                                    clientConnection.eventSent(entityId, entity, event);
                             }
                         }
                     }
@@ -74,18 +81,18 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
     public void entityUpdated(EntityUpdated entityUpdated, Entity entity) {
         boolean replicateToAllClients = hasToReplicateToAllClients(entity);
 
-        int entityId = entity.getId();
+        String entityId = entityIdMapper.getEntityId(entity);
         for (Map.Entry<String, ClientConnection> clientConnectionEntry : clientConnectionMap.entrySet()) {
             ClientConnection clientConnection = clientConnectionEntry.getValue();
             if (replicateToAllClients || hasToReplicateToClient(entity, clientConnection)) {
                 if (clientTracksEntity(clientConnection, entityId)) {
-                    clientConnection.entityModified(entity);
+                    clientConnection.entityModified(entityId, entity);
                 } else {
                     clientTrackingEntities.put(clientConnection, entityId);
-                    clientConnection.entityAdded(entity);
+                    clientConnection.entityAdded(entityId, entity);
                 }
             } else if (clientTracksEntity(clientConnection, entityId)) {
-                clientConnection.entityRemoved(entityId);
+                clientConnection.entityRemoved(entityId, entity);
                 clientTrackingEntities.remove(clientConnection, entityId);
             }
         }
@@ -104,10 +111,12 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
     }
 
     private void entityRemoved(int entityId) {
+        Entity entity = world.getEntity(entityId);
+        String entityIdStr = entityIdMapper.getEntityId(entity);
         for (ClientConnection clientConnection : clientConnectionMap.values()) {
-            if (clientTracksEntity(clientConnection, entityId)) {
-                clientConnection.entityRemoved(entityId);
-                clientTrackingEntities.remove(clientConnection, entityId);
+            if (clientTracksEntity(clientConnection, entityIdStr)) {
+                clientConnection.entityRemoved(entityIdStr, entity);
+                clientTrackingEntities.remove(clientConnection, entityIdStr);
             }
         }
     }
@@ -132,7 +141,7 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
         clientConnection.setServerCallback(
                 new ServerCallback() {
                     @Override
-                    public void processEvent(String fromUser, int entityId, EventFromClient event) {
+                    public void processEvent(String fromUser, String entityId, EventFromClient event) {
                         Entity trackedEntity = findTrackedEntity(entityId);
                         if (trackedEntity != null) {
                             event.setOrigin(fromUser);
@@ -140,9 +149,9 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
                         }
                     }
 
-                    private Entity findTrackedEntity(int entityId) {
+                    private Entity findTrackedEntity(String entityId) {
                         if (clientTracksEntity(clientConnection, entityId))
-                            return world.getEntity(entityId);
+                            return entityIdMapper.findfromId(entityId);
                         return null;
                     }
                 });
@@ -151,9 +160,10 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
         for (int i = 0, s = entities.size(); s > i; i++) {
             int entityId = entities.get(i);
             Entity entity = world.getEntity(entityId);
+            String entityIdStr = entityIdMapper.getEntityId(entity);
             if (hasToReplicateToAllClients(entity) || hasToReplicateToClient(entity, clientConnection)) {
-                clientConnection.entityAdded(entity);
-                clientTrackingEntities.put(clientConnection, entityId);
+                clientConnection.entityAdded(entityIdStr, entity);
+                clientTrackingEntities.put(clientConnection, entityIdStr);
             }
         }
 
@@ -169,7 +179,7 @@ public class RemoteEntityManagerHandler extends BaseSystem implements RemoteHand
         return false;
     }
 
-    private boolean clientTracksEntity(ClientConnection clientConnection, int entityId) {
+    private boolean clientTracksEntity(ClientConnection clientConnection, String entityId) {
         return clientTrackingEntities.containsEntry(clientConnection, entityId);
     }
 

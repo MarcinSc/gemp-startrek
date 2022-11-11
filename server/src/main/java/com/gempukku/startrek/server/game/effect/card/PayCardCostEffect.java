@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game.effect.card;
 import com.artemis.Entity;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
@@ -14,6 +15,7 @@ public class PayCardCostEffect extends OneTimeEffectSystem {
     private AmountResolverSystem amountResolverSystem;
     private PlayerResolverSystem playerResolverSystem;
     private EventSystem eventSystem;
+    private ServerEntityIdSystem serverEntityIdSystem;
 
     public PayCardCostEffect() {
         super("payCardCost");
@@ -21,8 +23,8 @@ public class PayCardCostEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        int cardId = Integer.parseInt(memory.getValue(gameEffect.getDataString("cardMemory")));
-        Entity cardEntity = world.getEntity(cardId);
+        String cardId = memory.getValue(gameEffect.getDataString("cardMemory"));
+        Entity cardEntity = serverEntityIdSystem.findfromId(cardId);
 
         int costToPlay = amountResolverSystem.resolveAmount(cardEntity, memory, "costToPlay");
 

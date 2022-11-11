@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game.effect.zone;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
@@ -19,6 +20,7 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
     private CardFilteringSystem cardFilteringSystem;
     private EventSystem eventSystem;
     private ZoneOperations zoneOperations;
+    private ServerEntityIdSystem serverEntityIdSystem;
 
     private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
     private ComponentMapper<FaceDownCardInMissionComponent> faceDownCardInMissionComponentMapper;
@@ -31,9 +33,9 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String filter = gameEffect.getDataString("filter");
-        int missionId = Integer.parseInt(memory.getValue(gameEffect.getDataString("missionMemory")));
+        String missionId = memory.getValue(gameEffect.getDataString("missionMemory"));
         boolean faceUp = conditionResolverSystem.resolveBoolean(sourceEntity, memory, gameEffect.getDataString("faceUp"));
-        Entity missionEntity = world.getEntity(missionId);
+        Entity missionEntity = serverEntityIdSystem.findfromId(missionId);
 
         cardFilteringSystem.forEachCard(sourceEntity, memory, filter,
                 new Consumer<Entity>() {

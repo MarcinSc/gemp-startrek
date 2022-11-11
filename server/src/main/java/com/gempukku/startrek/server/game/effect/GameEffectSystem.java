@@ -5,12 +5,15 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
 import com.gempukku.startrek.server.game.stack.StackSystem;
 
 public class GameEffectSystem extends BaseSystem {
     private StackSystem stackSystem;
+    private ServerEntityIdSystem serverEntityIdSystem;
+
     private ObjectMap<String, GameEffectHandler> gameEffectHandlers = new ObjectMap<>();
 
     public void registerGameEffectHandler(String effectType, GameEffectHandler gameEffectHandler) {
@@ -22,9 +25,9 @@ public class GameEffectSystem extends BaseSystem {
         GameEffectComponent gameEffect = effectEntity.getComponent(GameEffectComponent.class);
         if (gameEffect != null) {
             Entity sourceEntity = null;
-            int sourceEntityId = gameEffect.getSourceEntityId();
-            if (sourceEntityId != -1)
-                sourceEntity = world.getEntity(sourceEntityId);
+            String sourceEntityId = gameEffect.getSourceEntityId();
+            if (sourceEntityId != null)
+                sourceEntity = serverEntityIdSystem.findfromId(sourceEntityId);
             String type = gameEffect.getType();
             GameEffectHandler gameEffectHandler = gameEffectHandlers.get(type);
             if (gameEffectHandler == null) {

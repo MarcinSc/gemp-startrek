@@ -13,6 +13,7 @@ import com.gempukku.libgdx.lib.artemis.input.UserInputStateComponent;
 import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
 import com.gempukku.libgdx.network.client.ServerEntityComponent;
+import com.gempukku.libgdx.network.client.ServerEntitySystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.common.UISettings;
@@ -34,6 +35,7 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
     private StageSystem stageSystem;
     private SelectionSystem selectionSystem;
     private ConditionResolverSystem conditionResolverSystem;
+    private ServerEntitySystem serverEntitySystem;
 
     private Table table;
     private TextButton useButton;
@@ -117,7 +119,7 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
 
         Entity sourceEntity = null;
         if (sourceId != null)
-            sourceEntity = world.getEntity(Integer.parseInt(sourceId));
+            sourceEntity = serverEntitySystem.findEntity(sourceId);
 
         memory = new Memory(decisionData);
 
@@ -144,14 +146,14 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
         Entity selected = selectionSystem.getSelectedEntities().iterator().next();
         int serverEntityId = selected.getComponent(ServerCardReferenceComponent.class).getEntityId();
         Entity usedCardEntity = world.getEntity(serverEntityId);
-        int entityId = usedCardEntity.getComponent(ServerEntityComponent.class).getEntityId();
+        String entityId = usedCardEntity.getComponent(ServerEntityComponent.class).getEntityId();
 
         int triggerIndex = TriggerRequirements.findUsableTriggerIndex(usedCardEntity, triggerType, false, memory,
                 cardAbilitySystem, conditionResolverSystem);
 
         ObjectMap<String, String> parameters = new ObjectMap<>();
         parameters.put("action", "use");
-        parameters.put("cardId", String.valueOf(entityId));
+        parameters.put("cardId", entityId);
         parameters.put("triggerIndex", String.valueOf(triggerIndex));
         executeCleanup();
         clientDecisionSystem.executeDecision(parameters);

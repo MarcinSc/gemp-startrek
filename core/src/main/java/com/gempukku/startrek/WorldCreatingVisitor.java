@@ -32,6 +32,7 @@ import com.gempukku.libgdx.lib.graph.artemis.text.TextSystem;
 import com.gempukku.libgdx.lib.graph.artemis.time.TimeKeepingSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
 import com.gempukku.libgdx.network.JsonDataSerializer;
+import com.gempukku.libgdx.network.client.ServerEntitySystem;
 import com.gempukku.libgdx.network.client.WebsocketRemoteClientConnector;
 import com.gempukku.libgdx.network.json.JsonValueNetworkMessageMarshaller;
 import com.gempukku.libgdx.network.json.JsonValueServerSessionProducer;
@@ -109,6 +110,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new WebsocketRemoteClientConnector<>(
                         new JsonDataSerializer(), new JsonValueServerSessionProducer(),
                         new JsonValueNetworkMessageMarshaller()),
+                new ServerEntitySystem(),
 
                 new BitmapFontSystem(new RuntimeBitmapFontHandler()),
                 new TextSystem(),

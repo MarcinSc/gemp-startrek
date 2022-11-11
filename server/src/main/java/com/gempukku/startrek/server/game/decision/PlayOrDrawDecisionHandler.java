@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Predicate;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.PlayRequirements;
@@ -32,6 +33,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
     private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private CardAbilitySystem cardAbilitySystem;
+    private ServerEntityIdSystem serverEntityIdSystem;
 
     @Override
     protected void initialize() {
@@ -51,8 +53,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
             } else if (action.equals("pass") && (publicStats.getCounterCount() == 0 || publicStats.getDeckCount() == 0)) {
                 return true;
             } else if (action.equals("play")) {
-                int cardId = Integer.parseInt(result.get("cardId"));
-                Entity playedCardEntity = world.getEntity(cardId);
+                Entity playedCardEntity = serverEntityIdSystem.findfromId(result.get("cardId"));
                 if (playedCardEntity == null)
                     return false;
 
@@ -106,8 +107,8 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
             Entity playCardEffect = spawnSystem.spawnEntity("game/effect/playCardEffect.template");
             EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);
             Memory memory = new Memory(effectMemory.getMemory());
-            memory.setValue("playedCardId", String.valueOf(cardId));
-            memory.setValue("missionId", String.valueOf(missionEntity.getId()));
+            memory.setValue("playedCardId", cardId);
+            memory.setValue("missionId", serverEntityIdSystem.getEntityId(missionEntity));
             stackSystem.stackEntity(playCardEffect);
         }
     }

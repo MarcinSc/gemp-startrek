@@ -47,7 +47,7 @@ public class JsonValueNetworkMessageMarshaller implements NetworkMessageMarshall
             System.out.println(json.toJson(JsonWriter.OutputType.json));
         }
         try {
-            int id = json.getInt("id");
+            String id = json.getString("id");
             NetworkMessage.Type type = NetworkMessage.Type.valueOf(json.getString("type"));
             switch (type) {
                 case EVENT:

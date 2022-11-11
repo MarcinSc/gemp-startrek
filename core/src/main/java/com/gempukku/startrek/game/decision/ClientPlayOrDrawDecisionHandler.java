@@ -158,10 +158,10 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
         Entity selected = selectionSystem.getSelectedEntities().iterator().next();
         int serverEntityId = selected.getComponent(ServerCardReferenceComponent.class).getEntityId();
         Entity serverEntity = world.getEntity(serverEntityId);
-        int entityId = serverEntity.getComponent(ServerEntityComponent.class).getEntityId();
+        String entityId = serverEntity.getComponent(ServerEntityComponent.class).getEntityId();
         ObjectMap<String, String> parameters = new ObjectMap<>();
         parameters.put("action", "play");
-        parameters.put("cardId", String.valueOf(entityId));
+        parameters.put("cardId", entityId);
         executeCleanup();
         clientDecisionSystem.executeDecision(parameters);
     }
