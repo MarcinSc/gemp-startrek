@@ -126,8 +126,8 @@ public class CardInGameRenderingSystem extends BaseSystem {
         Entity cardEntity = world.getEntity(entityId);
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         String owner = card.getOwner();
-        PlayerCards playerCards = cardStorageSystem.getPlayerCards(owner);
-        Entity renderedCard = playerCards.removeCardInHand(cardEntity);
+        PlayerZones playerZones = cardStorageSystem.getPlayerCards(owner);
+        Entity renderedCard = playerZones.removeCardInHand(cardEntity);
         world.deleteEntity(renderedCard);
 
         getZonesStatus(owner).setHandDrity(true);
@@ -150,8 +150,8 @@ public class CardInGameRenderingSystem extends BaseSystem {
         Entity cardEntity = world.getEntity(entityId);
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         String owner = card.getOwner();
-        PlayerCards playerCards = cardStorageSystem.getPlayerCards(owner);
-        Entity renderedCard = playerCards.removeCardInCore(cardEntity);
+        PlayerZones playerZones = cardStorageSystem.getPlayerCards(owner);
+        Entity renderedCard = playerZones.removeCardInCore(cardEntity);
         world.deleteEntity(renderedCard);
 
         getZonesStatus(owner).setCoreDirty(true);
@@ -246,16 +246,16 @@ public class CardInGameRenderingSystem extends BaseSystem {
         for (ObjectMap.Entry<PlayerPosition, ZonesStatus> playerZonesStatus : playerZonesStatusMap) {
             PlayerPosition playerPosition = playerZonesStatus.key;
             ZonesStatus zonesStatus = playerZonesStatus.value;
-            PlayerCards playerCards = cardStorageSystem.getPlayerCards(playerPosition);
+            PlayerZones playerZones = cardStorageSystem.getPlayerCards(playerPosition);
             if (zonesStatus.isHandDrity()) {
-                HandLayout.layoutHand(playerCards, playerPosition,
+                HandLayout.layoutHand(playerZones, playerPosition,
                         cameraSystem.getCamera(), transformSystem);
             }
             if (zonesStatus.isMissionsDirty()) {
-                MissionsLayout.layoutMissions(playerCards, playerPosition, transformSystem);
+                MissionsLayout.layoutMissions(playerZones, playerPosition, transformSystem);
             }
             if (zonesStatus.isCoreDirty()) {
-                CoreLayout.layoutCore(playerCards, playerPosition, transformSystem);
+                CoreLayout.layoutCore(playerZones, playerPosition, transformSystem);
             }
             zonesStatus.cleanZones();
         }
@@ -266,9 +266,9 @@ public class CardInGameRenderingSystem extends BaseSystem {
             String username = player.key;
             if (!username.equals(authenticationHolderSystem.getUsername())) {
                 PlayerPosition playerPosition = player.value;
-                PlayerCards playerCards = cardStorageSystem.getPlayerCards(playerPosition);
+                PlayerZones playerZones = cardStorageSystem.getPlayerCards(playerPosition);
                 Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
-                layoutPlayerUnknownHand(playerPosition, playerCards, playerEntity);
+                layoutPlayerUnknownHand(playerPosition, playerZones, playerEntity);
             }
         }
     }
@@ -278,8 +278,8 @@ public class CardInGameRenderingSystem extends BaseSystem {
             String username = player.key;
             PlayerPosition playerPosition = player.value;
             Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
-            PlayerCards playerCards = cardStorageSystem.getPlayerCards(playerPosition);
-            PileLayout.layoutPlayerDeck(playerCards, playerPosition,
+            PlayerZones playerZones = cardStorageSystem.getPlayerCards(playerPosition);
+            PileLayout.layoutPlayerDeck(playerZones, playerPosition,
                     playerEntity, world, spawnSystem, transformSystem);
         }
     }
@@ -294,14 +294,14 @@ public class CardInGameRenderingSystem extends BaseSystem {
         }
     }
 
-    private void layoutPlayerUnknownHand(PlayerPosition playerPosition, PlayerCards playerCards, Entity playerEntity) {
+    private void layoutPlayerUnknownHand(PlayerPosition playerPosition, PlayerZones playerZones, Entity playerEntity) {
         PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         int handCount = publicStats.getHandCount();
-        int renderedCount = playerCards.getCardInHandCount();
+        int renderedCount = playerZones.getCardInHandCount();
         if (renderedCount > handCount) {
             int destroyCount = renderedCount - handCount;
             for (int i = 0; i < destroyCount; i++) {
-                Entity removedCard = playerCards.removeOneCardInHand();
+                Entity removedCard = playerZones.removeOneCardInHand();
                 world.deleteEntity(removedCard);
             }
             getZonesStatus(playerPosition).setHandDrity(true);

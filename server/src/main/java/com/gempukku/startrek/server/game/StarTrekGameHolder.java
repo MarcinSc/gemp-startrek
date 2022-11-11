@@ -42,6 +42,7 @@ import com.gempukku.startrek.server.game.effect.memory.ClearMemoryEffect;
 import com.gempukku.startrek.server.game.effect.memory.MemorizeAmountEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutEventEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutTriggerEffect;
+import com.gempukku.startrek.server.game.effect.play.SetEffectStepEffect;
 import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
 import com.gempukku.startrek.server.game.effect.setup.*;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
@@ -51,7 +52,8 @@ import com.gempukku.startrek.server.game.effect.zone.MoveCardToZoneEffect;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 import com.gempukku.startrek.server.game.filter.MemoryFilterHandler;
 import com.gempukku.startrek.server.game.filter.ServerIdInFilterHandler;
-import com.gempukku.startrek.server.game.stack.StackSystem;
+import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
+import com.gempukku.startrek.server.game.stack.ObjectStackSystem;
 
 import java.util.function.Consumer;
 
@@ -59,7 +61,7 @@ public class StarTrekGameHolder implements Disposable {
     private final World gameWorld;
     private final Entity gameEntity;
 
-    private final StackSystem stackSystem;
+    private final ExecutionStackSystem stackSystem;
 
     public StarTrekGameHolder(CardData cardData, boolean test) {
         gameWorld = createGameWorld(cardData, test);
@@ -70,7 +72,7 @@ public class StarTrekGameHolder implements Disposable {
         gameWorld.process();
 
         // Stack the game on the execution stack
-        stackSystem = gameWorld.getSystem(StackSystem.class);
+        stackSystem = gameWorld.getSystem(ExecutionStackSystem.class);
         stackSystem.stackEntity(gameEntity);
     }
 
@@ -92,7 +94,8 @@ public class StarTrekGameHolder implements Disposable {
 
                 // Specific systems
                 new CardLookupSystem(cardDataService),
-                new StackSystem(),
+                new ExecutionStackSystem(),
+                new ObjectStackSystem(),
                 new ZoneOperations(),
 
                 // Setup effects
@@ -116,6 +119,7 @@ public class StarTrekGameHolder implements Disposable {
                 // Core game effects
                 new PlayoutEventEffect(),
                 new PlayoutTriggerEffect(),
+                new SetEffectStepEffect(),
 
                 // Specific game effects
                 new PlayerCounterEffect(),

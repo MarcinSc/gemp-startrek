@@ -9,7 +9,7 @@ import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
-import com.gempukku.startrek.server.game.stack.StackSystem;
+import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class SetupTurnOrderEffect extends EffectSystem {
     private SpawnSystem spawnSystem;
-    private StackSystem stackSystem;
+    private ExecutionStackSystem stackSystem;
 
     private boolean test;
 

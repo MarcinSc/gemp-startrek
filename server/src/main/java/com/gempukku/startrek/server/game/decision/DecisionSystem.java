@@ -13,10 +13,10 @@ import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
-import com.gempukku.startrek.server.game.stack.StackSystem;
+import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 
 public class DecisionSystem extends EffectSystem {
-    private StackSystem stackSystem;
+    private ExecutionStackSystem stackSystem;
     private PlayerResolverSystem playerResolverSystem;
     private ComponentMapper<PlayerDecisionComponent> playerDecisionComponentMapper;
 

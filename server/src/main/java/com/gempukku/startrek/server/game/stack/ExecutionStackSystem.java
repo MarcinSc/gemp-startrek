@@ -7,13 +7,13 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 
-public class StackSystem extends BaseEntitySystem {
+public class ExecutionStackSystem extends BaseEntitySystem {
     private EventSystem eventSystem;
 
     private Entity executionStackEntity;
     private ExecutionStackComponent executionStack;
 
-    public StackSystem() {
+    public ExecutionStackSystem() {
         super(Aspect.all(ExecutionStackComponent.class));
     }
 

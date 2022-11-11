@@ -8,10 +8,10 @@ import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
-import com.gempukku.startrek.server.game.stack.StackSystem;
+import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 
 public class GameEffectSystem extends BaseSystem {
-    private StackSystem stackSystem;
+    private ExecutionStackSystem stackSystem;
     private ServerEntityIdSystem serverEntityIdSystem;
 
     private ObjectMap<String, GameEffectHandler> gameEffectHandlers = new ObjectMap<>();

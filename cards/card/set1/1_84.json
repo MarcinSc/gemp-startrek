@@ -4,9 +4,13 @@
   "title": "D'Arsay Archive",
   "abilities": [
     {
-      "text": "Count the number of cards in your hand, shuffle them, and place them on the bottom of your deck to draw an equal number of cards. Destroy this event.",
+      "text": "[s 0]Count the number of cards in your hand, shuffle them, and place them on the bottom of your deck[/s] to [s 1]draw an equal number of cards[/s]. [s 2]Destroy this event[/s].",
       "type": "event",
       "costs": [
+        {
+          "type": "setEffectStep",
+          "step": "0"
+        },
         {
           "type": "memorizeAmount",
           "memory": "cardCount",
@@ -20,12 +24,20 @@
       ],
       "effects": [
         {
+          "type": "setEffectStep",
+          "step": "1"
+        },
+        {
           "type": "repeatTimes",
           "times": "memory(cardCount)",
           "action": {
             "type": "drawCard",
             "player": "owner(self)"
           }
+        },
+        {
+          "type": "setEffectStep",
+          "step": "2"
         },
         {
           "type": "destroy",

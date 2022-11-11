@@ -4,7 +4,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
-public class PlayerCards {
+public class PlayerZones {
     private final ObjectMap<Entity, Entity> cardToRenderedMap = new ObjectMap<>();
     private final Array<Entity> cardsInHand = new Array<>();
     private final Array<Entity> cardsInDeck = new Array<>();
@@ -13,7 +13,7 @@ public class PlayerCards {
 
     private final Array<MissionCards> missionCards = new Array<>();
 
-    public PlayerCards() {
+    public PlayerZones() {
         for (int i = 0; i < 5; i++) {
             missionCards.add(new MissionCards());
         }

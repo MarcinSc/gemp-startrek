@@ -12,7 +12,12 @@ import com.gempukku.libgdx.lib.graph.artemis.text.TextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextComponent;
 import com.gempukku.startrek.card.*;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class CardTemplates {
+    private static Pattern stepStartPattern = Pattern.compile("(\\[s [^]]+])");
+
     public static Entity createSmallCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
         Entity cardRepresentation;
         CardType cardType = cardDefinition.getType();
@@ -85,7 +90,7 @@ public class CardTemplates {
 
             // Text
             TextBlock textBlock = text.getTextBlocks().get(3);
-            textBlock.setText(createCardText(cardDefinition));
+            textBlock.setText(createCardText(cardDefinition, false, -1));
         }
         return cardRepresentation;
     }
@@ -134,7 +139,7 @@ public class CardTemplates {
 
             // Text
             TextBlock textBlock = text.getTextBlocks().get(4);
-            textBlock.setText(createCardText(cardDefinition));
+            textBlock.setText(createCardText(cardDefinition, false, -1));
 
             // Icons
             Array<CardIcon> icons = cardDefinition.getIcons();
@@ -196,7 +201,7 @@ public class CardTemplates {
         throw new GdxRuntimeException("Unable to resolve affiliated template: " + affiliation);
     }
 
-    private static String createCardText(CardDefinition cardDefinition) {
+    private static String createCardText(CardDefinition cardDefinition, boolean useSteps, int step) {
         StringBuilder result = new StringBuilder();
         Array<PersonnelSkill> skills = cardDefinition.getSkills();
         if (skills != null) {
@@ -225,6 +230,10 @@ public class CardTemplates {
         if (cardAbilities != null) {
             for (JsonValue ability : cardAbilities) {
                 String text = ability.getString("text");
+                if (useSteps)
+                    text = replaceSteps(text, step);
+                else
+                    text = removeSteps(text);
                 result.append(text).append("\n");
             }
         }
@@ -234,6 +243,33 @@ public class CardTemplates {
         }
 
         return result.toString();
+    }
+
+    private static String replaceSteps(String text, int step) {
+        text = text.replace("[/s]", "[/color]");
+        Matcher matcher = stepStartPattern.matcher(text);
+        StringBuilder sb = new StringBuilder();
+
+        int consumed = 0;
+        while (matcher.find()) {
+            for (int i = 1; i <= matcher.groupCount(); i++) {
+                sb.append(text, consumed, matcher.start(i));
+                String textInTag = matcher.group(i).substring(3).trim();
+                if (Integer.parseInt(textInTag) == step) {
+                    sb.append("[color 0000ff]");
+                } else {
+                    sb.append("[color 777777]");
+                }
+            }
+        }
+        sb.append(text, consumed, text.length());
+        return sb.toString();
+    }
+
+    private static String removeSteps(String text) {
+        text = text.replace("[/s]", "");
+        Matcher matcher = stepStartPattern.matcher(text);
+        return matcher.replaceAll("");
     }
 
     private static Entity createSmallMissionCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {

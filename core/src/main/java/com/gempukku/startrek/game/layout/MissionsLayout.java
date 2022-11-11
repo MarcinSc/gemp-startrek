@@ -5,8 +5,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.startrek.game.MissionCards;
-import com.gempukku.startrek.game.PlayerCards;
 import com.gempukku.startrek.game.PlayerPosition;
+import com.gempukku.startrek.game.PlayerZones;
 
 public class MissionsLayout {
     private static final float MAXIMUM_SCALE = 1.3f;
@@ -23,7 +23,7 @@ public class MissionsLayout {
     private static final float MISSION_CENTER_Y_DISTANCE = 0.005f;
     private static final float MISSION_CENTER_Z_DISTANCE = 1.6f;
 
-    public static void layoutMissions(PlayerCards playerCards, PlayerPosition playerPosition,
+    public static void layoutMissions(PlayerZones playerZones, PlayerPosition playerPosition,
                                       TransformSystem transformSystem) {
         DefaultGlyphOffseter defaultGlyphOffseter = new DefaultGlyphOffseter();
 
@@ -40,7 +40,7 @@ public class MissionsLayout {
                     .rotate(new Vector3(0, 1, 0), yRotateDegrees)
                     .translate(horizontalTranslate, 0, 0);
 
-            MissionCards missionCards = playerCards.getMissionCards(i);
+            MissionCards missionCards = playerZones.getMissionCards(i);
             RenderingMissionCards renderingMissionCards = new RenderingMissionCards(missionCards, STACK_VERTICAL_GAP);
 
             CardZoneParsedText missionParsedText = new CardZoneParsedText(renderingMissionCards,

@@ -22,13 +22,13 @@ import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
-import com.gempukku.startrek.server.game.stack.StackSystem;
+import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 
 public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTypeHandler {
     private DecisionSystem decisionSystem;
     private PlayerResolverSystem playerResolverSystem;
     private SpawnSystem spawnSystem;
-    private StackSystem stackSystem;
+    private ExecutionStackSystem stackSystem;
     private EventSystem eventSystem;
     private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;

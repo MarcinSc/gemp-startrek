@@ -1,3 +1,4 @@
 {
-  "com.gempukku.startrek.server.game.stack.ExecutionStackComponent": {}
+  "com.gempukku.startrek.server.game.stack.ExecutionStackComponent": {},
+  "com.gempukku.startrek.server.game.stack.ObjectStackComponent": {}
 }

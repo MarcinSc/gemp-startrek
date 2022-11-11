@@ -6,11 +6,11 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
-import com.gempukku.startrek.server.game.stack.StackSystem;
+import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 
 public abstract class EffectSystem extends BaseSystem implements GameEffectHandler {
     private GameEffectSystem gameEffectSystem;
-    private StackSystem stackSystem;
+    private ExecutionStackSystem stackSystem;
     private ServerEntityIdSystem serverEntityIdSystem;
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
     private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;

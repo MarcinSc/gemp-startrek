@@ -6,18 +6,18 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
-import com.gempukku.startrek.game.PlayerCards;
 import com.gempukku.startrek.game.PlayerPosition;
+import com.gempukku.startrek.game.PlayerZones;
 
 public class HandLayout {
-    private static final float VERTICAL_DISTANCE = 0.85f;
+    private static final float VERTICAL_DISTANCE = 0.3f;//0.85f;
     private static final float DISTANCE_FROM_CAMERA = 3f;
     private static final float CARD_SEPARATION = 0.15f;
     private static final float CARD_SCALE = 0.4f;
 
-    public static void layoutHand(PlayerCards playerCards, PlayerPosition playerPosition,
+    public static void layoutHand(PlayerZones playerZones, PlayerPosition playerPosition,
                                   Camera camera, TransformSystem transformSystem) {
-        Array<Entity> cardsInHand = playerCards.getCardsInHand();
+        Array<Entity> cardsInHand = playerZones.getCardsInHand();
 
         Vector3 basePlayerHandPosition =
                 new Vector3(camera.position)

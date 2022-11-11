@@ -16,10 +16,12 @@ import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.*;
 import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
 import com.gempukku.startrek.server.game.deck.PlayerDilemmaPileComponent;
+import com.gempukku.startrek.server.game.stack.ObjectStackSystem;
 
 public class ZoneOperations extends BaseSystem {
     private EventSystem eventSystem;
     private PlayerResolverSystem playerResolverSystem;
+    private ObjectStackSystem objectStackSystem;
 
     private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
     private ComponentMapper<FaceDownCardInMissionComponent> faceDownCardInMissionComponentMapper;
@@ -28,7 +30,7 @@ public class ZoneOperations extends BaseSystem {
     private ComponentMapper<CardInCoreComponent> cardInCoreComponentMapper;
     private ComponentMapper<CardInDiscardComponent> cardInDiscardComponentMapper;
     private ComponentMapper<CardInDilemmaPileComponent> cardInDilemmaPileComponentMapper;
-    private ComponentMapper<CardOnStackComponent> cardOnStackComponentMapper;
+    private ComponentMapper<ObjectOnStackComponent> cardOnStackComponentMapper;
 
     public void moveCardToHand(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
@@ -57,12 +59,15 @@ public class ZoneOperations extends BaseSystem {
     public void moveCardToStack(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         card.setCardZone(CardZone.Stack);
-        cardOnStackComponentMapper.create(cardEntity);
+        ObjectOnStackComponent cardOnStack = cardOnStackComponentMapper.create(cardEntity);
+        cardOnStack.setType("card");
+        objectStackSystem.stackEntity(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
 
     public void removeCardFromStack(Entity cardEntity) {
         cardOnStackComponentMapper.remove(cardEntity);
+        objectStackSystem.removeFromStack(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
 

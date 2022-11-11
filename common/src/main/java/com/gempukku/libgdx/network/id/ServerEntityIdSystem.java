@@ -61,7 +61,8 @@ public class ServerEntityIdSystem extends EntitySystem implements EntityIdMapper
         for (Entity entity : removed) {
             ServerEntityIdComponent id = serverEntityIdComponentMapper.get(entity);
             if (id != null) {
-                entityMap.remove(id.getId());
+                String entityId = id.getId();
+                entityMap.remove(entityId);
                 serverEntityIdComponentMapper.remove(entity);
             }
         }

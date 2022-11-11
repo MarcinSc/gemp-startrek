@@ -7,25 +7,25 @@ import com.badlogic.gdx.utils.ObjectMap;
 public class CardStorageSystem extends BaseSystem {
     private PlayerPositionSystem playerPositionSystem;
 
-    private ObjectMap<PlayerPosition, PlayerCards> playerCardsMap = new ObjectMap<>();
+    private ObjectMap<PlayerPosition, PlayerZones> playerCardsMap = new ObjectMap<>();
 
-    public PlayerCards getPlayerCards(String username) {
+    public PlayerZones getPlayerCards(String username) {
         PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(username);
         return getPlayerCards(playerPosition);
     }
 
-    public PlayerCards getPlayerCards(PlayerPosition playerPosition) {
-        PlayerCards playerCards = playerCardsMap.get(playerPosition);
-        if (playerCards == null) {
-            playerCards = new PlayerCards();
-            playerCardsMap.put(playerPosition, playerCards);
+    public PlayerZones getPlayerCards(PlayerPosition playerPosition) {
+        PlayerZones playerZones = playerCardsMap.get(playerPosition);
+        if (playerZones == null) {
+            playerZones = new PlayerZones();
+            playerCardsMap.put(playerPosition, playerZones);
         }
-        return playerCards;
+        return playerZones;
     }
 
     public Entity findRenderedCard(Entity cardEntity) {
-        for (PlayerCards playerCards : playerCardsMap.values()) {
-            Entity renderedCard = playerCards.findRenderedCard(cardEntity);
+        for (PlayerZones playerZones : playerCardsMap.values()) {
+            Entity renderedCard = playerZones.findRenderedCard(cardEntity);
             if (renderedCard != null)
                 return renderedCard;
         }

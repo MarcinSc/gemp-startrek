@@ -21,7 +21,7 @@ import com.gempukku.startrek.game.zone.CardInHandComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
-import com.gempukku.startrek.server.game.stack.StackSystem;
+import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 import org.junit.BeforeClass;
 
 import java.util.function.Consumer;
@@ -31,7 +31,7 @@ import static org.junit.Assert.assertTrue;
 public abstract class AbstractGameTest {
     protected static CardData cardData;
 
-    protected StackSystem stackSystem;
+    protected ExecutionStackSystem stackSystem;
     protected EventSystem eventSystem;
     protected World world;
     protected DecisionSystem decisionSystem;
@@ -95,7 +95,7 @@ public abstract class AbstractGameTest {
         gameHolder.processGame();
 
         world = gameHolder.getGameWorld();
-        stackSystem = world.getSystem(StackSystem.class);
+        stackSystem = world.getSystem(ExecutionStackSystem.class);
         eventSystem = world.getSystem(EventSystem.class);
         decisionSystem = world.getSystem(DecisionSystem.class);
         spawnSystem = world.getSystem(SpawnSystem.class);
@@ -136,15 +136,18 @@ public abstract class AbstractGameTest {
     }
 
     protected boolean playCard(Entity playedCard) {
+        String cardId = playedCard.getComponent(ServerEntityIdComponent.class).getId();
+        System.out.println("Playing card: " + cardId);
         return sendDecision("test1",
                 "action", "play",
-                "cardId", playedCard.getComponent(ServerEntityIdComponent.class).getId());
+                "cardId", cardId);
     }
 
     protected void useTriggerSuccessfully(Entity usedCard, int triggerIndex) {
+        String cardId = usedCard.getComponent(ServerEntityIdComponent.class).getId();
         assertTrue(sendDecision("test1",
                 "action", "use",
-                "cardId", usedCard.getComponent(ServerEntityIdComponent.class).getId(),
+                "cardId", cardId,
                 "triggerIndex", String.valueOf(triggerIndex)));
     }
 }

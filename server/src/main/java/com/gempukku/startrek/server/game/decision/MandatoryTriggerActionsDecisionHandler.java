@@ -13,13 +13,13 @@ import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
-import com.gempukku.startrek.server.game.stack.StackSystem;
+import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 
 public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implements DecisionTypeHandler {
     private DecisionSystem decisionSystem;
     private CardFilteringSystem cardFilteringSystem;
     private CardFilterResolverSystem cardFilterResolverSystem;
-    private StackSystem stackSystem;
+    private ExecutionStackSystem stackSystem;
     private SpawnSystem spawnSystem;
     private CardAbilitySystem cardAbilitySystem;
     private ConditionResolverSystem conditionResolverSystem;
