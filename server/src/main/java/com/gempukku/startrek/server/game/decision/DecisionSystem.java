@@ -68,7 +68,8 @@ public class DecisionSystem extends EffectSystem {
         Entity decisionEntity = world.createEntity();
         PlayerDecisionComponent decision = playerDecisionComponentMapper.create(decisionEntity);
         decision.setOwner(playerEntity.getComponent(GamePlayerComponent.class).getName());
-        decision.setDecisionType(gameEffect.getDataString("decisionType"));
+        String decisionType = gameEffect.getDataString("decisionType");
+        decision.setDecisionType(decisionType);
 
         JsonValue memoryData = gameEffect.getClonedDataObject("memoryData");
         if (memoryData != null) {
@@ -77,7 +78,8 @@ public class DecisionSystem extends EffectSystem {
                 String name = memoryDatum.name();
                 String memoryName = memoryDatum.asString();
                 String value = memory.getValue(memoryName);
-                data.put(name, value);
+                if (value != null)
+                    data.put(name, value);
             }
         }
 

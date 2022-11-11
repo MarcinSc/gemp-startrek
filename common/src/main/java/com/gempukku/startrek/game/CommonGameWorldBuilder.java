@@ -29,6 +29,7 @@ public class CommonGameWorldBuilder {
 
                 // Condition resolvers
                 new ConditionResolverSystem(),
+                new MatchesConditionHandler(),
                 new MemoryConditionHandler(),
                 new EqualsConditionHandler(),
                 new LessOrEqualConditionHandler(),

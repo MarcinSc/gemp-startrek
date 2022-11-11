@@ -25,6 +25,8 @@ import org.junit.BeforeClass;
 
 import java.util.function.Consumer;
 
+import static org.junit.Assert.assertTrue;
+
 public abstract class AbstractGameTest {
     protected static CardData cardData;
 
@@ -121,5 +123,20 @@ public abstract class AbstractGameTest {
             stackSystem.processStack();
         }
         return result;
+    }
+
+    protected void sendDecisionSuccessfully(String player, String... decisionKeysAndValues) {
+        assertTrue(sendDecision(player, decisionKeysAndValues));
+    }
+
+    protected void playCardSuccessfully(Entity playedCard) {
+        assertTrue(
+                playCard(playedCard));
+    }
+
+    protected boolean playCard(Entity playedCard) {
+        return sendDecision("test1",
+                "action", "play",
+                "cardId", String.valueOf(playedCard.getId()));
     }
 }

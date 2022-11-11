@@ -8,7 +8,8 @@ import com.gempukku.startrek.game.zone.CardInDiscardComponent;
 import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class PlayCardTest extends AbstractGameTest {
     @Test
@@ -16,10 +17,7 @@ public class PlayCardTest extends AbstractGameTest {
         setupGame(createDeck("1_188", "1_210"));
 
         Entity playedCard = getCardsInHand("test1").get(0);
-        assertTrue(
-                sendDecision("test1",
-                        "action", "play",
-                        "cardId", String.valueOf(playedCard.getId())));
+        playCardSuccessfully(playedCard);
 
         assertNotNull(playedCard.getComponent(FaceUpCardInMissionComponent.class));
     }
@@ -29,10 +27,7 @@ public class PlayCardTest extends AbstractGameTest {
         setupGame(createDeck("1_188", "1_390"));
 
         Entity playedCard = getCardsInHand("test1").get(0);
-        assertTrue(
-                sendDecision("test1",
-                        "action", "play",
-                        "cardId", String.valueOf(playedCard.getId())));
+        playCardSuccessfully(playedCard);
 
         assertNotNull(playedCard.getComponent(FaceUpCardInMissionComponent.class));
     }
@@ -42,10 +37,7 @@ public class PlayCardTest extends AbstractGameTest {
         setupGame(createDeck("1_188", "1_83"));
 
         Entity playedCard = getCardsInHand("test1").get(0);
-        assertTrue(
-                sendDecision("test1",
-                        "action", "play",
-                        "cardId", String.valueOf(playedCard.getId())));
+        playCardSuccessfully(playedCard);
 
         assertNotNull(playedCard.getComponent(CardInCoreComponent.class));
     }
@@ -58,10 +50,7 @@ public class PlayCardTest extends AbstractGameTest {
         putCardOnTopOfDeck("test1", "1_83");
 
         Entity playedCard = getCardsInHand("test1").get(0);
-        assertTrue(
-                sendDecision("test1",
-                        "action", "play",
-                        "cardId", String.valueOf(playedCard.getId())));
+        playCardSuccessfully(playedCard);
 
         assertNotNull(playedCard.getComponent(CardInDiscardComponent.class));
 

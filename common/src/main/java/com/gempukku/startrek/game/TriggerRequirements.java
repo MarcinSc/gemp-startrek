@@ -27,8 +27,6 @@ public class TriggerRequirements {
             String triggerType,
             String usedIds,
             CardFilterResolverSystem cardFilterResolverSystem) {
-        if (usedIds == null)
-            usedIds = "";
         return cardFilterResolverSystem.resolveCardFilter(
                 "or(zone(Mission),zone(Core)),owner(username(" + username + ")),hasAbility(Trigger)," +
                         "not(idIn(" + usedIds + "))," +

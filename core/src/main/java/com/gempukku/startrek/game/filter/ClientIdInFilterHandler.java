@@ -16,7 +16,7 @@ public class ClientIdInFilterHandler extends CardFilterSystem {
             return new CardFilter() {
                 @Override
                 public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                    return true;
+                    return false;
                 }
             };
         }

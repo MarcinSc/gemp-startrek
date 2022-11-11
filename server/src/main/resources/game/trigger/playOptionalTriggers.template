@@ -1,18 +1,32 @@
 {
-  "type": "repeatUntilInTurnOrder",
-  "playerMemory": "activePlayer",
-  "condition": "equals(memory(playersPassed),playerCount)",
-  "action": {
-    "type": "processDecision",
-    "player": "memory(activePlayer)",
-    "decisionType": "optionalTriggerActions",
-    "data": {
-      "triggerType": "played"
+  "type": "sequence",
+  "memory": "optionalTriggerActionIndex",
+  "actions": [
+    {
+      "type": "repeatUntilInTurnOrder",
+      "playerMemory": "activePlayer",
+      "condition": "equals(memory(playersPassed),playerCount)",
+      "action": {
+        "type": "processDecision",
+        "player": "memory(activePlayer)",
+        "decisionType": "optionalTriggerActions",
+        "data": {
+          "triggerType": "played"
+        },
+        "memoryData": {
+          "sourceId": "playedCardId",
+          "missionId": "missionId",
+          "usedIds": "usedIds"
+        }
+      }
     },
-    "memoryData": {
-      "sourceId": "playedCardId",
-      "missionId": "missionId",
-      "usedIds": "usedIds"
+    {
+      "type": "clearMemory",
+      "memory": "playersPassed"
+    },
+    {
+      "type": "clearMemory",
+      "memory": "usedIds"
     }
-  }
+  ]
 }
