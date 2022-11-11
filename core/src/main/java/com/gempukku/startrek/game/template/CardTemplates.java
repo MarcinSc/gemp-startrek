@@ -35,7 +35,7 @@ public class CardTemplates {
     }
 
     public static Entity createFaceDownCard(SpawnSystem spawnSystem) {
-        return spawnSystem.spawnEntity("game/card-facedown.template");
+        return spawnSystem.spawnEntity("game/card/card-facedown.template");
     }
 
     public static Entity createFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
@@ -51,7 +51,7 @@ public class CardTemplates {
     }
 
     private static Entity createUnaffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-unaffiliated.template");
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/card-full-unaffiliated.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
 
         String cardTemplate = getUnaffiliatedCardTemplate(cardType);
@@ -91,7 +91,7 @@ public class CardTemplates {
     }
 
     private static Entity createAffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-affiliated.template");
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/card-full-affiliated.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
 
         Affiliation affiliation = cardDefinition.getAffiliation();
@@ -237,7 +237,7 @@ public class CardTemplates {
     }
 
     private static Entity createSmallMissionCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/mission-small.template");
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/mission-small.template");
 
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
 
@@ -267,7 +267,7 @@ public class CardTemplates {
     }
 
     private static Entity createSmallPersonnelCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/personnel-small.template");
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/personnel-small.template");
 
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
 
@@ -307,7 +307,7 @@ public class CardTemplates {
     }
 
     private static Entity createSmallShipCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/personnel-small.template");
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/personnel-small.template");
 
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
 
@@ -347,7 +347,7 @@ public class CardTemplates {
     }
 
     private static Entity createSmallUnaffilatedCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/unaffiliated-small.template");
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/unaffiliated-small.template");
 
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
 

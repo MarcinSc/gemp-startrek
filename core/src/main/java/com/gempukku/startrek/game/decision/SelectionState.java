@@ -96,12 +96,12 @@ public class SelectionState implements SelectionDefinition {
                     public void accept(Entity cardEntity) {
                         if (cardEntity.getComponent(CardInHandComponent.class) != null) {
                             Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
-                            Entity selectionEntity = spawnSystem.spawnEntity("game/card-full-selection.template");
+                            Entity selectionEntity = spawnSystem.spawnEntity("game/card/card-full-selection.template");
                             hierarchySystem.addHierarchy(renderedCard, selectionEntity);
                             selectionEntities.add(selectionEntity);
                         } else {
                             Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
-                            Entity selectionEntity = spawnSystem.spawnEntity("game/card-small-selection.template");
+                            Entity selectionEntity = spawnSystem.spawnEntity("game/card/card-small-selection.template");
                             hierarchySystem.addHierarchy(renderedCard, selectionEntity);
                             selectionEntities.add(selectionEntity);
                         }

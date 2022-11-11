@@ -23,10 +23,14 @@ public class PlayerPositionSystem extends BaseEntitySystem {
         if (authenticationHolderSystem.getUsername().equals(playerName)) {
             playerPositions.put(playerName, PlayerPosition.Lower);
         } else {
-            if (playerPositions.size == 1) {
+            if (playerPositions.size == 0) {
                 playerPositions.put(playerName, PlayerPosition.Upper);
             } else {
-                playerPositions.put(playerName, PlayerPosition.Lower);
+                if (playerPositions.values().next() == PlayerPosition.Lower) {
+                    playerPositions.put(playerName, PlayerPosition.Upper);
+                } else {
+                    playerPositions.put(playerName, PlayerPosition.Lower);
+                }
             }
         }
     }

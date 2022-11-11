@@ -91,7 +91,7 @@ public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem impl
         selectionSystem.startSelection(selectionState);
 
         enableButton(useButton, false);
-        enableButton(passButton, !selectionState.hasSelectableEntities());
+        enableButton(passButton, true);
 
         stage.addActor(table);
     }
