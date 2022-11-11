@@ -46,10 +46,10 @@ public class ClientDecisionSystem extends BaseEntitySystem {
             DecisionHandler decisionHandler = decisionHandlerMap.get(decisionType);
             if (decisionHandler == null)
                 throw new GdxRuntimeException("Unable to find decision handler for decision type: " + decisionType);
-            decisionHandler.processNewDecision(playerDecision.getData());
-
-            decisionEntityToProcess = null;
             processingDecision = true;
+            decisionEntityToProcess = null;
+
+            decisionHandler.processNewDecision(playerDecision.getData());
         }
     }
 }

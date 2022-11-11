@@ -54,7 +54,12 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
 
         VerticalGroup verticalGroup = new VerticalGroup();
 
-        useButton = new TextButton("Use", stageSystem.getSkin(), UISettings.mainButtonStyle);
+        useButton = new TextButton("Use", stageSystem.getSkin(), UISettings.mainButtonStyle) {
+            @Override
+            public float getPrefWidth() {
+                return 200;
+            }
+        };
         useButton.addListener(
                 new ClickListener() {
                     @Override
@@ -63,7 +68,12 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
                     }
                 });
         verticalGroup.addActor(useButton);
-        passButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.alternativeButtonStyle);
+        passButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+            @Override
+            public float getPrefWidth() {
+                return 200;
+            }
+        };
         passButton.addListener(
                 new ClickListener() {
                     @Override
@@ -84,16 +94,20 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
         }
 
         initializeSelectionState(decisionData);
-
-        Stage stage = stageSystem.getStage();
-
         selectionState.markPlayableCards();
-        selectionSystem.startSelection(selectionState);
 
-        enableButton(useButton, false);
-        enableButton(passButton, !selectionState.hasSelectableEntities());
+        if (!selectionState.hasSelectableEntities()) {
+            pass();
+        } else {
+            Stage stage = stageSystem.getStage();
 
-        stage.addActor(table);
+            selectionSystem.startSelection(selectionState);
+
+            enableButton(useButton, false);
+            enableButton(passButton, !selectionState.hasSelectableEntities());
+
+            stage.addActor(table);
+        }
     }
 
     private void initializeSelectionState(ObjectMap<String, String> decisionData) {

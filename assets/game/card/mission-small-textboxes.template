@@ -1,27 +1,5 @@
 {
-  "com.gempukku.startrek.game.card.ServerCardReferenceComponent": {},
-  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
-    "localTransform": {
-      "val": [
-        1,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        1,
-        0,
-        0,
-        0,
-        0,
-        1
-      ]
-    }
-  },
+  "tpl:extends": "game/card/card-small-common.template",
   "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent": {
     "sprites": [
       {

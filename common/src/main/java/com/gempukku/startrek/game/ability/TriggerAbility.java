@@ -15,21 +15,19 @@ public class TriggerAbility implements CardAbility {
         this.triggerType = triggerType;
         this.optional = optional;
         this.condition = condition;
-        this.costs = createArray(costs, true);
-        this.effects = createArray(effects, false);
+        this.costs = createArray(costs);
+        this.effects = createArray(effects);
     }
 
-    private Array<JsonValue> createArray(JsonValue effects, boolean cost) {
+    private Array<JsonValue> createArray(JsonValue effects) {
         Array<JsonValue> result = new Array<>();
         if (effects != null) {
             if (effects.type() == JsonValue.ValueType.object) {
-                effects.addChild("cost", new JsonValue(cost));
                 result.add(effects);
             } else {
                 for (JsonValue effect : effects) {
-                    effect.addChild("cost", new JsonValue(cost));
+                    result.add(effect);
                 }
-                result.add(effects);
             }
         }
         return result;

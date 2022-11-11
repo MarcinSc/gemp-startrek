@@ -75,7 +75,12 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
 
         VerticalGroup verticalGroup = new VerticalGroup();
 
-        drawButton = new TextButton("Draw a card", stageSystem.getSkin(), UISettings.mainButtonStyle);
+        drawButton = new TextButton("Draw a card", stageSystem.getSkin(), UISettings.mainButtonStyle) {
+            @Override
+            public float getPrefWidth() {
+                return 200;
+            }
+        };
         drawButton.addListener(
                 new ClickListener() {
                     @Override
@@ -84,7 +89,12 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
                     }
                 });
         verticalGroup.addActor(drawButton);
-        playButton = new TextButton("Play", stageSystem.getSkin(), UISettings.alternativeButtonStyle);
+        playButton = new TextButton("Play", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+            @Override
+            public float getPrefWidth() {
+                return 200;
+            }
+        };
         playButton.addListener(
                 new ClickListener() {
                     @Override
@@ -93,7 +103,12 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
                     }
                 });
         verticalGroup.addActor(playButton);
-        passButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.alternativeButtonStyle);
+        passButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+            @Override
+            public float getPrefWidth() {
+                return 200;
+            }
+        };
         passButton.addListener(
                 new ClickListener() {
                     @Override

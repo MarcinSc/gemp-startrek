@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.zone.CardInCoreComponent;
 import com.gempukku.startrek.game.zone.CardInDiscardComponent;
+import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
 import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 import org.junit.Test;
 
@@ -19,7 +20,7 @@ public class PlayCardTest extends AbstractGameTest {
         Entity playedCard = getCardsInHand("test1").get(0);
         playCardSuccessfully(playedCard);
 
-        assertNotNull(playedCard.getComponent(FaceUpCardInMissionComponent.class));
+        assertNotNull(playedCard.getComponent(FaceDownCardInMissionComponent.class));
     }
 
     @Test

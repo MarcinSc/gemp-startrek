@@ -2,5 +2,5 @@
   "type": "moveCardToMission",
   "filter": "memory(playedCardId)",
   "missionMemory": "missionId",
-  "faceUp": "true"
+  "faceUp": "memoryMatches(playedCardId,type(Ship))"
 }

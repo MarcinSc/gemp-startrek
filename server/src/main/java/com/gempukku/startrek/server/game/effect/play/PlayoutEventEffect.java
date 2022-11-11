@@ -1,6 +1,7 @@
 package com.gempukku.startrek.server.game.effect.play;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
@@ -25,7 +26,7 @@ public class PlayoutEventEffect extends EffectSystem {
         EventAbility eventAbility = cardAbilitySystem.getCardAbilities(cardEntity, EventAbility.class).get(0);
         boolean costsPaid = Boolean.parseBoolean(memory.getValue("costsPaid", "false"));
         if (!costsPaid) {
-            JsonValue costs = eventAbility.getCosts();
+            Array<JsonValue> costs = eventAbility.getCosts();
             int paidCostIndex = Integer.parseInt(memory.getValue("costIndex", "-1"));
             int nextCostIndex = paidCostIndex + 1;
             if (nextCostIndex < costs.size) {
@@ -38,7 +39,7 @@ public class PlayoutEventEffect extends EffectSystem {
             }
         }
         if (costsPaid) {
-            JsonValue effects = eventAbility.getEffects();
+            Array<JsonValue> effects = eventAbility.getEffects();
             int resolvedEffectIndex = Integer.parseInt(memory.getValue("effectIndex", "-1"));
             int nextEffectIndex = resolvedEffectIndex + 1;
             if (nextEffectIndex < effects.size) {

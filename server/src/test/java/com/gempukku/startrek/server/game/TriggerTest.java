@@ -1,7 +1,7 @@
 package com.gempukku.startrek.server.game;
 
 import com.artemis.Entity;
-import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
+import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -17,7 +17,7 @@ public class TriggerTest extends AbstractGameTest {
         Entity card = getCardsInHand("test1").get(0);
         playCardSuccessfully(card);
 
-        assertNotNull(card.getComponent(FaceUpCardInMissionComponent.class));
+        assertNotNull(card.getComponent(FaceDownCardInMissionComponent.class));
 
         // Pass on mandatory
         sendDecisionSuccessfully("test1", "action", "pass");
