@@ -2,8 +2,8 @@ package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.gempukku.libgdx.network.client.ServerEntityComponent;
 import com.gempukku.startrek.game.Memory;
-import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 
 public class ClientIdInFilterHandler extends CardFilterSystem {
     public ClientIdInFilterHandler() {
@@ -23,7 +23,7 @@ public class ClientIdInFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                String id = String.valueOf(cardEntity.getComponent(ServerCardReferenceComponent.class).getEntityId());
+                String id = String.valueOf(cardEntity.getComponent(ServerEntityComponent.class).getEntityId());
                 for (String parameter : parameters) {
                     if (parameter.equals(id))
                         return true;

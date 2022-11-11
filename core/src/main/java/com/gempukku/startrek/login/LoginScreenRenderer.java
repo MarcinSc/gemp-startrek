@@ -538,7 +538,7 @@ public class LoginScreenRenderer extends BaseSystem {
 
             initialized = true;
 
-            processLogin("test1", "testtest");
+            //processLogin("test1", "testtest");
         }
     }
 }

@@ -12,6 +12,7 @@ import com.gempukku.startrek.game.CardStorageSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
+import com.gempukku.startrek.game.zone.CardInHandComponent;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -93,10 +94,17 @@ public class SelectionState implements SelectionDefinition {
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
-                        Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
-                        Entity selectionEntity = spawnSystem.spawnEntity("game/card-full-selection.template");
-                        hierarchySystem.addHierarchy(renderedCard, selectionEntity);
-                        selectionEntities.add(selectionEntity);
+                        if (cardEntity.getComponent(CardInHandComponent.class) != null) {
+                            Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
+                            Entity selectionEntity = spawnSystem.spawnEntity("game/card-full-selection.template");
+                            hierarchySystem.addHierarchy(renderedCard, selectionEntity);
+                            selectionEntities.add(selectionEntity);
+                        } else {
+                            Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
+                            Entity selectionEntity = spawnSystem.spawnEntity("game/card-small-selection.template");
+                            hierarchySystem.addHierarchy(renderedCard, selectionEntity);
+                            selectionEntities.add(selectionEntity);
+                        }
                     }
                 });
     }
