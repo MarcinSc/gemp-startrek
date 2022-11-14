@@ -22,12 +22,14 @@ public class AnimationChannel {
     }
 
     public void update(float delta) {
-        Animator first = animatorQueue.first();
-        animationTime += delta;
-        boolean finished = first.update(delta, animationTime);
-        if (finished) {
-            animatorQueue.removeFirst();
-            animationTime = 0f;
+        if (hasAnimator()) {
+            Animator first = animatorQueue.first();
+            animationTime += delta;
+            boolean finished = first.update(delta, animationTime);
+            if (finished) {
+                animatorQueue.removeFirst();
+                animationTime = 0f;
+            }
         }
     }
 }

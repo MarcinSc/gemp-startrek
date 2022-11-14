@@ -1,4 +1,4 @@
-package com.gempukku.startrek.game;
+package com.gempukku.startrek.game.zone;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;

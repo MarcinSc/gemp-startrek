@@ -44,18 +44,24 @@ public class CardTemplates {
     }
 
     public static Entity createFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
+        return createFullCard(cardDefinition, spawnSystem, false, -1);
+    }
+
+    public static Entity createFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem,
+                                        boolean useSteps, int step) {
         CardType cardType = cardDefinition.getType();
 
         if (cardType == CardType.Personnel || cardType == CardType.Ship) {
-            return createAffiliatedFullCard(cardDefinition, spawnSystem, cardType);
+            return createAffiliatedFullCard(cardDefinition, spawnSystem, cardType, useSteps, step);
         } else if (cardType == CardType.Equipment || cardType == CardType.Event
                 || cardType == CardType.Interrupt || cardType == CardType.Dilemma) {
-            return createUnaffiliatedFullCard(cardDefinition, spawnSystem, cardType);
+            return createUnaffiliatedFullCard(cardDefinition, spawnSystem, cardType, useSteps, step);
         }
         throw new GdxRuntimeException("Unable to create a full card for card type: " + cardType);
     }
 
-    private static Entity createUnaffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType) {
+    private static Entity createUnaffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType,
+                                                     boolean useSteps, int step) {
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card/card-full-unaffiliated.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
 
@@ -90,12 +96,13 @@ public class CardTemplates {
 
             // Text
             TextBlock textBlock = text.getTextBlocks().get(3);
-            textBlock.setText(createCardText(cardDefinition, false, -1));
+            textBlock.setText(createCardText(cardDefinition, useSteps, step));
         }
         return cardRepresentation;
     }
 
-    private static Entity createAffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType) {
+    private static Entity createAffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType,
+                                                   boolean useSteps, int step) {
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card/card-full-affiliated.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
 
@@ -139,7 +146,7 @@ public class CardTemplates {
 
             // Text
             TextBlock textBlock = text.getTextBlocks().get(4);
-            textBlock.setText(createCardText(cardDefinition, false, -1));
+            textBlock.setText(createCardText(cardDefinition, useSteps, step));
 
             // Icons
             Array<CardIcon> icons = cardDefinition.getIcons();
@@ -254,12 +261,14 @@ public class CardTemplates {
         while (matcher.find()) {
             for (int i = 1; i <= matcher.groupCount(); i++) {
                 sb.append(text, consumed, matcher.start(i));
-                String textInTag = matcher.group(i).substring(3).trim();
+                String textInTag = matcher.group(i).substring(3);
+                textInTag = textInTag.substring(0, textInTag.length() - 1).trim();
                 if (Integer.parseInt(textInTag) == step) {
                     sb.append("[color 0000ff]");
                 } else {
                     sb.append("[color 777777]");
                 }
+                consumed = matcher.end(i);
             }
         }
         sb.append(text, consumed, text.length());

@@ -1,4 +1,4 @@
-package com.gempukku.startrek.game;
+package com.gempukku.startrek.game.zone;
 
 public class ZonesStatus {
     private boolean handDrity;

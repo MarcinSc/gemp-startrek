@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.DefaultGlyphOffseter;
-import com.gempukku.startrek.game.MissionCards;
 import com.gempukku.startrek.game.PlayerPosition;
-import com.gempukku.startrek.game.PlayerZones;
+import com.gempukku.startrek.game.zone.MissionCards;
+import com.gempukku.startrek.game.zone.PlayerZones;
 
 public class MissionsLayout {
     private static final float MAXIMUM_SCALE = 1.3f;

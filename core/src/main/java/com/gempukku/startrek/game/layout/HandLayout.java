@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.startrek.game.PlayerPosition;
-import com.gempukku.startrek.game.PlayerZones;
+import com.gempukku.startrek.game.zone.PlayerZones;
 
 public class HandLayout {
     private static final float VERTICAL_DISTANCE = 0.3f;//0.85f;

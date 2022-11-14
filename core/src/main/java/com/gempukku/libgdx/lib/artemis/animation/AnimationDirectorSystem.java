@@ -17,6 +17,10 @@ public class AnimationDirectorSystem extends BaseSystem {
         animationChannel.completeAnimator();
     }
 
+    public boolean isAnimating(String channel) {
+        return getChannel(channel).hasAnimator();
+    }
+
     private AnimationChannel getChannel(String channel) {
         AnimationChannel result = animationChannels.get(channel);
         if (result == null) {

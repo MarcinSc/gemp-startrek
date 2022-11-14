@@ -1,9 +1,6 @@
 package com.gempukku.startrek.game;
 
-import com.artemis.Aspect;
-import com.artemis.BaseSystem;
-import com.artemis.Entity;
-import com.artemis.EntitySubscription;
+import com.artemis.*;
 import com.artemis.utils.IntBag;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
@@ -13,16 +10,14 @@ import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
+import com.gempukku.startrek.common.OrderComponent;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.layout.CoreLayout;
 import com.gempukku.startrek.game.layout.HandLayout;
 import com.gempukku.startrek.game.layout.MissionsLayout;
 import com.gempukku.startrek.game.layout.PileLayout;
 import com.gempukku.startrek.game.template.CardTemplates;
-import com.gempukku.startrek.game.zone.CardInCoreComponent;
-import com.gempukku.startrek.game.zone.CardInHandComponent;
-import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
-import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
+import com.gempukku.startrek.game.zone.*;
 
 public class CardInGameRenderingSystem extends BaseSystem {
     private SpawnSystem spawnSystem;
@@ -33,7 +28,10 @@ public class CardInGameRenderingSystem extends BaseSystem {
     private AuthenticationHolderSystem authenticationHolderSystem;
     private CardStorageSystem cardStorageSystem;
 
+    private ComponentMapper<OrderComponent> orderComponentMapper;
+
     private final ObjectMap<PlayerPosition, ZonesStatus> playerZonesStatusMap = new ObjectMap<>();
+    private final CommonZonesStatus commonZonesStatus = new CommonZonesStatus();
 
     @Override
     protected void initialize() {
@@ -105,7 +103,24 @@ public class CardInGameRenderingSystem extends BaseSystem {
                                 }
                             }
                         });
+        world.getAspectSubscriptionManager().get(Aspect.all(ObjectOnStackComponent.class))
+                .addSubscriptionListener(
+                        new EntitySubscription.SubscriptionListener() {
+                            @Override
+                            public void inserted(IntBag entities) {
+                                for (int i = 0, s = entities.size(); s > i; ++i) {
+                                    objectOnStackInserted(entities.get(i));
+                                }
+                            }
 
+                            @Override
+                            public void removed(IntBag entities) {
+                                for (int i = 0, s = entities.size(); s > i; ++i) {
+                                    objectOnStackRemoved(entities.get(i));
+                                }
+                            }
+                        }
+                );
     }
 
     private void cardInHandInserted(int entityId) {
@@ -155,6 +170,30 @@ public class CardInGameRenderingSystem extends BaseSystem {
         world.deleteEntity(renderedCard);
 
         getZonesStatus(owner).setCoreDirty(true);
+    }
+
+    private void objectOnStackInserted(int entityId) {
+        Entity objectEntity = world.getEntity(entityId);
+        CardComponent card = objectEntity.getComponent(CardComponent.class);
+        String cardId = card.getCardId();
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
+        ObjectOnStackComponent objectOnStack = objectEntity.getComponent(ObjectOnStackComponent.class);
+        int step = objectOnStack.getEffectStep();
+        Entity objectRepresentation = CardTemplates.createFullCard(cardDefinition, spawnSystem, true, step);
+        OrderComponent order = orderComponentMapper.create(objectRepresentation);
+        order.setValue(objectOnStack.getStackIndex());
+        objectRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(entityId);
+        cardStorageSystem.getCommonZones().addObjectToStack(objectEntity, objectRepresentation);
+
+        commonZonesStatus.setStackDirty(true);
+    }
+
+    private void objectOnStackRemoved(int entityId) {
+        Entity objectEntity = world.getEntity(entityId);
+        Entity renderedEntity = cardStorageSystem.getCommonZones().removeObjectFromStack(objectEntity);
+        world.deleteEntity(renderedEntity);
+
+        commonZonesStatus.setStackDirty(true);
     }
 
     private void faceUpCardInMissionInserted(int entityId) {

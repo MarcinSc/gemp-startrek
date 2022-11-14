@@ -1,12 +1,15 @@
-package com.gempukku.startrek.game;
+package com.gempukku.startrek.game.zone;
 
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.game.PlayerPosition;
+import com.gempukku.startrek.game.PlayerPositionSystem;
 
 public class CardStorageSystem extends BaseSystem {
     private PlayerPositionSystem playerPositionSystem;
 
+    private final CommonZones commonZones = new CommonZones();
     private ObjectMap<PlayerPosition, PlayerZones> playerCardsMap = new ObjectMap<>();
 
     public PlayerZones getPlayerCards(String username) {
@@ -30,6 +33,10 @@ public class CardStorageSystem extends BaseSystem {
                 return renderedCard;
         }
         return null;
+    }
+
+    public CommonZones getCommonZones() {
+        return commonZones;
     }
 
     @Override
