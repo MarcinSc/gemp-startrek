@@ -48,7 +48,10 @@ public class SerializingClientConnection<T> implements ClientConnection {
 
     @Override
     public void entityAdded(String entityId, Entity entity) {
-        entitiesCreated.put(entityId, entity);
+        if (entitiesRemoved.remove(entityId))
+            entitiesModified.put(entityId, entity);
+        else
+            entitiesCreated.put(entityId, entity);
     }
 
     @Override

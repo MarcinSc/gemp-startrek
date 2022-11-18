@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.startrek.game.PlayerPosition;
-import com.gempukku.startrek.game.zone.PlayerZones;
+import com.gempukku.startrek.game.render.zone.PlayerZones;
 
 public class CoreLayout {
     private static final float MAXIMUM_SCALE = 1.3f;

@@ -5,8 +5,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.startrek.game.PlayerPosition;
-import com.gempukku.startrek.game.zone.MissionCards;
-import com.gempukku.startrek.game.zone.PlayerZones;
+import com.gempukku.startrek.game.render.zone.MissionCards;
+import com.gempukku.startrek.game.render.zone.PlayerZones;
 
 public class MissionsLayout {
     private static final float MAXIMUM_SCALE = 1.3f;
@@ -49,5 +49,32 @@ public class MissionsLayout {
             CardsInZoneLayout.layoutCards(transformSystem, defaultGlyphOffseter, missionTransform, missionParsedText,
                     MAXIMUM_SCALE, MISSION_SPACE_WIDTH, MISSION_SPACE_HEIGHT);
         }
+    }
+
+    public static void layoutMission(PlayerZones playerZones, int missionIndex, PlayerPosition playerPosition,
+                                     TransformSystem transformSystem) {
+        DefaultGlyphOffseter defaultGlyphOffseter = new DefaultGlyphOffseter();
+
+        Matrix4 missionTransform = new Matrix4();
+
+        float verticalTranslate = (playerPosition == PlayerPosition.Lower) ?
+                MISSION_CENTER_Z_DISTANCE : -MISSION_CENTER_Z_DISTANCE;
+        float horizontalTranslate = (missionIndex - 2) * (MISSION_SPACE_WIDTH + MISSION_SPACE_GAP);
+        float yRotateDegrees = (playerPosition == PlayerPosition.Lower) ? 0f : 180f;
+
+        // Move to mission center
+        missionTransform.idt()
+                .translate(0, MISSION_CENTER_Y_DISTANCE, verticalTranslate)
+                .rotate(new Vector3(0, 1, 0), yRotateDegrees)
+                .translate(horizontalTranslate, 0, 0);
+
+        MissionCards missionCards = playerZones.getMissionCards(missionIndex);
+        RenderingMissionCards renderingMissionCards = new RenderingMissionCards(missionCards, STACK_VERTICAL_GAP);
+
+        CardZoneParsedText missionParsedText = new CardZoneParsedText(renderingMissionCards,
+                STACK_HEIGHT, STACK_WIDTH, STACK_HORIZONTAL_GAP, STACK_STICKOUT_PERC);
+
+        CardsInZoneLayout.layoutCards(transformSystem, defaultGlyphOffseter, missionTransform, missionParsedText,
+                MAXIMUM_SCALE, MISSION_SPACE_WIDTH, MISSION_SPACE_HEIGHT);
     }
 }

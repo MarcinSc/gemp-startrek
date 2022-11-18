@@ -42,7 +42,8 @@ public class IncomingUpdatesProcessor extends BaseSystem {
     protected void processSystem() {
         if (!awaitingUpdates.isEmpty() &&
                 (animationDirectorSystem == null || !animationDirectorSystem.isAnimating("Server"))) {
-            for (IncomingInformationPacket<JsonValue> packet : awaitingUpdates.removeFirst()) {
+            List<IncomingInformationPacket<JsonValue>> changes = awaitingUpdates.removeFirst();
+            for (IncomingInformationPacket<JsonValue> packet : changes) {
                 informationPacketUtil.applyInformationPacket(packet);
             }
 

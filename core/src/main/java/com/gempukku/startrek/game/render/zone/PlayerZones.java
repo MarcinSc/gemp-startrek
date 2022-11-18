@@ -1,15 +1,19 @@
-package com.gempukku.startrek.game.zone;
+package com.gempukku.startrek.game.render.zone;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.startrek.game.zone.CardZone;
 
 public class PlayerZones {
+    private final PlayerZonesStatus playerZonesStatus = new PlayerZonesStatus();
+
     private final ObjectMap<Entity, Entity> cardToRenderedMap = new ObjectMap<>();
     private final Array<Entity> cardsInHand = new Array<>();
     private final Array<Entity> cardsInDeck = new Array<>();
     private final Array<Entity> cardsInDilemmaPile = new Array<>();
     private final Array<Entity> cardsInCore = new Array<>();
+    private final Array<Entity> cardsInBrig = new Array<>();
 
     private final Array<MissionCards> missionCards = new Array<>();
 
@@ -24,6 +28,15 @@ public class PlayerZones {
             cardToRenderedMap.put(card, renderedCard);
         }
         cardsInCore.add(renderedCard);
+        playerZonesStatus.setCoreDirty();
+    }
+
+    public void addCardInBrig(Entity card, Entity renderedCard) {
+        if (card != null) {
+            cardToRenderedMap.put(card, renderedCard);
+        }
+        cardsInBrig.add(renderedCard);
+        playerZonesStatus.setBrigDirty();
     }
 
     public void addCardInHand(Entity card, Entity renderedCard) {
@@ -31,6 +44,7 @@ public class PlayerZones {
             cardToRenderedMap.put(card, renderedCard);
         }
         cardsInHand.add(renderedCard);
+        playerZonesStatus.setHandDrity();
     }
 
     public void addCardInDeck(Entity card, Entity renderedCard) {
@@ -52,12 +66,15 @@ public class PlayerZones {
     }
 
     public Entity removeOneCardInHand() {
-        return removeLast(cardsInHand);
+        Entity renderedCard = removeLast(cardsInHand);
+        playerZonesStatus.setHandDrity();
+        return renderedCard;
     }
 
     public Entity removeCardInHand(Entity card) {
         Entity renderedCard = cardToRenderedMap.remove(card);
         cardsInHand.removeValue(renderedCard, true);
+        playerZonesStatus.setHandDrity();
         return renderedCard;
     }
 
@@ -72,6 +89,14 @@ public class PlayerZones {
     public Entity removeCardInCore(Entity card) {
         Entity renderedCard = cardToRenderedMap.remove(card);
         cardsInCore.removeValue(renderedCard, true);
+        playerZonesStatus.setCoreDirty();
+        return renderedCard;
+    }
+
+    public Entity removeCardInBrig(Entity card) {
+        Entity renderedCard = cardToRenderedMap.remove(card);
+        cardsInBrig.removeValue(renderedCard, true);
+        playerZonesStatus.setBrigDirty();
         return renderedCard;
     }
 
@@ -117,5 +142,45 @@ public class PlayerZones {
             }
         }
         return result;
+    }
+
+    public boolean isMissionDirty(int missionIndex) {
+        return missionCards.get(missionIndex).isMissionDirty();
+    }
+
+    public boolean isBrigDirty() {
+        return playerZonesStatus.isBrigDirty();
+    }
+
+    public boolean isCoreDirty() {
+        return playerZonesStatus.isCoreDirty();
+    }
+
+    public boolean isHandDirty() {
+        return playerZonesStatus.isHandDrity();
+    }
+
+    public void cleanup() {
+        playerZonesStatus.cleanZones();
+        for (MissionCards missionCard : missionCards) {
+            missionCard.cleanup();
+        }
+    }
+
+    public Entity removeCard(Entity card, CardZone oldZone) {
+        if (oldZone == CardZone.Brig)
+            return removeCardInBrig(card);
+        if (oldZone == CardZone.Core)
+            return removeCardInCore(card);
+        if (oldZone == CardZone.Hand)
+            return removeCardInHand(card);
+        if (oldZone == CardZone.Mission) {
+            for (MissionCards missionCard : missionCards) {
+                Entity renderedCard = missionCard.removeCard(card);
+                if (renderedCard != null)
+                    return renderedCard;
+            }
+        }
+        return null;
     }
 }

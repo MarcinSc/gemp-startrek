@@ -1,10 +1,12 @@
-package com.gempukku.startrek.game.zone;
+package com.gempukku.startrek.game.render.zone;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 public class MissionCards {
+    private boolean missionDirty = false;
+
     private final ObjectMap<Entity, Entity> renderedCards = new ObjectMap<>();
     private final Array<Entity> playerTopLevelCardsInMission = new Array<>();
     private final Array<Entity> opponentTopLevelCardsInMission = new Array<>();
@@ -15,6 +17,8 @@ public class MissionCards {
         renderedCards.put(card, renderedCard);
         attachedCardsInMission.put(renderedCard, new Array<>());
         missionCards.add(renderedCard);
+
+        missionDirty = true;
     }
 
     public Array<Entity> getMissionCards() {
@@ -33,6 +37,8 @@ public class MissionCards {
         renderedCards.put(card, renderedCard);
         attachedCardsInMission.put(renderedCard, new Array<>());
         playerTopLevelCardsInMission.add(renderedCard);
+
+        missionDirty = true;
     }
 
     public Array<Entity> getPlayerTopLevelCardsInMission() {
@@ -42,6 +48,8 @@ public class MissionCards {
     public Entity removePlayerTopLevelCardInMission(Entity card) {
         Entity renderedCard = renderedCards.remove(card);
         playerTopLevelCardsInMission.removeValue(renderedCard, true);
+        attachedCardsInMission.remove(renderedCard);
+        missionDirty = true;
         return renderedCard;
     }
 
@@ -49,6 +57,8 @@ public class MissionCards {
         renderedCards.put(card, renderedCard);
         attachedCardsInMission.put(renderedCard, new Array<>());
         opponentTopLevelCardsInMission.add(renderedCard);
+
+        missionDirty = true;
     }
 
     public Array<Entity> getOpponentTopLevelCardsInMission() {
@@ -58,8 +68,31 @@ public class MissionCards {
     public Entity removeOpponentTopLevelCardInMission(Entity card) {
         Entity renderedCard = renderedCards.remove(card);
         opponentTopLevelCardsInMission.removeValue(renderedCard, true);
+        attachedCardsInMission.remove(renderedCard);
+        missionDirty = true;
         return renderedCard;
     }
+
+    public void cleanup() {
+        missionDirty = false;
+    }
+
+    public boolean isMissionDirty() {
+        return missionDirty;
+    }
+
+    public Entity removeCard(Entity card) {
+        Entity renderedCard = renderedCards.remove(card);
+        if (renderedCard != null) {
+            attachedCardsInMission.remove(renderedCard);
+            playerTopLevelCardsInMission.removeValue(renderedCard, true);
+            opponentTopLevelCardsInMission.removeValue(renderedCard, true);
+            missionDirty = true;
+            return renderedCard;
+        }
+        return null;
+    }
+
     //
 //    public void addAttachedCardInMission(Entity card, Entity attachedTo, Entity renderedCard) {
 //        renderedCards.put(card, renderedCard);

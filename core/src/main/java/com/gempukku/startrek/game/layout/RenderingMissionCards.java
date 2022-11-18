@@ -6,7 +6,7 @@ import com.gempukku.libgdx.lib.graph.artemis.text.TextHorizontalAlignment;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextVerticalAlignment;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyleConstants;
-import com.gempukku.startrek.game.zone.MissionCards;
+import com.gempukku.startrek.game.render.zone.MissionCards;
 
 public class RenderingMissionCards implements CardZoneCards {
     private MissionCards missionCards;

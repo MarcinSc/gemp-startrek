@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JsonValueNetworkMessageMarshaller implements NetworkMessageMarshaller<JsonValue>, JsonUtils.JsonConverter<JsonValue> {
-    private boolean debug = true;
+    private boolean debug = false;
 
     public void setDebug(boolean debug) {
         this.debug = debug;

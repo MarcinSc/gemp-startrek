@@ -50,10 +50,11 @@ import com.gempukku.startrek.game.decision.ClientMandatoryTriggerActionsDecision
 import com.gempukku.startrek.game.decision.ClientOptionalTriggerActionsDecisionHandler;
 import com.gempukku.startrek.game.decision.ClientPlayOrDrawDecisionHandler;
 import com.gempukku.startrek.game.filter.ClientIdInFilterHandler;
-import com.gempukku.startrek.game.render.CardInGameRenderingSystem;
+import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.PlayerInfoRenderingSystem;
 import com.gempukku.startrek.game.render.TurnSegmentRenderingSystem;
-import com.gempukku.startrek.game.zone.CardStorageSystem;
+import com.gempukku.startrek.game.zone.GameStateCardsTrackingSystem;
+import com.gempukku.startrek.game.zone.InitialGameStateCardsCreatorSystem;
 import com.gempukku.startrek.hall.*;
 import com.gempukku.startrek.login.LoginScreenRenderer;
 
@@ -128,7 +129,8 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
 
                 new CardLookupSystem(cardData),
                 new PlayerPositionSystem(),
-                new CardStorageSystem(),
+                new InitialGameStateCardsCreatorSystem(),
+                new GameStateCardsTrackingSystem(),
 
                 new ShapeSystem(),
                 new ShapePickingSystem(),
@@ -148,7 +150,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new ClientIdInFilterHandler(),
 
                 // Rendering
-                new CardInGameRenderingSystem(),
+                new CardRenderingSystem(),
                 new PlayerInfoRenderingSystem(),
                 new TurnSegmentRenderingSystem());
 

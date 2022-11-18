@@ -28,7 +28,7 @@ import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
-import com.gempukku.startrek.game.zone.CardStorageSystem;
+import com.gempukku.startrek.game.render.CardRenderingSystem;
 
 public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements DecisionHandler {
     private AuthenticationHolderSystem authenticationHolderSystem;
@@ -40,7 +40,7 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     private CardAbilitySystem cardAbilitySystem;
     private AmountResolverSystem amountResolverSystem;
     private CardFilterResolverSystem cardFilterResolverSystem;
-    private CardStorageSystem cardStorageSystem;
+    private CardRenderingSystem cardRenderingSystem;
     private HierarchySystem hierarchySystem;
     private SpawnSystem spawnSystem;
     private SelectionSystem selectionSystem;

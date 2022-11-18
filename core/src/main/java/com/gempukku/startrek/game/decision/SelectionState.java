@@ -11,8 +11,8 @@ import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionDefinition;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
+import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.zone.CardInHandComponent;
-import com.gempukku.startrek.game.zone.CardStorageSystem;
 
 import java.util.Set;
 import java.util.function.Consumer;
@@ -87,7 +87,7 @@ public class SelectionState implements SelectionDefinition {
 
     public void markPlayableCards() {
         CardFilteringSystem cardFilteringSystem = world.getSystem(CardFilteringSystem.class);
-        CardStorageSystem cardStorageSystem = world.getSystem(CardStorageSystem.class);
+        CardRenderingSystem cardRenderingSystem = world.getSystem(CardRenderingSystem.class);
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
         HierarchySystem hierarchySystem = world.getSystem(HierarchySystem.class);
         cardFilteringSystem.forEachCard(sourceEntity, memory, cardFilter,
@@ -95,12 +95,12 @@ public class SelectionState implements SelectionDefinition {
                     @Override
                     public void accept(Entity cardEntity) {
                         if (cardEntity.getComponent(CardInHandComponent.class) != null) {
-                            Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
+                            Entity renderedCard = cardRenderingSystem.findRenderedCard(cardEntity);
                             Entity selectionEntity = spawnSystem.spawnEntity("game/card/card-full-selection.template");
                             hierarchySystem.addHierarchy(renderedCard, selectionEntity);
                             selectionEntities.add(selectionEntity);
                         } else {
-                            Entity renderedCard = cardStorageSystem.findRenderedCard(cardEntity);
+                            Entity renderedCard = cardRenderingSystem.findRenderedCard(cardEntity);
                             Entity selectionEntity = spawnSystem.spawnEntity("game/card/card-small-selection.template");
                             hierarchySystem.addHierarchy(renderedCard, selectionEntity);
                             selectionEntities.add(selectionEntity);
