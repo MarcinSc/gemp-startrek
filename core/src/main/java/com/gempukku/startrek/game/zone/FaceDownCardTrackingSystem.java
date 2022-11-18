@@ -157,12 +157,12 @@ public class FaceDownCardTrackingSystem extends BaseSystem {
     }
 
     private void addFaceDownPlayerCard(MissionCards missionCards) {
-        Entity cardRepresentation = CardTemplates.createFaceDownCard(spawnSystem);
+        Entity cardRepresentation = CardTemplates.createSmallFaceDownCard(spawnSystem);
         missionCards.addPlayerTopLevelCardInMission(null, cardRepresentation);
     }
 
     private void addFaceDownOpponentCard(MissionCards missionCards) {
-        Entity cardRepresentation = CardTemplates.createFaceDownCard(spawnSystem);
+        Entity cardRepresentation = CardTemplates.createSmallFaceDownCard(spawnSystem);
         missionCards.addOpponentTopLevelCardInMission(null, cardRepresentation);
     }
 

@@ -13,9 +13,16 @@ bajoran-template
   index: -1
 cardback
   rotate: false
-  xy: 2216, 3108
+  xy: 740, 532
   size: 357, 499
   orig: 357, 499
+  offset: 0, 0
+  index: -1
+cardback-small
+  rotate: false
+  xy: 2, 2
+  size: 736, 512
+  orig: 736, 512
   offset: 0, 0
   index: -1
 equipment-template
@@ -48,7 +55,7 @@ interrupt-template
   index: -1
 mission-template-small
   rotate: false
-  xy: 2, 2
+  xy: 740, 1033
   size: 736, 512
   orig: 736, 512
   offset: 0, 0
@@ -62,14 +69,14 @@ nonAligned-template
   index: -1
 personnel-template-small
   rotate: false
-  xy: 740, 1033
+  xy: 1478, 2064
   size: 736, 512
   orig: 736, 512
   offset: 0, 0
   index: -1
 unaffiliated-template-small
   rotate: false
-  xy: 1478, 2064
+  xy: 2216, 3095
   size: 736, 512
   orig: 736, 512
   offset: 0, 0

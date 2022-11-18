@@ -43,6 +43,10 @@ public class CardTemplates {
         return spawnSystem.spawnEntity("game/card/card-facedown.template");
     }
 
+    public static Entity createSmallFaceDownCard(SpawnSystem spawnSystem) {
+        return spawnSystem.spawnEntity("game/card/card-small-facedown.template");
+    }
+
     public static Entity createFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
         return createFullCard(cardDefinition, spawnSystem, false, -1);
     }
