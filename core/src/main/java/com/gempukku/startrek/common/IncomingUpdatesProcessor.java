@@ -23,7 +23,6 @@ public class IncomingUpdatesProcessor extends BaseSystem {
     private InformationPacketUtil<JsonValue> informationPacketUtil;
 
     private EventSystem eventSystem;
-    private boolean stateChanged = false;
 
     @Wire(failOnNull = false)
     private AnimationDirectorSystem animationDirectorSystem;
