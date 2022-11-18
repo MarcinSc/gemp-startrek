@@ -53,9 +53,9 @@ public class DualGameApplication extends ApplicationAdapter {
     @Override
     public void render() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {
-            System.out.println("Switching context");
             currentGame.setInactive();
             operateOnFirstContext = !operateOnFirstContext;
+            System.out.println("Switching context: " + (operateOnFirstContext ? "1" : "2"));
             currentGame = operateOnFirstContext ? game1 : game2;
 
             currentGame.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

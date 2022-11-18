@@ -1,9 +1,11 @@
 package com.gempukku.libgdx.network.client;
 
 
-import com.artemis.*;
+import com.artemis.Component;
+import com.artemis.ComponentMapper;
+import com.artemis.Entity;
+import com.artemis.World;
 import com.artemis.utils.Bag;
-import com.artemis.utils.IntBag;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.DataSerializer;
@@ -22,34 +24,6 @@ public class InformationPacketUtil<T> {
         this.eventSystem = world.getSystem(EventSystem.class);
         serverEntityMapper = world.getMapper(ServerEntityComponent.class);
         this.dataSerializer = dataSerializer;
-        world.getAspectSubscriptionManager().get(Aspect.all(ServerEntityComponent.class)).
-                addSubscriptionListener(
-                        new EntitySubscription.SubscriptionListener() {
-                            @Override
-                            public void inserted(IntBag entities) {
-                                for (int i = 0, s = entities.size(); s > i; i++) {
-                                    entityAdded(entities.get(i));
-                                }
-                            }
-
-                            @Override
-                            public void removed(IntBag entities) {
-                                for (int i = 0, s = entities.size(); s > i; i++) {
-                                    entityRemoved(entities.get(i));
-                                }
-                            }
-                        });
-    }
-
-    private void entityAdded(int i) {
-        Entity entity = world.getEntity(i);
-        String serverEntityId = serverEntityMapper.get(entity).getEntityId();
-        serverEntityMap.put(serverEntityId, entity);
-    }
-
-    private void entityRemoved(int i) {
-        String serverEntityId = serverEntityMapper.get(i).getEntityId();
-        serverEntityMap.remove(serverEntityId);
     }
 
     public void applyInformationPacket(IncomingInformationPacket<T> packet) {
@@ -62,7 +36,9 @@ public class InformationPacketUtil<T> {
         } else if (packet.getType() == IncomingInformationPacket.Type.CREATE_ENTITY) {
             Entity entity = world.createEntity();
             ServerEntityComponent serverEntityComponent = serverEntityMapper.create(entity);
-            serverEntityComponent.setEntityId(packet.getEntityId());
+            String entityId = packet.getEntityId();
+            serverEntityComponent.setEntityId(entityId);
+            serverEntityMap.put(entityId, entity);
 
             for (T entityDatum : packet.getEntityData()) {
                 dataSerializer.deserializeComponent(entity, world, entityDatum);
@@ -83,7 +59,7 @@ public class InformationPacketUtil<T> {
                 }
             }
         } else if (packet.getType() == IncomingInformationPacket.Type.DESTROY_ENTITY) {
-            Entity entity = serverEntityMap.get(packet.getEntityId());
+            Entity entity = serverEntityMap.remove(packet.getEntityId());
             if (entity != null) {
                 world.deleteEntity(entity);
             }

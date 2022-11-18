@@ -23,16 +23,21 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
 
     @EventListener
     public void cardZoneChanged(CardChangedZones cardChangedZones, Entity cardEntity) {
+        System.out.println("Card zone changed");
         CardComponent card = cardEntity.getComponent(CardComponent.class);
 
         CardZone oldZone = cardChangedZones.getPreviousZone();
         CardZone newZone = card.getCardZone();
 
         Entity renderedCard = cardRenderingSystem.removeRenderedCard(cardEntity, oldZone);
-        if (isBigCardZone(oldZone) == isBigCardZone(newZone)) {
-            moveCardToZone(cardEntity, renderedCard, card, oldZone, newZone);
+        if (renderedCard != null) {
+            if (isBigCardZone(oldZone) == isBigCardZone(newZone)) {
+                moveCardToZone(cardEntity, renderedCard, card, oldZone, newZone);
+            } else {
+                world.deleteEntity(renderedCard);
+                createAndAddCardToZone(cardEntity, card, newZone);
+            }
         } else {
-            world.deleteEntity(renderedCard);
             createAndAddCardToZone(cardEntity, card, newZone);
         }
     }
