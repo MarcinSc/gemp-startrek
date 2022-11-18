@@ -1,4 +1,4 @@
-package com.gempukku.startrek.game;
+package com.gempukku.startrek.game.render;
 
 import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
@@ -16,6 +16,10 @@ import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextComponent;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextSystem;
+import com.gempukku.startrek.game.GamePlayerComponent;
+import com.gempukku.startrek.game.PlayerPosition;
+import com.gempukku.startrek.game.PlayerPositionSystem;
+import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 
 public class PlayerInfoRenderingSystem extends BaseEntitySystem {
     private PlayerPositionSystem playerPositionSystem;

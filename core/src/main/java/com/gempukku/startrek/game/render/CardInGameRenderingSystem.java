@@ -1,4 +1,4 @@
-package com.gempukku.startrek.game;
+package com.gempukku.startrek.game.render;
 
 import com.artemis.*;
 import com.artemis.utils.IntBag;
@@ -11,6 +11,10 @@ import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.common.OrderComponent;
+import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.PlayerPosition;
+import com.gempukku.startrek.game.PlayerPositionSystem;
+import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.layout.CoreLayout;
 import com.gempukku.startrek.game.layout.HandLayout;

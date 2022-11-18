@@ -1,4 +1,4 @@
-package com.gempukku.startrek.game;
+package com.gempukku.startrek.game.render;
 
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
@@ -14,6 +14,9 @@ import com.gempukku.libgdx.lib.graph.artemis.text.TextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextComponent;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextSystem;
 import com.gempukku.startrek.LazyEntityUtil;
+import com.gempukku.startrek.game.PlayerPosition;
+import com.gempukku.startrek.game.PlayerPositionSystem;
+import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.turn.TurnComponent;
 import com.gempukku.startrek.game.turn.TurnSegment;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
