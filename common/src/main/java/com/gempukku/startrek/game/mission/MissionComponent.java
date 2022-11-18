@@ -9,7 +9,7 @@ public class MissionComponent extends Component {
     private String owner;
     private int missionIndex;
     private boolean completed;
-    private ObjectMap<String, Integer> hiddenCardsCount = new ObjectMap<>();
+    private ObjectMap<String, Integer> playerFaceDownCardsCount = new ObjectMap<>();
 
     public String getOwner() {
         return owner;
@@ -35,7 +35,7 @@ public class MissionComponent extends Component {
         this.missionIndex = missionIndex;
     }
 
-    public ObjectMap<String, Integer> getHiddenCardsCount() {
-        return hiddenCardsCount;
+    public ObjectMap<String, Integer> getPlayerFaceDownCardsCount() {
+        return playerFaceDownCardsCount;
     }
 }

@@ -12,6 +12,16 @@ public class MissionCards {
     private final Array<Entity> opponentTopLevelCardsInMission = new Array<>();
     private final ObjectMap<Entity, Array<Entity>> attachedCardsInMission = new ObjectMap<>();
     private final Array<Entity> missionCards = new Array<>();
+    private final Array<Entity> faceDownPlayerCards = new Array<>();
+    private final Array<Entity> faceDownOpponentCards = new Array<>();
+
+    public int getFaceDownPlayerCardCount() {
+        return faceDownPlayerCards.size;
+    }
+
+    public int getFaceDownOpponentCardCount() {
+        return faceDownOpponentCards.size;
+    }
 
     public void addMissionCard(Entity card, Entity renderedCard) {
         renderedCards.put(card, renderedCard);
@@ -34,7 +44,11 @@ public class MissionCards {
     }
 
     public void addPlayerTopLevelCardInMission(Entity card, Entity renderedCard) {
-        renderedCards.put(card, renderedCard);
+        if (card != null) {
+            renderedCards.put(card, renderedCard);
+        } else {
+            faceDownPlayerCards.add(renderedCard);
+        }
         attachedCardsInMission.put(renderedCard, new Array<>());
         playerTopLevelCardsInMission.add(renderedCard);
 
@@ -43,6 +57,10 @@ public class MissionCards {
 
     public Array<Entity> getPlayerTopLevelCardsInMission() {
         return playerTopLevelCardsInMission;
+    }
+
+    public Entity removeFaceDownPlayerCard() {
+        return faceDownPlayerCards.removeIndex(faceDownPlayerCards.size - 1);
     }
 
     public Entity removePlayerTopLevelCardInMission(Entity card) {
@@ -54,7 +72,11 @@ public class MissionCards {
     }
 
     public void addOpponentTopLevelCardInMission(Entity card, Entity renderedCard) {
-        renderedCards.put(card, renderedCard);
+        if (card != null) {
+            renderedCards.put(card, renderedCard);
+        } else {
+            faceDownOpponentCards.add(renderedCard);
+        }
         attachedCardsInMission.put(renderedCard, new Array<>());
         opponentTopLevelCardsInMission.add(renderedCard);
 
@@ -63,6 +85,10 @@ public class MissionCards {
 
     public Array<Entity> getOpponentTopLevelCardsInMission() {
         return opponentTopLevelCardsInMission;
+    }
+
+    public Entity removeFaceDownOpponentCard() {
+        return faceDownOpponentCards.removeIndex(faceDownOpponentCards.size - 1);
     }
 
     public Entity removeOpponentTopLevelCardInMission(Entity card) {

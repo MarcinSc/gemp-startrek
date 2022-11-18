@@ -11,7 +11,10 @@ import com.gempukku.startrek.common.ServerStateChanged;
 import com.gempukku.startrek.game.PlayerPosition;
 import com.gempukku.startrek.game.PlayerPositionSystem;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
+import com.gempukku.startrek.game.mission.MissionComponent;
+import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
+import com.gempukku.startrek.game.render.zone.MissionCards;
 import com.gempukku.startrek.game.render.zone.PlayerZones;
 import com.gempukku.startrek.game.template.CardTemplates;
 
@@ -34,13 +37,76 @@ public class FaceDownCardTrackingSystem extends BaseSystem {
         if (stateChanged) {
             stateChanged = false;
 
-            setupUnknownPlayersHands();
-            setupPlayersDecks();
-            setupPlayersDilemmaPiles();
+            updateUnknownPlayersHands();
+            updatePlayersDecks();
+            updatePlayersDilemmaPiles();
+            updatePlayersMissions();
         }
     }
 
-    private void setupPlayersDecks() {
+    private void updatePlayersMissions() {
+        for (ObjectMap.Entry<String, PlayerPosition> missionPlayer : new ObjectMap.Entries<>(playerPositionSystem.getPlayerPositions())) {
+            String missionOwner = missionPlayer.key;
+            PlayerPosition missionPlayerPosition = missionPlayer.value;
+            Entity missionPlayerEntity = playerPositionSystem.getPlayerEntity(missionOwner);
+            PlayerZones missionPlayerZones = cardRenderingSystem.getPlayerCards(missionPlayerPosition);
+
+            for (int missionIndex = 0; missionIndex < 5; missionIndex++) {
+                Entity missionEntity = MissionOperations.findMission(world, missionPlayerEntity, missionIndex);
+                MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
+
+                MissionCards missionCards = missionPlayerZones.getMissionCards(missionIndex);
+                updateFaceDownMissionCards(missionOwner, mission, missionCards);
+            }
+        }
+    }
+
+    private void updateFaceDownMissionCards(String missionOwner, MissionComponent mission, MissionCards missionCards) {
+        int playerFaceDownCardCount = 0;
+        int opponentFaceDownCardCount = 0;
+        for (ObjectMap.Entry<String, PlayerPosition> cardOwnerEntry : playerPositionSystem.getPlayerPositions()) {
+            String ownerUsername = cardOwnerEntry.key;
+            if (!ownerUsername.equals(authenticationHolderSystem.getUsername())) {
+                if (missionOwner.equals(ownerUsername)) {
+                    playerFaceDownCardCount += mission.getPlayerFaceDownCardsCount().get(ownerUsername, 0);
+                } else {
+                    opponentFaceDownCardCount += mission.getPlayerFaceDownCardsCount().get(ownerUsername, 0);
+                }
+            }
+        }
+
+        int existingPlayerFaceDownCards = missionCards.getFaceDownPlayerCardCount();
+        if (existingPlayerFaceDownCards > playerFaceDownCardCount) {
+            int destroyCount = existingPlayerFaceDownCards - playerFaceDownCardCount;
+            for (int i = 0; i < destroyCount; i++) {
+                Entity removedCard = missionCards.removeFaceDownPlayerCard();
+                world.deleteEntity(removedCard);
+            }
+
+        } else if (existingPlayerFaceDownCards < playerFaceDownCardCount) {
+            int createCount = playerFaceDownCardCount - existingPlayerFaceDownCards;
+            for (int i = 0; i < createCount; i++) {
+                addFaceDownPlayerCard(missionCards);
+            }
+        }
+
+        int existingOpponentFaceDownCards = missionCards.getFaceDownOpponentCardCount();
+        if (existingOpponentFaceDownCards > opponentFaceDownCardCount) {
+            int destroyCount = existingOpponentFaceDownCards - opponentFaceDownCardCount;
+            for (int i = 0; i < destroyCount; i++) {
+                Entity removedCard = missionCards.removeFaceDownOpponentCard();
+                world.deleteEntity(removedCard);
+            }
+
+        } else if (existingOpponentFaceDownCards < opponentFaceDownCardCount) {
+            int createCount = opponentFaceDownCardCount - existingOpponentFaceDownCards;
+            for (int i = 0; i < createCount; i++) {
+                addFaceDownOpponentCard(missionCards);
+            }
+        }
+    }
+
+    private void updatePlayersDecks() {
         for (ObjectMap.Entry<String, PlayerPosition> player : playerPositionSystem.getPlayerPositions()) {
             String username = player.key;
             PlayerPosition playerPosition = player.value;
@@ -65,7 +131,7 @@ public class FaceDownCardTrackingSystem extends BaseSystem {
         }
     }
 
-    private void setupPlayersDilemmaPiles() {
+    private void updatePlayersDilemmaPiles() {
         for (ObjectMap.Entry<String, PlayerPosition> player : playerPositionSystem.getPlayerPositions()) {
             String username = player.key;
             PlayerPosition playerPosition = player.value;
@@ -90,14 +156,24 @@ public class FaceDownCardTrackingSystem extends BaseSystem {
         }
     }
 
+    private void addFaceDownPlayerCard(MissionCards missionCards) {
+        Entity cardRepresentation = CardTemplates.createFaceDownCard(spawnSystem);
+        missionCards.addPlayerTopLevelCardInMission(null, cardRepresentation);
+    }
+
+    private void addFaceDownOpponentCard(MissionCards missionCards) {
+        Entity cardRepresentation = CardTemplates.createFaceDownCard(spawnSystem);
+        missionCards.addOpponentTopLevelCardInMission(null, cardRepresentation);
+    }
+
     private void addFaceDownCardToDeck(PlayerZones playerZones) {
         Entity cardRepresentation = CardTemplates.createFaceDownCard(spawnSystem);
-        playerZones.addCardInDeck(null, cardRepresentation);
+        playerZones.addCardInDeck(cardRepresentation);
     }
 
     private void addFaceDownCardToDilemmaPile(PlayerZones playerZones) {
         Entity cardRepresentation = CardTemplates.createFaceDownCard(spawnSystem);
-        playerZones.addCardInDilemmaPile(null, cardRepresentation);
+        playerZones.addCardInDilemmaPile(cardRepresentation);
     }
 
     private static int getRenderedDeckSize(int realDeckSize) {
@@ -110,19 +186,19 @@ public class FaceDownCardTrackingSystem extends BaseSystem {
         return realDeckSize;
     }
 
-    private void setupUnknownPlayersHands() {
+    private void updateUnknownPlayersHands() {
         for (ObjectMap.Entry<String, PlayerPosition> player : playerPositionSystem.getPlayerPositions()) {
             String username = player.key;
             if (!username.equals(authenticationHolderSystem.getUsername())) {
                 PlayerPosition playerPosition = player.value;
                 PlayerZones playerZones = cardRenderingSystem.getPlayerCards(playerPosition);
                 Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
-                layoutPlayerUnknownHand(playerPosition, playerZones, playerEntity);
+                updatePlayerUnknownHand(playerPosition, playerZones, playerEntity);
             }
         }
     }
 
-    private void layoutPlayerUnknownHand(PlayerPosition playerPosition, PlayerZones playerZones, Entity playerEntity) {
+    private void updatePlayerUnknownHand(PlayerPosition playerPosition, PlayerZones playerZones, Entity playerEntity) {
         PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         int handCount = publicStats.getHandCount();
         int renderedCount = playerZones.getCardInHandCount();

@@ -24,17 +24,13 @@ public class PlayerZones {
     }
 
     public void addCardInCore(Entity card, Entity renderedCard) {
-        if (card != null) {
-            cardToRenderedMap.put(card, renderedCard);
-        }
+        cardToRenderedMap.put(card, renderedCard);
         cardsInCore.add(renderedCard);
         playerZonesStatus.setCoreDirty();
     }
 
     public void addCardInBrig(Entity card, Entity renderedCard) {
-        if (card != null) {
-            cardToRenderedMap.put(card, renderedCard);
-        }
+        cardToRenderedMap.put(card, renderedCard);
         cardsInBrig.add(renderedCard);
         playerZonesStatus.setBrigDirty();
     }
@@ -47,18 +43,12 @@ public class PlayerZones {
         playerZonesStatus.setHandDrity();
     }
 
-    public void addCardInDeck(Entity card, Entity renderedCard) {
-        if (card != null) {
-            cardToRenderedMap.put(card, renderedCard);
-        }
+    public void addCardInDeck(Entity renderedCard) {
         cardsInDeck.add(renderedCard);
         playerZonesStatus.setDeckDirty();
     }
 
-    public void addCardInDilemmaPile(Entity card, Entity renderedCard) {
-        if (card != null) {
-            cardToRenderedMap.put(card, renderedCard);
-        }
+    public void addCardInDilemmaPile(Entity renderedCard) {
         cardsInDilemmaPile.add(renderedCard);
         playerZonesStatus.setDilemmaPileDirty();
     }

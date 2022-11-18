@@ -5,6 +5,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.CardComponent;
@@ -12,6 +13,7 @@ import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.game.PlayerDiscardPileComponent;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.mission.MissionComponent;
+import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.*;
 import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
@@ -118,6 +120,10 @@ public class ZoneOperations extends BaseSystem {
             cardInMission.setOwner(card.getOwner());
             cardInMission.setMissionOwner(mission.getOwner());
             cardInMission.setMissionIndex(mission.getMissionIndex());
+            ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
+            int oldCount = playerFaceDownCardsCount.get(card.getOwner(), 0);
+            playerFaceDownCardsCount.put(card.getOwner(), oldCount + 1);
+            eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
         }
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
 
@@ -125,7 +131,21 @@ public class ZoneOperations extends BaseSystem {
     }
 
     public void removeCardFromMission(Entity cardEntity) {
-        faceDownCardInMissionComponentMapper.remove(cardEntity);
+        FaceDownCardInMissionComponent faceDownInMission = faceDownCardInMissionComponentMapper.get(cardEntity);
+        if (faceDownInMission != null) {
+            int missionIndex = faceDownInMission.getMissionIndex();
+            String missionOwner = faceDownInMission.getMissionOwner();
+            Entity playerEntity = playerResolverSystem.findPlayerEntity(missionOwner);
+            Entity missionEntity = MissionOperations.findMission(world, playerEntity, missionIndex);
+            faceDownCardInMissionComponentMapper.remove(cardEntity);
+
+            CardComponent card = cardEntity.getComponent(CardComponent.class);
+            MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
+            ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
+            int oldCount = playerFaceDownCardsCount.get(card.getOwner(), 0);
+            playerFaceDownCardsCount.put(card.getOwner(), oldCount - 1);
+            eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
+        }
         faceUpCardInMissionComponentMapper.remove(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
