@@ -34,8 +34,10 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToHand(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.Hand;
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
-        card.setCardZone(CardZone.Hand);
+        card.setCardZone(newZone);
         CardInHandComponent cardInHand = cardInHandComponentMapper.create(cardEntity);
         cardInHand.setOwner(card.getOwner());
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
@@ -43,6 +45,14 @@ public class ZoneOperations extends BaseSystem {
         PlayerPublicStatsComponent stats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         stats.setHandCount(stats.getHandCount() + 1);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone);
+    }
+
+    private void notifyZoneChange(Entity cardEntity, CardZone lastZone, CardZone newZone) {
+        if (lastZone != null && lastZone != newZone) {
+            eventSystem.fireEvent(new CardChangedZones(lastZone), cardEntity);
+        }
     }
 
     public void removeCardFromHand(Entity cardEntity) {
@@ -58,11 +68,15 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToStack(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.Stack);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.Stack;
+        card.setCardZone(newZone);
         ObjectOnStackComponent cardOnStack = cardOnStackComponentMapper.create(cardEntity);
         cardOnStack.setType("card");
         objectStackSystem.stackEntity(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone);
     }
 
     public void removeCardFromStack(Entity cardEntity) {
@@ -73,11 +87,15 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToBrig(Entity cardEntity, Entity brigPlayerEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.Brig);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.Brig;
+        card.setCardZone(newZone);
         GamePlayerComponent gamePlayer = brigPlayerEntity.getComponent(GamePlayerComponent.class);
         CardInBrigComponent cardInBrig = cardInBrigComponentMapper.create(cardEntity);
         cardInBrig.setBrigOwner(gamePlayer.getName());
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone);
     }
 
     public void removeCardFromBrig(Entity cardEntity) {
@@ -87,8 +105,10 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToMission(Entity cardEntity, Entity missionEntity, boolean faceUp) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.Mission;
         MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
-        card.setCardZone(CardZone.Mission);
+        card.setCardZone(newZone);
         if (faceUp) {
             FaceUpCardInMissionComponent cardInMission = faceUpCardInMissionComponentMapper.create(cardEntity);
             cardInMission.setMissionOwner(mission.getOwner());
@@ -100,6 +120,8 @@ public class ZoneOperations extends BaseSystem {
             cardInMission.setMissionIndex(mission.getMissionIndex());
         }
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone);
     }
 
     public void removeCardFromMission(Entity cardEntity) {
@@ -110,9 +132,13 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToCore(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.Core);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.Core;
+        card.setCardZone(newZone);
         cardInCoreComponentMapper.create(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone);
     }
 
     public void removeCardFromCore(Entity cardEntity) {
@@ -122,30 +148,38 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToBottomOfDeck(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.Deck;
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
         PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);
         PlayerPublicStatsComponent stats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         deck.getCards().insert(0, cardEntity.getId());
-        card.setCardZone(CardZone.Deck);
+        card.setCardZone(newZone);
 
         stats.setDeckCount(stats.getDeckCount() + 1);
 
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone);
     }
 
     public void moveCardToTopOfDeck(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.Deck;
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
         PlayerDeckComponent deck = playerEntity.getComponent(PlayerDeckComponent.class);
         PlayerPublicStatsComponent stats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         deck.getCards().add(cardEntity.getId());
-        card.setCardZone(CardZone.Deck);
+        card.setCardZone(newZone);
 
         stats.setDeckCount(stats.getDeckCount() + 1);
 
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone);
     }
 
     public Entity removeTopCardOfDeck(Entity playerEntity) {
@@ -177,7 +211,9 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToDiscardPile(Entity cardEntity) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.DiscardPile);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.DiscardPile;
+        card.setCardZone(newZone);
         cardInDiscardComponentMapper.create(cardEntity);
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
         PlayerDiscardPileComponent discard = playerEntity.getComponent(PlayerDiscardPileComponent.class);
@@ -185,6 +221,8 @@ public class ZoneOperations extends BaseSystem {
         cards.add(cardEntity.getId());
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone);
     }
 
     public void removeCardFromDiscardPile(Entity cardEntity) {
@@ -200,7 +238,9 @@ public class ZoneOperations extends BaseSystem {
 
     public void moveCardToBottomOfDilemmaPile(Entity cardEntity, boolean faceUp) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.DilemmaPile);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.DilemmaPile;
+        card.setCardZone(newZone);
         CardInDilemmaPileComponent cardInDilemmaPile = cardInDilemmaPileComponentMapper.create(cardEntity);
         cardInDilemmaPile.setFaceUp(faceUp);
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
@@ -211,11 +251,15 @@ public class ZoneOperations extends BaseSystem {
         stats.setDilemmaCount(cards.size);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone);
     }
 
     public void moveCardToTopOfDilemmaPile(Entity cardEntity, boolean faceUp) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setCardZone(CardZone.DilemmaPile);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.DilemmaPile;
+        card.setCardZone(newZone);
         CardInDilemmaPileComponent cardInDilemmaPile = cardInDilemmaPileComponentMapper.create(cardEntity);
         cardInDilemmaPile.setFaceUp(faceUp);
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
@@ -226,6 +270,8 @@ public class ZoneOperations extends BaseSystem {
         stats.setDilemmaCount(cards.size);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone);
     }
 
     public Entity removeTopCardFromDilemmaPile(Entity playerEntity) {

@@ -121,7 +121,6 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new SpriteBatchSystem(),
                 new SpriteSystem(),
                 new CameraSystem(new TopDownCameraController()),
-                new EvaluatePropertySystem(),
                 new IncomingUpdatesProcessor(),
 
                 new CardLookupSystem(cardData),
@@ -181,6 +180,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new HierarchySystem(),
                 new TransformSystem(),
                 new InputProcessorSystem(),
+                new EvaluatePropertySystem(),
                 new TextureSystem(),
                 new ConfigureTextureSystem(),
                 new PropertySystem(properties),
