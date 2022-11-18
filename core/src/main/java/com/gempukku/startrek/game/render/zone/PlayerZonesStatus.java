@@ -4,13 +4,15 @@ public class PlayerZonesStatus {
     private boolean handDrity;
     private boolean coreDirty;
     private boolean brigDirty;
+    private boolean deckDirty;
+    private boolean dilemmaPileDirty;
 
     public boolean isHandDrity() {
         return handDrity;
     }
 
     public void setHandDrity() {
-        this.handDrity = true;
+        handDrity = true;
     }
 
     public boolean isCoreDirty() {
@@ -18,7 +20,7 @@ public class PlayerZonesStatus {
     }
 
     public void setCoreDirty() {
-        this.coreDirty = true;
+        coreDirty = true;
     }
 
     public boolean isBrigDirty() {
@@ -26,12 +28,30 @@ public class PlayerZonesStatus {
     }
 
     public void setBrigDirty() {
-        this.brigDirty = true;
+        brigDirty = true;
+    }
+
+    public boolean isDeckDirty() {
+        return deckDirty;
+    }
+
+    public void setDeckDirty() {
+        this.deckDirty = true;
+    }
+
+    public boolean isDilemmaPileDirty() {
+        return dilemmaPileDirty;
+    }
+
+    public void setDilemmaPileDirty() {
+        dilemmaPileDirty = true;
     }
 
     public void cleanZones() {
         handDrity = false;
         coreDirty = false;
         brigDirty = false;
+        deckDirty = false;
+        dilemmaPileDirty = false;
     }
 }

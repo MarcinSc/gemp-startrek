@@ -1,8 +1,7 @@
 package com.gempukku.startrek.game.zone;
 
-import com.artemis.BaseSystem;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
+import com.artemis.*;
+import com.artemis.utils.IntBag;
 import com.gempukku.libgdx.lib.artemis.animation.AnimationDirectorSystem;
 import com.gempukku.libgdx.lib.artemis.animation.animator.WaitAnimator;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
@@ -20,6 +19,35 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
     private AnimationDirectorSystem animationDirectorSystem;
 
     private ComponentMapper<OrderComponent> orderComponentMapper;
+
+    @Override
+    protected void initialize() {
+        world.getAspectSubscriptionManager().get(Aspect.all(CardComponent.class))
+                .addSubscriptionListener(
+                        new EntitySubscription.SubscriptionListener() {
+                            @Override
+                            public void inserted(IntBag entities) {
+
+                            }
+
+                            @Override
+                            public void removed(IntBag entities) {
+                                for (int i = 0, size = entities.size(); i < size; i++) {
+                                    cardRemoved(entities.get(i));
+                                }
+                            }
+                        }
+                );
+    }
+
+    private void cardRemoved(int entityId) {
+        Entity cardEntity = world.getEntity(entityId);
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        Entity renderedCard = cardRenderingSystem.removeRenderedCard(cardEntity, card.getCardZone());
+        if (renderedCard != null) {
+            world.deleteEntity(renderedCard);
+        }
+    }
 
     @EventListener
     public void cardZoneChanged(CardChangedZones cardChangedZones, Entity cardEntity) {
@@ -52,7 +80,7 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
             CardZoneUtil.moveCardToCore(cardEntity, renderedCard, card, cardRenderingSystem);
         if (zone == CardZone.Stack) {
             CardZoneUtil.moveObjectToStack(cardEntity, renderedCard, cardRenderingSystem);
-            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(20f));
+            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
         }
 
         FaceUpCardInMissionComponent faceUpCardInMission = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
@@ -76,9 +104,11 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
             CardZoneUtil.addCardInBrig(cardEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem);
         if (zone == CardZone.Core)
             CardZoneUtil.addCardInCore(cardEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem);
-        if (zone == CardZone.Stack)
+        if (zone == CardZone.Stack) {
             CardZoneUtil.addObjectOnStack(cardEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem,
                     orderComponentMapper);
+            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+        }
 
         if (cardEntity.getComponent(FaceUpCardInMissionComponent.class) != null)
             CardZoneUtil.addFaceUpCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);

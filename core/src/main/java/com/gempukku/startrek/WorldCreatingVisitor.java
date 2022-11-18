@@ -53,6 +53,7 @@ import com.gempukku.startrek.game.filter.ClientIdInFilterHandler;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.PlayerInfoRenderingSystem;
 import com.gempukku.startrek.game.render.TurnSegmentRenderingSystem;
+import com.gempukku.startrek.game.zone.FaceDownCardTrackingSystem;
 import com.gempukku.startrek.game.zone.GameStateCardsTrackingSystem;
 import com.gempukku.startrek.game.zone.InitialGameStateCardsCreatorSystem;
 import com.gempukku.startrek.hall.*;
@@ -131,6 +132,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new PlayerPositionSystem(),
                 new InitialGameStateCardsCreatorSystem(),
                 new GameStateCardsTrackingSystem(),
+                new FaceDownCardTrackingSystem(),
 
                 new ShapeSystem(),
                 new ShapePickingSystem(),

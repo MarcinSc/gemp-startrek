@@ -52,6 +52,7 @@ public class PlayerZones {
             cardToRenderedMap.put(card, renderedCard);
         }
         cardsInDeck.add(renderedCard);
+        playerZonesStatus.setDeckDirty();
     }
 
     public void addCardInDilemmaPile(Entity card, Entity renderedCard) {
@@ -59,6 +60,7 @@ public class PlayerZones {
             cardToRenderedMap.put(card, renderedCard);
         }
         cardsInDilemmaPile.add(renderedCard);
+        playerZonesStatus.setDilemmaPileDirty();
     }
 
     public MissionCards getMissionCards(int missionIndex) {
@@ -79,11 +81,15 @@ public class PlayerZones {
     }
 
     public Entity removeOneCardInDeck() {
-        return removeLast(cardsInDeck);
+        Entity renderedCard = removeLast(cardsInDeck);
+        playerZonesStatus.setDeckDirty();
+        return renderedCard;
     }
 
     public Entity removeOneCardInDilemmaPile() {
-        return removeLast(cardsInDilemmaPile);
+        Entity renderedCard = removeLast(cardsInDilemmaPile);
+        playerZonesStatus.setDilemmaPileDirty();
+        return renderedCard;
     }
 
     public Entity removeCardInCore(Entity card) {
@@ -158,6 +164,14 @@ public class PlayerZones {
 
     public boolean isHandDirty() {
         return playerZonesStatus.isHandDrity();
+    }
+
+    public boolean isDeckDirty() {
+        return playerZonesStatus.isDeckDirty();
+    }
+
+    public boolean isDilemmaPileDirty() {
+        return playerZonesStatus.isDilemmaPileDirty();
     }
 
     public void cleanup() {
