@@ -6,12 +6,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluableProperty;
-import com.gempukku.libgdx.lib.artemis.evaluate.EvaluateProperty;
-import com.gempukku.libgdx.lib.artemis.event.EventListener;
+import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
+import com.gempukku.libgdx.lib.artemis.evaluate.PropertyEvaluator;
 
-public class TextureSystem extends BaseSystem {
+public class TextureSystem extends BaseSystem implements PropertyEvaluator {
+    private EvaluatePropertySystem evaluatePropertySystem;
+
     private TextureHandler defaultTextureHandler;
     private final ObjectMap<String, TextureHandler> configuredTextureHandler = new ObjectMap<>();
+
+    @Override
+    protected void initialize() {
+        evaluatePropertySystem.addPropertyEvaluator(this);
+    }
 
     public void setDefaultTextureHandler(TextureHandler defaultTextureHandler) {
         this.defaultTextureHandler = defaultTextureHandler;
@@ -31,14 +38,15 @@ public class TextureSystem extends BaseSystem {
         return result;
     }
 
-    @EventListener
-    public void evaluateTextureReference(EvaluateProperty evaluateProperty, Entity entity) {
-        EvaluableProperty propertyValue = evaluateProperty.getPropertyValue();
-        if (propertyValue instanceof TextureReference) {
-            TextureReference textureReference = (TextureReference) propertyValue;
-            TextureRegion textureRegion = getTextureRegion(textureReference.getAtlas(), textureReference.getRegion());
-            evaluateProperty.setResult(textureRegion);
-        }
+    @Override
+    public boolean evaluatesProperty(Entity entity, EvaluableProperty value) {
+        return value instanceof TextureReference;
+    }
+
+    @Override
+    public Object evaluateValue(Entity entity, EvaluableProperty value) {
+        TextureReference textureReference = (TextureReference) value;
+        return getTextureRegion(textureReference.getAtlas(), textureReference.getRegion());
     }
 
     @Override

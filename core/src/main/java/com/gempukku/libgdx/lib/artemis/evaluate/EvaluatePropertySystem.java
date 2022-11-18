@@ -2,12 +2,20 @@ package com.gempukku.libgdx.lib.artemis.evaluate;
 
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 
 public class EvaluatePropertySystem extends BaseSystem {
-    private static final EvaluateProperty evaluateProperty = new EvaluateProperty();
-
     private EventSystem eventSystem;
+    private Array<PropertyEvaluator> propertyEvaluatorArray = new Array<>();
+
+    public void addPropertyEvaluator(PropertyEvaluator propertyEvaluator) {
+        propertyEvaluatorArray.add(propertyEvaluator);
+    }
+
+    public void removePropertyEvaluator(PropertyEvaluator propertyEvaluator) {
+        propertyEvaluatorArray.removeValue(propertyEvaluator, true);
+    }
 
     @Override
     protected void processSystem() {
@@ -16,10 +24,11 @@ public class EvaluatePropertySystem extends BaseSystem {
 
     public <T> T evaluateProperty(Entity entity, Object property, Class<T> clazz) {
         if (property instanceof EvaluableProperty) {
-            evaluateProperty.setResult(null);
-            evaluateProperty.setPropertyValue((EvaluableProperty) property);
-            eventSystem.fireEvent(evaluateProperty, entity);
-            return (T) evaluateProperty.getResult();
+            EvaluableProperty evaluableProperty = (EvaluableProperty) property;
+            for (PropertyEvaluator propertyEvaluator : propertyEvaluatorArray) {
+                if (propertyEvaluator.evaluatesProperty(entity, evaluableProperty))
+                    return (T) propertyEvaluator.evaluateValue(entity, evaluableProperty);
+            }
         }
         return (T) property;
     }

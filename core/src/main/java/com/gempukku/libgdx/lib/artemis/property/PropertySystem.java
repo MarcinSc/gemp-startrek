@@ -4,26 +4,34 @@ import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluableProperty;
-import com.gempukku.libgdx.lib.artemis.evaluate.EvaluateProperty;
-import com.gempukku.libgdx.lib.artemis.event.EventListener;
+import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
+import com.gempukku.libgdx.lib.artemis.evaluate.PropertyEvaluator;
 
-public class PropertySystem extends BaseSystem {
+public class PropertySystem extends BaseSystem implements PropertyEvaluator {
     private ObjectMap<String, String> properties;
+    private EvaluatePropertySystem evaluatePropertySystem;
 
     public PropertySystem(ObjectMap<String, String> properties) {
         this.properties = properties;
+    }
+
+    @Override
+    protected void initialize() {
+        evaluatePropertySystem.addPropertyEvaluator(this);
     }
 
     public String getProperty(String name) {
         return properties.get(name);
     }
 
-    @EventListener
-    public void evaluateProperty(EvaluateProperty evaluateProperty, Entity entity) {
-        EvaluableProperty propertyValue = evaluateProperty.getPropertyValue();
-        if (propertyValue instanceof PropertyEvaluable) {
-            evaluateProperty.setResult(properties.get(((PropertyEvaluable) propertyValue).getName()));
-        }
+    @Override
+    public boolean evaluatesProperty(Entity entity, EvaluableProperty value) {
+        return value instanceof PropertyEvaluable;
+    }
+
+    @Override
+    public Object evaluateValue(Entity entity, EvaluableProperty value) {
+        return properties.get(((PropertyEvaluable) value).getName());
     }
 
     @Override
