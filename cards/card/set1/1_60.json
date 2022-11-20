@@ -7,7 +7,7 @@
     {
       "text": "Unless you have a personnel who has 2 Astrometrics or a personnel who has 2 Navigation, your opponent chooses an Astrometrics or Navigation personnel to be stopped. If your opponent cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "condition",
           "condition": "or(countAtLeast(skill(Astrometrics),2),countAtLeast(skill(Navigation),2))",

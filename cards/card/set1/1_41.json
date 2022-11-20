@@ -7,7 +7,7 @@
     {
       "text": "Randomly select a personnel to be stopped. Unless you have Diplomacy and Medical or 2 Security, that personnel is killed instead, then all your other personnel are stopped and this dilemma returns to its owner's dilemma pile.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "selectRandomly",
           "memory": "selectedPersonnel",

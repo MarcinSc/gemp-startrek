@@ -18,11 +18,11 @@
       "type": "trigger",
       "optional": "true",
       "condition": "playerPlays(controller,icon(The Original Series)),notUsed",
-      "cost": {
+      "costs": {
         "type": "spendCounters",
         "count": 1
       },
-      "effect": [
+      "effects": [
         {
           "type": "drawCards",
           "count": 2

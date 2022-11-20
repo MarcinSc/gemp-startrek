@@ -27,7 +27,7 @@
       "type": "trigger",
       "optional": "true",
       "condition": "beginMission,onMission(personnel,atLeast(6))",
-      "effect": [
+      "effects": [
         {
           "type": "drawCards",
           "count": 2

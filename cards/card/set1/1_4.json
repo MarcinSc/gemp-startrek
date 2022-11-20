@@ -7,7 +7,7 @@
     {
       "text": "Unless you have a personnel who has 2 Anthropology or a personnel who has 2 Telepathy, your opponent chooses an Anthropology or Telepathy personnel to be stopped.  If your opponent cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "condition",
           "condition": "or(countAtLeast(and(facingDilemma,skill(Anthropology)),2),countAtLeast(and(facingDilemma,skill(Telepathy)),2))",

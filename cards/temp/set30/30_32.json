@@ -21,7 +21,7 @@
       "type": "trigger",
       "optional": "true",
       "condition": "playerCompletesMission(controller,self)",
-      "effect": [
+      "effects": [
         {
           "type": "selectFromDiscard",
           "prompt": "Choose which personnel to place at your headquarters",

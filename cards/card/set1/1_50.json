@@ -7,7 +7,7 @@
     {
       "text": "Unless you have a personnel who has 2 Physics or a personnel who has 2 Science, your opponent chooses an Physics or Science personnel to be stopped. If your opponent cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "condition",
           "condition": "or(countAtLeast(and(facingDilemma,skill(Physics)),2),countAtLeast(and(facingDilemma,skill(Science)),2))",

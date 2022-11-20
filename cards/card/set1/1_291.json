@@ -27,7 +27,7 @@
       "triggerType": "engagementBegins",
       "optional": true,
       "condition": "engagementBeginsAt(missionLocation(self)),engagementInvolving(owned,type(ship),icon(Fed)),isOnboardShip(self)",
-      "effect": {
+      "effects": {
         "type": "joinEngagement",
         "filter": "onboardShip(self)"
       }

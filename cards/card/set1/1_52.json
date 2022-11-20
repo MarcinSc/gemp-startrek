@@ -7,7 +7,7 @@
     {
       "text": "Choose a personnel who has Engineer or Programming to be stopped. If you cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "condition",
           "condition": "or(countAtLeast(facingDilemma,skill(Engineer),1),countAtLeast(facingDilemma,skill(Programming),1))",

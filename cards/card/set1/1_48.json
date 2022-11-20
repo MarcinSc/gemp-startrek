@@ -7,7 +7,7 @@
     {
       "text": "Unless you have a personnel who has 2 Biology or a personnel who has 2 Medical, your opponent chooses an Biology or Medical personnel to be stopped. If your opponent cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "condition",
           "condition": "or(countAtLeast(and(facingDilemma,skill(Biology)),2),countAtLeast(and(facingDilemma,skill(Medical)),2))",

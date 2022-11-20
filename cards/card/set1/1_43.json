@@ -7,7 +7,7 @@
     {
       "text": "Randomly select a personnel to be stopped. If you still have nine personnel remaining, randomly select a second personnel to be stopped. If you still have ten personnel remaining, randomly select a third personnel to be stopped.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "selectRandomly",
           "memory": "selectedPersonnel1",

@@ -7,7 +7,7 @@
     {
       "text": "Choose a personnel who has Leadership or Officer to be stopped. If you cannot, randomly select a personnel to be killed.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "condition",
           "condition": "or(countAtLeast(facingDilemma,skill(Leadership),1),countAtLeast(facingDilemma,skill(Officer),1))",

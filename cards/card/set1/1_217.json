@@ -29,7 +29,7 @@
       "triggerType": "played",
       "optional": true,
       "condition": "matches(self)",
-      "effect": {
+      "effects": {
         "type": "drawCard",
         "player": "owner(self)"
       }
@@ -39,7 +39,7 @@
       "type": "trigger",
       "triggerType": "killed",
       "condition": "matches(self)",
-      "effect": {
+      "effects": {
         "type": "chooseAndDiscard",
         "player": "owner(self)",
         "amount": 1

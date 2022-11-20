@@ -7,7 +7,7 @@
     {
       "text": "Randomly select nine personnel. All your other personnel are stopped. Place this dilemma on this mission.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "randomlySelect",
           "amount": "9",
@@ -31,7 +31,7 @@
       "optional": "true",
       "player": "opponent",
       "condition": "attemptMission(self),afterDilemmasDrawn",
-      "effect": [
+      "effects": [
         {
           "type": "putIntoHand",
           "filter": "self"

@@ -7,7 +7,7 @@
     {
       "text": "Return all your equipment to their owner's hands.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "returnToHand",
           "filter": "facingDilemma,type(Equipment)"

@@ -7,7 +7,7 @@
     {
       "text": "Choose a personnel who has Biology or Medical to be stopped. If you cannot, randomly select a personnel to be killed.",
       "type": "dilemmaEffect",
-      "effect": [
+      "effects": [
         {
           "type": "condition",
           "condition": "or(countAtLeast(facingDilemma,skill(Biology),1),countAtLeast(facingDilemma,skill(Medical),1))",

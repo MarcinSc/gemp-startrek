@@ -31,7 +31,7 @@
       "triggerType": "played",
       "optional": true,
       "condition": "matches(self)",
-      "effect": {
+      "effects": {
         "type": "download",
         "filter": "type(ship),icon(Deep Space Nine)",
         "amount": 1

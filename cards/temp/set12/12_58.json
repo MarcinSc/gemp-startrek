@@ -42,11 +42,11 @@
       "text": "When an opponent plays an interrupt, if this personnel is present with three [past] personnel, you may return this personnel to his owner's hand to prevent that interrupt and place it in its owner's discard pile.",
       "type": "trigger",
       "condition": "playerPlays(opponent,type(interrupt)),presentWith(3,type(personnel),icon(past))",
-      "cost": {
+      "costs": {
         "type": "returnToHand",
         "filter": "self"
       },
-      "effect": {
+      "effects": {
         "type": "preventInterrupt"
       }
     }

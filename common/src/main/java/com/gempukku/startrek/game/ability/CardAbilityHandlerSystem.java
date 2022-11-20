@@ -1,7 +1,6 @@
 package com.gempukku.startrek.game.ability;
 
 import com.artemis.BaseSystem;
-import com.badlogic.gdx.utils.JsonValue;
 
 public abstract class CardAbilityHandlerSystem extends BaseSystem implements CardAbilityHandler {
     private CardAbilitySystem cardAbilitySystem;
@@ -16,11 +15,6 @@ public abstract class CardAbilityHandlerSystem extends BaseSystem implements Car
         for (String abilityType : abilityTypes) {
             cardAbilitySystem.registerCardAbilityHandler(abilityType, this);
         }
-    }
-
-    @Override
-    public void validateAbility(JsonValue cardAbility) {
-        // TODO - remove the method - each Handler should implement it
     }
 
     @Override

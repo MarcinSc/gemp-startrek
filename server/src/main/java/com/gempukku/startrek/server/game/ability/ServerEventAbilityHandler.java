@@ -3,11 +3,10 @@ package com.gempukku.startrek.server.game.ability;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.ability.CardAbility;
-import com.gempukku.startrek.game.ability.CardAbilityHandlerSystem;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 
-public class ServerEventAbilityHandler extends CardAbilityHandlerSystem {
+public class ServerEventAbilityHandler extends ServerCardAbilityHandlerSystem {
     private ConditionResolverSystem conditionResolverSystem;
     private GameEffectSystem gameEffectSystem;
 
@@ -36,12 +35,8 @@ public class ServerEventAbilityHandler extends CardAbilityHandlerSystem {
         if (condition != null)
             conditionResolverSystem.validate(condition);
         if (costs != null) {
-            for (JsonValue cost : costs) {
-                gameEffectSystem.validate(cost);
-            }
+            validateEffects(costs);
         }
-        for (JsonValue effect : effects) {
-            gameEffectSystem.validate(effect);
-        }
+        validateEffects(effects);
     }
 }
