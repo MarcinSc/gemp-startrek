@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game.effect;
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
@@ -18,6 +19,14 @@ public class GameEffectSystem extends BaseSystem {
 
     public void registerGameEffectHandler(String effectType, GameEffectHandler gameEffectHandler) {
         gameEffectHandlers.put(effectType, gameEffectHandler);
+    }
+
+    public void validate(JsonValue effect) {
+        String type = effect.getString("type");
+        GameEffectHandler gameEffectHandler = gameEffectHandlers.get(type);
+        if (gameEffectHandler == null)
+            throw new RuntimeException("Unable to find game effect handler for type: " + type);
+        gameEffectHandler.validate(effect);
     }
 
     @EventListener

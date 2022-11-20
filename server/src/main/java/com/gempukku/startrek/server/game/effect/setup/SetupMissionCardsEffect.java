@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game.effect.setup;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardDefinition;
@@ -10,6 +11,7 @@ import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
@@ -56,6 +58,14 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
             Entity missionEntity = playerMissions.get(i);
             zoneOperations.moveCardToMission(missionEntity, MissionOperations.findMission(world, playerEntity, i), true);
         }
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"player"},
+                new String[]{});
+        playerResolverSystem.validate(effect.getString("player"));
     }
 
     private Array<Entity> getAllPlayerMissions(String player) {

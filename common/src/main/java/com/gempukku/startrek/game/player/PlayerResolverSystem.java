@@ -47,6 +47,24 @@ public class PlayerResolverSystem extends BaseSystem {
                 });
     }
 
+    public void validate(String value) {
+        Array<Expression> expressions = expressionSystem.parseExpression(value);
+        if (expressions.size > 1)
+            throw new RuntimeException("Invalid number of expressoins to resolve player");
+
+        Expression expression = expressions.get(0);
+        if (expression.getType().equals("currentPlayer")) {
+            return;
+        } else if (expression.getType().equals("username")) {
+            return;
+        } else if (expression.getType().equals("owner")) {
+            return;
+        } else if (expression.getType().equals("memory")) {
+            return;
+        }
+        throw new RuntimeException("Unable to find player resolver for filter: " + value);
+    }
+
     @Override
     protected void processSystem() {
 

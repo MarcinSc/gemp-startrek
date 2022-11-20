@@ -46,6 +46,14 @@ public class CardAbilitySystem extends BaseSystem {
         return result;
     }
 
+    public void validate(JsonValue ability) {
+        String abilityType = ability.getString("type");
+        CardAbilityHandler cardAbilityHandler = handlerMap.get(abilityType);
+        if (cardAbilityHandler == null)
+            throw new GdxRuntimeException("Unable to resolve card ability: " + abilityType);
+        cardAbilityHandler.validateAbility(ability);
+    }
+
     @Override
     protected void processSystem() {
         if (!initialized) {

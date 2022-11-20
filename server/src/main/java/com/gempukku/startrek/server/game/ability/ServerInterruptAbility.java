@@ -1,13 +1,14 @@
-package com.gempukku.startrek.game.ability;
+package com.gempukku.startrek.server.game.ability;
 
 import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.startrek.game.ability.CardAbility;
 
-public class InterruptAbility implements CardAbility {
+public class ServerInterruptAbility implements CardAbility {
     private String condition;
     private JsonValue costs;
     private JsonValue effects;
 
-    public InterruptAbility(String condition, JsonValue costs, JsonValue effects) {
+    public ServerInterruptAbility(String condition, JsonValue costs, JsonValue effects) {
         this.condition = condition;
         this.costs = costs;
         this.effects = effects;

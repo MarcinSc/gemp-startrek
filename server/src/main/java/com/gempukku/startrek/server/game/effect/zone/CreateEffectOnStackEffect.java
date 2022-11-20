@@ -1,11 +1,13 @@
 package com.gempukku.startrek.server.game.effect.zone;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.EffectComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
@@ -40,5 +42,13 @@ public class CreateEffectOnStackEffect extends OneTimeEffectSystem {
         effect.setOwner(card.getOwner());
 
         zoneOperations.moveEffectToStack(effectEntity, abilityIndex);
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"sourceMemory", "abilityIndex"},
+                new String[]{});
+        amountResolverSystem.validateAmount(effect.getString("abilityIndex"));
     }
 }

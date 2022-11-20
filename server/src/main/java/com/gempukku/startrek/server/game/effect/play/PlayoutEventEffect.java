@@ -5,9 +5,10 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
-import com.gempukku.startrek.game.ability.EventAbility;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
+import com.gempukku.startrek.server.game.ability.ServerEventAbility;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 
@@ -25,7 +26,7 @@ public class PlayoutEventEffect extends EffectSystem {
         String memoryName = gameEffect.getDataString("memoryCard");
         String cardId = memory.getValue(memoryName);
         Entity cardEntity = serverEntityIdSystem.findfromId(cardId);
-        EventAbility eventAbility = cardAbilitySystem.getCardAbilities(cardEntity, EventAbility.class).get(0);
+        ServerEventAbility eventAbility = cardAbilitySystem.getCardAbilities(cardEntity, ServerEventAbility.class).get(0);
         boolean costsPaid = Boolean.parseBoolean(memory.getValue("costsPaid", "false"));
         if (!costsPaid) {
             Array<JsonValue> costs = eventAbility.getCosts();
@@ -55,5 +56,12 @@ public class PlayoutEventEffect extends EffectSystem {
                 removeTopEffectFromStack();
             }
         }
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"memoryCard"},
+                new String[]{});
     }
 }

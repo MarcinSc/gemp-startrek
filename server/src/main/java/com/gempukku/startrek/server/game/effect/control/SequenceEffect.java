@@ -4,11 +4,14 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
+import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 
 public class SequenceEffect extends EffectSystem {
+    private GameEffectSystem gameEffectSystem;
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
     private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;
 
@@ -18,9 +21,16 @@ public class SequenceEffect extends EffectSystem {
 
     @Override
     protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        String effectType = gameEffect.getType();
-        if (effectType.equals("sequence")) {
-            sequence(sourceEntity, gameEffect, memory);
+        sequence(sourceEntity, gameEffect, memory);
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"actions"},
+                new String[]{});
+        for (JsonValue action : effect.get("actions")) {
+            gameEffectSystem.validate(action);
         }
     }
 

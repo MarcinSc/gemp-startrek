@@ -7,6 +7,7 @@ import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.MissionType;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 
 public class MissionTypeFilterHandler extends CardFilterSystem {
     private CardLookupSystem cardLookupSystem;
@@ -16,9 +17,15 @@ public class MissionTypeFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         MissionType missionType = MissionType.valueOf(parameters.get(0));
         return new MissionTypeCardFilter(missionType);
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.exactly(parameters, 1);
+        MissionType.valueOf(parameters.get(0));
     }
 
     private class MissionTypeCardFilter implements CardFilter {

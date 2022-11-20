@@ -5,8 +5,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
-import com.gempukku.startrek.game.ability.TriggerAbility;
+import com.gempukku.startrek.server.game.ability.ServerTriggerAbility;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 
@@ -26,10 +27,10 @@ public class PlayoutTriggerEffect extends EffectSystem {
         String triggerIndexMemory = gameEffect.getDataString("triggerIndexMemory");
         int triggerIndex = Integer.parseInt(memory.getValue(triggerIndexMemory));
 
-        TriggerAbility triggerAbility = (TriggerAbility) cardAbilitySystem.getCardAbilities(cardEntity).get(triggerIndex);
+        ServerTriggerAbility serverTriggerAbility = (ServerTriggerAbility) cardAbilitySystem.getCardAbilities(cardEntity).get(triggerIndex);
         boolean costsPaid = Boolean.parseBoolean(memory.getValue("costsPaid", "false"));
         if (!costsPaid) {
-            Array<JsonValue> costs = triggerAbility.getCosts();
+            Array<JsonValue> costs = serverTriggerAbility.getCosts();
             int paidCostIndex = Integer.parseInt(memory.getValue("costIndex", "-1"));
             int nextCostIndex = paidCostIndex + 1;
             if (nextCostIndex < costs.size) {
@@ -43,7 +44,7 @@ public class PlayoutTriggerEffect extends EffectSystem {
             }
         }
         if (costsPaid) {
-            Array<JsonValue> effects = triggerAbility.getEffects();
+            Array<JsonValue> effects = serverTriggerAbility.getEffects();
             int resolvedEffectIndex = Integer.parseInt(memory.getValue("effectIndex", "-1"));
             int nextEffectIndex = resolvedEffectIndex + 1;
 
@@ -58,5 +59,13 @@ public class PlayoutTriggerEffect extends EffectSystem {
                 removeTopEffectFromStack();
             }
         }
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"cardMemory", "triggerIndexMemory"},
+                new String[]{});
+
     }
 }

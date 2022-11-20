@@ -21,7 +21,7 @@ import com.gempukku.startrek.game.GameComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
-import com.gempukku.startrek.server.game.ability.DilemmaEffectHandler;
+import com.gempukku.startrek.server.game.ability.*;
 import com.gempukku.startrek.server.game.condition.MemoryMatchesHandler;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.decision.MandatoryTriggerActionsDecisionHandler;
@@ -137,6 +137,10 @@ public class StarTrekGameHolder implements Disposable {
 
                 // Ability handlers
                 new DilemmaEffectHandler(),
+                new ServerEventAbilityHandler(),
+                new ServerInterruptAbilityHandler(),
+                new ServerTriggerAbilityHandler(),
+                new ServerOrderAbilityHandler(),
 
                 // Decision handlers
                 new PlayOrDrawDecisionHandler(),

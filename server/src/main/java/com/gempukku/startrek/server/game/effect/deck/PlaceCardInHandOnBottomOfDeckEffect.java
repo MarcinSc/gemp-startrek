@@ -2,7 +2,9 @@ package com.gempukku.startrek.server.game.effect.deck;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
@@ -46,5 +48,14 @@ public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
             zoneOperations.removeFromCurrentZone(card);
             zoneOperations.moveCardToBottomOfDeck(card);
         }
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"player", "filter"},
+                new String[]{});
+        playerResolverSystem.validate(effect.getString("player"));
+        cardFilterResolverSystem.validate(effect.getString("filter"));
     }
 }

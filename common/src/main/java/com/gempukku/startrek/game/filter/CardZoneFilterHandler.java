@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.zone.CardZone;
 
@@ -17,7 +18,7 @@ public class CardZoneFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         CardZone cardZone = CardZone.valueOf(parameters.get(0));
         return new CardFilter() {
             @Override
@@ -26,5 +27,11 @@ public class CardZoneFilterHandler extends CardFilterSystem {
                 return card.getCardZone() == cardZone;
             }
         };
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.exactly(parameters, 1);
+        CardZone.valueOf(parameters.get(0));
     }
 }

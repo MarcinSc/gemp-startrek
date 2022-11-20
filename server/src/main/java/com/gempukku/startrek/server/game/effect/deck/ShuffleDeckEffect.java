@@ -1,9 +1,12 @@
 package com.gempukku.startrek.server.game.effect.deck;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
 import com.gempukku.startrek.server.game.deck.PlayerDilemmaPileComponent;
@@ -32,5 +35,16 @@ public class ShuffleDeckEffect extends OneTimeEffectSystem {
             deck.getCards().shuffle();
             eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
         }
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"player", "deck"},
+                new String[]{});
+        playerResolverSystem.validate(effect.getString("player"));
+        String deck = effect.getString("deck");
+        if (!deck.equals("dilemmaDeck") && !deck.equals("drawDeck"))
+            throw new GdxRuntimeException("Unable to resolve deck type - " + deck);
     }
 }

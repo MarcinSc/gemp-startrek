@@ -22,7 +22,7 @@
       "type": "moveCostModifier",
       "shipFilter": "any",
       "fromFilter": "self",
-      "toFilter": "to(quarter(Gamma))",
+      "toFilter": "quadrant(Gamma)",
       "amount": "-2"
     }
   ],

@@ -8,11 +8,14 @@ import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.GameComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
+import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 
 public class StackActionEffect extends EffectSystem {
+    private GameEffectSystem gameEffectSystem;
     private SpawnSystem spawnSystem;
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
     private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;
@@ -28,6 +31,21 @@ public class StackActionEffect extends EffectSystem {
             stackForEachPlayerEffect(sourceEntity, gameEffect, memory);
         } else if (effectType.equals("stackActionTemplate")) {
             stackActionTemplate(sourceEntity, gameEffect, memory);
+        }
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        String type = effect.getString("type");
+        if (type.equals("stackForEachPlayer")) {
+            ValidateUtil.effectExpectedFields(effect,
+                    new String[]{"playerMemory", "action"},
+                    new String[]{});
+            gameEffectSystem.validate(effect.get("action"));
+        } else if (type.equals("stackActionTemplate")) {
+            ValidateUtil.effectExpectedFields(effect,
+                    new String[]{"template"},
+                    new String[]{});
         }
     }
 

@@ -9,6 +9,7 @@ import com.gempukku.startrek.decision.DecisionMade;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -28,6 +29,15 @@ public class DecisionSystem extends EffectSystem {
 
     public void registerDecisionTypeHandler(String decisionType, DecisionTypeHandler decisionTypeHandler) {
         decisionTypeHandlerMap.put(decisionType, decisionTypeHandler);
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"player", "decisionType"},
+                new String[]{"data", "memoryData"});
+        String player = effect.getString("decisionType");
+        playerResolverSystem.validate(player);
     }
 
     @EventListener

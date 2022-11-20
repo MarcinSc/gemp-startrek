@@ -1,10 +1,12 @@
 package com.gempukku.startrek.server.game.effect.player;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -30,5 +32,14 @@ public class PlayerCounterEffect extends OneTimeEffectSystem {
         playerCounter.setCounterCount(amount);
 
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"amount", "player"},
+                new String[]{});
+        amountResolverSystem.validateAmount(effect.getString("amount"));
+        playerResolverSystem.validate(effect.getString("player"));
     }
 }

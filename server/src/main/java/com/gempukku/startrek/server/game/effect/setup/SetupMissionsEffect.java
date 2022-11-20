@@ -1,8 +1,10 @@
 package com.gempukku.startrek.server.game.effect.setup;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -26,5 +28,13 @@ public class SetupMissionsEffect extends OneTimeEffectSystem {
             mission.setOwner(player);
             mission.setMissionIndex(missionIndex);
         }
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"player"},
+                new String[]{});
+        playerResolverSystem.validate(effect.getString("player"));
     }
 }

@@ -1,13 +1,12 @@
-package com.gempukku.startrek.game.filter.trigger;
+package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.ability.TriggerAbility;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
-import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterSystem;
 
 public class TriggerConditionMatchesFilterHandler extends CardFilterSystem {
     private CardAbilitySystem cardAbilitySystem;
@@ -18,7 +17,7 @@ public class TriggerConditionMatchesFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         String triggerType = parameters.get(0);
         String optionalCondition = parameters.get(1);
         return new CardFilter() {
@@ -43,5 +42,11 @@ public class TriggerConditionMatchesFilterHandler extends CardFilterSystem {
                 return false;
             }
         };
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.exactly(parameters, 2);
+        conditionResolverSystem.validate(parameters.get(1));
     }
 }

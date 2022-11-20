@@ -7,6 +7,7 @@ import com.gempukku.startrek.card.CardIcon;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 
 public class CardIconFilterHandler extends CardFilterSystem {
     private CardLookupSystem cardLookupSystem;
@@ -16,9 +17,15 @@ public class CardIconFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         CardIcon cardIcon = CardIcon.valueOf(parameters.get(0));
         return new IconCardFilter(cardIcon);
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.exactly(parameters, 1);
+        CardIcon.valueOf(parameters.get(0));
     }
 
     private class IconCardFilter implements CardFilter {

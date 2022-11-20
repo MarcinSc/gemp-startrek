@@ -6,6 +6,7 @@ import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 
 public class UniquenessPreservedFilterHandler extends CardFilterSystem {
@@ -17,7 +18,7 @@ public class UniquenessPreservedFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
@@ -28,6 +29,11 @@ public class UniquenessPreservedFilterHandler extends CardFilterSystem {
                         || cantFindCardInPlayWithSameTitle(card, cardDefinition);
             }
         };
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.exactly(parameters, 0);
     }
 
     private boolean cantFindCardInPlayWithSameTitle(CardComponent card, CardDefinition cardDefinition) {

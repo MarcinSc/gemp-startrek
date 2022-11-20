@@ -4,6 +4,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 
 public class YourFilterHandler extends CardFilterSystem {
     public YourFilterHandler() {
@@ -11,7 +12,7 @@ public class YourFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
@@ -20,5 +21,10 @@ public class YourFilterHandler extends CardFilterSystem {
                 return tested.getOwner().equals(card.getOwner());
             }
         };
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.exactly(parameters, 0);
     }
 }

@@ -1,10 +1,12 @@
 package com.gempukku.startrek.server.game.effect.turn;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.turn.TurnComponent;
 import com.gempukku.startrek.game.turn.TurnSegment;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -25,5 +27,13 @@ public class SetTurnSegmentEffect extends OneTimeEffectSystem {
         turn.setTurnSegment(turnSegment);
 
         eventSystem.fireEvent(EntityUpdated.instance, turnEntity);
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"segment"},
+                new String[]{});
+        TurnSegment.valueOf(effect.getString("segment"));
     }
 }

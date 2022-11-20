@@ -11,4 +11,9 @@ public class NoOpClientCardAbilityHandler extends CardAbilityHandlerSystem {
     public CardAbility resolveCardAbility(JsonValue cardAbility) {
         return null;
     }
+
+    @Override
+    public void validateAbility(JsonValue cardAbility) {
+
+    }
 }

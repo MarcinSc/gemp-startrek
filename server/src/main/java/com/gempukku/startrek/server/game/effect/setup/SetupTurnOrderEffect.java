@@ -2,10 +2,12 @@ package com.gempukku.startrek.server.game.effect.setup;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.GameComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -41,6 +43,13 @@ public class SetupTurnOrderEffect extends EffectSystem {
         }
 
         stackSystem.stackEntity(turnSequenceEntity);
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{},
+                new String[]{});
     }
 
     private List<String> determinePlayerOrder(Array<String> players) {

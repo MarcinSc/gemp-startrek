@@ -11,7 +11,7 @@ public class ClientIdInFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         if (parameters.size == 1 && parameters.get(0).equals("")) {
             return new CardFilter() {
                 @Override
@@ -32,5 +32,10 @@ public class ClientIdInFilterHandler extends CardFilterSystem {
                 return false;
             }
         };
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+
     }
 }

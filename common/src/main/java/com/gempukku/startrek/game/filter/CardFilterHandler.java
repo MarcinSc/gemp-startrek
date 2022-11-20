@@ -3,5 +3,7 @@ package com.gempukku.startrek.game.filter;
 import com.badlogic.gdx.utils.Array;
 
 public interface CardFilterHandler {
-    CardFilter resolveFilter(String filterType, Array<String> parameters);
+    CardFilter resolveFilter(Array<String> parameters);
+
+    void validate(Array<String> parameters);
 }

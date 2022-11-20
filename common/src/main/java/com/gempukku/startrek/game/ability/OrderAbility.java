@@ -1,21 +1,13 @@
 package com.gempukku.startrek.game.ability;
 
-import com.badlogic.gdx.utils.JsonValue;
-
 public class OrderAbility implements CardAbility {
-    private JsonValue costs;
-    private JsonValue effects;
+    private String condition;
 
-    public OrderAbility(JsonValue costs, JsonValue effects) {
-        this.costs = costs;
-        this.effects = effects;
+    public OrderAbility(String condition) {
+        this.condition = condition;
     }
 
-    public JsonValue getCosts() {
-        return costs;
-    }
-
-    public JsonValue getEffects() {
-        return effects;
+    public String getCondition() {
+        return condition;
     }
 }

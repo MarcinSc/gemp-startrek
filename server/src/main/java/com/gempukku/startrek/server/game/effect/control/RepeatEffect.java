@@ -6,13 +6,16 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
+import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 
 public class RepeatEffect extends EffectSystem {
+    private GameEffectSystem gameEffectSystem;
     private AmountResolverSystem amountResolverSystem;
     private ConditionResolverSystem conditionResolverSystem;
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
@@ -30,6 +33,30 @@ public class RepeatEffect extends EffectSystem {
             repeatUntil(sourceEntity, gameEffect, memory);
         } else if (type.equals("repeatUntilInTurnOrder")) {
             repeatUntilInTurnOrder(sourceEntity, gameEffect, memory);
+        }
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        String type = effect.getString("type");
+        if (type.equals("repeatTimes")) {
+            ValidateUtil.effectExpectedFields(effect,
+                    new String[]{"times", "action"},
+                    new String[]{});
+            amountResolverSystem.validateAmount(effect.getString("times"));
+            gameEffectSystem.validate(effect.get("action"));
+        } else if (type.equals("repeatUntil")) {
+            ValidateUtil.effectExpectedFields(effect,
+                    new String[]{"condition", "action"},
+                    new String[]{});
+            conditionResolverSystem.validate(effect.getString("condition"));
+            gameEffectSystem.validate(effect.get("action"));
+        } else if (type.equals("repeatUntilInTurnOrder")) {
+            ValidateUtil.effectExpectedFields(effect,
+                    new String[]{"condition", "playerMemory", "action"},
+                    new String[]{});
+            conditionResolverSystem.validate(effect.getString("condition"));
+            gameEffectSystem.validate(effect.get("action"));
         }
     }
 

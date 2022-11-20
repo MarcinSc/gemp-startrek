@@ -7,6 +7,7 @@ import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.PersonnelSkill;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 
 public class SkillFilterHandler extends CardFilterSystem {
@@ -18,7 +19,7 @@ public class SkillFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         PersonnelSkill skill = PersonnelSkill.valueOf(parameters.get(0));
         return new CardFilter() {
             @Override
@@ -36,5 +37,13 @@ public class SkillFilterHandler extends CardFilterSystem {
                 return found >= count;
             }
         };
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.between(parameters, 1, 2);
+        PersonnelSkill.valueOf(parameters.get(0));
+        if (parameters.size > 1)
+            amountResolverSystem.validateAmount(parameters.get(1));
     }
 }

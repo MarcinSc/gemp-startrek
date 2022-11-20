@@ -2,11 +2,14 @@ package com.gempukku.startrek.server.game.effect.zone;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.zone.CardInHandComponent;
 import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
 import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
@@ -16,6 +19,7 @@ import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import java.util.function.Consumer;
 
 public class MoveCardToMissionEffect extends OneTimeEffectSystem {
+    private CardFilterResolverSystem cardFilterResolverSystem;
     private ConditionResolverSystem conditionResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private EventSystem eventSystem;
@@ -45,5 +49,14 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
                         zoneOperations.moveCardToMission(cardEntity, missionEntity, faceUp);
                     }
                 });
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"filter", "missionMemory", "faceUp"},
+                new String[]{});
+        cardFilterResolverSystem.validate(effect.getString("filter"));
+        conditionResolverSystem.validate(effect.getString("faceUp"));
     }
 }

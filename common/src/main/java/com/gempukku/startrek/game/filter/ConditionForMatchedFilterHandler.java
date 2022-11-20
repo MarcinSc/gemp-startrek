@@ -3,6 +3,7 @@ package com.gempukku.startrek.game.filter;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 
 public class ConditionForMatchedFilterHandler extends CardFilterSystem {
@@ -13,7 +14,7 @@ public class ConditionForMatchedFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
@@ -25,5 +26,13 @@ public class ConditionForMatchedFilterHandler extends CardFilterSystem {
                 return true;
             }
         };
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.atLeast(parameters, 1);
+        for (String parameter : parameters) {
+            conditionResolverSystem.validate(parameter);
+        }
     }
 }

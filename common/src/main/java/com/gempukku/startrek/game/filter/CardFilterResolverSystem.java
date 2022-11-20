@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.expression.Expression;
 import com.gempukku.startrek.expression.ExpressionSystem;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 
 public class CardFilterResolverSystem extends BaseSystem {
     private ExpressionSystem expressionSystem;
@@ -19,14 +20,22 @@ public class CardFilterResolverSystem extends BaseSystem {
         registerFilterHandler("and",
                 new CardFilterHandler() {
                     @Override
-                    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+                    public CardFilter resolveFilter(Array<String> parameters) {
                         return createAndFilter(parameters);
+                    }
+
+                    @Override
+                    public void validate(Array<String> parameters) {
+                        ValidateUtil.atLeast(parameters, 2);
+                        for (String parameter : parameters) {
+                            CardFilterResolverSystem.this.validate(parameter);
+                        }
                     }
                 });
         registerFilterHandler("or",
                 new CardFilterHandler() {
                     @Override
-                    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+                    public CardFilter resolveFilter(Array<String> parameters) {
                         Array<CardFilter> filters = new Array<>();
                         for (String parameter : parameters) {
                             filters.add(resolveCardFilter(parameter));
@@ -34,11 +43,19 @@ public class CardFilterResolverSystem extends BaseSystem {
 
                         return new OrCardFilter(filters);
                     }
+
+                    @Override
+                    public void validate(Array<String> parameters) {
+                        ValidateUtil.atLeast(parameters, 2);
+                        for (String parameter : parameters) {
+                            CardFilterResolverSystem.this.validate(parameter);
+                        }
+                    }
                 });
         registerFilterHandler("any",
                 new CardFilterHandler() {
                     @Override
-                    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+                    public CardFilter resolveFilter(Array<String> parameters) {
                         return new CardFilter() {
                             @Override
                             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
@@ -46,11 +63,16 @@ public class CardFilterResolverSystem extends BaseSystem {
                             }
                         };
                     }
+
+                    @Override
+                    public void validate(Array<String> parameters) {
+                        ValidateUtil.exactly(parameters, 0);
+                    }
                 });
         registerFilterHandler("not",
                 new CardFilterHandler() {
                     @Override
-                    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+                    public CardFilter resolveFilter(Array<String> parameters) {
                         CardFilter opposite = resolveCardFilter(parameters.get(0));
                         return new CardFilter() {
                             @Override
@@ -59,17 +81,28 @@ public class CardFilterResolverSystem extends BaseSystem {
                             }
                         };
                     }
+
+                    @Override
+                    public void validate(Array<String> parameters) {
+                        ValidateUtil.exactly(parameters, 1);
+                        CardFilterResolverSystem.this.validate(parameters.get(0));
+                    }
                 });
         registerFilterHandler("self",
                 new CardFilterHandler() {
                     @Override
-                    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+                    public CardFilter resolveFilter(Array<String> parameters) {
                         return new CardFilter() {
                             @Override
                             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
                                 return sourceEntity == cardEntity;
                             }
                         };
+                    }
+
+                    @Override
+                    public void validate(Array<String> parameters) {
+                        ValidateUtil.exactly(parameters, 0);
                     }
                 });
     }
@@ -111,7 +144,7 @@ public class CardFilterResolverSystem extends BaseSystem {
                 if (filterHandler == null)
                     throw new GdxRuntimeException("Unable to find filter handler: " + type);
 
-                filters.add(filterHandler.resolveFilter(type, expression.getParameters()));
+                filters.add(filterHandler.resolveFilter(expression.getParameters()));
             }
             return new AndCardFilter(filters);
         } else {
@@ -121,7 +154,30 @@ public class CardFilterResolverSystem extends BaseSystem {
             if (filterHandler == null)
                 throw new GdxRuntimeException("Unable to find filter handler: " + type);
 
-            return filterHandler.resolveFilter(type, expression.getParameters());
+            return filterHandler.resolveFilter(expression.getParameters());
+        }
+    }
+
+    public void validate(String value) {
+        Array<Expression> expressions = expressionSystem.parseExpression(value);
+        if (expressions.size > 1) {
+            Array<CardFilter> filters = new Array<>();
+            for (Expression expression : expressions) {
+                String type = expression.getType();
+                CardFilterHandler filterHandler = filterHandlers.get(type);
+                if (filterHandler == null)
+                    throw new GdxRuntimeException("Unable to find filter handler: " + type);
+
+                filterHandler.validate(expression.getParameters());
+            }
+        } else {
+            Expression expression = expressions.get(0);
+            String type = expression.getType();
+            CardFilterHandler filterHandler = filterHandlers.get(type);
+            if (filterHandler == null)
+                throw new GdxRuntimeException("Unable to find filter handler: " + type);
+
+            filterHandler.validate(expression.getParameters());
         }
     }
 

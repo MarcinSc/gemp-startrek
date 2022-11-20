@@ -1,0 +1,39 @@
+package com.gempukku.startrek.server.game.ability;
+
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.startrek.game.ability.TriggerAbility;
+
+public class ServerTriggerAbility extends TriggerAbility {
+    private Array<JsonValue> costs;
+    private Array<JsonValue> effects;
+
+    public ServerTriggerAbility(String triggerType, boolean optional, String condition,
+                                JsonValue costs, JsonValue effects) {
+        super(triggerType, optional, condition);
+        this.costs = createArray(costs);
+        this.effects = createArray(effects);
+    }
+
+    private Array<JsonValue> createArray(JsonValue effects) {
+        Array<JsonValue> result = new Array<>();
+        if (effects != null) {
+            if (effects.type() == JsonValue.ValueType.object) {
+                result.add(effects);
+            } else {
+                for (JsonValue effect : effects) {
+                    result.add(effect);
+                }
+            }
+        }
+        return result;
+    }
+
+    public Array<JsonValue> getCosts() {
+        return costs;
+    }
+
+    public Array<JsonValue> getEffects() {
+        return effects;
+    }
+}

@@ -39,6 +39,27 @@ public class AmountResolverSystem extends BaseSystem {
         return amountHandler.resolveAmount(type, sourceEntity, memory, expression.getParameters());
     }
 
+    public void validateAmount(String value) {
+        Array<Expression> expressions = expressionSystem.parseExpression(value);
+        if (expressions.size != 1)
+            throw new GdxRuntimeException("Unable to resolve amount handler: " + value);
+
+        Expression expression = expressions.get(0);
+        String type = expression.getType();
+        AmountHandler amountHandler = amountHandlers.get(type);
+        if (amountHandler == null) {
+            // Check if it's just a number
+            try {
+                Integer.parseInt(value);
+                return;
+            } catch (NumberFormatException exp) {
+
+            }
+            throw new GdxRuntimeException("Unable to find amount handler: " + type);
+        }
+        amountHandler.validate(expression.getParameters());
+    }
+
     @Override
     protected void processSystem() {
 

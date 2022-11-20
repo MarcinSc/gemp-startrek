@@ -7,7 +7,6 @@ import com.gempukku.startrek.game.amount.*;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.*;
 import com.gempukku.startrek.game.filter.*;
-import com.gempukku.startrek.game.filter.trigger.TriggerConditionMatchesFilterHandler;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 
 public class CommonGameWorldBuilder {
@@ -43,6 +42,7 @@ public class CommonGameWorldBuilder {
                 new AffiliationFilterHandler(),
                 new SkillFilterHandler(),
                 new MissionTypeFilterHandler(),
+                new QuadrantFilterHandler(),
                 new OwnerFilterHandler(),
                 new YourFilterHandler(),
                 new TitleFilterHandler(),
@@ -55,10 +55,6 @@ public class CommonGameWorldBuilder {
                 // Card abilities
                 new CardAbilitySystem(),
                 new PlaysInCoreAbilityHandler(),
-                new OrderAbilityHandler(),
-                new EventAbilityHandler(),
-                new InterruptAbilityHandler(),
-                new TriggerAbilityHandler(),
                 new HeadquarterRequirementsAbilityHandler(),
                 new GrantSkillAbilityHandler(),
                 new MoveCostModifierAbilityHandler(),

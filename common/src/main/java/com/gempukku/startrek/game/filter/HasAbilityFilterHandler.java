@@ -4,6 +4,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.ability.CardAbility;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.ability.PlaysInCoreAbility;
@@ -17,7 +18,7 @@ public class HasAbilityFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         Class<? extends CardAbility> cardAbilityType = getCardAbility(parameters.get(0));
         return new CardFilter() {
             @Override
@@ -25,6 +26,12 @@ public class HasAbilityFilterHandler extends CardFilterSystem {
                 return cardAbilitySystem.getCardAbilities(cardEntity, cardAbilityType).size > 0;
             }
         };
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.exactly(parameters, 1);
+        getCardAbility(parameters.get(0));
     }
 
     private Class<? extends CardAbility> getCardAbility(String type) {

@@ -137,7 +137,6 @@ public abstract class AbstractGameTest {
 
     protected boolean playCard(Entity playedCard) {
         String cardId = playedCard.getComponent(ServerEntityIdComponent.class).getId();
-        System.out.println("Playing card: " + cardId);
         return sendDecision("test1",
                 "action", "play",
                 "cardId", cardId);

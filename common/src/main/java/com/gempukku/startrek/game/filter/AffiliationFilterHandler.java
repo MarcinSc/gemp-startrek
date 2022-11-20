@@ -7,6 +7,7 @@ import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 
 public class AffiliationFilterHandler extends CardFilterSystem {
     private CardLookupSystem cardLookupSystem;
@@ -16,9 +17,15 @@ public class AffiliationFilterHandler extends CardFilterSystem {
     }
 
     @Override
-    public CardFilter resolveFilter(String filterType, Array<String> parameters) {
+    public CardFilter resolveFilter(Array<String> parameters) {
         Affiliation affiliation = Affiliation.valueOf(parameters.get(0));
         return new AffiliationCardFilter(affiliation);
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.exactly(parameters, 1);
+        Affiliation.valueOf(parameters.get(0));
     }
 
     private class AffiliationCardFilter implements CardFilter {

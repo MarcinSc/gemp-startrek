@@ -1,6 +1,7 @@
 package com.gempukku.startrek.server.game.effect.zone;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
@@ -15,5 +16,10 @@ public class RemoveEffectFromStackEffect extends OneTimeEffectSystem {
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         zoneOperations.removeEffectFromStack();
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+
     }
 }

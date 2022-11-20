@@ -4,4 +4,6 @@ import com.badlogic.gdx.utils.JsonValue;
 
 public interface CardAbilityHandler {
     CardAbility resolveCardAbility(JsonValue cardAbility);
+
+    void validateAbility(JsonValue cardAbility);
 }

@@ -4,6 +4,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.ConditionSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
@@ -31,5 +32,10 @@ public class MemoryMatchesHandler extends ConditionSystem {
         }
 
         return false;
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.exactly(parameters, 1);
     }
 }

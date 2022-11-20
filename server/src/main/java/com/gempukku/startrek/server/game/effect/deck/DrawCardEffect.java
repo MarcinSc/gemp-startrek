@@ -2,8 +2,10 @@ package com.gempukku.startrek.server.game.effect.deck;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.CardInHandComponent;
@@ -30,5 +32,13 @@ public class DrawCardEffect extends OneTimeEffectSystem {
         Entity cardEntity = zoneOperations.removeTopCardOfDeck(playerEntity);
         if (cardEntity != null)
             zoneOperations.moveCardToHand(cardEntity);
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"player"},
+                new String[]{});
+        playerResolverSystem.validate(effect.getString("player"));
     }
 }
