@@ -115,6 +115,7 @@ public class SelectionState implements SelectionDefinition {
                 }
             }
         }
+        selectionCallback.selectionChanged(selectedRenderedCards);
     }
 
     private Entity findMarkedEntity(Entity parent) {
@@ -171,6 +172,11 @@ public class SelectionState implements SelectionDefinition {
             world.deleteEntity(selectionEntity);
         }
         selectionEntities.clear();
+        for (Entity markedEntity : markedEntities) {
+            world.deleteEntity(markedEntity);
+        }
+        markedEntities.clear();
+        matchingRenderedCards.clear();
     }
 
     @Override

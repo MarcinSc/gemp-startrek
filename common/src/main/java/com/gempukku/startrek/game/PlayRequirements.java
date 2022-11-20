@@ -9,6 +9,7 @@ import com.gempukku.startrek.game.filter.AndCardFilter;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.filter.OrCardFilter;
+import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 
 public class PlayRequirements {
@@ -26,7 +27,7 @@ public class PlayRequirements {
         String missionOwner = ship.getMissionOwner();
         int missionIndex = ship.getMissionIndex();
         CardFilter shipFilter = cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped," +
-                "onMission(owner(username(" + missionOwner + ")),missionIndex(" + missionIndex + "))," +
+                "onMission(username(" + missionOwner + ")," + missionIndex + ")," +
                 "owner(username(" + username + "))");
 
         Array<CardFilter> resultFilters = new Array<>();
@@ -48,12 +49,13 @@ public class PlayRequirements {
             Entity missionEntity,
             Entity shipEntity,
             CardFilterResolverSystem cardFilterResolverSystem) {
-        FaceUpCardInMissionComponent mission = missionEntity.getComponent(FaceUpCardInMissionComponent.class);
-        String missionOwner = mission.getMissionOwner();
+        MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
+        String missionOwner = mission.getOwner();
         int missionIndex = mission.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
                 "or(type(Personnel),type(Equipment)),unstopped," +
-                        "onMission(owner(username(" + missionOwner + ")),missionIndex(" + missionIndex + ")),notAboardShip," +
+                        "onMission(username(" + missionOwner + ")," + missionIndex + ")," +
+                        "notAboardShip," +
                         "owner(username(" + username + "))");
     }
 
@@ -63,12 +65,12 @@ public class PlayRequirements {
             Entity missionEntity,
             Entity shipEntity,
             CardFilterResolverSystem cardFilterResolverSystem) {
-        FaceUpCardInMissionComponent mission = missionEntity.getComponent(FaceUpCardInMissionComponent.class);
-        String missionOwner = mission.getMissionOwner();
+        MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
+        String missionOwner = mission.getOwner();
         int missionIndex = mission.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
                 "or(type(Personnel),type(Equipment)),unstopped," +
-                        "onMission(owner(username(" + missionOwner + ")),missionIndex(" + missionIndex + "))," +
+                        "onMission(username(" + missionOwner + ")," + missionIndex + ")," +
                         "owner(username(" + username + "))");
     }
 
@@ -83,7 +85,7 @@ public class PlayRequirements {
         int missionIndex = ship.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
                 "or(type(Personnel),type(Equipment)),unstopped," +
-                        "onMission(owner(username(" + missionOwner + ")),missionIndex(" + missionIndex + "))," +
+                        "onMission(username(" + missionOwner + ")," + missionIndex + ")," +
                         "owner(username(" + username + "))");
     }
 

@@ -45,10 +45,7 @@ import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.game.*;
 import com.gempukku.startrek.game.ability.*;
 import com.gempukku.startrek.game.config.ConfigureTextSystem;
-import com.gempukku.startrek.game.decision.ClientDecisionSystem;
-import com.gempukku.startrek.game.decision.ClientMandatoryTriggerActionsDecisionHandler;
-import com.gempukku.startrek.game.decision.ClientOptionalTriggerActionsDecisionHandler;
-import com.gempukku.startrek.game.decision.ClientPlayOrDrawDecisionHandler;
+import com.gempukku.startrek.game.decision.*;
 import com.gempukku.startrek.game.filter.ClientFacingDilemmaFilterHandler;
 import com.gempukku.startrek.game.filter.ClientIdInFilterHandler;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
@@ -151,6 +148,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 // Decision-related
                 new ClientDecisionSystem(),
                 new ClientPlayOrDrawDecisionHandler(),
+                new ClientExecuteOrdersDecisionHandler(),
                 new ClientMandatoryTriggerActionsDecisionHandler(),
                 new ClientOptionalTriggerActionsDecisionHandler(),
 

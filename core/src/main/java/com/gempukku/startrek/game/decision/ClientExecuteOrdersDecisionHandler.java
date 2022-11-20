@@ -7,13 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.lib.artemis.input.UserInputStateComponent;
 import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
+import com.gempukku.libgdx.network.client.ServerEntityComponent;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
+import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.common.UISettings;
 import com.gempukku.startrek.game.PlayRequirements;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
@@ -335,8 +338,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
 
         private void acceptShip() {
             Entity selected = selectionSystem.getSelectedEntities().iterator().next();
-            int serverEntityId = selected.getComponent(ServerCardReferenceComponent.class).getEntityId();
-            Entity shipEntity = world.getEntity(serverEntityId);
+            Entity shipEntity = getServerEntity(selected);
             goToDecisionInterface(new BeamFromMissionChooseEntitiesInterface(shipEntity));
         }
 
@@ -373,16 +375,87 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
                         }
                     });
 
+            table = new Table();
+            table.setFillParent(true);
+
+            VerticalGroup verticalGroup = new VerticalGroup();
+
+            beamButton = new TextButton("Beam!", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            beamButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            beamSelected();
+                        }
+                    });
+            verticalGroup.addActor(beamButton);
+
+            cancelBeamButton = new TextButton("Cancel", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            cancelBeamButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            cancelBeam();
+                        }
+                    });
+            verticalGroup.addActor(cancelBeamButton);
+
+            table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
         }
 
         @Override
         public void proceedToDecision() {
-            // TODO
+            Stage stage = stageSystem.getStage();
+
+            selectionState.markSelectableCards();
+            selectionSystem.startSelection(selectionState);
+
+            enableButton(beamButton, false);
+
+            stage.addActor(table);
         }
 
         @Override
         public void cleanupDecision() {
-            // TODO
+            table.remove();
+            selectionState.cleanup();
+            selectionSystem.finishSelection();
         }
+
+        private void beamSelected() {
+            String shipId = shipEntity.getComponent(ServerEntityComponent.class).getEntityId();
+
+            Array<String> ids = new Array<>();
+            for (Entity selectedEntity : selectionSystem.getSelectedEntities()) {
+                ids.add(getServerEntity(selectedEntity).getComponent(ServerEntityComponent.class).getEntityId());
+            }
+
+            ObjectMap<String, String> parameters = new ObjectMap<>();
+            parameters.put("action", "beamFromMission");
+            parameters.put("shipId", shipId);
+            parameters.put("beamedId", StringUtils.merge(ids, ","));
+            clientDecisionSystem.executeDecision(parameters);
+
+            goToDecisionInterface(null);
+        }
+
+        private void cancelBeam() {
+            goToDecisionInterface(mainDecisionInterface);
+        }
+    }
+
+    private Entity getServerEntity(Entity renderedEntity) {
+        int serverEntityId = renderedEntity.getComponent(ServerCardReferenceComponent.class).getEntityId();
+        return world.getEntity(serverEntityId);
     }
 }
