@@ -10,6 +10,16 @@
         {
           "type": "setTurnSegment",
           "segment": "EXECUTE_ORDERS"
+        },
+        {
+          "type": "repeatUntil",
+          "memory": true,
+          "condition": "memoryHas(playerFinished,true)",
+          "action": {
+            "type": "processDecision",
+            "player": "currentPlayer",
+            "decisionType": "executeOrdersDecision"
+          }
         }
       ]
     }

@@ -32,8 +32,8 @@ public class StarTrekServerDeckSystem extends BaseSystem {
         temporaryDeck.getDillemas().add("1_57");
         temporaryDeck.getDillemas().add("1_60");
 
-        // Equipment
-        temporaryDeck.getDrawDeck().add("1_68");
+//        // Equipment
+//        temporaryDeck.getDrawDeck().add("1_68");
 
 //        // Event
 //        temporaryDeck.getDrawDeck().add("1_83");
@@ -57,13 +57,13 @@ public class StarTrekServerDeckSystem extends BaseSystem {
         // Personnel - Bajoran
         temporaryDeck.getDrawDeck().add("1_207");
         temporaryDeck.getDrawDeck().add("1_207");
-        temporaryDeck.getDrawDeck().add("1_210");
-        temporaryDeck.getDrawDeck().add("1_210");
-        temporaryDeck.getDrawDeck().add("1_214");
-        temporaryDeck.getDrawDeck().add("1_214");
-        temporaryDeck.getDrawDeck().add("1_217");
-        temporaryDeck.getDrawDeck().add("1_225");
-        temporaryDeck.getDrawDeck().add("1_225");
+//        temporaryDeck.getDrawDeck().add("1_210");
+//        temporaryDeck.getDrawDeck().add("1_210");
+//        temporaryDeck.getDrawDeck().add("1_214");
+//        temporaryDeck.getDrawDeck().add("1_214");
+//        temporaryDeck.getDrawDeck().add("1_217");
+//        temporaryDeck.getDrawDeck().add("1_225");
+//        temporaryDeck.getDrawDeck().add("1_225");
 //        // Personnel - Federation
 //        temporaryDeck.getDrawDeck().add("1_251");
 //        temporaryDeck.getDrawDeck().add("1_254");
