@@ -4,17 +4,21 @@
     {
       "type": "moveCardToStack",
       "filter": "memory(playedCardId)",
-      "abilityIndex": "-1"
+      "abilityIndex": "0"
     },
     {
       "type": "payCardCost",
       "cardMemory": "playedCardId"
     },
     {
-      "type": "moveCardToMission",
+      "type": "playoutEventEffect",
+      "memoryCard": "playedCardId"
+    },
+    {
+      "type": "moveCardToZone",
       "filter": "memory(playedCardId)",
-      "missionMemory": "missionId",
-      "faceUp": "memoryMatches(playedCardId,type(Ship))"
+      "fromZone": "Stack",
+      "zone": "DiscardPile"
     },
     {
       "tpl:extends": "game/trigger/playMandatoryTriggers.template"

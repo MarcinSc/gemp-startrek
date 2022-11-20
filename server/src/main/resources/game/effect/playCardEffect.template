@@ -7,35 +7,23 @@
     }
   },
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
-    "type": "sequence",
+    "type": "condition",
     "data": {
-      "actions": [
-        {
-          "type": "moveCardToZone",
-          "filter": "memory(playedCardId)",
-          "zone": "Stack"
+      "condition": "memoryMatches(playedCardId,type(Event))",
+      "trueEffect": {
+        "type": "condition",
+        "conditionMemory": "checkTypeOfEvent",
+        "condition": "memoryMatches(playedCardId,hasAbility(PlaysInCore))",
+        "trueEffect": {
+          "tpl:extends": "game/effect/playPlaysToCoreEvent.template"
         },
-        {
-          "type": "payCardCost",
-          "cardMemory": "playedCardId"
-        },
-        {
-          "type": "condition",
-          "condition": "memoryMatches(playedCardId,type(Event))",
-          "trueEffect": {
-            "tpl:extends": "game/effect/playEvent.template"
-          },
-          "falseEffect": {
-            "tpl:extends": "game/effect/playNonEvent.template"
-          }
-        },
-        {
-          "tpl:extends": "game/trigger/playMandatoryTriggers.template"
-        },
-        {
-          "tpl:extends": "game/trigger/playOptionalTriggers.template"
+        "falseEffect": {
+          "tpl:extends": "game/effect/playImmediateEvent.template"
         }
-      ]
+      },
+      "falseEffect": {
+        "tpl:extends": "game/effect/playNonEvent.template"
+      }
     }
   }
 }

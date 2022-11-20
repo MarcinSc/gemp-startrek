@@ -48,6 +48,7 @@ import com.gempukku.startrek.server.game.effect.setup.*;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.effect.zone.MoveCardToMissionEffect;
+import com.gempukku.startrek.server.game.effect.zone.MoveCardToStackEffect;
 import com.gempukku.startrek.server.game.effect.zone.MoveCardToZoneEffect;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 import com.gempukku.startrek.server.game.filter.MemoryFilterHandler;
@@ -129,6 +130,7 @@ public class StarTrekGameHolder implements Disposable {
                 new PlaceCardInHandOnBottomOfDeckEffect(),
                 new MoveCardToZoneEffect(),
                 new MoveCardToMissionEffect(),
+                new MoveCardToStackEffect(),
                 new PayCardCostEffect(),
                 new ClearMemoryEffect(),
                 new MemorizeAmountEffect(),

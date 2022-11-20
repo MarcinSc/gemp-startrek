@@ -69,8 +69,7 @@ public class CardZoneUtil {
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
         ObjectOnStackComponent objectOnStack = objectEntity.getComponent(ObjectOnStackComponent.class);
-        int step = objectOnStack.getEffectStep();
-        Entity objectRepresentation = CardTemplates.createFullCard(cardDefinition, spawnSystem, true, step);
+        Entity objectRepresentation = CardTemplates.createFullCard(cardDefinition, spawnSystem);
         OrderComponent order = orderComponentMapper.create(objectRepresentation);
         order.setValue(objectOnStack.getStackIndex());
         objectRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(objectEntity.getId());

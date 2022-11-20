@@ -6,6 +6,7 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToClients;
 @ReplicateToClients
 public class ObjectOnStackComponent extends Component {
     private String type;
+    private int abilityIndex;
     private int stackIndex;
     private int effectStep = -1;
 
@@ -15,6 +16,14 @@ public class ObjectOnStackComponent extends Component {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getAbilityIndex() {
+        return abilityIndex;
+    }
+
+    public void setAbilityIndex(int abilityIndex) {
+        this.abilityIndex = abilityIndex;
     }
 
     public int getStackIndex() {

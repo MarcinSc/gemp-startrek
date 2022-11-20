@@ -16,17 +16,23 @@ public class ConditionEffect extends EffectSystem {
 
     @Override
     protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        String condition = gameEffect.getDataString("condition");
-        JsonValue action;
-        if (conditionResolverSystem.resolveBoolean(sourceEntity, memory, condition)) {
-            action = gameEffect.getClonedDataObject("trueEffect");
+        String conditionMemory = gameEffect.getDataString("conditionMemory", "effectStacked");
+        String effectStacked = memory.getValue(conditionMemory);
+        if (effectStacked != null && effectStacked.equals("true")) {
+            removeTopEffectFromStack();
         } else {
-            action = gameEffect.getClonedDataObject("falseEffect");
-        }
-        removeTopEffectFromStack();
-        if (action != null) {
-            Entity entityToStack = createActionFromJson(action, sourceEntity);
-            stackEffect(entityToStack);
+            String condition = gameEffect.getDataString("condition");
+            JsonValue action;
+            if (conditionResolverSystem.resolveBoolean(sourceEntity, memory, condition)) {
+                action = gameEffect.getClonedDataObject("trueEffect");
+            } else {
+                action = gameEffect.getClonedDataObject("falseEffect");
+            }
+            if (action != null) {
+                Entity entityToStack = createActionFromJson(action, sourceEntity);
+                stackEffect(entityToStack);
+            }
+            memory.setValue(conditionMemory, "true");
         }
     }
 }

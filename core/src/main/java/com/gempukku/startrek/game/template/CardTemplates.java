@@ -48,24 +48,18 @@ public class CardTemplates {
     }
 
     public static Entity createFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
-        return createFullCard(cardDefinition, spawnSystem, false, -1);
-    }
-
-    public static Entity createFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem,
-                                        boolean useSteps, int step) {
         CardType cardType = cardDefinition.getType();
 
         if (cardType == CardType.Personnel || cardType == CardType.Ship) {
-            return createAffiliatedFullCard(cardDefinition, spawnSystem, cardType, useSteps, step);
+            return createAffiliatedFullCard(cardDefinition, spawnSystem, cardType);
         } else if (cardType == CardType.Equipment || cardType == CardType.Event
                 || cardType == CardType.Interrupt || cardType == CardType.Dilemma) {
-            return createUnaffiliatedFullCard(cardDefinition, spawnSystem, cardType, useSteps, step);
+            return createUnaffiliatedFullCard(cardDefinition, spawnSystem, cardType);
         }
         throw new GdxRuntimeException("Unable to create a full card for card type: " + cardType);
     }
 
-    private static Entity createUnaffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType,
-                                                     boolean useSteps, int step) {
+    private static Entity createUnaffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType) {
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card/card-full-unaffiliated.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
 
@@ -100,13 +94,12 @@ public class CardTemplates {
 
             // Text
             TextBlock textBlock = text.getTextBlocks().get(3);
-            textBlock.setText(createCardText(cardDefinition, useSteps, step));
+            textBlock.setText(createCardText(cardDefinition));
         }
         return cardRepresentation;
     }
 
-    private static Entity createAffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType,
-                                                   boolean useSteps, int step) {
+    private static Entity createAffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType) {
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card/card-full-affiliated.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
 
@@ -150,7 +143,7 @@ public class CardTemplates {
 
             // Text
             TextBlock textBlock = text.getTextBlocks().get(4);
-            textBlock.setText(createCardText(cardDefinition, useSteps, step));
+            textBlock.setText(createCardText(cardDefinition));
 
             // Icons
             Array<CardIcon> icons = cardDefinition.getIcons();
@@ -212,7 +205,15 @@ public class CardTemplates {
         throw new GdxRuntimeException("Unable to resolve affiliated template: " + affiliation);
     }
 
-    private static String createCardText(CardDefinition cardDefinition, boolean useSteps, int step) {
+    private static String createCardText(CardDefinition cardDefinition) {
+        return createCardText(cardDefinition, false, -1, -1);
+    }
+
+    public static String createStepCardText(CardDefinition cardDefinition, int abilityIndex, int step) {
+        return createCardText(cardDefinition, true, abilityIndex, step);
+    }
+
+    private static String createCardText(CardDefinition cardDefinition, boolean useSteps, int abilityIndex, int step) {
         StringBuilder result = new StringBuilder();
         Array<PersonnelSkill> skills = cardDefinition.getSkills();
         if (skills != null) {
@@ -239,9 +240,10 @@ public class CardTemplates {
         }
         Array<JsonValue> cardAbilities = cardDefinition.getAbilities();
         if (cardAbilities != null) {
-            for (JsonValue ability : cardAbilities) {
+            for (int i = 0; i < cardAbilities.size; i++) {
+                JsonValue ability = cardAbilities.get(i);
                 String text = ability.getString("text");
-                if (useSteps)
+                if (useSteps && abilityIndex == i)
                     text = replaceSteps(text, step);
                 else
                     text = removeSteps(text);

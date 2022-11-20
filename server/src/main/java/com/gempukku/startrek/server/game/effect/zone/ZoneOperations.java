@@ -68,13 +68,14 @@ public class ZoneOperations extends BaseSystem {
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
     }
 
-    public void moveCardToStack(Entity cardEntity) {
+    public void moveCardToStack(Entity cardEntity, int abilityIndex) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         CardZone oldZone = card.getCardZone();
         CardZone newZone = CardZone.Stack;
         card.setCardZone(newZone);
         ObjectOnStackComponent cardOnStack = cardOnStackComponentMapper.create(cardEntity);
         cardOnStack.setType("card");
+        cardOnStack.setAbilityIndex(abilityIndex);
         objectStackSystem.stackEntity(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
 
@@ -332,9 +333,6 @@ public class ZoneOperations extends BaseSystem {
                 break;
             case Core:
                 moveCardToCore(cardEntity);
-                break;
-            case Stack:
-                moveCardToStack(cardEntity);
                 break;
             case DiscardPile:
                 moveCardToDiscardPile(cardEntity);

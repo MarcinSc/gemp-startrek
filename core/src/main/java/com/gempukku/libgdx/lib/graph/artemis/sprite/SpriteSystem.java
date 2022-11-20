@@ -58,7 +58,9 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
         Entity spriteEntity = world.getEntity(entityId);
         SpriteComponent sprite = spriteEntity.getComponent(SpriteComponent.class);
         Array<SpriteDefinitionAdapter> spriteDefinitionAdapters = spriteMap.get(entityId);
-        spriteDefinitionAdapters.get(spriteDefinitionIndex).updateSprite(sprite.getSprites().get(spriteDefinitionIndex));
+        if (spriteDefinitionAdapters != null) {
+            spriteDefinitionAdapters.get(spriteDefinitionIndex).updateSprite(sprite.getSprites().get(spriteDefinitionIndex));
+        }
     }
 
     @EventListener

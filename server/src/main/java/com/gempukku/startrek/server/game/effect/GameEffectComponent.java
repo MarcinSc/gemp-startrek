@@ -47,10 +47,4 @@ public class GameEffectComponent extends Component {
     public String getDataString(String name, String defaultValue) {
         return data.getString(name, defaultValue);
     }
-
-    public boolean getDataBoolean(String name, boolean defaultValue) {
-        if (data.has(name))
-            return data.getBoolean(name);
-        return defaultValue;
-    }
 }
