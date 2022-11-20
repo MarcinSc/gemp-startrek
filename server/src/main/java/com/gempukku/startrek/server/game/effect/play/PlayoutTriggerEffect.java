@@ -26,7 +26,7 @@ public class PlayoutTriggerEffect extends EffectSystem {
         String triggerIndexMemory = gameEffect.getDataString("triggerIndexMemory");
         int triggerIndex = Integer.parseInt(memory.getValue(triggerIndexMemory));
 
-        TriggerAbility triggerAbility = cardAbilitySystem.getCardAbilities(cardEntity, TriggerAbility.class).get(triggerIndex);
+        TriggerAbility triggerAbility = (TriggerAbility) cardAbilitySystem.getCardAbilities(cardEntity).get(triggerIndex);
         boolean costsPaid = Boolean.parseBoolean(memory.getValue("costsPaid", "false"));
         if (!costsPaid) {
             Array<JsonValue> costs = triggerAbility.getCosts();

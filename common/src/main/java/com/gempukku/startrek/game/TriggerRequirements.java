@@ -2,6 +2,7 @@ package com.gempukku.startrek.game;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.gempukku.startrek.game.ability.CardAbility;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.ability.TriggerAbility;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
@@ -36,12 +37,15 @@ public class TriggerRequirements {
     public static int findUsableTriggerIndex(
             Entity usedCardEntity, String triggerType, boolean optional, Memory memory,
             CardAbilitySystem cardAbilitySystem, ConditionResolverSystem conditionResolverSystem) {
-        Array<TriggerAbility> triggerAbilities = cardAbilitySystem.getCardAbilities(usedCardEntity, TriggerAbility.class);
-        for (int i = 0; i < triggerAbilities.size; i++) {
-            TriggerAbility triggerAbility = triggerAbilities.get(i);
-            if (triggerAbility.getTriggerType().equals(triggerType) && triggerAbility.isOptional() == optional) {
-                if (conditionResolverSystem.resolveBoolean(usedCardEntity, memory, triggerAbility.getCondition()))
-                    return i;
+        Array<CardAbility> cardAbilities = cardAbilitySystem.getCardAbilities(usedCardEntity);
+        for (int i = 0; i < cardAbilities.size; i++) {
+            CardAbility cardAbility = cardAbilities.get(i);
+            if (cardAbility instanceof TriggerAbility) {
+                TriggerAbility triggerAbility = (TriggerAbility) cardAbility;
+                if (triggerAbility.getTriggerType().equals(triggerType) && triggerAbility.isOptional() == optional) {
+                    if (conditionResolverSystem.resolveBoolean(usedCardEntity, memory, triggerAbility.getCondition()))
+                        return i;
+                }
             }
         }
         return -1;

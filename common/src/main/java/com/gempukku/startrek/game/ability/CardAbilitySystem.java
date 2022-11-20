@@ -24,6 +24,14 @@ public class CardAbilitySystem extends BaseSystem {
         handlerMap.put(type, handler);
     }
 
+    public Array<CardAbility> getCardAbilities(Entity cardEntity) {
+        return getCardAbilities(cardEntity.getComponent(CardComponent.class).getCardId());
+    }
+
+    public Array<CardAbility> getCardAbilities(String cardId) {
+        return abilitiesMap.get(cardId);
+    }
+
     public <T extends CardAbility> Array<T> getCardAbilities(Entity cardEntity, Class<T> clazz) {
         return getCardAbilities(cardEntity.getComponent(CardComponent.class).getCardId(), clazz);
     }
