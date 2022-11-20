@@ -39,11 +39,19 @@
       "type": "trigger",
       "triggerType": "killed",
       "condition": "matches(self)",
-      "effects": {
-        "type": "chooseAndDiscard",
-        "player": "owner(self)",
-        "amount": 1
-      }
+      "effects": [
+        {
+          "type": "selectInHand",
+          "filter": "any",
+          "memory": "selectedCard",
+          "amount": 1
+        },
+        {
+          "type": "discard",
+          "player": "owner(self)",
+          "filter": "memory(selectedCard)"
+        }
+      ]
     }
   ],
   "lore": "\"...I have done what Bajor needed me to do. I've allowed myself to be a slave to my reputation all of these years. And now, it is enough.\""
