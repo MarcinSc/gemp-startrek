@@ -10,6 +10,7 @@ import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.common.OrderComponent;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.EffectComponent;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
 
 public class GameStateCardsTrackingSystem extends BaseSystem {
@@ -36,8 +37,40 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
                                     cardRemoved(entities.get(i));
                                 }
                             }
-                        }
-                );
+                        });
+        world.getAspectSubscriptionManager().get(Aspect.all(EffectComponent.class))
+                .addSubscriptionListener(
+                        new EntitySubscription.SubscriptionListener() {
+                            @Override
+                            public void inserted(IntBag entities) {
+                                for (int i = 0, size = entities.size(); i < size; i++) {
+                                    effectInserted(entities.get(i));
+                                }
+                            }
+
+                            @Override
+                            public void removed(IntBag entities) {
+                                for (int i = 0, size = entities.size(); i < size; i++) {
+                                    effectRemoved(entities.get(i));
+                                }
+                            }
+                        });
+    }
+
+    private void effectInserted(int entityId) {
+        Entity effectEntity = world.getEntity(entityId);
+        EffectComponent effect = effectEntity.getComponent(EffectComponent.class);
+        CardZoneUtil.addEffectOnStack(effectEntity, effect, cardLookupSystem, spawnSystem, cardRenderingSystem,
+                orderComponentMapper);
+        animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+    }
+
+    private void effectRemoved(int entityId) {
+        Entity effectEntity = world.getEntity(entityId);
+        Entity renderedCard = cardRenderingSystem.removeRenderedCard(effectEntity, CardZone.Stack);
+        if (renderedCard != null) {
+            world.deleteEntity(renderedCard);
+        }
     }
 
     private void cardRemoved(int entityId) {
@@ -51,7 +84,6 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
 
     @EventListener
     public void cardZoneChanged(CardChangedZones cardChangedZones, Entity cardEntity) {
-        System.out.println("Card zone changed");
         CardComponent card = cardEntity.getComponent(CardComponent.class);
 
         CardZone oldZone = cardChangedZones.getPreviousZone();
@@ -105,7 +137,7 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
         if (zone == CardZone.Core)
             CardZoneUtil.addCardInCore(cardEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem);
         if (zone == CardZone.Stack) {
-            CardZoneUtil.addObjectOnStack(cardEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem,
+            CardZoneUtil.addCardOnStack(cardEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem,
                     orderComponentMapper);
             animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
         }

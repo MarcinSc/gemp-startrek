@@ -8,6 +8,7 @@ import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.common.OrderComponent;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.EffectComponent;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.template.CardTemplates;
@@ -62,14 +63,28 @@ public class CardZoneUtil {
         cardRenderingSystem.getPlayerCards(cardInBrig.getBrigOwner()).addCardInBrig(cardEntity, cardRepresentation);
     }
 
-    public static void addObjectOnStack(Entity objectEntity, CardComponent card,
-                                        CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
-                                        CardRenderingSystem cardRenderingSystem,
-                                        ComponentMapper<OrderComponent> orderComponentMapper) {
+    public static void addCardOnStack(Entity objectEntity, CardComponent card,
+                                      CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
+                                      CardRenderingSystem cardRenderingSystem,
+                                      ComponentMapper<OrderComponent> orderComponentMapper) {
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
         ObjectOnStackComponent objectOnStack = objectEntity.getComponent(ObjectOnStackComponent.class);
         Entity objectRepresentation = CardTemplates.createFullCard(cardDefinition, spawnSystem);
+        OrderComponent order = orderComponentMapper.create(objectRepresentation);
+        order.setValue(objectOnStack.getStackIndex());
+        objectRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(objectEntity.getId());
+        moveObjectToStack(objectEntity, objectRepresentation, cardRenderingSystem);
+    }
+
+    public static void addEffectOnStack(Entity objectEntity, EffectComponent effect,
+                                        CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
+                                        CardRenderingSystem cardRenderingSystem,
+                                        ComponentMapper<OrderComponent> orderComponentMapper) {
+        String cardId = effect.getSourceCardId();
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
+        ObjectOnStackComponent objectOnStack = objectEntity.getComponent(ObjectOnStackComponent.class);
+        Entity objectRepresentation = CardTemplates.createEffect(cardDefinition, objectOnStack.getAbilityIndex(), spawnSystem);
         OrderComponent order = orderComponentMapper.create(objectRepresentation);
         order.setValue(objectOnStack.getStackIndex());
         objectRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(objectEntity.getId());

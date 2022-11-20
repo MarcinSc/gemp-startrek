@@ -32,6 +32,11 @@ public class ObjectStackSystem extends BaseEntitySystem {
         entityIds.removeValue(objectEntity.getId(), false);
     }
 
+    public Entity removeTopMostFromStack() {
+        Array<Integer> entityIds = executionStack.getEntityIds();
+        return world.getEntity(entityIds.removeIndex(entityIds.size - 1));
+    }
+
     @Override
     protected void processSystem() {
 

@@ -7,10 +7,23 @@
     }
   },
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
-    "type": "playoutTrigger",
+    "type": "sequence",
     "data": {
-      "cardMemory": "usedCardId",
-      "triggerIndexMemory": "triggerIndex"
+      "actions": [
+        {
+          "type": "createEffectOnStack",
+          "sourceMemory": "usedCardId",
+          "abilityIndex": "memory(triggerIndex)"
+        },
+        {
+          "type": "playoutTrigger",
+          "cardMemory": "usedCardId",
+          "triggerIndexMemory": "triggerIndex"
+        },
+        {
+          "type": "removeEffectFromStack"
+        }
+      ]
     }
   }
 }

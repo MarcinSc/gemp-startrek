@@ -14,6 +14,7 @@ import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.common.ServerStateChanged;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.EffectComponent;
 import com.gempukku.startrek.game.template.CardTemplates;
 import com.gempukku.startrek.game.zone.ObjectOnStackComponent;
 
@@ -45,12 +46,30 @@ public class StackTextHighlightingSystem extends BaseEntitySystem {
                 ObjectOnStackComponent objectOnStack = entityOnStack.getComponent(ObjectOnStackComponent.class);
                 int abilityIndex = objectOnStack.getAbilityIndex();
                 if (abilityIndex >= 0) {
-                    CardComponent card = entityOnStack.getComponent(CardComponent.class);
-                    if (card != null) {
+                    String objectType = objectOnStack.getType();
+                    if (objectType.equals("card")) {
+                        CardComponent card = entityOnStack.getComponent(CardComponent.class);
                         Entity renderedCard = cardRenderingSystem.getCommonZones().findRenderedCard(entityOnStack);
 
                         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(card.getCardId());
                         String cardText = CardTemplates.createStepCardText(cardDefinition, abilityIndex, objectOnStack.getEffectStep());
+
+                        int cardTextBlockIndex = 3;
+
+                        // Text
+                        TextComponent text = renderedCard.getComponent(TextComponent.class);
+                        TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
+                        if (!cardText.equals(textBlock.getText())) {
+                            textBlock.setText(cardText);
+                            textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
+                            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+                        }
+                    } else if (objectType.equals("effect")) {
+                        EffectComponent effect = entityOnStack.getComponent(EffectComponent.class);
+                        Entity renderedCard = cardRenderingSystem.getCommonZones().findRenderedCard(entityOnStack);
+
+                        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(effect.getSourceCardId());
+                        String cardText = CardTemplates.createStepEffectText(cardDefinition, abilityIndex, objectOnStack.getEffectStep());
 
                         int cardTextBlockIndex = 3;
 

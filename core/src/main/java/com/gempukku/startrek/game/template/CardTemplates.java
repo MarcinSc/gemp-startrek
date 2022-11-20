@@ -59,6 +59,60 @@ public class CardTemplates {
         throw new GdxRuntimeException("Unable to create a full card for card type: " + cardType);
     }
 
+    public static Entity createEffect(CardDefinition cardDefinition, int abilityIndex, SpawnSystem spawnSystem) {
+        // TODO temporary
+        CardType cardType = cardDefinition.getType();
+
+        if (cardType == CardType.Personnel || cardType == CardType.Ship) {
+            return createAffiliatedEffect(cardDefinition, spawnSystem, cardType, abilityIndex);
+        } else if (cardType == CardType.Equipment || cardType == CardType.Event
+                || cardType == CardType.Interrupt || cardType == CardType.Dilemma) {
+            return createUnaffiliatedEffect(cardDefinition, spawnSystem, cardType, abilityIndex);
+        }
+        throw new GdxRuntimeException("Unable to create a full card for card type: " + cardType);
+    }
+
+    private static Entity createUnaffiliatedEffect(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType,
+                                                   int abilityIndex) {
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/card-full-unaffiliated.template");
+        //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
+
+        String cardTemplate = getUnaffiliatedCardTemplate(cardType);
+
+        SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
+        TextureReference cardTemplateTexture = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
+        cardTemplateTexture.setRegion(cardTemplate);
+
+        TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
+        cardImageTexture.setRegion(cardDefinition.getCardImagePath());
+
+        TextComponent text = cardRepresentation.getComponent(TextComponent.class);
+        if (text != null) {
+            // Title
+            TextBlock titleBlock = text.getTextBlocks().get(0);
+            String titleText = (cardDefinition.isUnique() ? "• " : "") + cardDefinition.getTitle();
+            titleBlock.setText(titleText);
+
+            if (cardType != CardType.Interrupt) {
+                // Cost
+                TextBlock costBlock = text.getTextBlocks().get(1);
+                costBlock.setText(String.valueOf(cardDefinition.getCost()));
+            } else {
+                TextBlock costBlock = text.getTextBlocks().get(1);
+                costBlock.setText("");
+            }
+
+            // Type
+            TextBlock typeBlock = text.getTextBlocks().get(2);
+            typeBlock.setText(cardType.name());
+
+            // Text
+            TextBlock textBlock = text.getTextBlocks().get(3);
+            textBlock.setText(createEffectText(cardDefinition, abilityIndex));
+        }
+        return cardRepresentation;
+    }
+
     private static Entity createUnaffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType) {
         Entity cardRepresentation = spawnSystem.spawnEntity("game/card/card-full-unaffiliated.template");
         //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
@@ -95,6 +149,93 @@ public class CardTemplates {
             // Text
             TextBlock textBlock = text.getTextBlocks().get(3);
             textBlock.setText(createCardText(cardDefinition));
+        }
+        return cardRepresentation;
+    }
+
+    private static Entity createAffiliatedEffect(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType,
+                                                 int abilityIndex) {
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/card-full-affiliated.template");
+        //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
+
+        Affiliation affiliation = cardDefinition.getAffiliation();
+        String cardTemplate = getAffiliatedCardTemplate(affiliation);
+
+        SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
+        TextureReference cardTemplateTexture = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
+        cardTemplateTexture.setRegion(cardTemplate);
+
+        TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
+        cardImageTexture.setRegion(cardDefinition.getCardImagePath());
+
+        TextComponent text = cardRepresentation.getComponent(TextComponent.class);
+        if (text != null) {
+            // Title
+            TextBlock titleBlock = text.getTextBlocks().get(0);
+            String titleText = (cardDefinition.isUnique() ? "• " : "") + cardDefinition.getTitle();
+            titleBlock.setText(titleText);
+
+            // Subtitle
+            String subtitle = cardDefinition.getSubtitle();
+            if (subtitle != null) {
+                TextBlock subtitleBlock = text.getTextBlocks().get(1);
+                subtitleBlock.setText(subtitle);
+            }
+
+            // Cost
+            TextBlock costBlock = text.getTextBlocks().get(2);
+            costBlock.setText(String.valueOf(cardDefinition.getCost()));
+
+            if (cardType == CardType.Personnel) {
+                // Species
+                TextBlock raceBlock = text.getTextBlocks().get(3);
+                raceBlock.setText(cardDefinition.getSpecies().toString());
+            } else if (cardType == CardType.Ship) {
+                // Class
+                TextBlock classBlock = text.getTextBlocks().get(3);
+                classBlock.setText("[font font/arial-italic.fnt]" + cardDefinition.getShipClass() + "[/font] Class");
+            }
+
+            // Text
+            TextBlock textBlock = text.getTextBlocks().get(4);
+            textBlock.setText(createEffectText(cardDefinition, abilityIndex));
+
+            // Icons
+            Array<CardIcon> icons = cardDefinition.getIcons();
+            if (icons != null) {
+                int nonStaffIcon = 0;
+                for (int iconIndex = 0; iconIndex < icons.size; iconIndex++) {
+                    CardIcon icon = icons.get(iconIndex);
+                    int spriteIconIndex;
+                    if (icon == CardIcon.Stf || icon == CardIcon.Cmd) {
+                        spriteIconIndex = 2;
+                    } else {
+                        spriteIconIndex = 3 + nonStaffIcon;
+                        nonStaffIcon++;
+                    }
+                    SpriteDefinition spriteDefinition = cardTemplateSprite.getSprites().get(spriteIconIndex);
+                    TextureReference iconTextureReference = (TextureReference) spriteDefinition.getProperties().get("Texture");
+                    iconTextureReference.setRegion(icon.name());
+                }
+            }
+
+            if (cardType == CardType.Personnel) {
+                // Stats
+                TextBlock integrityBlock = text.getTextBlocks().get(5);
+                integrityBlock.setText("I[scale 0.8]NTEGRITY[/scale] " + cardDefinition.getIntegrity());
+                TextBlock cunningBlock = text.getTextBlocks().get(6);
+                cunningBlock.setText("C[scale 0.8]UNNING[/scale] " + cardDefinition.getCunning());
+                TextBlock strengthBlock = text.getTextBlocks().get(7);
+                strengthBlock.setText("S[scale 0.8]TRENGTH[/scale] " + cardDefinition.getStrength());
+            } else if (cardType == CardType.Ship) {
+                // Stats
+                TextBlock rangeBlock = text.getTextBlocks().get(5);
+                rangeBlock.setText("R[scale 0.8]ANGE[/scale] " + cardDefinition.getRange());
+                TextBlock weaponsBlock = text.getTextBlocks().get(6);
+                weaponsBlock.setText("W[scale 0.8]EAPONS[/scale] " + cardDefinition.getWeapons());
+                TextBlock shieldsBlock = text.getTextBlocks().get(7);
+                shieldsBlock.setText("S[scale 0.8]HIELDS[/scale] " + cardDefinition.getShields());
+            }
         }
         return cardRepresentation;
     }
@@ -203,6 +344,30 @@ public class CardTemplates {
         else if (affiliation == Affiliation.NonAligned)
             return "nonAligned-template";
         throw new GdxRuntimeException("Unable to resolve affiliated template: " + affiliation);
+    }
+
+    private static String createEffectText(CardDefinition cardDefinition, int abilityIndex) {
+        return createEffectText(cardDefinition, false, abilityIndex, -1);
+    }
+
+    public static String createStepEffectText(CardDefinition cardDefinition, int abilityIndex, int step) {
+        return createEffectText(cardDefinition, true, abilityIndex, step);
+    }
+
+    private static String createEffectText(CardDefinition cardDefinition, boolean useSteps, int abilityIndex, int step) {
+        StringBuilder result = new StringBuilder();
+        result.append("[b]Effect:[/b]\n");
+        Array<JsonValue> cardAbilities = cardDefinition.getAbilities();
+        if (cardAbilities != null) {
+            JsonValue ability = cardAbilities.get(abilityIndex);
+            String text = ability.getString("text");
+            if (useSteps)
+                text = replaceSteps(text, step);
+            else
+                text = removeSteps(text);
+            result.append(text).append("\n");
+        }
+        return result.toString();
     }
 
     private static String createCardText(CardDefinition cardDefinition) {

@@ -40,9 +40,15 @@ public class InitialGameStateCardsCreatorSystem extends BaseSystem {
     }
 
     private void objectOnStackInserted(Entity objectEntity) {
-        CardComponent card = objectEntity.getComponent(CardComponent.class);
-        CardZoneUtil.addObjectOnStack(objectEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem,
-                orderComponentMapper);
+        ObjectOnStackComponent objectOnStack = objectEntity.getComponent(ObjectOnStackComponent.class);
+        String objectType = objectOnStack.getType();
+        // This class deals only with cards, not effects
+        // Effects are done in GameStateCardsTrackingSystem
+        if (objectType.equals("card")) {
+            CardComponent card = objectEntity.getComponent(CardComponent.class);
+            CardZoneUtil.addCardOnStack(objectEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem,
+                    orderComponentMapper);
+        }
     }
 
     private void faceUpCardInMissionInserted(Entity cardEntity) {
