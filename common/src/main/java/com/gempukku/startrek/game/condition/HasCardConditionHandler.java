@@ -27,7 +27,7 @@ public class HasCardConditionHandler extends ConditionSystem {
     public void validate(Array<String> parameters) {
         ValidateUtil.atLeast(parameters, 1);
         for (String parameter : parameters) {
-            cardFilterResolverSystem.validate(parameter);
+            cardFilterResolverSystem.validateFilter(parameter);
         }
     }
 }

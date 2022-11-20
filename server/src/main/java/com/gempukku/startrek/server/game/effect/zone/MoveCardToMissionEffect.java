@@ -56,7 +56,7 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"filter", "missionMemory", "faceUp"},
                 new String[]{});
-        cardFilterResolverSystem.validate(effect.getString("filter"));
-        conditionResolverSystem.validate(effect.getString("faceUp"));
+        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
+        conditionResolverSystem.validateCondition(effect.getString("faceUp"));
     }
 }

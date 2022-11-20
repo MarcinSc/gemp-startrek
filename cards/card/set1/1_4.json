@@ -10,7 +10,7 @@
       "effects": [
         {
           "type": "condition",
-          "condition": "or(countAtLeast(and(facingDilemma,skill(Anthropology)),2),countAtLeast(and(facingDilemma,skill(Telepathy)),2))",
+          "condition": "or(countSkillAtLeast(facingDilemma,Anthropology,2),countSkillAtLeast(facingDilemma,Telepathy,2))",
           "falseEffect": {
             "type": "condition",
             "condition": "onMission(currentMission),or(skill(Anthropology),skill(Telepathy))",

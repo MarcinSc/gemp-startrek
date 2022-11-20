@@ -42,7 +42,7 @@ public class MoveCardToStackEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"filter"},
                 new String[]{"abilityIndex"});
-        cardFilterResolverSystem.validate(effect.getString("filter"));
+        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
         String abilityIndex = effect.getString("abilityIndex");
         if (abilityIndex != null)
             amountResolverSystem.validateAmount(abilityIndex);

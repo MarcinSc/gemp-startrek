@@ -37,7 +37,7 @@ public class DecisionSystem extends EffectSystem {
                 new String[]{"player", "decisionType"},
                 new String[]{"data", "memoryData"});
         String player = effect.getString("decisionType");
-        playerResolverSystem.validate(player);
+        playerResolverSystem.validatePlayer(player);
     }
 
     @EventListener

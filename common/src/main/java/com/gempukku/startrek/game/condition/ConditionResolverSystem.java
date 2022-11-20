@@ -56,7 +56,7 @@ public class ConditionResolverSystem extends BaseSystem {
                     public void validate(Array<String> parameters) {
                         ValidateUtil.atLeast(parameters, 2);
                         for (String parameter : parameters) {
-                            ConditionResolverSystem.this.validate(parameter);
+                            ConditionResolverSystem.this.validateCondition(parameter);
                         }
 
                     }
@@ -77,7 +77,7 @@ public class ConditionResolverSystem extends BaseSystem {
                     public void validate(Array<String> parameters) {
                         ValidateUtil.atLeast(parameters, 2);
                         for (String parameter : parameters) {
-                            ConditionResolverSystem.this.validate(parameter);
+                            ConditionResolverSystem.this.validateCondition(parameter);
                         }
 
                     }
@@ -103,7 +103,7 @@ public class ConditionResolverSystem extends BaseSystem {
         return true;
     }
 
-    public void validate(String value) {
+    public void validateCondition(String value) {
         Array<Expression> expressions = expressionSystem.parseExpression(value);
         for (Expression expression : expressions) {
             String type = expression.getType();

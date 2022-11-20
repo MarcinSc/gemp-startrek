@@ -10,7 +10,7 @@
       "effects": [
         {
           "type": "condition",
-          "condition": "or(countAtLeast(facingDilemma,skill(Leadership),1),countAtLeast(facingDilemma,skill(Security),1))",
+          "condition": "or(countAtLeast(and(facingDilemma,skill(Leadership)),1),countAtLeast(and(facingDilemma,skill(Security)),1))",
           "trueEffect": [
             {
               "type": "select",

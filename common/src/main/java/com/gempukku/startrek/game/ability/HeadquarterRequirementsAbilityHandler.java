@@ -23,6 +23,6 @@ public class HeadquarterRequirementsAbilityHandler extends CardAbilityHandlerSys
         ValidateUtil.abilityExpectedFields(cardAbility,
                 new String[]{"filter"},
                 new String[]{});
-        cardFilterResolverSystem.validate(cardAbility.getString("filter"));
+        cardFilterResolverSystem.validateFilter(cardAbility.getString("filter"));
     }
 }

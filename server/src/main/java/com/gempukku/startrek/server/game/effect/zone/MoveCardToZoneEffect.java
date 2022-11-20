@@ -50,7 +50,7 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"filter", "zone"},
                 new String[]{"fromZone"});
-        cardFilterResolverSystem.validate(effect.getString("filter"));
+        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
         CardZone.valueOf(effect.getString("zone"));
         String fromZone = effect.getString("fromZone");
         if (fromZone != null)

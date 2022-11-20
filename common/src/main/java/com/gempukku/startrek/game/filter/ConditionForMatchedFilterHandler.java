@@ -32,7 +32,7 @@ public class ConditionForMatchedFilterHandler extends CardFilterSystem {
     public void validate(Array<String> parameters) {
         ValidateUtil.atLeast(parameters, 1);
         for (String parameter : parameters) {
-            conditionResolverSystem.validate(parameter);
+            conditionResolverSystem.validateCondition(parameter);
         }
     }
 }

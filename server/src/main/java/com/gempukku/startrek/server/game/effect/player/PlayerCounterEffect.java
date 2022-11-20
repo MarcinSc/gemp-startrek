@@ -40,6 +40,6 @@ public class PlayerCounterEffect extends OneTimeEffectSystem {
                 new String[]{"amount", "player"},
                 new String[]{});
         amountResolverSystem.validateAmount(effect.getString("amount"));
-        playerResolverSystem.validate(effect.getString("player"));
+        playerResolverSystem.validatePlayer(effect.getString("player"));
     }
 }

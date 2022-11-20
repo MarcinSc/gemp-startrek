@@ -33,7 +33,7 @@ public class ServerOrderAbilityHandler extends ServerCardAbilityHandlerSystem {
         JsonValue effects = cardAbility.get("effects");
 
         if (condition != null)
-            conditionResolverSystem.validate(condition);
+            conditionResolverSystem.validateCondition(condition);
         if (costs != null) {
             validateEffects(costs);
         }

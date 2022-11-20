@@ -55,7 +55,7 @@ public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"player", "filter"},
                 new String[]{});
-        playerResolverSystem.validate(effect.getString("player"));
-        cardFilterResolverSystem.validate(effect.getString("filter"));
+        playerResolverSystem.validatePlayer(effect.getString("player"));
+        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
     }
 }

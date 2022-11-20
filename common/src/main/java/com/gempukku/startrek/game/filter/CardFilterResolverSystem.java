@@ -28,7 +28,7 @@ public class CardFilterResolverSystem extends BaseSystem {
                     public void validate(Array<String> parameters) {
                         ValidateUtil.atLeast(parameters, 2);
                         for (String parameter : parameters) {
-                            CardFilterResolverSystem.this.validate(parameter);
+                            CardFilterResolverSystem.this.validateFilter(parameter);
                         }
                     }
                 });
@@ -48,7 +48,7 @@ public class CardFilterResolverSystem extends BaseSystem {
                     public void validate(Array<String> parameters) {
                         ValidateUtil.atLeast(parameters, 2);
                         for (String parameter : parameters) {
-                            CardFilterResolverSystem.this.validate(parameter);
+                            CardFilterResolverSystem.this.validateFilter(parameter);
                         }
                     }
                 });
@@ -85,7 +85,7 @@ public class CardFilterResolverSystem extends BaseSystem {
                     @Override
                     public void validate(Array<String> parameters) {
                         ValidateUtil.exactly(parameters, 1);
-                        CardFilterResolverSystem.this.validate(parameters.get(0));
+                        CardFilterResolverSystem.this.validateFilter(parameters.get(0));
                     }
                 });
         registerFilterHandler("self",
@@ -158,7 +158,7 @@ public class CardFilterResolverSystem extends BaseSystem {
         }
     }
 
-    public void validate(String value) {
+    public void validateFilter(String value) {
         Array<Expression> expressions = expressionSystem.parseExpression(value);
         if (expressions.size > 1) {
             Array<CardFilter> filters = new Array<>();

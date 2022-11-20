@@ -10,7 +10,7 @@
       "effects": [
         {
           "type": "condition",
-          "condition": "or(countAtLeast(and(facingDilemma,skill(Biology)),2),countAtLeast(and(facingDilemma,skill(Medical)),2))",
+          "condition": "or(countSkillAtLeast(facingDilemma,skillBiology,2),countSkillAtLeast(facingDilemma,Medical,2))",
           "falseEffect": {
             "type": "condition",
             "condition": "onMission(currentMission),or(skill(Biology),skill(Medical))",

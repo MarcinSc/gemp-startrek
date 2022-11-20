@@ -9,13 +9,13 @@
       "type": "dilemmaEffect",
       "effects": [
         {
-          "type": "selectRandomly",
+          "type": "randomlySelect",
           "memory": "selectedPersonnel",
           "filter": "facingDilemma,type(Personnel)"
         },
         {
           "type": "condition",
-          "condition": "or(and(countAtLeast(facingDilemma,skill(Diplomacy),1),countAtLeast(facingDilemma,skill(Medical))),countAtLeast(facingDilemma,skill(Security),2))",
+          "condition": "or(and(countAtLeast(facingDilemma,skill(Diplomacy),1),countAtLeast(facingDilemma,skill(Medical))),countSkillAtLeast(facingDilemma,Security,2))",
           "trueEffect": {
             "type": "stop",
             "filter": "memory(selectedPersonnel)"

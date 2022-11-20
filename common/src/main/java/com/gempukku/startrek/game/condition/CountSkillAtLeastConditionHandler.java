@@ -1,0 +1,54 @@
+package com.gempukku.startrek.game.condition;
+
+import com.artemis.Entity;
+import com.badlogic.gdx.utils.Array;
+import com.gempukku.startrek.card.CardDefinition;
+import com.gempukku.startrek.card.CardLookupSystem;
+import com.gempukku.startrek.card.PersonnelSkill;
+import com.gempukku.startrek.game.Memory;
+import com.gempukku.startrek.game.ValidateUtil;
+import com.gempukku.startrek.game.amount.AmountResolverSystem;
+import com.gempukku.startrek.game.card.CardFilteringSystem;
+import com.gempukku.startrek.game.filter.CardFilter;
+import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+
+import java.util.function.Consumer;
+
+public class CountSkillAtLeastConditionHandler extends ConditionSystem {
+    private CardFilterResolverSystem cardFilterResolverSystem;
+    private CardFilteringSystem cardFilteringSystem;
+    private AmountResolverSystem amountResolverSystem;
+    private CardLookupSystem cardLookupSystem;
+
+    public CountSkillAtLeastConditionHandler() {
+        super("countSkillAtLeast");
+    }
+
+    @Override
+    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+        CardFilter filter = cardFilterResolverSystem.resolveCardFilter(parameters.get(0));
+        PersonnelSkill skill = PersonnelSkill.valueOf(parameters.get(1));
+        int amount = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(2));
+        int[] result = new int[1];
+        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, filter,
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity entity) {
+                        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(entity);
+                        for (PersonnelSkill cardSkill : cardDefinition.getSkills()) {
+                            if (cardSkill == skill)
+                                result[0]++;
+                        }
+                    }
+                });
+        return result[0] >= amount;
+    }
+
+    @Override
+    public void validate(Array<String> parameters) {
+        ValidateUtil.exactly(parameters, 3);
+        cardFilterResolverSystem.validateFilter(parameters.get(0));
+        PersonnelSkill.valueOf(parameters.get(1));
+        amountResolverSystem.validateAmount(parameters.get(2));
+    }
+}

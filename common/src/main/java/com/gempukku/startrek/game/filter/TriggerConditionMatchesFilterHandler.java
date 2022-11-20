@@ -47,6 +47,6 @@ public class TriggerConditionMatchesFilterHandler extends CardFilterSystem {
     @Override
     public void validate(Array<String> parameters) {
         ValidateUtil.exactly(parameters, 2);
-        conditionResolverSystem.validate(parameters.get(1));
+        conditionResolverSystem.validateCondition(parameters.get(1));
     }
 }

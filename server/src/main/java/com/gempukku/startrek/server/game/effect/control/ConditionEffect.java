@@ -44,7 +44,7 @@ public class ConditionEffect extends EffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"condition"},
                 new String[]{"conditionMemory", "trueEffect", "falseEffect"});
-        conditionResolverSystem.validate(effect.getString("condition"));
+        conditionResolverSystem.validateCondition(effect.getString("condition"));
         JsonValue trueEffect = effect.get("trueEffect");
         if (trueEffect != null)
             gameEffectSystem.validate(trueEffect);

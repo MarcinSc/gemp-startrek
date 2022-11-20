@@ -23,6 +23,6 @@ public class CounterCountAmountHandler extends AmountSystem {
     @Override
     public void validate(Array<String> parameters) {
         ValidateUtil.exactly(parameters, 1);
-        playerResolverSystem.validate(parameters.get(0));
+        playerResolverSystem.validatePlayer(parameters.get(0));
     }
 }

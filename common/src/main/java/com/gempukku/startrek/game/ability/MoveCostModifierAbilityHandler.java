@@ -32,9 +32,9 @@ public class MoveCostModifierAbilityHandler extends CardAbilityHandlerSystem {
         String toFilter = cardAbility.getString("toFilter", "any");
         String amount = cardAbility.getString("amount");
 
-        cardFilterResolverSystem.validate(shipFilter);
-        cardFilterResolverSystem.validate(fromFilter);
-        cardFilterResolverSystem.validate(toFilter);
+        cardFilterResolverSystem.validateFilter(shipFilter);
+        cardFilterResolverSystem.validateFilter(fromFilter);
+        cardFilterResolverSystem.validateFilter(toFilter);
         amountResolverSystem.validateAmount(amount);
     }
 }

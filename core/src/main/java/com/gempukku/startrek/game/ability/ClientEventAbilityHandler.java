@@ -25,6 +25,6 @@ public class ClientEventAbilityHandler extends CardAbilityHandlerSystem {
 
         String condition = cardAbility.getString("condition", null);
         if (condition != null)
-            conditionResolverSystem.validate(condition);
+            conditionResolverSystem.validateCondition(condition);
     }
 }

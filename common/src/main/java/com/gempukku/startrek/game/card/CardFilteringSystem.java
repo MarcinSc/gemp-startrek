@@ -52,6 +52,23 @@ public class CardFilteringSystem extends BaseSystem {
         }
     }
 
+    public boolean hasMatchingInPlay(Entity sourceEntity, Memory memory, CardFilter cardFilter, int count) {
+        int result = 0;
+        IntBag entities = cardSubscription.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity cardEntity = world.getEntity(entities.get(i));
+            CardComponent card = cardComponentMapper.get(cardEntity);
+            CardZone cardZone = card.getCardZone();
+            if (cardZone == CardZone.Core || cardZone == CardZone.Brig || cardZone == CardZone.Mission
+                    && cardFilter.accepts(sourceEntity, memory, cardEntity)) {
+                result++;
+                if (result >= count)
+                    return true;
+            }
+        }
+        return false;
+    }
+
     public void forEachCardInPlay(Entity sourceEntity, Memory memory, String filter, Consumer<Entity> consumer) {
         CardFilter cardFilter = cardFilterResolverSystem.resolveCardFilter(filter);
         forEachCardInPlay(sourceEntity, memory, cardFilter, consumer);

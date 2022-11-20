@@ -49,13 +49,13 @@ public class RepeatEffect extends EffectSystem {
             ValidateUtil.effectExpectedFields(effect,
                     new String[]{"condition", "action"},
                     new String[]{});
-            conditionResolverSystem.validate(effect.getString("condition"));
+            conditionResolverSystem.validateCondition(effect.getString("condition"));
             gameEffectSystem.validate(effect.get("action"));
         } else if (type.equals("repeatUntilInTurnOrder")) {
             ValidateUtil.effectExpectedFields(effect,
                     new String[]{"condition", "playerMemory", "action"},
                     new String[]{});
-            conditionResolverSystem.validate(effect.getString("condition"));
+            conditionResolverSystem.validateCondition(effect.getString("condition"));
             gameEffectSystem.validate(effect.get("action"));
         }
     }

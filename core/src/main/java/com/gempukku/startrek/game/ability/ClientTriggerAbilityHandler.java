@@ -27,6 +27,6 @@ public class ClientTriggerAbilityHandler extends CardAbilityHandlerSystem {
 
         String condition = cardAbility.getString("condition");
 
-        conditionResolverSystem.validate(condition);
+        conditionResolverSystem.validateCondition(condition);
     }
 }

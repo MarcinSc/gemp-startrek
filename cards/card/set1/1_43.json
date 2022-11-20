@@ -9,7 +9,7 @@
       "type": "dilemmaEffect",
       "effects": [
         {
-          "type": "selectRandomly",
+          "type": "randomlySelect",
           "memory": "selectedPersonnel1",
           "filter": "facingDilemma,type(Personnel)"
         },
@@ -22,7 +22,7 @@
           "condition": "countAtLeast(and(facingDilemma,type(Personnel)),9)",
           "trueEffect": [
             {
-              "type": "selectRandomly",
+              "type": "randomlySelect",
               "memory": "selectedPersonnel2",
               "filter": "facingDilemma,type(Personnel)"
             },
@@ -35,7 +35,7 @@
               "condition": "countAtLeast(and(facingDilemma,type(Personnel)),10)",
               "trueEffect": [
                 {
-                  "type": "selectRandomly",
+                  "type": "randomlySelect",
                   "memory": "selectedPersonnel3",
                   "filter": "facingDilemma,type(Personnel)"
                 },

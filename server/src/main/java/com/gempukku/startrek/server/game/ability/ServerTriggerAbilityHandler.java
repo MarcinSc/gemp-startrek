@@ -34,7 +34,7 @@ public class ServerTriggerAbilityHandler extends ServerCardAbilityHandlerSystem 
         JsonValue costs = cardAbility.get("costs");
         JsonValue effects = cardAbility.get("effects");
 
-        conditionResolverSystem.validate(condition);
+        conditionResolverSystem.validateCondition(condition);
         if (costs != null) {
             validateEffects(costs);
         }

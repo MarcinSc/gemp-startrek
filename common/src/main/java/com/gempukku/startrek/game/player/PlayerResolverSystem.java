@@ -47,7 +47,7 @@ public class PlayerResolverSystem extends BaseSystem {
                 });
     }
 
-    public void validate(String value) {
+    public void validatePlayer(String value) {
         Array<Expression> expressions = expressionSystem.parseExpression(value);
         if (expressions.size > 1)
             throw new RuntimeException("Invalid number of expressoins to resolve player");

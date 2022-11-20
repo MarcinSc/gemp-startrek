@@ -10,7 +10,7 @@
       "effects": [
         {
           "type": "condition",
-          "condition": "or(countAtLeast(facingDilemma,skill(Engineer),1),countAtLeast(facingDilemma,skill(Programming),1))",
+          "condition": "or(countAtLeast(and(facingDilemma,skill(Engineer)),1),countAtLeast(and(facingDilemma,skill(Programming)),1))",
           "trueEffect": [
             {
               "type": "select",

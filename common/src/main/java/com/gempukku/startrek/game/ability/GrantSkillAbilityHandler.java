@@ -25,7 +25,7 @@ public class GrantSkillAbilityHandler extends CardAbilityHandlerSystem {
         ValidateUtil.abilityExpectedFields(cardAbility,
                 new String[]{"filter", "skill"},
                 new String[]{});
-        cardFilterResolverSystem.validate(cardAbility.getString("filter"));
+        cardFilterResolverSystem.validateFilter(cardAbility.getString("filter"));
         PersonnelSkill.valueOf(cardAbility.getString("skill"));
     }
 }

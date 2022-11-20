@@ -10,7 +10,7 @@
       "effects": [
         {
           "type": "condition",
-          "condition": "or(countAtLeast(skill(Astrometrics),2),countAtLeast(skill(Navigation),2))",
+          "condition": "or(countSkillAtLeast(facingDilemma,Astrometrics,2),countSkillAtLeast(facingDilemma,Navigation,2))",
           "falseEffect": {
             "type": "condition",
             "condition": "onMission(currentMission),or(skill(Astrometrics),skill(Navigation))",

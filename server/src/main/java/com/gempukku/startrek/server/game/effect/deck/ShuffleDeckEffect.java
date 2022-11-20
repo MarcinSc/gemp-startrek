@@ -42,7 +42,7 @@ public class ShuffleDeckEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"player", "deck"},
                 new String[]{});
-        playerResolverSystem.validate(effect.getString("player"));
+        playerResolverSystem.validatePlayer(effect.getString("player"));
         String deck = effect.getString("deck");
         if (!deck.equals("dilemmaDeck") && !deck.equals("drawDeck"))
             throw new GdxRuntimeException("Unable to resolve deck type - " + deck);

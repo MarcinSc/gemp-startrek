@@ -32,6 +32,9 @@ public class CommonGameWorldBuilder {
                 new MemoryConditionHandler(),
                 new EqualsConditionHandler(),
                 new LessOrEqualConditionHandler(),
+                new AtLeastConditionHandler(),
+                new CountAtLeastConditionHandler(),
+                new CountSkillAtLeastConditionHandler(),
                 new HasCardConditionHandler(),
 
                 // Card filter resovlers

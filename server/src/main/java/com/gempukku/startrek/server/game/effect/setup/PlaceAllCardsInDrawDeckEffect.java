@@ -51,6 +51,6 @@ public class PlaceAllCardsInDrawDeckEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"player"},
                 new String[]{});
-        playerResolverSystem.validate(effect.getString("player"));
+        playerResolverSystem.validatePlayer(effect.getString("player"));
     }
 }

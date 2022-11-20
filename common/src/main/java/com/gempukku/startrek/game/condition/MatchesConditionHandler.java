@@ -22,6 +22,6 @@ public class MatchesConditionHandler extends ConditionSystem {
     @Override
     public void validate(Array<String> parameters) {
         ValidateUtil.exactly(parameters, 1);
-        cardFilterResolverSystem.validate(parameters.get(0));
+        cardFilterResolverSystem.validateFilter(parameters.get(0));
     }
 }

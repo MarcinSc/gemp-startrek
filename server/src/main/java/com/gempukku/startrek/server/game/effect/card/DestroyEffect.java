@@ -37,6 +37,6 @@ public class DestroyEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"filter"},
                 new String[]{});
-        cardFilterResolverSystem.validate(effect.getString("filter"));
+        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
     }
 }
