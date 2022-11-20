@@ -9,10 +9,10 @@ import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.startrek.game.render.zone.CommonZones;
 
 public class StackLayout {
-    private static final float HORIZONTAL_DISTANCE = 1.3f;
+    private static final float HORIZONTAL_DISTANCE = 1.2f;
     private static final float DISTANCE_FROM_CAMERA = 3f;
     private static final float CARD_SEPARATION = -0.15f;
-    private static final float CARD_SCALE = 0.4f;
+    private static final float CARD_SCALE = 0.6f;
     private static final float STACK_DEPTH = 0.01f;
     private static final float STACK_SCALE = 0.01f;
 
