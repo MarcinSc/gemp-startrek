@@ -13,10 +13,14 @@ import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 
 public class PlayRequirements {
-    public static CardFilter createBeamShipRequirements(
+    public static CardFilter createBeamFromMissionShipRequirements(
             String username,
             CardFilterResolverSystem cardFilterResolverSystem) {
         return cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped,owner(username(" + username + "))");
+    }
+
+    public static CardFilter createBeamToMissionShipRequirements(String username, CardFilterResolverSystem cardFilterResolverSystem) {
+        return cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped,owner(username(" + username + ")),missionMatches(or(missionType(Planet),missionType(Headquarters))");
     }
 
     public static CardFilter createBeamSelectAnotherShipRequirements(
@@ -27,21 +31,19 @@ public class PlayRequirements {
         String missionOwner = ship.getMissionOwner();
         int missionIndex = ship.getMissionIndex();
         CardFilter shipFilter = cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped," +
-                "onMission(username(" + missionOwner + ")," + missionIndex + ")," +
+                "inMission(username(" + missionOwner + ")," + missionIndex + ")," +
                 "owner(username(" + username + "))");
 
-        Array<CardFilter> resultFilters = new Array<>();
         // Not same ship
-        resultFilters.add(
+        CardFilter notSameShip =
                 new CardFilter() {
                     @Override
                     public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
                         return cardEntity != shipEntity;
                     }
-                });
-        resultFilters.add(shipFilter);
+                };
 
-        return new AndCardFilter(resultFilters);
+        return new AndCardFilter(notSameShip, shipFilter);
     }
 
     public static CardFilter createBeamFromMissionRequirements(
@@ -54,7 +56,7 @@ public class PlayRequirements {
         int missionIndex = mission.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
                 "or(type(Personnel),type(Equipment)),unstopped," +
-                        "onMission(username(" + missionOwner + ")," + missionIndex + ")," +
+                        "inMission(username(" + missionOwner + ")," + missionIndex + ")," +
                         "notAboardShip," +
                         "owner(username(" + username + "))");
     }
@@ -70,7 +72,7 @@ public class PlayRequirements {
         int missionIndex = mission.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
                 "or(type(Personnel),type(Equipment)),unstopped," +
-                        "onMission(username(" + missionOwner + ")," + missionIndex + ")," +
+                        "inMission(username(" + missionOwner + ")," + missionIndex + ")," +
                         "owner(username(" + username + "))");
     }
 
@@ -85,7 +87,7 @@ public class PlayRequirements {
         int missionIndex = ship.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
                 "or(type(Personnel),type(Equipment)),unstopped," +
-                        "onMission(username(" + missionOwner + ")," + missionIndex + ")," +
+                        "inMission(username(" + missionOwner + ")," + missionIndex + ")," +
                         "owner(username(" + username + "))");
     }
 
@@ -97,11 +99,7 @@ public class PlayRequirements {
         OrCardFilter playabilityFilter = playabilityCheckFilter(username, cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
         CardFilter handOwnedFilter = cardFilterResolverSystem.resolveCardFilter("zone(Hand),owner(username(" + username + "))");
 
-        Array<CardFilter> filters = new Array<>();
-        filters.add(handOwnedFilter);
-        filters.add(playabilityFilter);
-
-        return new AndCardFilter(filters);
+        return new AndCardFilter(handOwnedFilter, playabilityFilter);
     }
 
     private static OrCardFilter playabilityCheckFilter(String username, CardFilteringSystem cardFilteringSystem, CardFilterResolverSystem cardFilterResolverSystem, CardAbilitySystem cardAbilitySystem) {
@@ -126,10 +124,8 @@ public class PlayRequirements {
                 "or(type(Personnel),type(Ship),type(Equipment)),"
                         + "uniquenessPreserved,playable,"
                         + "conditionForMatched(lessOrEqual(costToPlay,counterCount(username(" + username + "))))");
-        Array<CardFilter> filters = new Array<>();
-        filters.add(headquarterRequirements, nonEventCards);
 
-        return new AndCardFilter(filters);
+        return new AndCardFilter(headquarterRequirements, nonEventCards);
     }
 
     private static CardFilter createEventPlayRequirements(

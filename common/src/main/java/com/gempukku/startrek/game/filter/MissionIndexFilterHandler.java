@@ -5,16 +5,14 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
 import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 
-public class OnMissionFilterHandler extends CardFilterSystem {
-    private PlayerResolverSystem playerResolverSystem;
+public class MissionIndexFilterHandler extends CardFilterSystem {
     private AmountResolverSystem amountResolverSystem;
 
-    public OnMissionFilterHandler() {
-        super("inMission");
+    public MissionIndexFilterHandler() {
+        super("missionIndex");
     }
 
     @Override
@@ -22,15 +20,13 @@ public class OnMissionFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                String username = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory, parameters.get(0));
-                int missionIndex = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(1));
+                int index = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(0));
                 FaceUpCardInMissionComponent faceUpCard = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
                 if (faceUpCard != null)
-                    return faceUpCard.getMissionOwner().equals(username) && faceUpCard.getMissionIndex() == missionIndex;
+                    return faceUpCard.getMissionIndex() == index;
                 FaceDownCardInMissionComponent faceDownCard = cardEntity.getComponent(FaceDownCardInMissionComponent.class);
                 if (faceDownCard != null)
-                    return faceDownCard.getMissionOwner().equals(username) && faceDownCard.getMissionIndex() == missionIndex;
-
+                    return faceDownCard.getMissionIndex() == index;
                 return false;
             }
         };
@@ -38,8 +34,7 @@ public class OnMissionFilterHandler extends CardFilterSystem {
 
     @Override
     public void validate(Array<String> parameters) {
-        ValidateUtil.exactly(parameters, 2);
-        playerResolverSystem.validatePlayer(parameters.get(0));
-        amountResolverSystem.validateAmount(parameters.get(1));
+        ValidateUtil.exactly(parameters, 1);
+        amountResolverSystem.validateAmount(parameters.get(0));
     }
 }

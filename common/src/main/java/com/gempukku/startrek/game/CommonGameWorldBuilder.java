@@ -45,6 +45,8 @@ public class CommonGameWorldBuilder {
                 new AffiliationFilterHandler(),
                 new SkillFilterHandler(),
                 new MissionTypeFilterHandler(),
+                new MissionIndexFilterHandler(),
+                new MissionMatchesFilterHandler(),
                 new QuadrantFilterHandler(),
                 new OwnerFilterHandler(),
                 new YourFilterHandler(),
