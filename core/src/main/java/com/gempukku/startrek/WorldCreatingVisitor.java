@@ -52,6 +52,7 @@ import com.gempukku.startrek.game.decision.ClientPlayOrDrawDecisionHandler;
 import com.gempukku.startrek.game.filter.ClientIdInFilterHandler;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.PlayerInfoRenderingSystem;
+import com.gempukku.startrek.game.render.StackTextHighlightingSystem;
 import com.gempukku.startrek.game.render.TurnSegmentRenderingSystem;
 import com.gempukku.startrek.game.zone.FaceDownCardTrackingSystem;
 import com.gempukku.startrek.game.zone.GameStateCardsTrackingSystem;
@@ -133,6 +134,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new InitialGameStateCardsCreatorSystem(),
                 new GameStateCardsTrackingSystem(),
                 new FaceDownCardTrackingSystem(),
+                new StackTextHighlightingSystem(),
 
                 new ShapeSystem(),
                 new ShapePickingSystem(),

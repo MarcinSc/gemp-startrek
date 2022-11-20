@@ -4,11 +4,12 @@ import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.Entity;
 import com.artemis.utils.IntBag;
-import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.libgdx.lib.artemis.animation.AnimationDirectorSystem;
+import com.gempukku.libgdx.lib.artemis.animation.animator.WaitAnimator;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
-import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextComponent;
+import com.gempukku.libgdx.lib.graph.artemis.text.TextSystem;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.common.ServerStateChanged;
@@ -19,7 +20,8 @@ import com.gempukku.startrek.game.zone.ObjectOnStackComponent;
 public class StackTextHighlightingSystem extends BaseEntitySystem {
     private CardLookupSystem cardLookupSystem;
     private CardRenderingSystem cardRenderingSystem;
-    private SpriteSystem spriteSystem;
+    private TextSystem textSystem;
+    private AnimationDirectorSystem animationDirectorSystem;
 
     private boolean stateChanged;
 
@@ -48,7 +50,6 @@ public class StackTextHighlightingSystem extends BaseEntitySystem {
                         Entity renderedCard = cardRenderingSystem.getCommonZones().findRenderedCard(entityOnStack);
 
                         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(card.getCardId());
-                        JsonValue ability = cardDefinition.getAbilities().get(abilityIndex);
                         String cardText = CardTemplates.createStepCardText(cardDefinition, abilityIndex, objectOnStack.getEffectStep());
 
                         int cardTextBlockIndex = 3;
@@ -58,7 +59,8 @@ public class StackTextHighlightingSystem extends BaseEntitySystem {
                         TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
                         if (!cardText.equals(textBlock.getText())) {
                             textBlock.setText(cardText);
-                            spriteSystem.updateSprite(renderedCard.getId(), cardTextBlockIndex);
+                            textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
+                            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
                         }
                     }
                 }

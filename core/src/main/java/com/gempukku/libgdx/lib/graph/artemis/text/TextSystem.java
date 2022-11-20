@@ -94,7 +94,8 @@ public class TextSystem extends BaseEntitySystem {
 
     public void updateText(int entityId, int textIndex) {
         Array<DisplayedText> texts = renderedTexts.get(entityId);
-        texts.get(textIndex).updateSprites();
+        if (texts != null)
+            texts.get(textIndex).updateSprites();
     }
 
     @Override

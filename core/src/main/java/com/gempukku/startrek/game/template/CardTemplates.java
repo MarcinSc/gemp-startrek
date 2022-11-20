@@ -272,7 +272,7 @@ public class CardTemplates {
                 if (Integer.parseInt(textInTag) == step) {
                     sb.append("[color 0000ff]");
                 } else {
-                    sb.append("[color 777777]");
+                    sb.append("[color 000000]");
                 }
                 consumed = matcher.end(i);
             }
