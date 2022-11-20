@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.lib.artemis.input.UserInputStateComponent;
 import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
@@ -96,7 +96,7 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
         }
 
         initializeSelectionState(decisionData);
-        selectionState.markPlayableCards();
+        selectionState.markSelectableCards();
 
         if (!selectionState.hasSelectableEntities()) {
             pass();
@@ -131,7 +131,7 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
                 sourceEntity, memory,
                 new SelectionCallback() {
                     @Override
-                    public void selectionChanged(Array<Entity> selected) {
+                    public void selectionChanged(ObjectSet<Entity> selected) {
                         enableButton(useButton, selected.size == 1);
                     }
                 });

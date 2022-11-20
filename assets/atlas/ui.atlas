@@ -6,56 +6,70 @@ filter: Linear, Linear
 repeat: none
 discard-cards
   rotate: false
-  xy: 652, 77
+  xy: 652, 100
   size: 139, 133
   orig: 139, 133
   offset: 0, 0
   index: -1
 discard-cards-active
   rotate: false
-  xy: 793, 77
+  xy: 793, 100
   size: 139, 133
   orig: 139, 133
   offset: 0, 0
   index: -1
 execute-orders
   rotate: false
-  xy: 2, 25
+  xy: 2, 48
   size: 156, 185
   orig: 156, 185
   offset: 0, 0
   index: -1
 execute-orders-active
   rotate: false
-  xy: 160, 25
+  xy: 160, 48
   size: 156, 185
   orig: 156, 185
   offset: 0, 0
   index: -1
 play-and-draw
   rotate: false
-  xy: 318, 64
+  xy: 318, 87
   size: 165, 146
   orig: 165, 146
   offset: 0, 0
   index: -1
 play-and-draw-active
   rotate: false
-  xy: 485, 64
+  xy: 485, 87
   size: 165, 146
   orig: 165, 146
   offset: 0, 0
   index: -1
+selected-corner
+  rotate: false
+  xy: 2, 25
+  size: 21, 21
+  orig: 21, 21
+  offset: 0, 0
+  index: -1
+selected-side
+  rotate: false
+  xy: 934, 212
+  size: 18, 21
+  orig: 18, 21
+  offset: 0, 0
+  index: -1
 selection-corner
   rotate: false
-  xy: 2, 2
+  xy: 318, 64
   size: 21, 21
   orig: 21, 21
   offset: 0, 0
   index: -1
 selection-side
   rotate: false
-  xy: 318, 41
+  xy: 2, 2
   size: 18, 21
   orig: 18, 21
   offset: 0, 0

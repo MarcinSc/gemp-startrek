@@ -1,8 +1,8 @@
 package com.gempukku.startrek.game.decision;
 
 import com.artemis.Entity;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectSet;
 
 public interface SelectionCallback {
-    void selectionChanged(Array<Entity> selected);
+    void selectionChanged(ObjectSet<Entity> selected);
 }

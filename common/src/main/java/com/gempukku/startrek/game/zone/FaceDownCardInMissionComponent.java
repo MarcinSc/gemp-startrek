@@ -10,6 +10,7 @@ public class FaceDownCardInMissionComponent extends Component implements OwnedCo
     private String missionOwner;
     private int missionIndex;
     private boolean stopped;
+    private String onShipId;
 
     @Override
     public boolean isOwnedBy(String username) {
@@ -42,5 +43,13 @@ public class FaceDownCardInMissionComponent extends Component implements OwnedCo
 
     public void setStopped(boolean stopped) {
         this.stopped = stopped;
+    }
+
+    public String getOnShipId() {
+        return onShipId;
+    }
+
+    public void setOnShipId(String onShipId) {
+        this.onShipId = onShipId;
     }
 }

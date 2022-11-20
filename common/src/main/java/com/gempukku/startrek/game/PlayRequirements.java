@@ -9,8 +9,84 @@ import com.gempukku.startrek.game.filter.AndCardFilter;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.filter.OrCardFilter;
+import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 
 public class PlayRequirements {
+    public static CardFilter createBeamShipRequirements(
+            String username,
+            CardFilterResolverSystem cardFilterResolverSystem) {
+        return cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped,owner(username(" + username + "))");
+    }
+
+    public static CardFilter createBeamSelectAnotherShipRequirements(
+            String username,
+            Entity shipEntity,
+            CardFilterResolverSystem cardFilterResolverSystem) {
+        FaceUpCardInMissionComponent ship = shipEntity.getComponent(FaceUpCardInMissionComponent.class);
+        String missionOwner = ship.getMissionOwner();
+        int missionIndex = ship.getMissionIndex();
+        CardFilter shipFilter = cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped," +
+                "onMission(owner(username(" + missionOwner + ")),missionIndex(" + missionIndex + "))," +
+                "owner(username(" + username + "))");
+
+        Array<CardFilter> resultFilters = new Array<>();
+        // Not same ship
+        resultFilters.add(
+                new CardFilter() {
+                    @Override
+                    public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
+                        return cardEntity != shipEntity;
+                    }
+                });
+        resultFilters.add(shipFilter);
+
+        return new AndCardFilter(resultFilters);
+    }
+
+    public static CardFilter createBeamFromMissionRequirements(
+            String username,
+            Entity missionEntity,
+            Entity shipEntity,
+            CardFilterResolverSystem cardFilterResolverSystem) {
+        FaceUpCardInMissionComponent mission = missionEntity.getComponent(FaceUpCardInMissionComponent.class);
+        String missionOwner = mission.getMissionOwner();
+        int missionIndex = mission.getMissionIndex();
+        return cardFilterResolverSystem.resolveCardFilter(
+                "or(type(Personnel),type(Equipment)),unstopped," +
+                        "onMission(owner(username(" + missionOwner + ")),missionIndex(" + missionIndex + ")),notAboardShip," +
+                        "owner(username(" + username + "))");
+    }
+
+    // Remember to also check if the card is aboard the ship
+    public static CardFilter createBeamToMissionRequirements(
+            String username,
+            Entity missionEntity,
+            Entity shipEntity,
+            CardFilterResolverSystem cardFilterResolverSystem) {
+        FaceUpCardInMissionComponent mission = missionEntity.getComponent(FaceUpCardInMissionComponent.class);
+        String missionOwner = mission.getMissionOwner();
+        int missionIndex = mission.getMissionIndex();
+        return cardFilterResolverSystem.resolveCardFilter(
+                "or(type(Personnel),type(Equipment)),unstopped," +
+                        "onMission(owner(username(" + missionOwner + ")),missionIndex(" + missionIndex + "))," +
+                        "owner(username(" + username + "))");
+    }
+
+    // Remember to also check if the card is aboard the ship
+    public static CardFilter createBeamBetweenShipsRequirements(
+            String username,
+            Entity fromShipEntity,
+            Entity toShipEntity,
+            CardFilterResolverSystem cardFilterResolverSystem) {
+        FaceUpCardInMissionComponent ship = fromShipEntity.getComponent(FaceUpCardInMissionComponent.class);
+        String missionOwner = ship.getMissionOwner();
+        int missionIndex = ship.getMissionIndex();
+        return cardFilterResolverSystem.resolveCardFilter(
+                "or(type(Personnel),type(Equipment)),unstopped," +
+                        "onMission(owner(username(" + missionOwner + ")),missionIndex(" + missionIndex + "))," +
+                        "owner(username(" + username + "))");
+    }
+
     public static CardFilter createPlayRequirements(
             String username,
             CardFilteringSystem cardFilteringSystem,

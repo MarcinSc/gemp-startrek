@@ -7,8 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
 import com.gempukku.libgdx.lib.artemis.input.UserInputStateComponent;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
@@ -65,7 +65,7 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
         selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                 new SelectionCallback() {
                     @Override
-                    public void selectionChanged(Array<Entity> selected) {
+                    public void selectionChanged(ObjectSet<Entity> selected) {
                         enableButton(playButton, selected.size == 1);
                     }
                 });
@@ -132,7 +132,7 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
         Entity playerEntity = playerPositionSystem.getPlayerEntity(username);
         checkForDraw(playerEntity);
 
-        selectionState.markPlayableCards();
+        selectionState.markSelectableCards();
         selectionSystem.startSelection(selectionState);
 
         enableButton(playButton, false);

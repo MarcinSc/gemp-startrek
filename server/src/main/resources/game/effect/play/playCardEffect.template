@@ -15,14 +15,14 @@
         "conditionMemory": "checkTypeOfEvent",
         "condition": "memoryMatches(playedCardId,hasAbility(PlaysInCore))",
         "trueEffect": {
-          "tpl:extends": "game/effect/playPlaysToCoreEvent.template"
+          "tpl:extends": "game/effect/play/playPlaysToCoreEvent.template"
         },
         "falseEffect": {
-          "tpl:extends": "game/effect/playImmediateEvent.template"
+          "tpl:extends": "game/effect/play/playImmediateEvent.template"
         }
       },
       "falseEffect": {
-        "tpl:extends": "game/effect/playNonEvent.template"
+        "tpl:extends": "game/effect/play/playNonEvent.template"
       }
     }
   }

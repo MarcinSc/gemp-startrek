@@ -94,7 +94,7 @@ public class OptionalTriggerActionsDecisionHandler extends BaseSystem implements
             memory.put("playersPassed", "0");
             memory.put("usedIds", appendToList(memory.get("usedIds"), String.valueOf(cardId)));
 
-            Entity playCardEffect = spawnSystem.spawnEntity("game/trigger/playTriggerEffect.template");
+            Entity playCardEffect = spawnSystem.spawnEntity("game/effect/trigger/playTriggerEffect.template");
             EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);
             Memory triggerMemory = new Memory(effectMemory.getMemory());
             triggerMemory.setValue("usedCardId", cardId);

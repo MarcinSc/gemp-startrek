@@ -104,7 +104,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
                         }
                     });
 
-            Entity playCardEffect = spawnSystem.spawnEntity("game/effect/playCardEffect.template");
+            Entity playCardEffect = spawnSystem.spawnEntity("game/effect/play/playCardEffect.template");
             EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);
             Memory memory = new Memory(effectMemory.getMemory());
             memory.setValue("playedCardId", cardId);

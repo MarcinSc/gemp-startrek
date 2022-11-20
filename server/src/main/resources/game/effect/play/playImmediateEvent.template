@@ -21,10 +21,10 @@
       "zone": "DiscardPile"
     },
     {
-      "tpl:extends": "game/trigger/playMandatoryTriggers.template"
+      "tpl:extends": "game/effect/trigger/playMandatoryTriggers.template"
     },
     {
-      "tpl:extends": "game/trigger/playOptionalTriggers.template"
+      "tpl:extends": "game/effect/trigger/playOptionalTriggers.template"
     }
   ]
 }

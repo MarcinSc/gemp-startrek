@@ -1,18 +1,17 @@
 package com.gempukku.libgdx.lib.graph.artemis.selection;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.Predicate;
-
-import java.util.Set;
 
 public interface SelectionDefinition {
     boolean isSelectionTriggered();
 
-    boolean canDeselect(Set<Entity> selectedEntities, Entity selected);
+    boolean canDeselect(ObjectSet<Entity> selectedEntities, Entity selected);
 
-    boolean canSelect(Set<Entity> selectedEntities, Entity newSelected);
+    boolean canSelect(ObjectSet<Entity> selectedEntities, Entity newSelected);
 
-    void selectionChanged(Set<Entity> selectedEntities);
+    void selectionChanged(ObjectSet<Entity> selectedEntities);
 
     String getMask();
 

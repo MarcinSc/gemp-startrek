@@ -11,15 +11,16 @@
       "cardMemory": "playedCardId"
     },
     {
-      "type": "moveCardToZone",
+      "type": "moveCardToMission",
       "filter": "memory(playedCardId)",
-      "zone": "Core"
+      "missionMemory": "missionId",
+      "faceUp": "memoryMatches(playedCardId,type(Ship))"
     },
     {
-      "tpl:extends": "game/trigger/playMandatoryTriggers.template"
+      "tpl:extends": "game/effect/trigger/playMandatoryTriggers.template"
     },
     {
-      "tpl:extends": "game/trigger/playOptionalTriggers.template"
+      "tpl:extends": "game/effect/trigger/playOptionalTriggers.template"
     }
   ]
 }

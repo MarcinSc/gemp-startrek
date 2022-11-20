@@ -13,7 +13,7 @@ public class ClientOrderAbilityHandler extends CardAbilityHandlerSystem {
 
     @Override
     public CardAbility resolveCardAbility(JsonValue cardAbility) {
-        String condition = cardAbility.getString("condition");
+        String condition = cardAbility.getString("condition", null);
         return new OrderAbility(condition);
     }
 

@@ -5,12 +5,10 @@ import com.artemis.Entity;
 import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.collision.Ray;
+import com.badlogic.gdx.utils.ObjectSet;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
 import com.gempukku.libgdx.lib.artemis.picking.ShapePickingSystem;
-
-import java.util.HashSet;
-import java.util.Set;
 
 // Should not be necessary, as we only want to make the HierarchySystem optional, but
 // that is what I consider a bug in Artemis, where it doesn't work, if you just
@@ -25,7 +23,7 @@ public class SelectionSystem extends BaseSystem {
     private boolean selecting;
     private SelectionDefinition selectionDefinition;
 
-    private final Set<Entity> selectedEntities = new HashSet<>();
+    private final ObjectSet<Entity> selectedEntities = new ObjectSet<>();
 
     public void startSelection(SelectionDefinition selectionDefinition) {
         this.selecting = true;
