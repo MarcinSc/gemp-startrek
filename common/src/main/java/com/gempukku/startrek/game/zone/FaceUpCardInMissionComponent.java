@@ -7,6 +7,7 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToClients;
 public class FaceUpCardInMissionComponent extends Component {
     private String missionOwner;
     private int missionIndex;
+    private boolean stopped;
 
     public String getMissionOwner() {
         return missionOwner;
@@ -22,5 +23,13 @@ public class FaceUpCardInMissionComponent extends Component {
 
     public void setMissionIndex(int missionIndex) {
         this.missionIndex = missionIndex;
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void setStopped(boolean stopped) {
+        this.stopped = stopped;
     }
 }

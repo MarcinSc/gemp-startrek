@@ -9,6 +9,7 @@ public class FaceDownCardInMissionComponent extends Component implements OwnedCo
     private String owner;
     private String missionOwner;
     private int missionIndex;
+    private boolean stopped;
 
     @Override
     public boolean isOwnedBy(String username) {
@@ -33,5 +34,13 @@ public class FaceDownCardInMissionComponent extends Component implements OwnedCo
 
     public void setMissionIndex(int missionIndex) {
         this.missionIndex = missionIndex;
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void setStopped(boolean stopped) {
+        this.stopped = stopped;
     }
 }
