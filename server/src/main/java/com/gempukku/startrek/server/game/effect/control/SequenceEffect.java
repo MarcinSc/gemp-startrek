@@ -29,9 +29,7 @@ public class SequenceEffect extends EffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"actions"},
                 new String[]{});
-        for (JsonValue action : effect.get("actions")) {
-            gameEffectSystem.validate(action);
-        }
+        validate(effect.get("actions"));
     }
 
     private void sequence(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {

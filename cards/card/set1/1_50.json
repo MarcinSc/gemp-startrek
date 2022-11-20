@@ -13,11 +13,11 @@
           "condition": "or(countSkillAtLeast(facingDilemma,Physics,2),countSkillAtLeast(facingDilemma,Science,2))",
           "falseEffect": {
             "type": "condition",
-            "condition": "onMission(currentMission),or(skill(Physics),skill(Science))",
+            "condition": "hasCard(facingDilemma,or(skill(Physics),skill(Science)))",
             "trueEffect": [
               {
                 "type": "opponentSelect",
-                "filter": "onMission(currentMission),or(skill(Physics),skill(Science))",
+                "filter": "facingDilemma,or(skill(Physics),skill(Science))",
                 "memorize": "selectedCharacter"
               },
               {
@@ -28,7 +28,7 @@
             "falseEffect": [
               {
                 "type": "stop",
-                "filter": "onMission(currentMission),type(personnel)"
+                "filter": "facingDilemma,type(personnel)"
               },
               {
                 "type": "putDilemmaInDilemmaPile",

@@ -50,6 +50,7 @@ import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.effect.zone.*;
 import com.gempukku.startrek.server.game.filter.MemoryFilterHandler;
+import com.gempukku.startrek.server.game.filter.ServerFacingDilemmaFilterHandler;
 import com.gempukku.startrek.server.game.filter.ServerIdInFilterHandler;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 import com.gempukku.startrek.server.game.stack.ObjectStackSystem;
@@ -155,6 +156,7 @@ public class StarTrekGameHolder implements Disposable {
                 // Server card filters
                 new MemoryFilterHandler(),
                 new ServerIdInFilterHandler(),
+                new ServerFacingDilemmaFilterHandler(),
 
                 // Network systems
                 new RemoteEntityManagerHandler(serverEntityIdSystem),

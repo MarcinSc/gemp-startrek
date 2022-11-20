@@ -15,7 +15,7 @@
         },
         {
           "type": "condition",
-          "condition": "or(and(countAtLeast(facingDilemma,skill(Diplomacy),1),countAtLeast(facingDilemma,skill(Medical))),countSkillAtLeast(facingDilemma,Security,2))",
+          "condition": "or(and(countSkillAtLeast(facingDilemma,Diplomacy,1),countSkillAtLeast(facingDilemma,Medical,1)),countSkillAtLeast(facingDilemma,Security,2))",
           "trueEffect": {
             "type": "stop",
             "filter": "memory(selectedPersonnel)"

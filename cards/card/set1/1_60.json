@@ -13,11 +13,11 @@
           "condition": "or(countSkillAtLeast(facingDilemma,Astrometrics,2),countSkillAtLeast(facingDilemma,Navigation,2))",
           "falseEffect": {
             "type": "condition",
-            "condition": "onMission(currentMission),or(skill(Astrometrics),skill(Navigation))",
+            "condition": "hasCard(facingDilemma,or(skill(Astrometrics),skill(Navigation)))",
             "trueEffect": [
               {
                 "type": "opponentSelect",
-                "filter": "onMission(currentMission),or(skill(Astrometrics),skill(Navigation))",
+                "filter": "facingDilemma,or(skill(Astrometrics),skill(Navigation))",
                 "memorize": "selectedCharacter"
               },
               {
@@ -28,7 +28,7 @@
             "falseEffect": [
               {
                 "type": "stop",
-                "filter": "onMission(currentMission),type(personnel)"
+                "filter": "facingDilemma,type(personnel)"
               },
               {
                 "type": "putDilemmaInDilemmaPile",

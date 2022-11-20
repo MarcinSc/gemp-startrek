@@ -13,11 +13,11 @@
           "condition": "or(countSkillAtLeast(facingDilemma,Anthropology,2),countSkillAtLeast(facingDilemma,Telepathy,2))",
           "falseEffect": {
             "type": "condition",
-            "condition": "onMission(currentMission),or(skill(Anthropology),skill(Telepathy))",
+            "condition": "facingDilemma,or(skill(Anthropology),skill(Telepathy))",
             "trueEffect": [
               {
                 "type": "opponentSelect",
-                "filter": "onMission(currentMission),or(skill(Anthropology),skill(Telepathy))",
+                "filter": "facingDilemma,or(skill(Anthropology),skill(Telepathy))",
                 "memorize": "selectedCharacter"
               },
               {
@@ -28,7 +28,7 @@
             "falseEffect": [
               {
                 "type": "stop",
-                "filter": "onMission(currentMission),type(personnel)"
+                "filter": "facingDilemma,type(personnel)"
               },
               {
                 "type": "putDilemmaInDilemmaPile",

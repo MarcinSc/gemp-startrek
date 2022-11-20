@@ -59,6 +59,16 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
 
     protected abstract void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory);
 
+    protected void validateEffects(JsonValue effects) {
+        if (effects.type() == JsonValue.ValueType.object)
+            gameEffectSystem.validate(effects);
+        else {
+            for (JsonValue effect : effects) {
+                gameEffectSystem.validate(effect);
+            }
+        }
+    }
+
     @Override
     protected void processSystem() {
 

@@ -10,14 +10,14 @@
       "effects": [
         {
           "type": "condition",
-          "condition": "or(countSkillAtLeast(facingDilemma,skillBiology,2),countSkillAtLeast(facingDilemma,Medical,2))",
+          "condition": "or(countSkillAtLeast(facingDilemma,Biology,2),countSkillAtLeast(facingDilemma,Medical,2))",
           "falseEffect": {
             "type": "condition",
-            "condition": "onMission(currentMission),or(skill(Biology),skill(Medical))",
+            "condition": "hasCard(facingDilemma,or(skill(Biology),skill(Medical)))",
             "trueEffect": [
               {
                 "type": "opponentSelect",
-                "filter": "onMission(currentMission),or(skill(Biology),skill(Medical))",
+                "filter": "facingDilemma,or(skill(Biology),skill(Medical))",
                 "memorize": "selectedCharacter"
               },
               {
@@ -28,7 +28,7 @@
             "falseEffect": [
               {
                 "type": "stop",
-                "filter": "onMission(currentMission),type(personnel)"
+                "filter": "facingDilemma,type(personnel)"
               },
               {
                 "type": "putDilemmaInDilemmaPile",

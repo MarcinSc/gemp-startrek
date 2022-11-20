@@ -41,7 +41,7 @@ public class StackActionEffect extends EffectSystem {
             ValidateUtil.effectExpectedFields(effect,
                     new String[]{"playerMemory", "action"},
                     new String[]{});
-            gameEffectSystem.validate(effect.get("action"));
+            validate(effect.get("action"));
         } else if (type.equals("stackActionTemplate")) {
             ValidateUtil.effectExpectedFields(effect,
                     new String[]{"template"},

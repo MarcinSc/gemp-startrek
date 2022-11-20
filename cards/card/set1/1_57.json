@@ -10,7 +10,7 @@
       "effects": [
         {
           "type": "condition",
-          "condition": "or(countAtLeast(and(facingDilemma,skill(Biology)),1),countAtLeast(and(facingDilemma,skill(Medical)),1))",
+          "condition": "or(countSkillAtLeast(facingDilemma,Biology,1),countSkillAtLeast(facingDilemma,Medical,1))",
           "trueEffect": [
             {
               "type": "select",

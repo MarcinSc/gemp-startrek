@@ -5,7 +5,7 @@
     {
       "text": "When your [Baj] personnel is facing a dilemma, he or she gains all skills on a [Baj] personnel in your discard pile. This effect lasts until the end of that dilemma.",
       "type": "interrupt",
-      "condition": "facingDilemma(your,species(Bajoran),type(Personnel))",
+      "condition": "hasCard(facingDilemma,your,species(Bajoran),type(Personnel))",
       "effects": [
         {
           "type": "select",
