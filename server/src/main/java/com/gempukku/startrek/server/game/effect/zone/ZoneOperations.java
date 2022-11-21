@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.game.PlayerDiscardPileComponent;
@@ -24,6 +25,7 @@ public class ZoneOperations extends BaseSystem {
     private EventSystem eventSystem;
     private PlayerResolverSystem playerResolverSystem;
     private ObjectStackSystem objectStackSystem;
+    private ServerEntityIdSystem serverEntityIdSystem;
 
     private ComponentMapper<CardInPlayComponent> cardInPlayComponentMapper;
     private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
@@ -167,6 +169,26 @@ public class ZoneOperations extends BaseSystem {
         }
         faceUpCardInMissionComponentMapper.remove(cardEntity);
         cardInMissionComponentMapper.remove(cardEntity);
+        eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+    }
+
+    public void attachToShip(Entity shipEntity, Entity cardEntity) {
+        String shipId = serverEntityIdSystem.getEntityId(shipEntity);
+        CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+        cardInPlay.setAttachedToId(shipId);
+        eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+    }
+
+    public void unattachFromShip(Entity shipEntity, Entity cardEntity) {
+        CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+        cardInPlay.setAttachedToId(null);
+        eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+    }
+
+    public void attachFromShipToShip(Entity fromShipEntity, Entity toShipEntity, Entity cardEntity) {
+        String shipId = serverEntityIdSystem.getEntityId(toShipEntity);
+        CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+        cardInPlay.setAttachedToId(shipId);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
 

@@ -19,7 +19,7 @@ public class PlayRequirements {
     }
 
     public static CardFilter createBeamToMissionShipRequirements(String username, CardFilterResolverSystem cardFilterResolverSystem) {
-        return cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped,owner(username(" + username + ")),missionMatches(or(missionType(Planet),missionType(Headquarters))");
+        return cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped,owner(username(" + username + ")),missionMatches(or(missionType(Planet),missionType(Headquarters)))");
     }
 
     public static CardFilter createBeamSelectAnotherShipRequirements(

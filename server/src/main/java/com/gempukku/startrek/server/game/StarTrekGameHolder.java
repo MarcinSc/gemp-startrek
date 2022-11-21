@@ -26,6 +26,9 @@ import com.gempukku.startrek.server.game.condition.MemoryMatchesHandler;
 import com.gempukku.startrek.server.game.decision.*;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
+import com.gempukku.startrek.server.game.effect.beam.BeamBetweenShipsEffect;
+import com.gempukku.startrek.server.game.effect.beam.BeamFromMissionEffect;
+import com.gempukku.startrek.server.game.effect.beam.BeamToMissionEffect;
 import com.gempukku.startrek.server.game.effect.card.DestroyEffect;
 import com.gempukku.startrek.server.game.effect.card.ExecuteStopEffect;
 import com.gempukku.startrek.server.game.effect.card.PayCardCostEffect;
@@ -138,6 +141,10 @@ public class StarTrekGameHolder implements Disposable {
                 new DestroyEffect(),
                 new StopEffect(),
                 new ExecuteStopEffect(),
+
+                new BeamFromMissionEffect(),
+                new BeamToMissionEffect(),
+                new BeamBetweenShipsEffect(),
 
                 // Ability handlers
                 new DilemmaEffectHandler(),

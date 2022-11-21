@@ -174,7 +174,8 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
             Entity beamBetweenShipsEffect = spawnSystem.spawnEntity("game/effect/beam/beamBetweenShipsEffect.template");
             EffectMemoryComponent effectMemory = beamBetweenShipsEffect.getComponent(EffectMemoryComponent.class);
             Memory memory = new Memory(effectMemory.getMemory());
-            memory.setValue("shipId", result.get("shipId"));
+            memory.setValue("fromShipId", result.get("fromShipId"));
+            memory.setValue("toShipId", result.get("toShipId"));
             memory.setValue("beamedIds", result.get("beamedId"));
             stackSystem.stackEntity(beamBetweenShipsEffect);
         }
