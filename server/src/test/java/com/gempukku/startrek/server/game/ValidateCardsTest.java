@@ -17,6 +17,8 @@ public class ValidateCardsTest extends AbstractGameTest {
         CardLookupSystem cardLookupSystem = world.getSystem(CardLookupSystem.class);
         CardAbilitySystem cardAbilitySystem = world.getSystem(CardAbilitySystem.class);
 
+        int errorCount = 0;
+
         CardData cardData = cardLookupSystem.getCardData();
         for (ObjectMap.Entry<String, CardDefinition> cardDefinitionEntry : cardData.getCardDefinitions()) {
             String cardId = cardDefinitionEntry.key;
@@ -29,10 +31,12 @@ public class ValidateCardsTest extends AbstractGameTest {
                     } catch (RuntimeException exp) {
                         System.out.println("Card id: " + cardId);
                         exp.printStackTrace();
+                        errorCount++;
 //                        throw exp;
                     }
                 }
             }
         }
+        System.out.println("Error count: " + errorCount);
     }
 }

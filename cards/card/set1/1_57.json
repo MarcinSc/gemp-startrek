@@ -13,13 +13,8 @@
           "condition": "or(countSkillAtLeast(facingDilemma,Biology,1),countSkillAtLeast(facingDilemma,Medical,1))",
           "trueEffect": [
             {
-              "type": "select",
-              "memory": "chosenCharacter",
-              "filter": "facingDilemma,type(Personnel),or(skill(Biology),skill(Medical))"
-            },
-            {
               "type": "stop",
-              "filter": "memory(chosenCharacter)"
+              "select": "facingDilemma,type(Personnel),or(skill(Biology),skill(Medical))"
             }
           ],
           "falseEffect": {

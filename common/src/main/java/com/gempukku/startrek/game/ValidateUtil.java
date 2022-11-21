@@ -25,6 +25,16 @@ public class ValidateUtil {
             throw new GdxRuntimeException("Number of parameters is not correct, expected at most " + maximum);
     }
 
+    public static void hasExactlyOneOf(JsonValue value, String... names) {
+        int count = 0;
+        for (String name : names) {
+            if (value.has(name))
+                count++;
+        }
+        if (count != 1)
+            throw new GdxRuntimeException("Was expecting 1 field, found " + count);
+    }
+
     public static void effectExpectedFields(JsonValue effect, String[] requiredFields, String[] optionalFields) {
         if (effect.type() != JsonValue.ValueType.object)
             throw new GdxRuntimeException("Ability should be a JSON of type object");

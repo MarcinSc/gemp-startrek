@@ -13,13 +13,8 @@
           "condition": "or(countSkillAtLeast(facingDilemma,Leadership,1),countSkillAtLeast(facingDilemma,Security,1))",
           "trueEffect": [
             {
-              "type": "select",
-              "memory": "chosenCharacter",
-              "filter": "facingDilemma,type(Personnel),or(skill(Leadership),skill(Security))"
-            },
-            {
               "type": "stop",
-              "filter": "memory(chosenCharacter)"
+              "select": "facingDilemma,type(Personnel),or(skill(Leadership),skill(Security))"
             }
           ],
           "falseEffect": {

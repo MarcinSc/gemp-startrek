@@ -42,8 +42,10 @@ public class StopEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter"},
-                new String[]{});
-        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
+                new String[]{},
+                new String[]{"filter", "select"});
+        ValidateUtil.hasExactlyOneOf(effect, "filter", "select");
+        cardFilterResolverSystem.validateFilter(effect.getString("filter", "any"));
+        cardFilterResolverSystem.validateFilter(effect.getString("select", "any"));
     }
 }

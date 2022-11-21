@@ -13,7 +13,7 @@
           "condition": "or(countSkillAtLeast(facingDilemma,Anthropology,2),countSkillAtLeast(facingDilemma,Telepathy,2))",
           "falseEffect": {
             "type": "condition",
-            "condition": "facingDilemma,or(skill(Anthropology),skill(Telepathy))",
+            "condition": "hasCard(facingDilemma,or(skill(Anthropology),skill(Telepathy)))",
             "trueEffect": [
               {
                 "type": "opponentSelect",

@@ -13,13 +13,8 @@
           "condition": "or(countSkillAtLeast(facingDilemma,Engineer,1),countSkillAtLeast(facingDilemma,Programming,1))",
           "trueEffect": [
             {
-              "type": "select",
-              "memory": "chosenCharacter",
-              "filter": "facingDilemma,type(Personnel),or(skill(Engineer),skill(Programming))"
-            },
-            {
               "type": "stop",
-              "filter": "memory(chosenCharacter)"
+              "select": "facingDilemma,type(Personnel),or(skill(Engineer),skill(Programming))"
             }
           ],
           "falseEffect": [

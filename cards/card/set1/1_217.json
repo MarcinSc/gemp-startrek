@@ -41,15 +41,9 @@
       "condition": "matches(self)",
       "effects": [
         {
-          "type": "selectInHand",
-          "filter": "any",
-          "memory": "selectedCard",
-          "amount": 1
-        },
-        {
           "type": "discard",
-          "player": "owner(self)",
-          "filter": "memory(selectedCard)"
+          "select": "any",
+          "player": "owner(self)"
         }
       ]
     }
