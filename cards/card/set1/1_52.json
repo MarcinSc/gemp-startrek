@@ -11,12 +11,10 @@
         {
           "type": "condition",
           "condition": "or(countSkillAtLeast(facingDilemma,Engineer,1),countSkillAtLeast(facingDilemma,Programming,1))",
-          "trueEffect": [
-            {
-              "type": "stop",
-              "select": "facingDilemma,type(Personnel),or(skill(Engineer),skill(Programming))"
-            }
-          ],
+          "trueEffect": {
+            "type": "stop",
+            "select": "facingDilemma,type(Personnel),or(skill(Engineer),skill(Programming))"
+          },
           "falseEffect": [
             {
               "type": "stop",

@@ -11,16 +11,21 @@
         {
           "type": "condition",
           "condition": "or(countSkillAtLeast(facingDilemma,Leadership,1),countSkillAtLeast(facingDilemma,Officer,1))",
-          "trueEffect": [
+          "trueEffect": {
+            "type": "stop",
+            "select": "facingDilemma,type(Personnel),or(skill(Leadership),skill(Officer))"
+          },
+          "falseEffect": [
             {
-              "type": "stop",
-              "select": "facingDilemma,type(Personnel),or(skill(Leadership),skill(Officer))"
+              "type": "randomlySelect",
+              "filter": "facingDilemma,type(Personnel)",
+              "memory": "randomPersonnel"
+            },
+            {
+              "type": "kill",
+              "filter": "memory(randomPersonnel)"
             }
-          ],
-          "falseEffect": {
-            "type": "kill",
-            "filter": "random(facingDilemma,type(Personnel))"
-          }
+          ]
         }
       ]
     }

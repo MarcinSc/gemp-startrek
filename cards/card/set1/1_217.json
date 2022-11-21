@@ -39,13 +39,11 @@
       "type": "trigger",
       "triggerType": "killed",
       "condition": "matches(self)",
-      "effects": [
-        {
-          "type": "discard",
-          "select": "any",
-          "player": "owner(self)"
-        }
-      ]
+      "effects": {
+        "type": "discard",
+        "select": "any",
+        "player": "owner(self)"
+      }
     }
   ],
   "lore": "\"...I have done what Bajor needed me to do. I've allowed myself to be a slave to my reputation all of these years. And now, it is enough.\""
