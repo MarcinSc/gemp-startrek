@@ -1,0 +1,16 @@
+{
+  "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
+    "memoryType": "beamFromMission",
+    "memory": {
+      "shipId": "[shipId]",
+      "beamedIds": "[beamedIds]"
+    }
+  },
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "beamToMission",
+    "data": {
+      "ship": "memory(shipId)",
+      "filter": "memory(beamedIds)"
+    }
+  }
+}

@@ -24,9 +24,7 @@ import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.filter.AndCardFilter;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
-import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
-import com.gempukku.startrek.game.zone.CardInMissionComponent;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
 
 public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements DecisionHandler {
@@ -43,6 +41,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
     private BeamSelectionInterface beamSelectionInterface;
     private BeamFromMissionChooseShipInterface beamFromMissionChooseShipInterface;
     private BeamToMissionChooseShipInterface beamToMissionChooseShipInterface;
+    private BeamBetweenShipsChooseFirstShipInterface beamBetweenShipsChooseFirstShipInterface;
 
     @Override
     protected void initialize() {
@@ -53,6 +52,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
         mainDecisionInterface = new MainDecisionInterface();
         beamSelectionInterface = new BeamSelectionInterface();
         beamFromMissionChooseShipInterface = new BeamFromMissionChooseShipInterface();
+        beamToMissionChooseShipInterface = new BeamToMissionChooseShipInterface();
+        beamBetweenShipsChooseFirstShipInterface = new BeamBetweenShipsChooseFirstShipInterface();
     }
 
     private void goToDecisionInterface(DecisionInterface decisionInterface) {
@@ -158,7 +159,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
         }
     }
 
-    protected class BeamSelectionInterface implements DecisionInterface {
+    private class BeamSelectionInterface implements DecisionInterface {
         private Table table;
         private TextButton beamFromMissionButton;
         private TextButton beamToMissionButton;
@@ -255,11 +256,311 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
         }
 
         private void initiateBeamToMission() {
-            // TODO
+            goToDecisionInterface(beamToMissionChooseShipInterface);
         }
 
         private void initiateBeamBetweenShips() {
-            // TODO
+            goToDecisionInterface(beamBetweenShipsChooseFirstShipInterface);
+        }
+    }
+
+    private class BeamBetweenShipsChooseFirstShipInterface implements DecisionInterface {
+        private Table table;
+        private TextButton acceptShipButton;
+        private TextButton cancelBeamButton;
+
+        private SelectionState selectionState;
+
+        public BeamBetweenShipsChooseFirstShipInterface() {
+            Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
+            CardFilter playRequirementsFilter = PlayRequirements.createBeamFromMissionShipRequirements(
+                    authenticationHolderSystem.getUsername(), cardFilterResolverSystem);
+
+            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+                    new SelectionCallback() {
+                        @Override
+                        public void selectionChanged(ObjectSet<Entity> selected) {
+                            enableButton(acceptShipButton, selected.size == 1);
+                        }
+                    });
+
+            table = new Table();
+            table.setFillParent(true);
+
+            VerticalGroup verticalGroup = new VerticalGroup();
+
+            acceptShipButton = new TextButton("Accept", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            acceptShipButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            acceptShip();
+                        }
+                    });
+            verticalGroup.addActor(acceptShipButton);
+
+            cancelBeamButton = new TextButton("Cancel", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            cancelBeamButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            cancelBeam();
+                        }
+                    });
+            verticalGroup.addActor(cancelBeamButton);
+
+            table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
+        }
+
+        @Override
+        public void proceedToDecision() {
+            Stage stage = stageSystem.getStage();
+
+            selectionState.markSelectableCards();
+            selectionSystem.startSelection(selectionState);
+
+            enableButton(acceptShipButton, false);
+
+            stage.addActor(table);
+        }
+
+        @Override
+        public void cleanupDecision() {
+            table.remove();
+            selectionState.cleanup();
+            selectionSystem.finishSelection();
+        }
+
+        private void acceptShip() {
+            Entity selected = selectionSystem.getSelectedEntities().iterator().next();
+            Entity shipEntity = getServerEntity(selected);
+            goToDecisionInterface(new BeamBetweenShipsChooseSecondShipInterface(shipEntity));
+        }
+
+        private void cancelBeam() {
+            goToDecisionInterface(mainDecisionInterface);
+        }
+    }
+
+    private class BeamBetweenShipsChooseSecondShipInterface implements DecisionInterface {
+        private Table table;
+        private TextButton acceptShipButton;
+        private TextButton cancelBeamButton;
+
+        private SelectionState selectionState;
+
+        private Entity firstShipEntity;
+
+        public BeamBetweenShipsChooseSecondShipInterface(Entity firstShipEntity) {
+            this.firstShipEntity = firstShipEntity;
+
+            Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
+            CardFilter playRequirementsFilter = PlayRequirements.createBeamSelectAnotherShipRequirements(
+                    authenticationHolderSystem.getUsername(), firstShipEntity, cardFilterResolverSystem);
+
+            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+                    new SelectionCallback() {
+                        @Override
+                        public void selectionChanged(ObjectSet<Entity> selected) {
+                            enableButton(acceptShipButton, selected.size == 1);
+                        }
+                    });
+
+            table = new Table();
+            table.setFillParent(true);
+
+            VerticalGroup verticalGroup = new VerticalGroup();
+
+            acceptShipButton = new TextButton("Accept", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            acceptShipButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            acceptShip();
+                        }
+                    });
+            verticalGroup.addActor(acceptShipButton);
+
+            cancelBeamButton = new TextButton("Cancel", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            cancelBeamButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            cancelBeam();
+                        }
+                    });
+            verticalGroup.addActor(cancelBeamButton);
+
+            table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
+        }
+
+        @Override
+        public void proceedToDecision() {
+            Stage stage = stageSystem.getStage();
+
+            selectionState.markSelectableCards();
+            selectionSystem.startSelection(selectionState);
+
+            enableButton(acceptShipButton, false);
+
+            stage.addActor(table);
+        }
+
+        @Override
+        public void cleanupDecision() {
+            table.remove();
+            selectionState.cleanup();
+            selectionSystem.finishSelection();
+        }
+
+        private void acceptShip() {
+            Entity selected = selectionSystem.getSelectedEntities().iterator().next();
+            Entity shipEntity = getServerEntity(selected);
+            goToDecisionInterface(new BeamBetweenShipsChooseEntitiesInterface(firstShipEntity, shipEntity));
+        }
+
+        private void cancelBeam() {
+            goToDecisionInterface(mainDecisionInterface);
+        }
+    }
+
+    private class BeamBetweenShipsChooseEntitiesInterface implements DecisionInterface {
+        private Table table;
+        private TextButton beamButton;
+        private TextButton cancelBeamButton;
+
+        private SelectionState selectionState;
+
+        private Entity fromShipEntity;
+        private Entity toShipEntity;
+
+        public BeamBetweenShipsChooseEntitiesInterface(Entity fromShipEntity, Entity toShipEntity) {
+            this.fromShipEntity = fromShipEntity;
+            this.toShipEntity = toShipEntity;
+
+            String shipId = fromShipEntity.getComponent(ServerEntityComponent.class).getEntityId();
+
+            Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
+            CardFilter playRequirementsFilter = PlayRequirements.createBeamBetweenShipsRequirements(
+                    authenticationHolderSystem.getUsername(),
+                    fromShipEntity, toShipEntity, cardFilterResolverSystem);
+
+            CardFilter onShip = new CardFilter() {
+                @Override
+                public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
+                    CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+                    if (cardInPlay != null)
+                        return shipId.equals(cardInPlay.getAttachedToId());
+                    return false;
+                }
+            };
+
+            selectionState = new SelectionState(world, userInputStateEntity, new AndCardFilter(onShip, playRequirementsFilter),
+                    new SelectionCallback() {
+                        @Override
+                        public void selectionChanged(ObjectSet<Entity> selected) {
+                            enableButton(beamButton, selected.size > 0);
+                        }
+                    });
+
+            table = new Table();
+            table.setFillParent(true);
+
+            VerticalGroup verticalGroup = new VerticalGroup();
+
+            beamButton = new TextButton("Beam!", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            beamButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            beamSelected();
+                        }
+                    });
+            verticalGroup.addActor(beamButton);
+
+            cancelBeamButton = new TextButton("Cancel", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            cancelBeamButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            cancelBeam();
+                        }
+                    });
+            verticalGroup.addActor(cancelBeamButton);
+
+            table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
+        }
+
+        @Override
+        public void proceedToDecision() {
+            Stage stage = stageSystem.getStage();
+
+            selectionState.markSelectableCards();
+            selectionSystem.startSelection(selectionState);
+
+            enableButton(beamButton, false);
+
+            stage.addActor(table);
+        }
+
+        @Override
+        public void cleanupDecision() {
+            table.remove();
+            selectionState.cleanup();
+            selectionSystem.finishSelection();
+        }
+
+        private void beamSelected() {
+            String fromShipId = fromShipEntity.getComponent(ServerEntityComponent.class).getEntityId();
+            String toShipId = toShipEntity.getComponent(ServerEntityComponent.class).getEntityId();
+
+            Array<String> ids = new Array<>();
+            for (Entity selectedEntity : selectionSystem.getSelectedEntities()) {
+                ids.add(getServerEntity(selectedEntity).getComponent(ServerEntityComponent.class).getEntityId());
+            }
+
+            ObjectMap<String, String> parameters = new ObjectMap<>();
+            parameters.put("action", "beamBetweenShips");
+            parameters.put("fromShipId", fromShipId);
+            parameters.put("toShipId", toShipId);
+            parameters.put("beamedId", StringUtils.merge(ids, ","));
+            clientDecisionSystem.executeDecision(parameters);
+
+            goToDecisionInterface(null);
+        }
+
+        private void cancelBeam() {
+            goToDecisionInterface(mainDecisionInterface);
         }
     }
 
@@ -272,8 +573,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
 
         public BeamFromMissionChooseShipInterface() {
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
-            CardFilter playRequirementsFilter = PlayRequirements.createBeamFromMissionShipRequirements(authenticationHolderSystem.getUsername(),
-                    cardFilterResolverSystem);
+            CardFilter playRequirementsFilter = PlayRequirements.createBeamFromMissionShipRequirements(
+                    authenticationHolderSystem.getUsername(), cardFilterResolverSystem);
 
             selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                     new SelectionCallback() {
@@ -360,8 +661,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
 
         public BeamToMissionChooseShipInterface() {
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
-            CardFilter playRequirementsFilter = PlayRequirements.createBeamToMissionShipRequirements(authenticationHolderSystem.getUsername(),
-                    cardFilterResolverSystem);
+            CardFilter playRequirementsFilter = PlayRequirements.createBeamToMissionShipRequirements(
+                    authenticationHolderSystem.getUsername(), cardFilterResolverSystem);
 
             selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                     new SelectionCallback() {
@@ -451,13 +752,10 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
         public BeamFromMissionChooseEntitiesInterface(Entity shipEntity) {
             this.shipEntity = shipEntity;
 
-            CardInMissionComponent ship = shipEntity.getComponent(CardInMissionComponent.class);
-            Entity playerEntity = playerResolverSystem.findPlayerEntity(ship.getMissionOwner());
-            Entity missionEntity = MissionOperations.findMission(world, playerEntity, ship.getMissionIndex());
-
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
-            CardFilter playRequirementsFilter = PlayRequirements.createBeamFromMissionRequirements(authenticationHolderSystem.getUsername(),
-                    missionEntity, shipEntity, cardFilterResolverSystem);
+            CardFilter playRequirementsFilter = PlayRequirements.createBeamFromMissionRequirements(
+                    authenticationHolderSystem.getUsername(),
+                    shipEntity, cardFilterResolverSystem);
 
             selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                     new SelectionCallback() {
@@ -559,13 +857,11 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             this.shipEntity = shipEntity;
 
             String shipId = shipEntity.getComponent(ServerEntityComponent.class).getEntityId();
-            CardInMissionComponent ship = shipEntity.getComponent(CardInMissionComponent.class);
-            Entity playerEntity = playerResolverSystem.findPlayerEntity(ship.getMissionOwner());
-            Entity missionEntity = MissionOperations.findMission(world, playerEntity, ship.getMissionIndex());
 
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
-            CardFilter playRequirementsFilter = PlayRequirements.createBeamToMissionRequirements(authenticationHolderSystem.getUsername(),
-                    missionEntity, shipEntity, cardFilterResolverSystem);
+            CardFilter playRequirementsFilter = PlayRequirements.createBeamToMissionRequirements(
+                    authenticationHolderSystem.getUsername(),
+                    shipEntity, cardFilterResolverSystem);
 
             CardFilter onShip = new CardFilter() {
                 @Override

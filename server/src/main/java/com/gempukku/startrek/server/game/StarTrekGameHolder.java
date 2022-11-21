@@ -23,10 +23,7 @@ import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
 import com.gempukku.startrek.server.game.ability.*;
 import com.gempukku.startrek.server.game.condition.MemoryMatchesHandler;
-import com.gempukku.startrek.server.game.decision.DecisionSystem;
-import com.gempukku.startrek.server.game.decision.MandatoryTriggerActionsDecisionHandler;
-import com.gempukku.startrek.server.game.decision.OptionalTriggerActionsDecisionHandler;
-import com.gempukku.startrek.server.game.decision.PlayOrDrawDecisionHandler;
+import com.gempukku.startrek.server.game.decision.*;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 import com.gempukku.startrek.server.game.effect.card.DestroyEffect;
@@ -151,6 +148,7 @@ public class StarTrekGameHolder implements Disposable {
 
                 // Decision handlers
                 new PlayOrDrawDecisionHandler(),
+                new ExecuteOrdersDecisionHandler(),
                 new MandatoryTriggerActionsDecisionHandler(),
                 new OptionalTriggerActionsDecisionHandler(),
 

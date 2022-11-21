@@ -9,7 +9,6 @@ import com.gempukku.startrek.game.filter.AndCardFilter;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.filter.OrCardFilter;
-import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
 public class PlayRequirements {
@@ -48,12 +47,11 @@ public class PlayRequirements {
 
     public static CardFilter createBeamFromMissionRequirements(
             String username,
-            Entity missionEntity,
             Entity shipEntity,
             CardFilterResolverSystem cardFilterResolverSystem) {
-        MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
-        String missionOwner = mission.getOwner();
-        int missionIndex = mission.getMissionIndex();
+        CardInMissionComponent cardInMission = shipEntity.getComponent(CardInMissionComponent.class);
+        String missionOwner = cardInMission.getMissionOwner();
+        int missionIndex = cardInMission.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
                 "or(type(Personnel),type(Equipment)),unstopped," +
                         "inMission(username(" + missionOwner + ")," + missionIndex + ")," +
@@ -64,12 +62,11 @@ public class PlayRequirements {
     // Remember to also check if the card is aboard the ship
     public static CardFilter createBeamToMissionRequirements(
             String username,
-            Entity missionEntity,
             Entity shipEntity,
             CardFilterResolverSystem cardFilterResolverSystem) {
-        MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
-        String missionOwner = mission.getOwner();
-        int missionIndex = mission.getMissionIndex();
+        CardInMissionComponent cardInMission = shipEntity.getComponent(CardInMissionComponent.class);
+        String missionOwner = cardInMission.getMissionOwner();
+        int missionIndex = cardInMission.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
                 "or(type(Personnel),type(Equipment)),unstopped," +
                         "inMission(username(" + missionOwner + ")," + missionIndex + ")," +
