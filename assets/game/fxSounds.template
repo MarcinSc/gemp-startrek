@@ -1,0 +1,11 @@
+{
+  "com.gempukku.libgdx.lib.artemis.audio.AudioBankComponent": {
+    "name": "fx",
+    "sounds": [
+      {
+        "name": "transporter",
+        "path": "sound/transporter.ogg"
+      }
+    ]
+  }
+}

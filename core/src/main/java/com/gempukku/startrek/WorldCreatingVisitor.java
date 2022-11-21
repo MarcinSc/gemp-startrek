@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.PropertiesUtils;
 import com.gempukku.libgdx.lib.artemis.animation.AnimationDirectorSystem;
+import com.gempukku.libgdx.lib.artemis.audio.AudioSystem;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.camera.TopDownCameraController;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
@@ -52,6 +53,7 @@ import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.PlayerInfoRenderingSystem;
 import com.gempukku.startrek.game.render.StackTextHighlightingSystem;
 import com.gempukku.startrek.game.render.TurnSegmentRenderingSystem;
+import com.gempukku.startrek.game.zone.BeamingTrackingSystem;
 import com.gempukku.startrek.game.zone.FaceDownCardTrackingSystem;
 import com.gempukku.startrek.game.zone.GameStateCardsTrackingSystem;
 import com.gempukku.startrek.game.zone.InitialGameStateCardsCreatorSystem;
@@ -120,6 +122,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new BitmapFontSystem(new RuntimeBitmapFontHandler()),
                 new TextSystem(),
                 new ConfigureTextSystem(),
+                new AudioSystem(),
 
                 new AnimationDirectorSystem(),
                 new SpriteBatchSystem(),
@@ -132,6 +135,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new InitialGameStateCardsCreatorSystem(),
                 new GameStateCardsTrackingSystem(),
                 new FaceDownCardTrackingSystem(),
+                new BeamingTrackingSystem(),
                 new StackTextHighlightingSystem(),
 
                 new ShapeSystem(),

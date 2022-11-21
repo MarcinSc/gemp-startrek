@@ -20,6 +20,9 @@
     },
     {
       "tpl:extends": "game/shape/square.template"
+    },
+    {
+      "tpl:extends": "game/fxSounds.template"
     }
   ]
 }
