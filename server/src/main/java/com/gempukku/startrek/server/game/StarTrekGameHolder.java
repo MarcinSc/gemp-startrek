@@ -30,6 +30,7 @@ import com.gempukku.startrek.server.game.decision.PlayOrDrawDecisionHandler;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 import com.gempukku.startrek.server.game.effect.card.DestroyEffect;
+import com.gempukku.startrek.server.game.effect.card.ExecuteStopEffect;
 import com.gempukku.startrek.server.game.effect.card.PayCardCostEffect;
 import com.gempukku.startrek.server.game.effect.card.StopEffect;
 import com.gempukku.startrek.server.game.effect.control.ConditionEffect;
@@ -139,6 +140,7 @@ public class StarTrekGameHolder implements Disposable {
                 new RandomlySelectEffect(),
                 new DestroyEffect(),
                 new StopEffect(),
+                new ExecuteStopEffect(),
 
                 // Ability handlers
                 new DilemmaEffectHandler(),
