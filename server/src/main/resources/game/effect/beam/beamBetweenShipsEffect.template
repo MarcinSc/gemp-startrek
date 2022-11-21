@@ -1,15 +1,17 @@
 {
   "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
-    "memoryType": "beamToMission",
+    "memoryType": "beamBetweenShips",
     "memory": {
-      "shipId": "[shipId]",
+      "fromShipId": "[fromShipId]",
+      "toShipId": "[toShipId]",
       "beamedIds": "[beamedIds]"
     }
   },
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
-    "type": "beamToMission",
+    "type": "beamBetweenShips",
     "data": {
-      "ship": "memory(shipId)",
+      "fromShip": "memory(fromShipId)",
+      "toShip": "memory(toShipId)",
       "filter": "memory(beamedIds)"
     }
   }

@@ -38,7 +38,9 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
             } else if (action.equals("beamFromMission")) {
                 return validateBeamFromMission(decisionPlayer, result);
             } else if (action.equals("beamToMission")) {
-                return validateToMission(decisionPlayer, result);
+                return validateBeamToMission(decisionPlayer, result);
+            } else if (action.equals("beamBetweenShips")) {
+                return validateBeamBetweenShips(decisionPlayer, result);
             }
         } catch (Exception exp) {
             // Ignore
@@ -46,7 +48,48 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
         return false;
     }
 
-    private boolean validateToMission(String decisionPlayer, ObjectMap<String, String> result) {
+    private boolean validateBeamBetweenShips(String decisionPlayer, ObjectMap<String, String> result) {
+        String fromShipId = result.get("fromShipId");
+        Entity fromShipEntity = serverEntityIdSystem.findfromId(fromShipId);
+        if (fromShipEntity == null)
+            return false;
+        String toShipId = result.get("toShipId");
+        Entity toShipEntity = serverEntityIdSystem.findfromId(toShipId);
+        if (toShipEntity == null)
+            return false;
+
+        CardFilter firstShipRequirements = PlayRequirements.createBeamFromMissionShipRequirements(
+                decisionPlayer, cardFilterResolverSystem);
+        if (!firstShipRequirements.accepts(null, null, fromShipEntity))
+            return false;
+
+        CardFilter secondShipRequirements = PlayRequirements.createBeamSelectAnotherShipRequirements(
+                decisionPlayer, fromShipEntity, cardFilterResolverSystem);
+        if (!secondShipRequirements.accepts(null, null, toShipEntity))
+            return false;
+
+        String beamedId = result.get("beamedId");
+        Array<Entity> beamedEntities = new Array<>();
+        for (String id : StringUtils.split(beamedId, ",")) {
+            beamedEntities.add(serverEntityIdSystem.findfromId(id));
+        }
+
+        if (beamedEntities.size == 0)
+            return false;
+
+        CardFilter cardFilter = PlayRequirements.createBeamBetweenShipsRequirements(
+                decisionPlayer, fromShipEntity, toShipEntity, cardFilterResolverSystem);
+        for (Entity beamedEntity : beamedEntities) {
+            if (!cardFilter.accepts(null, null, beamedEntity))
+                return false;
+            CardInPlayComponent cardInPlay = beamedEntity.getComponent(CardInPlayComponent.class);
+            if (!fromShipId.equals(cardInPlay.getAttachedToId()))
+                return false;
+        }
+        return true;
+    }
+
+    private boolean validateBeamToMission(String decisionPlayer, ObjectMap<String, String> result) {
         String shipId = result.get("shipId");
         Entity shipEntity = serverEntityIdSystem.findfromId(shipId);
         if (shipEntity == null)
@@ -121,12 +164,19 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
             memory.setValue("beamedIds", result.get("beamedId"));
             stackSystem.stackEntity(beamFromMissionEffect);
         } else if (action.equals("beamToMission")) {
-            Entity beamFromMissionEffect = spawnSystem.spawnEntity("game/effect/beam/beamToMissionEffect.template");
-            EffectMemoryComponent effectMemory = beamFromMissionEffect.getComponent(EffectMemoryComponent.class);
+            Entity beamToMissionEffect = spawnSystem.spawnEntity("game/effect/beam/beamToMissionEffect.template");
+            EffectMemoryComponent effectMemory = beamToMissionEffect.getComponent(EffectMemoryComponent.class);
             Memory memory = new Memory(effectMemory.getMemory());
             memory.setValue("shipId", result.get("shipId"));
             memory.setValue("beamedIds", result.get("beamedId"));
-            stackSystem.stackEntity(beamFromMissionEffect);
+            stackSystem.stackEntity(beamToMissionEffect);
+        } else if (action.equals("beamBetweenShips")) {
+            Entity beamBetweenShipsEffect = spawnSystem.spawnEntity("game/effect/beam/beamBetweenShipsEffect.template");
+            EffectMemoryComponent effectMemory = beamBetweenShipsEffect.getComponent(EffectMemoryComponent.class);
+            Memory memory = new Memory(effectMemory.getMemory());
+            memory.setValue("shipId", result.get("shipId"));
+            memory.setValue("beamedIds", result.get("beamedId"));
+            stackSystem.stackEntity(beamBetweenShipsEffect);
         }
     }
 
