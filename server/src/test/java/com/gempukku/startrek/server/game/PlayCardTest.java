@@ -15,7 +15,7 @@ import static org.junit.Assert.assertNotNull;
 public class PlayCardTest extends AbstractGameTest {
     @Test
     public void playPersonnelCard() {
-        setupGame(createDeck("1_188", "1_210"));
+        setupGame(createDeckWithMissions("1_210"));
 
         Entity playedCard = getCardsInHand("test1").get(0);
         playCardSuccessfully(playedCard);
@@ -25,7 +25,7 @@ public class PlayCardTest extends AbstractGameTest {
 
     @Test
     public void playShipCard() {
-        setupGame(createDeck("1_188", "1_390"));
+        setupGame(createDeckWithMissions("1_390"));
 
         Entity playedCard = getCardsInHand("test1").get(0);
         playCardSuccessfully(playedCard);
@@ -35,7 +35,7 @@ public class PlayCardTest extends AbstractGameTest {
 
     @Test
     public void playCoreEventCard() {
-        setupGame(createDeck("1_188", "1_83"));
+        setupGame(createDeckWithMissions("1_83"));
 
         Entity playedCard = getCardsInHand("test1").get(0);
         playCardSuccessfully(playedCard);
@@ -45,7 +45,7 @@ public class PlayCardTest extends AbstractGameTest {
 
     @Test
     public void playNonCoreEventCard() {
-        setupGame(createDeck("1_188", "1_84", "1_84"));
+        setupGame(createDeckWithMissions("1_84", "1_84"));
 
         putCardOnTopOfDeck("test1", "1_83");
         putCardOnTopOfDeck("test1", "1_83");

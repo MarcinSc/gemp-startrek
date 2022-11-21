@@ -12,7 +12,7 @@ import org.junit.Test;
 public class ValidateCardsTest extends AbstractGameTest {
     @Test
     public void validateAllCards() {
-        setupGame(createDeck("1_188", "1_210"));
+        setupGame(createDeckWithMissions());
 
         CardLookupSystem cardLookupSystem = world.getSystem(CardLookupSystem.class);
         CardAbilitySystem cardAbilitySystem = world.getSystem(CardAbilitySystem.class);

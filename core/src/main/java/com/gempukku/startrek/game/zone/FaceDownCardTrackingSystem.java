@@ -48,11 +48,10 @@ public class FaceDownCardTrackingSystem extends BaseSystem {
         for (ObjectMap.Entry<String, PlayerPosition> missionPlayer : new ObjectMap.Entries<>(playerPositionSystem.getPlayerPositions())) {
             String missionOwner = missionPlayer.key;
             PlayerPosition missionPlayerPosition = missionPlayer.value;
-            Entity missionPlayerEntity = playerPositionSystem.getPlayerEntity(missionOwner);
             PlayerZones missionPlayerZones = cardRenderingSystem.getPlayerCards(missionPlayerPosition);
 
             for (int missionIndex = 0; missionIndex < 5; missionIndex++) {
-                Entity missionEntity = MissionOperations.findMission(world, missionPlayerEntity, missionIndex);
+                Entity missionEntity = MissionOperations.findMission(world, missionOwner, missionIndex);
                 MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
 
                 MissionCards missionCards = missionPlayerZones.getMissionCards(missionIndex);

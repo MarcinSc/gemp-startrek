@@ -10,9 +10,11 @@ import com.gempukku.libgdx.DummyApplication;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.id.ServerEntityIdComponent;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardData;
 import com.gempukku.startrek.card.CardDefinition;
+import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.decision.DecisionMade;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
@@ -67,7 +69,24 @@ public abstract class AbstractGameTest {
         return result;
     }
 
-    protected StarTrekDeck createDeck(String... cardIds) {
+    protected Entity createCard(String username, String cardId) {
+        CardLookupSystem cardLookupSystem = world.getSystem(CardLookupSystem.class);
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
+        if (cardDefinition == null)
+            throw new RuntimeException("Unable to locate card with id: " + cardId);
+
+        Entity cardEntity = spawnSystem.spawnEntity("game/card.template");
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        card.setOwner(username);
+        card.setCardId(cardId);
+        return cardEntity;
+    }
+
+    protected String getCardId(Entity cardEntity) {
+        return world.getSystem(ServerEntityIdSystem.class).getEntityId(cardEntity);
+    }
+
+    protected StarTrekDeck createDeckWithMissions(String... cardIds) {
         StarTrekDeck deck = new StarTrekDeck();
         for (String cardId : cardIds) {
             CardDefinition cardDefinition = cardData.getCardDefinition(cardId);
@@ -79,6 +98,13 @@ public abstract class AbstractGameTest {
             else
                 deck.getDrawDeck().add(cardId);
         }
+
+        // Missions
+        deck.getMissions().add("1_170");
+        deck.getMissions().add("1_187");
+        deck.getMissions().add("1_188");
+        deck.getMissions().add("1_198");
+        deck.getMissions().add("1_199");
 
         return deck;
     }

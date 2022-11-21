@@ -10,7 +10,7 @@ import static org.junit.Assert.assertNotNull;
 public class TriggerTest extends AbstractGameTest {
     @Test
     public void testOptionalPlayTriggerOnSelf() {
-        setupGame(createDeck("1_188", "1_217"));
+        setupGame(createDeckWithMissions("1_217"));
 
         putCardOnTopOfDeck("test1", "1_83");
 

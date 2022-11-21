@@ -38,7 +38,6 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String username = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory,
                 gameEffect.getDataString("player"));
-        Entity playerEntity = playerResolverSystem.findPlayerEntity(username);
         Array<Entity> playerMissions = getAllPlayerMissions(username);
         playerMissions.sort(
                 new Comparator<Entity>() {
@@ -54,7 +53,7 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
                 });
         for (int i = 0; i < playerMissions.size; i++) {
             Entity missionEntity = playerMissions.get(i);
-            zoneOperations.moveCardToMission(missionEntity, MissionOperations.findMission(world, playerEntity, i), true);
+            zoneOperations.moveCardToMission(missionEntity, MissionOperations.findMission(world, username, i), true);
         }
     }
 

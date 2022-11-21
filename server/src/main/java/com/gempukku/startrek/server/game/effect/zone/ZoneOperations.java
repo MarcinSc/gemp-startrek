@@ -155,8 +155,7 @@ public class ZoneOperations extends BaseSystem {
         if (faceDownInMission != null) {
             int missionIndex = cardInMission.getMissionIndex();
             String missionOwner = cardInMission.getMissionOwner();
-            Entity playerEntity = playerResolverSystem.findPlayerEntity(missionOwner);
-            Entity missionEntity = MissionOperations.findMission(world, playerEntity, missionIndex);
+            Entity missionEntity = MissionOperations.findMission(world, missionOwner, missionIndex);
             faceDownCardInMissionComponentMapper.remove(cardEntity);
 
             CardComponent card = cardEntity.getComponent(CardComponent.class);
