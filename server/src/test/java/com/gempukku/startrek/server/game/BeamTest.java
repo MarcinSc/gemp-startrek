@@ -94,4 +94,5 @@ public class BeamTest extends AbstractGameTest {
 
         assertEquals(getCardId(ship2), personnel.getComponent(CardInPlayComponent.class).getAttachedToId());
     }
+    // TODO add negative tests
 }
