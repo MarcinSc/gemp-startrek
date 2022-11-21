@@ -26,6 +26,10 @@ public class InformationPacketUtil<T> {
         this.dataSerializer = dataSerializer;
     }
 
+    public Entity getEntityById(String entityId) {
+        return serverEntityMap.get(entityId);
+    }
+
     public void applyInformationPacket(IncomingInformationPacket<T> packet) {
         if (packet.getType() == IncomingInformationPacket.Type.EVENT) {
             String entityId = packet.getEntityId();

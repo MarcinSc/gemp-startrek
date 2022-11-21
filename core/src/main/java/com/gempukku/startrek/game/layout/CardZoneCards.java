@@ -9,6 +9,8 @@ public interface CardZoneCards {
 
     Array<Entity> getTopLevelCards(int lineIndex);
 
+    Array<Entity> getAttachedCards(Entity entity);
+
     int getAttachedCardCount(Entity entity);
 
     TextStyle getCardTextStyle(int lineIndex, int cardIndex);

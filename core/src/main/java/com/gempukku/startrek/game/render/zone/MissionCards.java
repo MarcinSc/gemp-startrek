@@ -119,6 +119,12 @@ public class MissionCards {
         return null;
     }
 
+    public void addAttachedCard(Entity attachedToCardEntity, Entity cardEntity, Entity cardRepresentation) {
+        renderedCards.put(cardEntity, cardRepresentation);
+        Entity renderedAttachedTo = renderedCards.get(attachedToCardEntity);
+        attachedCardsInMission.get(renderedAttachedTo).add(cardRepresentation);
+    }
+
     //
 //    public void addAttachedCardInMission(Entity card, Entity attachedTo, Entity renderedCard) {
 //        renderedCards.put(card, renderedCard);

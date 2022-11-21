@@ -7,6 +7,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardLookupSystem;
+import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.common.OrderComponent;
 import com.gempukku.startrek.common.ServerStateChanged;
 import com.gempukku.startrek.game.CardComponent;
@@ -18,6 +19,7 @@ public class InitialGameStateCardsCreatorSystem extends BaseSystem {
     private SpawnSystem spawnSystem;
     private CardLookupSystem cardLookupSystem;
     private CardRenderingSystem cardRenderingSystem;
+    private IncomingUpdatesProcessor incomingUpdatesProcessor;
 
     private ComponentMapper<OrderComponent> orderComponentMapper;
 
@@ -51,8 +53,19 @@ public class InitialGameStateCardsCreatorSystem extends BaseSystem {
         }
     }
 
-    private void cardInMissionInserted(Entity cardEntity) {
-        CardZoneUtil.addCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);
+    private void processTopLevelCardInMission(Entity cardEntity) {
+        CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+        if (cardInPlay.getAttachedToId() == null)
+            CardZoneUtil.addCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);
+    }
+
+    private void processAttachedCardInMission(Entity cardEntity) {
+        CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+        if (cardInPlay.getAttachedToId() != null) {
+
+            Entity attachedToCard = incomingUpdatesProcessor.getEntityById(cardInPlay.getAttachedToId());
+            CardZoneUtil.addAttachedCardInMission(cardEntity, attachedToCard, cardLookupSystem, spawnSystem, cardRenderingSystem);
+        }
     }
 
     @EventListener
@@ -75,7 +88,7 @@ public class InitialGameStateCardsCreatorSystem extends BaseSystem {
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
-                        cardInMissionInserted(entity);
+                        processTopLevelCardInMission(entity);
                     }
                 });
         LazyEntityUtil.forEachEntityWithComponent(world, CardInCoreComponent.class,
@@ -97,6 +110,13 @@ public class InitialGameStateCardsCreatorSystem extends BaseSystem {
                     @Override
                     public void accept(Entity entity) {
                         objectOnStackInserted(entity);
+                    }
+                });
+        LazyEntityUtil.forEachEntityWithComponent(world, CardInMissionComponent.class,
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity entity) {
+                        processAttachedCardInMission(entity);
                     }
                 });
     }

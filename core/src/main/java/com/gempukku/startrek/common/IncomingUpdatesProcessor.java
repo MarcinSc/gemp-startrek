@@ -33,6 +33,10 @@ public class IncomingUpdatesProcessor extends BaseSystem {
                 new JsonDataSerializer());
     }
 
+    public Entity getEntityById(String entityId) {
+        return informationPacketUtil.getEntityById(entityId);
+    }
+
     @EventListener
     public void incomingServerUpdates(ReceivedUpdateFromServer<JsonValue> updates, Entity entity) {
         awaitingUpdates.add(updates.getPackets());

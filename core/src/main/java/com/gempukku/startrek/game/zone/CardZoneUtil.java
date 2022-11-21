@@ -101,13 +101,32 @@ public class CardZoneUtil {
         CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
         int missionIndex = cardInMission.getMissionIndex();
         String missionOwner = cardInMission.getMissionOwner();
-        addRevealedCardInMission(cardEntity, missionIndex, missionOwner,
+        addCardInMission(cardEntity, missionIndex, missionOwner,
                 cardLookupSystem, spawnSystem, cardRenderingSystem);
     }
 
-    private static Entity addRevealedCardInMission(Entity cardEntity, int missionIndex, String missionOwner,
-                                                   CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
-                                                   CardRenderingSystem cardRenderingSystem) {
+    public static void addAttachedCardInMission(
+            Entity cardEntity, Entity attachedToCardEntity,
+            CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
+            CardRenderingSystem cardRenderingSystem) {
+        CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
+        int missionIndex = cardInMission.getMissionIndex();
+        String missionOwner = cardInMission.getMissionOwner();
+
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        String cardId = card.getCardId();
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
+
+        Entity cardRepresentation = CardTemplates.createSmallCard(cardDefinition, spawnSystem);
+        cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(cardEntity.getId());
+
+        cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).
+                addAttachedCard(attachedToCardEntity, cardEntity, cardRepresentation);
+    }
+
+    private static Entity addCardInMission(Entity cardEntity, int missionIndex, String missionOwner,
+                                           CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
+                                           CardRenderingSystem cardRenderingSystem) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);

@@ -15,7 +15,7 @@ public class MissionsLayout {
     private static final float STACK_VERTICAL_GAP = 0.03f;
     private static final float STACK_WIDTH = 0.715257f;
     private static final float STACK_HEIGHT = 0.497570f;
-    private static final float STACK_STICKOUT_PERC = 0.2f;
+    private static final float STACK_STICKOUT_PERC = 0.25f;
 
     private static final float MISSION_SPACE_WIDTH = 2f;
     private static final float MISSION_SPACE_HEIGHT = 1.55f;

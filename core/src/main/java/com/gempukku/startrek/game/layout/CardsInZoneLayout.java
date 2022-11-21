@@ -2,6 +2,7 @@ package com.gempukku.startrek.game.layout;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextHorizontalAlignment;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextVerticalAlignment;
@@ -12,6 +13,8 @@ import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyleConstants;
 
 public class CardsInZoneLayout {
+    private static final float ATTACH_CARD_Y_SEPARATION = 0.010f;
+
     private static final Matrix4 tempMatrix4 = new Matrix4();
 
     public static void layoutCards(TransformSystem transformSystem, GlyphOffseter glyphOffseter,
@@ -33,10 +36,24 @@ public class CardsInZoneLayout {
                 int indexInText = line.getStartIndex() + glyphIndex;
                 if (!missionParsedText.isWhitespace(indexInText)) {
                     float glyphScale = getScale(missionParsedText.getTextStyle(indexInText));
-                    float glyphWidth = missionParsedText.getWidth(indexInText) * glyphScale;
+                    float glyphWidth = missionParsedText.getCardWidth() * glyphScale;
+                    float translateX = startX + line.getGlyphXAdvance(glyphIndex) + glyphWidth / 2f;
+                    float translateY = 0;
+                    Array<Entity> attachedEntities = missionParsedText.getAttachedEntities(indexInText);
+                    for (Entity attachedEntity : attachedEntities) {
+                        tempMatrix4.set(startupTransform);
+                        tempMatrix4.translate(translateX, translateY, startY);
+                        tempMatrix4.scl(glyphScale);
+
+                        transformSystem.setTransform(attachedEntity, tempMatrix4);
+
+                        translateX += missionParsedText.getAttachedAdvance() * glyphScale;
+                        translateY += ATTACH_CARD_Y_SEPARATION;
+                    }
+
                     Entity cardEntity = missionParsedText.getEntity(indexInText);
                     tempMatrix4.set(startupTransform);
-                    tempMatrix4.translate(startX + line.getGlyphXAdvance(glyphIndex) + glyphWidth / 2f, 0, startY);
+                    tempMatrix4.translate(translateX, translateY, startY);
                     tempMatrix4.scl(glyphScale);
 
                     transformSystem.setTransform(cardEntity, tempMatrix4);

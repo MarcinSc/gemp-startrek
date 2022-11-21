@@ -10,6 +10,10 @@ public class CardsBeamed implements EntityEvent {
     private String toShipId;
     private Array<String> entityIds;
 
+    public CardsBeamed() {
+
+    }
+
     public CardsBeamed(String fromShipId, String toShipId, Array<String> entityIds) {
         this.fromShipId = fromShipId;
         this.toShipId = toShipId;

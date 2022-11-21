@@ -112,6 +112,18 @@ public class CardZoneParsedText implements ParsedText {
         return (Entity) glyphs.get(glyphIndex);
     }
 
+    public float getCardWidth() {
+        return stackWidth;
+    }
+
+    public float getAttachedAdvance() {
+        return stackWidth * stackStickoutPerc;
+    }
+
+    public Array<Entity> getAttachedEntities(int glyphIndex) {
+        return cardZoneCards.getAttachedCards(getEntity(glyphIndex));
+    }
+
     @Override
     public void dispose() {
 

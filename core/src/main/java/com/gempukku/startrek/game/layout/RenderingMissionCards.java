@@ -44,6 +44,11 @@ public class RenderingMissionCards implements CardZoneCards {
     }
 
     @Override
+    public Array<Entity> getAttachedCards(Entity entity) {
+        return missionCards.getAttachedCards(entity);
+    }
+
+    @Override
     public int getAttachedCardCount(Entity entity) {
         return missionCards.getAttachedCards(entity).size;
     }

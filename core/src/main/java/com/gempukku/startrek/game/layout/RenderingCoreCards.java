@@ -32,6 +32,12 @@ public class RenderingCoreCards implements CardZoneCards {
     }
 
     @Override
+    public Array<Entity> getAttachedCards(Entity entity) {
+        // TODO: finish this!
+        return new Array<>();
+    }
+
+    @Override
     public int getAttachedCardCount(Entity entity) {
         // TODO: finish this!
         return 0;
