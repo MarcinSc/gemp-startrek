@@ -27,6 +27,7 @@ public class ZoneOperations extends BaseSystem {
 
     private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
     private ComponentMapper<FaceDownCardInMissionComponent> faceDownCardInMissionComponentMapper;
+    private ComponentMapper<CardInMissionComponent> cardInMissionComponentMapper;
     private ComponentMapper<CardInHandComponent> cardInHandComponentMapper;
     private ComponentMapper<CardInBrigComponent> cardInBrigComponentMapper;
     private ComponentMapper<CardInCoreComponent> cardInCoreComponentMapper;
@@ -125,15 +126,14 @@ public class ZoneOperations extends BaseSystem {
         CardZone newZone = CardZone.Mission;
         MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
         card.setCardZone(newZone);
+        CardInMissionComponent cardInMission = cardInMissionComponentMapper.create(cardEntity);
+        cardInMission.setMissionOwner(mission.getOwner());
+        cardInMission.setMissionIndex(mission.getMissionIndex());
         if (faceUp) {
-            FaceUpCardInMissionComponent cardInMission = faceUpCardInMissionComponentMapper.create(cardEntity);
-            cardInMission.setMissionOwner(mission.getOwner());
-            cardInMission.setMissionIndex(mission.getMissionIndex());
+            faceUpCardInMissionComponentMapper.create(cardEntity);
         } else {
-            FaceDownCardInMissionComponent cardInMission = faceDownCardInMissionComponentMapper.create(cardEntity);
-            cardInMission.setOwner(card.getOwner());
-            cardInMission.setMissionOwner(mission.getOwner());
-            cardInMission.setMissionIndex(mission.getMissionIndex());
+            FaceDownCardInMissionComponent faceDownCard = faceDownCardInMissionComponentMapper.create(cardEntity);
+            faceDownCard.setOwner(card.getOwner());
             ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
             int oldCount = playerFaceDownCardsCount.get(card.getOwner(), 0);
             playerFaceDownCardsCount.put(card.getOwner(), oldCount + 1);
@@ -145,10 +145,11 @@ public class ZoneOperations extends BaseSystem {
     }
 
     public void removeCardFromMission(Entity cardEntity) {
+        CardInMissionComponent cardInMission = cardInMissionComponentMapper.get(cardEntity);
         FaceDownCardInMissionComponent faceDownInMission = faceDownCardInMissionComponentMapper.get(cardEntity);
         if (faceDownInMission != null) {
-            int missionIndex = faceDownInMission.getMissionIndex();
-            String missionOwner = faceDownInMission.getMissionOwner();
+            int missionIndex = cardInMission.getMissionIndex();
+            String missionOwner = cardInMission.getMissionOwner();
             Entity playerEntity = playerResolverSystem.findPlayerEntity(missionOwner);
             Entity missionEntity = MissionOperations.findMission(world, playerEntity, missionIndex);
             faceDownCardInMissionComponentMapper.remove(cardEntity);
@@ -161,6 +162,7 @@ public class ZoneOperations extends BaseSystem {
             eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
         }
         faceUpCardInMissionComponentMapper.remove(cardEntity);
+        cardInMissionComponentMapper.remove(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
 

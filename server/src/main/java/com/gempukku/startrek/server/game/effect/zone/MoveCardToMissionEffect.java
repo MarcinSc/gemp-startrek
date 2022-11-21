@@ -1,6 +1,5 @@
 package com.gempukku.startrek.server.game.effect.zone;
 
-import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
@@ -10,9 +9,6 @@ import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
-import com.gempukku.startrek.game.zone.CardInHandComponent;
-import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
-import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 
@@ -25,10 +21,6 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
     private EventSystem eventSystem;
     private ZoneOperations zoneOperations;
     private ServerEntityIdSystem serverEntityIdSystem;
-
-    private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
-    private ComponentMapper<FaceDownCardInMissionComponent> faceDownCardInMissionComponentMapper;
-    private ComponentMapper<CardInHandComponent> cardInHandComponentMapper;
 
     public MoveCardToMissionEffect() {
         super("moveCardToMission");

@@ -26,8 +26,8 @@ import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
+import com.gempukku.startrek.game.zone.CardInMissionComponent;
 import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
-import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 
 public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements DecisionHandler {
     private ClientDecisionSystem clientDecisionSystem;
@@ -451,7 +451,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
         public BeamFromMissionChooseEntitiesInterface(Entity shipEntity) {
             this.shipEntity = shipEntity;
 
-            FaceUpCardInMissionComponent ship = shipEntity.getComponent(FaceUpCardInMissionComponent.class);
+            CardInMissionComponent ship = shipEntity.getComponent(CardInMissionComponent.class);
             Entity playerEntity = playerResolverSystem.findPlayerEntity(ship.getMissionOwner());
             Entity missionEntity = MissionOperations.findMission(world, playerEntity, ship.getMissionIndex());
 
@@ -559,7 +559,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             this.shipEntity = shipEntity;
 
             String shipId = shipEntity.getComponent(ServerEntityComponent.class).getEntityId();
-            FaceUpCardInMissionComponent ship = shipEntity.getComponent(FaceUpCardInMissionComponent.class);
+            CardInMissionComponent ship = shipEntity.getComponent(CardInMissionComponent.class);
             Entity playerEntity = playerResolverSystem.findPlayerEntity(ship.getMissionOwner());
             Entity missionEntity = MissionOperations.findMission(world, playerEntity, ship.getMissionIndex());
 

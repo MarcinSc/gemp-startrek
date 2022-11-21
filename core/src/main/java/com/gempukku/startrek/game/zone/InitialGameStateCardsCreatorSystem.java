@@ -51,12 +51,8 @@ public class InitialGameStateCardsCreatorSystem extends BaseSystem {
         }
     }
 
-    private void faceUpCardInMissionInserted(Entity cardEntity) {
-        CardZoneUtil.addFaceUpCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);
-    }
-
-    private void faceDownCardInMissionInserted(Entity cardEntity) {
-        CardZoneUtil.addFaceDownCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);
+    private void cardInMissionInserted(Entity cardEntity) {
+        CardZoneUtil.addCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);
     }
 
     @EventListener
@@ -75,18 +71,11 @@ public class InitialGameStateCardsCreatorSystem extends BaseSystem {
                         cardInHandInserted(entity);
                     }
                 });
-        LazyEntityUtil.forEachEntityWithComponent(world, FaceUpCardInMissionComponent.class,
+        LazyEntityUtil.forEachEntityWithComponent(world, CardInMissionComponent.class,
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
-                        faceUpCardInMissionInserted(entity);
-                    }
-                });
-        LazyEntityUtil.forEachEntityWithComponent(world, FaceDownCardInMissionComponent.class,
-                new Consumer<Entity>() {
-                    @Override
-                    public void accept(Entity entity) {
-                        faceDownCardInMissionInserted(entity);
+                        cardInMissionInserted(entity);
                     }
                 });
         LazyEntityUtil.forEachEntityWithComponent(world, CardInCoreComponent.class,

@@ -7,8 +7,6 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 @ReplicateToOwner
 public class FaceDownCardInMissionComponent extends Component implements OwnedComponent {
     private String owner;
-    private String missionOwner;
-    private int missionIndex;
     private boolean stopped;
     private String onShipId;
 
@@ -19,22 +17,6 @@ public class FaceDownCardInMissionComponent extends Component implements OwnedCo
 
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    public String getMissionOwner() {
-        return missionOwner;
-    }
-
-    public void setMissionOwner(String missionOwner) {
-        this.missionOwner = missionOwner;
-    }
-
-    public int getMissionIndex() {
-        return missionIndex;
-    }
-
-    public void setMissionIndex(int missionIndex) {
-        this.missionIndex = missionIndex;
     }
 
     public boolean isStopped() {

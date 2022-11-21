@@ -4,12 +4,10 @@ import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.Predicate;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
-import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.PlayRequirements;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
@@ -17,9 +15,9 @@ import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
-import com.gempukku.startrek.game.mission.MissionComponent;
+import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
-import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
+import com.gempukku.startrek.game.zone.CardInMissionComponent;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
@@ -93,16 +91,8 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
             String cardId = result.get("cardId");
 
             Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + decisionPlayer + "))");
-            FaceUpCardInMissionComponent cardInMission = playerHeadquarter.getComponent(FaceUpCardInMissionComponent.class);
-            Entity missionEntity = LazyEntityUtil.findEntityWithComponent(world, MissionComponent.class,
-                    new Predicate<Entity>() {
-                        @Override
-                        public boolean evaluate(Entity entity) {
-                            MissionComponent mission = entity.getComponent(MissionComponent.class);
-                            return mission.getOwner().equals(cardInMission.getMissionOwner())
-                                    && mission.getMissionIndex() == cardInMission.getMissionIndex();
-                        }
-                    });
+            CardInMissionComponent cardInMission = playerHeadquarter.getComponent(CardInMissionComponent.class);
+            Entity missionEntity = MissionOperations.findMission(world, cardInMission.getMissionOwner(), cardInMission.getMissionIndex());
 
             Entity playCardEffect = spawnSystem.spawnEntity("game/effect/play/playCardEffect.template");
             EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);

@@ -115,16 +115,10 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
             animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
         }
 
-        FaceUpCardInMissionComponent faceUpCardInMission = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
-        if (faceUpCardInMission != null) {
+        CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
+        if (cardInMission != null) {
             CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardEntity);
-            CardZoneUtil.moveCardToMission(cardEntity, faceUpCardInMission.getMissionOwner(), faceUpCardInMission.getMissionIndex(),
-                    renderedCard, card, cardDefinition, cardRenderingSystem);
-        }
-        FaceDownCardInMissionComponent faceDownCardInMission = cardEntity.getComponent(FaceDownCardInMissionComponent.class);
-        if (faceDownCardInMission != null) {
-            CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardEntity);
-            CardZoneUtil.moveCardToMission(cardEntity, faceDownCardInMission.getMissionOwner(), faceDownCardInMission.getMissionIndex(),
+            CardZoneUtil.moveCardToMission(cardEntity, cardInMission.getMissionOwner(), cardInMission.getMissionIndex(),
                     renderedCard, card, cardDefinition, cardRenderingSystem);
         }
     }
@@ -142,10 +136,8 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
             animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
         }
 
-        if (cardEntity.getComponent(FaceUpCardInMissionComponent.class) != null)
-            CardZoneUtil.addFaceUpCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);
-        if (cardEntity.getComponent(FaceDownCardInMissionComponent.class) != null)
-            CardZoneUtil.addFaceDownCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);
+        if (cardEntity.getComponent(CardInMissionComponent.class) != null)
+            CardZoneUtil.addCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);
     }
 
     private boolean isBigCardZone(CardZone zone) {

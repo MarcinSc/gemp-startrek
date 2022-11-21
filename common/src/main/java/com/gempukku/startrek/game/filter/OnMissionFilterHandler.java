@@ -6,8 +6,7 @@ import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
-import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
-import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
+import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
 public class OnMissionFilterHandler extends CardFilterSystem {
     private PlayerResolverSystem playerResolverSystem;
@@ -24,12 +23,9 @@ public class OnMissionFilterHandler extends CardFilterSystem {
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
                 String username = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory, parameters.get(0));
                 int missionIndex = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(1));
-                FaceUpCardInMissionComponent faceUpCard = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
-                if (faceUpCard != null)
-                    return faceUpCard.getMissionOwner().equals(username) && faceUpCard.getMissionIndex() == missionIndex;
-                FaceDownCardInMissionComponent faceDownCard = cardEntity.getComponent(FaceDownCardInMissionComponent.class);
-                if (faceDownCard != null)
-                    return faceDownCard.getMissionOwner().equals(username) && faceDownCard.getMissionIndex() == missionIndex;
+                CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
+                if (cardInMission != null)
+                    return cardInMission.getMissionOwner().equals(username) && cardInMission.getMissionIndex() == missionIndex;
 
                 return false;
             }

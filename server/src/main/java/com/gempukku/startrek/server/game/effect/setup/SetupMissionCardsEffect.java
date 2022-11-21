@@ -15,7 +15,6 @@ import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
-import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
@@ -28,7 +27,6 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
     private EventSystem eventSystem;
     private PlayerResolverSystem playerResolverSystem;
     private ComponentMapper<MissionComponent> missionStatusComponentMapper;
-    private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
     private ComponentMapper<CardComponent> cardComponentMapper;
     private ZoneOperations zoneOperations;
 

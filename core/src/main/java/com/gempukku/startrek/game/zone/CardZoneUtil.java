@@ -95,20 +95,10 @@ public class CardZoneUtil {
         cardRenderingSystem.getCommonZones().addObjectToStack(objectEntity, objectRepresentation);
     }
 
-    public static void addFaceUpCardInMission(Entity cardEntity,
-                                              CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
-                                              CardRenderingSystem cardRenderingSystem) {
-        FaceUpCardInMissionComponent cardInMission = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
-        int missionIndex = cardInMission.getMissionIndex();
-        String missionOwner = cardInMission.getMissionOwner();
-        addRevealedCardInMission(cardEntity, missionIndex, missionOwner,
-                cardLookupSystem, spawnSystem, cardRenderingSystem);
-    }
-
-    public static void addFaceDownCardInMission(Entity cardEntity,
-                                                CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
-                                                CardRenderingSystem cardRenderingSystem) {
-        FaceDownCardInMissionComponent cardInMission = cardEntity.getComponent(FaceDownCardInMissionComponent.class);
+    public static void addCardInMission(Entity cardEntity,
+                                        CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
+                                        CardRenderingSystem cardRenderingSystem) {
+        CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
         int missionIndex = cardInMission.getMissionIndex();
         String missionOwner = cardInMission.getMissionOwner();
         addRevealedCardInMission(cardEntity, missionIndex, missionOwner,

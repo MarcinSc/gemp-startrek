@@ -10,7 +10,7 @@ import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.filter.OrCardFilter;
 import com.gempukku.startrek.game.mission.MissionComponent;
-import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
+import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
 public class PlayRequirements {
     public static CardFilter createBeamFromMissionShipRequirements(
@@ -27,7 +27,7 @@ public class PlayRequirements {
             String username,
             Entity shipEntity,
             CardFilterResolverSystem cardFilterResolverSystem) {
-        FaceUpCardInMissionComponent ship = shipEntity.getComponent(FaceUpCardInMissionComponent.class);
+        CardInMissionComponent ship = shipEntity.getComponent(CardInMissionComponent.class);
         String missionOwner = ship.getMissionOwner();
         int missionIndex = ship.getMissionIndex();
         CardFilter shipFilter = cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped," +
@@ -82,7 +82,7 @@ public class PlayRequirements {
             Entity fromShipEntity,
             Entity toShipEntity,
             CardFilterResolverSystem cardFilterResolverSystem) {
-        FaceUpCardInMissionComponent ship = fromShipEntity.getComponent(FaceUpCardInMissionComponent.class);
+        CardInMissionComponent ship = fromShipEntity.getComponent(CardInMissionComponent.class);
         String missionOwner = ship.getMissionOwner();
         int missionIndex = ship.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
