@@ -27,7 +27,7 @@ import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
-import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
+import com.gempukku.startrek.game.zone.CardInPlayComponent;
 
 public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements DecisionHandler {
     private ClientDecisionSystem clientDecisionSystem;
@@ -570,9 +570,9 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             CardFilter onShip = new CardFilter() {
                 @Override
                 public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                    FaceDownCardInMissionComponent faceDownCard = cardEntity.getComponent(FaceDownCardInMissionComponent.class);
-                    if (faceDownCard != null)
-                        return shipId.equals(faceDownCard.getOnShipId());
+                    CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+                    if (cardInPlay != null)
+                        return shipId.equals(cardInPlay.getAttachedToId());
                     return false;
                 }
             };

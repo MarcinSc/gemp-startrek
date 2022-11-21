@@ -9,8 +9,7 @@ import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
-import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
-import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
+import com.gempukku.startrek.game.zone.CardInPlayComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 
@@ -32,12 +31,9 @@ public class StopEffect extends OneTimeEffectSystem {
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
-                        FaceUpCardInMissionComponent faceUp = entity.getComponent(FaceUpCardInMissionComponent.class);
-                        if (faceUp != null)
-                            faceUp.setStopped(true);
-                        FaceDownCardInMissionComponent faceDown = entity.getComponent(FaceDownCardInMissionComponent.class);
-                        if (faceDown != null)
-                            faceDown.setStopped(true);
+                        CardInPlayComponent cardInPlay = entity.getComponent(CardInPlayComponent.class);
+                        if (cardInPlay != null)
+                            cardInPlay.setStopped(true);
                         eventSystem.fireEvent(EntityUpdated.instance, entity);
                     }
                 });

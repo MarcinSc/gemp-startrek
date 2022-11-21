@@ -25,6 +25,7 @@ public class ZoneOperations extends BaseSystem {
     private PlayerResolverSystem playerResolverSystem;
     private ObjectStackSystem objectStackSystem;
 
+    private ComponentMapper<CardInPlayComponent> cardInPlayComponentMapper;
     private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
     private ComponentMapper<FaceDownCardInMissionComponent> faceDownCardInMissionComponentMapper;
     private ComponentMapper<CardInMissionComponent> cardInMissionComponentMapper;
@@ -103,6 +104,7 @@ public class ZoneOperations extends BaseSystem {
     }
 
     public void moveCardToBrig(Entity cardEntity, Entity brigPlayerEntity) {
+        cardInPlayComponentMapper.create(cardEntity);
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         CardZone oldZone = card.getCardZone();
         CardZone newZone = CardZone.Brig;
@@ -117,10 +119,12 @@ public class ZoneOperations extends BaseSystem {
 
     public void removeCardFromBrig(Entity cardEntity) {
         cardInBrigComponentMapper.remove(cardEntity);
+        cardInPlayComponentMapper.remove(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
 
     public void moveCardToMission(Entity cardEntity, Entity missionEntity, boolean faceUp) {
+        cardInPlayComponentMapper.create(cardEntity);
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         CardZone oldZone = card.getCardZone();
         CardZone newZone = CardZone.Mission;
@@ -145,6 +149,7 @@ public class ZoneOperations extends BaseSystem {
     }
 
     public void removeCardFromMission(Entity cardEntity) {
+        cardInPlayComponentMapper.remove(cardEntity);
         CardInMissionComponent cardInMission = cardInMissionComponentMapper.get(cardEntity);
         FaceDownCardInMissionComponent faceDownInMission = faceDownCardInMissionComponentMapper.get(cardEntity);
         if (faceDownInMission != null) {
@@ -167,6 +172,7 @@ public class ZoneOperations extends BaseSystem {
     }
 
     public void moveCardToCore(Entity cardEntity) {
+        cardInPlayComponentMapper.create(cardEntity);
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         CardZone oldZone = card.getCardZone();
         CardZone newZone = CardZone.Core;
@@ -179,6 +185,7 @@ public class ZoneOperations extends BaseSystem {
 
     public void removeCardFromCore(Entity cardEntity) {
         cardInCoreComponentMapper.remove(cardEntity);
+        cardInPlayComponentMapper.remove(cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
 

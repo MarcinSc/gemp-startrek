@@ -7,8 +7,6 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToOwner;
 @ReplicateToOwner
 public class FaceDownCardInMissionComponent extends Component implements OwnedComponent {
     private String owner;
-    private boolean stopped;
-    private String onShipId;
 
     @Override
     public boolean isOwnedBy(String username) {
@@ -17,21 +15,5 @@ public class FaceDownCardInMissionComponent extends Component implements OwnedCo
 
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    public boolean isStopped() {
-        return stopped;
-    }
-
-    public void setStopped(boolean stopped) {
-        this.stopped = stopped;
-    }
-
-    public String getOnShipId() {
-        return onShipId;
-    }
-
-    public void setOnShipId(String onShipId) {
-        this.onShipId = onShipId;
     }
 }

@@ -4,8 +4,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
-import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
+import com.gempukku.startrek.game.zone.CardInPlayComponent;
 
 public class UnstoppedFilterHandler extends CardFilterSystem {
     public UnstoppedFilterHandler() {
@@ -17,12 +16,9 @@ public class UnstoppedFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                FaceUpCardInMissionComponent faceUpCard = cardEntity.getComponent(FaceUpCardInMissionComponent.class);
-                if (faceUpCard != null)
-                    return !faceUpCard.isStopped();
-                FaceDownCardInMissionComponent faceDownCard = cardEntity.getComponent(FaceDownCardInMissionComponent.class);
-                if (faceDownCard != null)
-                    return !faceDownCard.isStopped();
+                CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+                if (cardInPlay != null)
+                    return !cardInPlay.isStopped();
                 return false;
             }
         };

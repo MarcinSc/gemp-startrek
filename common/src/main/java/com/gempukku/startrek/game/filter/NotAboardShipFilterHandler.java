@@ -4,7 +4,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
+import com.gempukku.startrek.game.zone.CardInPlayComponent;
 
 public class NotAboardShipFilterHandler extends CardFilterSystem {
     public NotAboardShipFilterHandler() {
@@ -16,9 +16,9 @@ public class NotAboardShipFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                FaceDownCardInMissionComponent faceDownCard = cardEntity.getComponent(FaceDownCardInMissionComponent.class);
-                if (faceDownCard != null)
-                    return faceDownCard.getOnShipId() == null;
+                CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+                if (cardInPlay != null)
+                    return cardInPlay.getAttachedToId() == null;
                 return false;
             }
         };

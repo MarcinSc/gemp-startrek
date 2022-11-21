@@ -5,16 +5,8 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToClients;
 
 @ReplicateToClients
 public class FaceUpCardInMissionComponent extends Component {
-    private boolean stopped;
     private int rangeUsed;
-
-    public boolean isStopped() {
-        return stopped;
-    }
-
-    public void setStopped(boolean stopped) {
-        this.stopped = stopped;
-    }
+    private int faceDownCardsCount;
 
     public int getRangeUsed() {
         return rangeUsed;
@@ -22,5 +14,13 @@ public class FaceUpCardInMissionComponent extends Component {
 
     public void setRangeUsed(int rangeUsed) {
         this.rangeUsed = rangeUsed;
+    }
+
+    public int getFaceDownCardsCount() {
+        return faceDownCardsCount;
+    }
+
+    public void setFaceDownCardsCount(int faceDownCardsCount) {
+        this.faceDownCardsCount = faceDownCardsCount;
     }
 }
