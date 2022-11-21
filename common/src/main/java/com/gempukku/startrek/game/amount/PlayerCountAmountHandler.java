@@ -14,8 +14,8 @@ public class PlayerCountAmountHandler extends AmountSystem {
 
     @Override
     public int resolveAmount(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
-        Entity playerEntity = LazyEntityUtil.findEntityWithComponent(world, GameComponent.class);
-        return playerEntity.getComponent(GameComponent.class).getPlayers().size;
+        Entity gameEntity = LazyEntityUtil.findEntityWithComponent(world, GameComponent.class);
+        return gameEntity.getComponent(GameComponent.class).getPlayers().size;
     }
 
     @Override
