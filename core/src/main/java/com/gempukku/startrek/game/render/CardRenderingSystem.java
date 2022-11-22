@@ -107,6 +107,8 @@ public class CardRenderingSystem extends BaseSystem {
                 if (playerZones.isDilemmaPileDirty()) {
                     PileLayout.layoutPlayerDilemmaPile(playerZones, playerPosition, transformSystem);
                 }
+                if (playerZones.isDiscardPileDirty())
+                    PileLayout.layoutPlayerDiscardPile(playerZones, playerPosition, transformSystem);
                 playerZones.cleanup();
             }
         }

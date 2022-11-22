@@ -119,6 +119,18 @@ public class CardZoneUtil {
         cardRenderingSystem.getCommonZones().addObjectToStack(objectEntity, objectRepresentation);
     }
 
+    public static Entity setTopDiscardPileCard(Entity cardEntity, CardComponent card, CardLookupSystem cardLookupSystem,
+                                               SpawnSystem spawnSystem, CardRenderingSystem cardRenderingSystem) {
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardEntity);
+        Entity renderedCard = CardTemplates.createFullCard(cardDefinition, spawnSystem);
+        return cardRenderingSystem.getPlayerCards(card.getOwner()).setTopDiscardPileCard(cardEntity, renderedCard);
+    }
+
+    public static Entity moveCardAsTopDiscardPileCard(Entity cardEntity, Entity renderedCard, CardRenderingSystem cardRenderingSystem) {
+        String owner = cardEntity.getComponent(CardComponent.class).getOwner();
+        return cardRenderingSystem.getPlayerCards(owner).setTopDiscardPileCard(cardEntity, renderedCard);
+    }
+
     public static void addAttachedCardInMission(
             Entity cardEntity, Entity attachedToCardEntity,
             CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,

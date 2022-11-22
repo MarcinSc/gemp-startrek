@@ -103,8 +103,6 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
         String missionOwner = cardChangedZones.getMissionOwner();
         int missionIndex = cardChangedZones.getMissionIndex();
 
-        System.out.println("From zone: " + fromZone + ", to zone: " + toZone);
-
         if (cardEntity != null) {
             // Moving card either to or from a zone where the card is known
             CardComponent card = cardEntity.getComponent(CardComponent.class);
@@ -179,6 +177,11 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
             CardZoneUtil.moveCardToMission(cardEntity, missionOwner, missionIndex,
                     renderedCard, card, cardDefinition, cardRenderingSystem);
         }
+        if (zone == CardZone.DiscardPile) {
+            Entity oldRenderedCard = CardZoneUtil.moveCardAsTopDiscardPileCard(cardEntity, renderedCard, cardRenderingSystem);
+            if (oldRenderedCard != null)
+                world.deleteEntity(oldRenderedCard);
+        }
     }
 
     private Entity removeFaceDownCard(String cardOwner, CardZone zone, String missionOwner, int missionIndex) {
@@ -236,6 +239,11 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
         }
         if (zone == CardZone.Mission) {
             CardZoneUtil.addCardInMission(cardEntity, missionOwner, missionIndex, cardLookupSystem, spawnSystem, cardRenderingSystem);
+        }
+        if (zone == CardZone.DiscardPile) {
+            Entity oldRenderedCard = CardZoneUtil.setTopDiscardPileCard(cardEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem);
+            if (oldRenderedCard != null)
+                world.deleteEntity(oldRenderedCard);
         }
     }
 

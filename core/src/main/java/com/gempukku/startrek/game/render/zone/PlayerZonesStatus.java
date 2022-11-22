@@ -6,6 +6,7 @@ public class PlayerZonesStatus {
     private boolean brigDirty;
     private boolean deckDirty;
     private boolean dilemmaPileDirty;
+    private boolean discardPileDirty;
 
     public boolean isHandDrity() {
         return handDrity;
@@ -47,11 +48,20 @@ public class PlayerZonesStatus {
         dilemmaPileDirty = true;
     }
 
+    public boolean isDiscardPileDirty() {
+        return discardPileDirty;
+    }
+
+    public void setDiscardPileDirty() {
+        discardPileDirty = true;
+    }
+
     public void cleanZones() {
         handDrity = false;
         coreDirty = false;
         brigDirty = false;
         deckDirty = false;
         dilemmaPileDirty = false;
+        discardPileDirty = false;
     }
 }

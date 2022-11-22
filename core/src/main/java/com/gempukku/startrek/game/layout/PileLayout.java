@@ -51,4 +51,22 @@ public class PileLayout {
                             .rotate(0, 1, 0, yRotation));
         }
     }
+
+    public static void layoutPlayerDiscardPile(
+            PlayerZones playerZones, PlayerPosition playerPosition,
+            TransformSystem transformSystem) {
+        float xTranslate = 4.5f;
+        float zTranslate = 3.3f;
+        Entity cardRepresentation = playerZones.getTopDiscardPileCard();
+        if (cardRepresentation != null) {
+            float yRotation = (playerPosition == PlayerPosition.Lower) ? 0 : 180;
+            float zMove = playerPosition == PlayerPosition.Lower ? zTranslate : -zTranslate;
+
+            transformSystem.setTransform(cardRepresentation,
+                    new Matrix4().idt()
+                            .translate(xTranslate, 0f, zMove)
+                            // A bit crooked
+                            .rotate(0, 1, 0, yRotation));
+        }
+    }
 }

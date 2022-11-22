@@ -14,6 +14,7 @@ public class PlayerZones {
     private final Array<Entity> cardsInDilemmaPile = new Array<>();
     private final Array<Entity> cardsInCore = new Array<>();
     private final Array<Entity> cardsInBrig = new Array<>();
+    private Entity topDiscardPileCard;
 
     private final Array<MissionCards> missionCards = new Array<>();
 
@@ -21,6 +22,18 @@ public class PlayerZones {
         for (int i = 0; i < 5; i++) {
             missionCards.add(new MissionCards());
         }
+    }
+
+    public Entity setTopDiscardPileCard(Entity card, Entity renderedCard) {
+        Entity oldTopDiscardPileCard = topDiscardPileCard;
+        cardToRenderedMap.put(card, renderedCard);
+        topDiscardPileCard = renderedCard;
+        playerZonesStatus.setDiscardPileDirty();
+        return oldTopDiscardPileCard;
+    }
+
+    public Entity getTopDiscardPileCard() {
+        return topDiscardPileCard;
     }
 
     public void addCardInCore(Entity card, Entity renderedCard) {
@@ -162,6 +175,10 @@ public class PlayerZones {
 
     public boolean isDilemmaPileDirty() {
         return playerZonesStatus.isDilemmaPileDirty();
+    }
+
+    public boolean isDiscardPileDirty() {
+        return playerZonesStatus.isDiscardPileDirty();
     }
 
     public void cleanup() {
