@@ -11,6 +11,7 @@ import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.ability.MoveCostModifier;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
+import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
 public class InRangeFilterHandler extends CardFilterSystem {
@@ -19,6 +20,7 @@ public class InRangeFilterHandler extends CardFilterSystem {
     private CardAbilitySystem cardAbilitySystem;
     private CardLookupSystem cardLookupSystem;
     private AmountResolverSystem amountResolverSystem;
+    private MissionOperations missionOperations;
 
     public InRangeFilterHandler() {
         super("inRange");
@@ -32,8 +34,7 @@ public class InRangeFilterHandler extends CardFilterSystem {
                 CardInMissionComponent cardInMission = sourceEntity.getComponent(CardInMissionComponent.class);
                 String missionOwner = cardInMission.getMissionOwner();
                 int missionIndex = cardInMission.getMissionIndex();
-                Entity fromMissionCardEntity = cardFilteringSystem.findFirstCardInPlay(cardEntity, memory,
-                        "type(Mission),inMission(username(" + missionOwner + ")," + missionIndex + ")");
+                Entity fromMissionCardEntity = missionOperations.findMission(missionOwner, missionIndex);
 
                 int shipRange = amountResolverSystem.resolveAmount(sourceEntity, memory, "shipRange");
                 int requiredRange = calculateRangeBetweenMissions(sourceEntity, fromMissionCardEntity, cardEntity);

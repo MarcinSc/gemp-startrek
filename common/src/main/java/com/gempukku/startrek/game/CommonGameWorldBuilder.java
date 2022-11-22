@@ -7,12 +7,14 @@ import com.gempukku.startrek.game.amount.*;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.*;
 import com.gempukku.startrek.game.filter.*;
+import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 
 public class CommonGameWorldBuilder {
     public static void createCommonSystems(WorldConfigurationBuilder worldConfigurationBuilder) {
         worldConfigurationBuilder.with(
                 new GameEntityProvider(),
+                new MissionOperations(),
 
                 new ExpressionSystem(),
 

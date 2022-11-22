@@ -5,11 +5,13 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
+import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
 public class MissionMatchesFilterHandler extends CardFilterSystem {
     private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
+    private MissionOperations missionOperations;
 
     public MissionMatchesFilterHandler() {
         super("missionMatches");
@@ -24,13 +26,8 @@ public class MissionMatchesFilterHandler extends CardFilterSystem {
                 CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
                 if (cardInMission != null)
                     return missionFilter.accepts(sourceEntity, memory,
-                            getMissionCard(cardInMission.getMissionOwner(), cardInMission.getMissionIndex()));
+                            missionOperations.findMission(cardInMission.getMissionOwner(), cardInMission.getMissionIndex()));
                 return false;
-            }
-
-            private Entity getMissionCard(String owner, int index) {
-                return cardFilteringSystem.findFirstCardInPlay(null, null,
-                        "type(Mission),inMission(username(" + owner + ")," + index + ")");
             }
         };
     }

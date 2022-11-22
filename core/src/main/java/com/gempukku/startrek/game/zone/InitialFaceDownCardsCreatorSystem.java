@@ -26,6 +26,7 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
     private CardRenderingSystem cardRenderingSystem;
     private SpawnSystem spawnSystem;
     private TransformSystem transformSystem;
+    private MissionOperations missionOperations;
 
     private boolean initializedState = false;
     private boolean processState = false;
@@ -60,7 +61,7 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
             PlayerZones missionPlayerZones = cardRenderingSystem.getPlayerCards(missionPlayerPosition);
 
             for (int missionIndex = 0; missionIndex < 5; missionIndex++) {
-                Entity missionEntity = MissionOperations.findMission(world, missionOwner, missionIndex);
+                Entity missionEntity = missionOperations.findMission(missionOwner, missionIndex);
                 MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
 
                 MissionCards missionCards = missionPlayerZones.getMissionCards(missionIndex);

@@ -23,7 +23,8 @@ public class PlayCardTest extends AbstractGameTest {
         playCardSuccessfully(playedCard);
 
         assertNotNull(playedCard.getComponent(FaceDownCardInMissionComponent.class));
-        MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
+        MissionOperations missionOperations = world.getSystem(MissionOperations.class);
+        MissionComponent mission = missionOperations.findMission("test1", 2).getComponent(MissionComponent.class);
         assertEquals(1, mission.getPlayerFaceDownCardsCount().get("test1").intValue());
     }
 
@@ -35,7 +36,8 @@ public class PlayCardTest extends AbstractGameTest {
         playCardSuccessfully(playedCard);
 
         assertNotNull(playedCard.getComponent(FaceUpCardInMissionComponent.class));
-        MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
+        MissionOperations missionOperations = world.getSystem(MissionOperations.class);
+        MissionComponent mission = missionOperations.findMission("test1", 2).getComponent(MissionComponent.class);
         assertEquals(0, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
     }
 

@@ -20,7 +20,8 @@ public class BeamTest extends AbstractGameTest {
         Entity ship = createCard("test1", "1_390");
 
         ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
-        Entity headquartersMission = MissionOperations.findMission(world, "test1", 2);
+        MissionOperations missionOperations = world.getSystem(MissionOperations.class);
+        Entity headquartersMission = missionOperations.findMission("test1", 2);
         zoneOperations.moveFromCurrentZoneToMission(personnel, headquartersMission, false);
         zoneOperations.moveFromCurrentZoneToMission(ship, headquartersMission, true);
 
@@ -34,7 +35,7 @@ public class BeamTest extends AbstractGameTest {
                 "beamedId", getCardId(personnel));
 
         assertEquals(getCardId(ship), personnel.getComponent(CardInPlayComponent.class).getAttachedToId());
-        MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
+        MissionComponent mission = missionOperations.findMission("test1", 2).getComponent(MissionComponent.class);
         assertEquals(0, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
         assertEquals(1, ship.getComponent(CardInPlayComponent.class).getAttachedFaceDownCount());
     }
@@ -47,7 +48,8 @@ public class BeamTest extends AbstractGameTest {
         Entity ship = createCard("test1", "1_390");
 
         ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
-        Entity headquartersMission = MissionOperations.findMission(world, "test1", 2);
+        MissionOperations missionOperations = world.getSystem(MissionOperations.class);
+        Entity headquartersMission = missionOperations.findMission("test1", 2);
         zoneOperations.moveFromCurrentZoneToMission(personnel, headquartersMission, false);
         zoneOperations.moveFromCurrentZoneToMission(ship, headquartersMission, true);
 
@@ -66,7 +68,7 @@ public class BeamTest extends AbstractGameTest {
                 "beamedId", getCardId(personnel));
 
         assertNull(personnel.getComponent(CardInPlayComponent.class).getAttachedToId());
-        MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
+        MissionComponent mission = missionOperations.findMission("test1", 2).getComponent(MissionComponent.class);
         assertEquals(1, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
         assertEquals(0, ship.getComponent(CardInPlayComponent.class).getAttachedFaceDownCount());
     }
@@ -80,7 +82,8 @@ public class BeamTest extends AbstractGameTest {
         Entity ship2 = createCard("test1", "1_390");
 
         ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
-        Entity headquartersMission = MissionOperations.findMission(world, "test1", 2);
+        MissionOperations missionOperations = world.getSystem(MissionOperations.class);
+        Entity headquartersMission = missionOperations.findMission("test1", 2);
         zoneOperations.moveFromCurrentZoneToMission(personnel, headquartersMission, false);
         zoneOperations.moveFromCurrentZoneToMission(ship1, headquartersMission, true);
         zoneOperations.moveFromCurrentZoneToMission(ship2, headquartersMission, true);
@@ -101,7 +104,7 @@ public class BeamTest extends AbstractGameTest {
                 "beamedId", getCardId(personnel));
 
         assertEquals(getCardId(ship2), personnel.getComponent(CardInPlayComponent.class).getAttachedToId());
-        MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
+        MissionComponent mission = missionOperations.findMission("test1", 2).getComponent(MissionComponent.class);
         assertEquals(0, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
         assertEquals(0, ship1.getComponent(CardInPlayComponent.class).getAttachedFaceDownCount());
         assertEquals(1, ship2.getComponent(CardInPlayComponent.class).getAttachedFaceDownCount());
@@ -117,7 +120,8 @@ public class BeamTest extends AbstractGameTest {
         Entity ship = createCard("test1", "1_393");
 
         ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
-        Entity headquartersMission = MissionOperations.findMission(world, "test1", 2);
+        MissionOperations missionOperations = world.getSystem(MissionOperations.class);
+        Entity headquartersMission = missionOperations.findMission("test1", 2);
         zoneOperations.moveFromCurrentZoneToMission(personnel1, headquartersMission, false);
         zoneOperations.moveFromCurrentZoneToMission(personnel2, headquartersMission, false);
         zoneOperations.moveFromCurrentZoneToMission(personnel3, headquartersMission, false);

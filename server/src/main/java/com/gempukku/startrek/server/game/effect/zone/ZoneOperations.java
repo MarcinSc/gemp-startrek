@@ -27,6 +27,7 @@ public class ZoneOperations extends BaseSystem {
     private ServerEntityIdSystem serverEntityIdSystem;
     private GameEntityProvider gameEntityProvider;
     private CardFilteringSystem cardFilteringSystem;
+    private MissionOperations missionOperations;
 
     private ComponentMapper<CardInPlayComponent> cardInPlayComponentMapper;
     private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
@@ -242,7 +243,7 @@ public class ZoneOperations extends BaseSystem {
     }
 
     private void decrementFaceDownCardCount(String cardOwner, String missionOwner, int missionIndex) {
-        Entity missionEntity = MissionOperations.findMission(world, missionOwner, missionIndex);
+        Entity missionEntity = missionOperations.findMission(missionOwner, missionIndex);
         MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
         ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
         int oldCount = playerFaceDownCardsCount.get(cardOwner, 0);
@@ -251,7 +252,7 @@ public class ZoneOperations extends BaseSystem {
     }
 
     private void incrementFaceDownCardCount(String cardOwner, String missionOwner, int missionIndex) {
-        Entity missionEntity = MissionOperations.findMission(world, missionOwner, missionIndex);
+        Entity missionEntity = missionOperations.findMission(missionOwner, missionIndex);
         MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
         ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
         int oldCount = playerFaceDownCardsCount.get(cardOwner, 0);

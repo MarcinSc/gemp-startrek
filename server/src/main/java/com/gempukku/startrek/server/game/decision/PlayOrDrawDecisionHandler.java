@@ -32,6 +32,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
     private CardFilteringSystem cardFilteringSystem;
     private CardAbilitySystem cardAbilitySystem;
     private ServerEntityIdSystem serverEntityIdSystem;
+    private MissionOperations missionOperations;
 
     @Override
     protected void initialize() {
@@ -92,7 +93,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
 
             Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + decisionPlayer + "))");
             CardInMissionComponent cardInMission = playerHeadquarter.getComponent(CardInMissionComponent.class);
-            Entity missionEntity = MissionOperations.findMission(world, cardInMission.getMissionOwner(), cardInMission.getMissionIndex());
+            Entity missionEntity = missionOperations.findMission(cardInMission.getMissionOwner(), cardInMission.getMissionIndex());
 
             Entity playCardEffect = spawnSystem.spawnEntity("game/effect/play/playCardEffect.template");
             EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);
