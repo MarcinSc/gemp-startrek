@@ -6,9 +6,9 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateToClients;
 
 @ReplicateToClients
 public class PlayerDiscardPileComponent extends Component {
-    private Array<Integer> cards = new Array<>();
+    private Array<String> cards = new Array<>();
 
-    public Array<Integer> getCards() {
+    public Array<String> getCards() {
         return cards;
     }
 }

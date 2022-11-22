@@ -378,8 +378,8 @@ public class ZoneOperations extends BaseSystem {
         cardInDiscardComponentMapper.create(cardEntity);
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
         PlayerDiscardPileComponent discard = playerEntity.getComponent(PlayerDiscardPileComponent.class);
-        Array<Integer> cards = discard.getCards();
-        cards.add(cardEntity.getId());
+        Array<String> cards = discard.getCards();
+        cards.add(serverEntityIdSystem.getEntityId(cardEntity));
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
 
@@ -391,8 +391,8 @@ public class ZoneOperations extends BaseSystem {
         cardInDiscardComponentMapper.remove(cardEntity);
         Entity playerEntity = playerResolverSystem.findPlayerEntity(card.getOwner());
         PlayerDiscardPileComponent discard = playerEntity.getComponent(PlayerDiscardPileComponent.class);
-        Array<Integer> cards = discard.getCards();
-        cards.removeValue(cardEntity.getId(), false);
+        Array<String> cards = discard.getCards();
+        cards.removeValue(serverEntityIdSystem.getEntityId(cardEntity), false);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
     }
