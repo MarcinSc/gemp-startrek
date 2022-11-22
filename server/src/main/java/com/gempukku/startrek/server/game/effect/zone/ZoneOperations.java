@@ -163,10 +163,8 @@ public class ZoneOperations extends BaseSystem {
         } else {
             FaceDownCardInMissionComponent faceDownCard = faceDownCardInMissionComponentMapper.create(cardEntity);
             faceDownCard.setOwner(card.getOwner());
-            ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
-            int oldCount = playerFaceDownCardsCount.get(card.getOwner(), 0);
-            playerFaceDownCardsCount.put(card.getOwner(), oldCount + 1);
-            eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
+
+            incrementFaceDownCardCount(card.getOwner(), mission.getOwner(), mission.getMissionIndex());
         }
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
 
@@ -178,17 +176,12 @@ public class ZoneOperations extends BaseSystem {
         CardInMissionComponent cardInMission = cardInMissionComponentMapper.get(cardEntity);
         FaceDownCardInMissionComponent faceDownInMission = faceDownCardInMissionComponentMapper.get(cardEntity);
         if (faceDownInMission != null) {
-            int missionIndex = cardInMission.getMissionIndex();
             String missionOwner = cardInMission.getMissionOwner();
-            Entity missionEntity = MissionOperations.findMission(world, missionOwner, missionIndex);
+            int missionIndex = cardInMission.getMissionIndex();
             faceDownCardInMissionComponentMapper.remove(cardEntity);
 
             CardComponent card = cardEntity.getComponent(CardComponent.class);
-            MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
-            ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
-            int oldCount = playerFaceDownCardsCount.get(card.getOwner(), 0);
-            playerFaceDownCardsCount.put(card.getOwner(), oldCount - 1);
-            eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
+            decrementFaceDownCardCount(card.getOwner(), missionOwner, missionIndex);
         }
         faceUpCardInMissionComponentMapper.remove(cardEntity);
         cardInMissionComponentMapper.remove(cardEntity);
@@ -199,16 +192,11 @@ public class ZoneOperations extends BaseSystem {
         CardInMissionComponent cardInMission = cardInMissionComponentMapper.get(cardEntity);
         FaceDownCardInMissionComponent faceDownInMission = faceDownCardInMissionComponentMapper.get(cardEntity);
         if (faceDownInMission != null) {
-            int missionIndex = cardInMission.getMissionIndex();
             String missionOwner = cardInMission.getMissionOwner();
-            Entity missionEntity = MissionOperations.findMission(world, missionOwner, missionIndex);
+            int missionIndex = cardInMission.getMissionIndex();
 
             CardComponent card = cardEntity.getComponent(CardComponent.class);
-            MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
-            ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
-            int oldCount = playerFaceDownCardsCount.get(card.getOwner(), 0);
-            playerFaceDownCardsCount.put(card.getOwner(), oldCount - 1);
-            eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
+            decrementFaceDownCardCount(card.getOwner(), missionOwner, missionIndex);
         }
 
         String shipId = serverEntityIdSystem.getEntityId(shipEntity);
@@ -221,21 +209,36 @@ public class ZoneOperations extends BaseSystem {
         CardInMissionComponent cardInMission = cardInMissionComponentMapper.get(cardEntity);
         FaceDownCardInMissionComponent faceDownInMission = faceDownCardInMissionComponentMapper.get(cardEntity);
         if (faceDownInMission != null) {
-            int missionIndex = cardInMission.getMissionIndex();
             String missionOwner = cardInMission.getMissionOwner();
-            Entity missionEntity = MissionOperations.findMission(world, missionOwner, missionIndex);
+            int missionIndex = cardInMission.getMissionIndex();
 
             CardComponent card = cardEntity.getComponent(CardComponent.class);
-            MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
-            ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
-            int oldCount = playerFaceDownCardsCount.get(card.getOwner(), 0);
-            playerFaceDownCardsCount.put(card.getOwner(), oldCount + 1);
-            eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
+            String cardOwner = card.getOwner();
+
+            incrementFaceDownCardCount(cardOwner, missionOwner, missionIndex);
         }
 
         CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
         cardInPlay.setAttachedToId(null);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+    }
+
+    private void decrementFaceDownCardCount(String cardOwner, String missionOwner, int missionIndex) {
+        Entity missionEntity = MissionOperations.findMission(world, missionOwner, missionIndex);
+        MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
+        ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
+        int oldCount = playerFaceDownCardsCount.get(cardOwner, 0);
+        playerFaceDownCardsCount.put(cardOwner, oldCount - 1);
+        eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
+    }
+
+    private void incrementFaceDownCardCount(String cardOwner, String missionOwner, int missionIndex) {
+        Entity missionEntity = MissionOperations.findMission(world, missionOwner, missionIndex);
+        MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
+        ObjectMap<String, Integer> playerFaceDownCardsCount = mission.getPlayerFaceDownCardsCount();
+        int oldCount = playerFaceDownCardsCount.get(cardOwner, 0);
+        playerFaceDownCardsCount.put(cardOwner, oldCount + 1);
+        eventSystem.fireEvent(EntityUpdated.instance, missionEntity);
     }
 
     public void attachFromShipToShip(Entity fromShipEntity, Entity toShipEntity, Entity cardEntity) {

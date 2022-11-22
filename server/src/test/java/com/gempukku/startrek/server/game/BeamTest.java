@@ -1,6 +1,7 @@
 package com.gempukku.startrek.server.game;
 
 import com.artemis.Entity;
+import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
@@ -32,6 +33,8 @@ public class BeamTest extends AbstractGameTest {
                 "beamedId", getCardId(personnel));
 
         assertEquals(getCardId(ship), personnel.getComponent(CardInPlayComponent.class).getAttachedToId());
+        MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
+        assertEquals(0, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
     }
 
     @Test
@@ -61,6 +64,8 @@ public class BeamTest extends AbstractGameTest {
                 "beamedId", getCardId(personnel));
 
         assertNull(personnel.getComponent(CardInPlayComponent.class).getAttachedToId());
+        MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
+        assertEquals(1, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
     }
 
     @Test
@@ -93,6 +98,8 @@ public class BeamTest extends AbstractGameTest {
                 "beamedId", getCardId(personnel));
 
         assertEquals(getCardId(ship2), personnel.getComponent(CardInPlayComponent.class).getAttachedToId());
+        MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
+        assertEquals(0, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
     }
     // TODO add negative tests
 }

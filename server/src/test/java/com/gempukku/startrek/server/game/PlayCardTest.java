@@ -3,6 +3,8 @@ package com.gempukku.startrek.server.game;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.mission.MissionComponent;
+import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.zone.CardInCoreComponent;
 import com.gempukku.startrek.game.zone.CardInDiscardComponent;
 import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
@@ -21,6 +23,8 @@ public class PlayCardTest extends AbstractGameTest {
         playCardSuccessfully(playedCard);
 
         assertNotNull(playedCard.getComponent(FaceDownCardInMissionComponent.class));
+        MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
+        assertEquals(1, mission.getPlayerFaceDownCardsCount().get("test1").intValue());
     }
 
     @Test
@@ -31,6 +35,8 @@ public class PlayCardTest extends AbstractGameTest {
         playCardSuccessfully(playedCard);
 
         assertNotNull(playedCard.getComponent(FaceUpCardInMissionComponent.class));
+        MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
+        assertEquals(0, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
     }
 
     @Test
