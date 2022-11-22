@@ -48,7 +48,10 @@ import com.gempukku.startrek.server.game.effect.play.PlayoutEventEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutTriggerEffect;
 import com.gempukku.startrek.server.game.effect.play.SetEffectStepEffect;
 import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
-import com.gempukku.startrek.server.game.effect.setup.*;
+import com.gempukku.startrek.server.game.effect.setup.PlaceAllCardsInDrawDeckEffect;
+import com.gempukku.startrek.server.game.effect.setup.PlaceAllDilemmasInDeckEffect;
+import com.gempukku.startrek.server.game.effect.setup.SetupMissionCardsEffect;
+import com.gempukku.startrek.server.game.effect.setup.SetupTurnOrderEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.effect.zone.*;
@@ -103,7 +106,6 @@ public class StarTrekGameHolder implements Disposable {
                 new ZoneOperations(),
 
                 // Setup effects
-                new SetupMissionsEffect(),
                 new SetupMissionCardsEffect(),
                 new PlaceAllDilemmasInDeckEffect(),
                 new PlaceAllCardsInDrawDeckEffect(),

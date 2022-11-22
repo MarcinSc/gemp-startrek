@@ -15,10 +15,6 @@
             "memory": "setupSequence",
             "actions": [
               {
-                "type": "setupMissions",
-                "player": "memory(setupPlayer)"
-              },
-              {
                 "type": "setupMissionCards",
                 "player": "memory(setupPlayer)"
               },

@@ -13,8 +13,8 @@ import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.mission.MissionComponent;
-import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
+import com.gempukku.startrek.game.zone.CardInMissionComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
@@ -26,7 +26,8 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
     private CardLookupSystem cardLookupSystem;
     private EventSystem eventSystem;
     private PlayerResolverSystem playerResolverSystem;
-    private ComponentMapper<MissionComponent> missionStatusComponentMapper;
+    private ComponentMapper<MissionComponent> missionComponentMapper;
+    private ComponentMapper<CardInMissionComponent> cardInMissionComponentMapper;
     private ComponentMapper<CardComponent> cardComponentMapper;
     private ZoneOperations zoneOperations;
 
@@ -53,7 +54,11 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
                 });
         for (int i = 0; i < playerMissions.size; i++) {
             Entity missionEntity = playerMissions.get(i);
-            zoneOperations.moveFromCurrentZoneToMission(missionEntity, MissionOperations.findMission(world, username, i), true);
+            missionComponentMapper.create(missionEntity);
+            CardInMissionComponent cardInMission = cardInMissionComponentMapper.create(missionEntity);
+            cardInMission.setMissionOwner(username);
+            cardInMission.setMissionIndex(i);
+            zoneOperations.moveFromCurrentZoneToMission(missionEntity, missionEntity, true);
         }
     }
 

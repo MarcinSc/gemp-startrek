@@ -157,10 +157,10 @@ public class ZoneOperations extends BaseSystem {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         CardZone oldZone = card.getCardZone();
         CardZone newZone = CardZone.Mission;
-        MissionComponent mission = missionEntity.getComponent(MissionComponent.class);
+        CardInMissionComponent mission = missionEntity.getComponent(CardInMissionComponent.class);
         card.setCardZone(newZone);
         CardInMissionComponent cardInMission = cardInMissionComponentMapper.create(cardEntity);
-        cardInMission.setMissionOwner(mission.getOwner());
+        cardInMission.setMissionOwner(mission.getMissionOwner());
         cardInMission.setMissionIndex(mission.getMissionIndex());
         if (faceUp) {
             faceUpCardInMissionComponentMapper.create(cardEntity);
@@ -168,11 +168,11 @@ public class ZoneOperations extends BaseSystem {
             FaceDownCardInMissionComponent faceDownCard = faceDownCardInMissionComponentMapper.create(cardEntity);
             faceDownCard.setOwner(card.getOwner());
 
-            incrementFaceDownCardCount(card.getOwner(), mission.getOwner(), mission.getMissionIndex());
+            incrementFaceDownCardCount(card.getOwner(), mission.getMissionOwner(), mission.getMissionIndex());
         }
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
 
-        notifyZoneChange(cardEntity, oldZone, newZone, mission.getOwner(), mission.getMissionIndex());
+        notifyZoneChange(cardEntity, oldZone, newZone, mission.getMissionOwner(), mission.getMissionIndex());
     }
 
     public void removeCardFromMission(Entity cardEntity) {
