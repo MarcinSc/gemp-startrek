@@ -79,9 +79,6 @@ public class SerializingClientConnection<T> implements ClientConnection {
     public void applyChanges() {
         if (entitiesRemoved.size > 0 || entitiesModified.size > 0
                 || entitiesCreated.size > 0 || eventsToSend.size() > 0) {
-            for (String entityId : entitiesRemoved) {
-                session.sendMessage(new NetworkMessage<>(entityId, NetworkMessage.Type.ENTITY_REMOVED, (T) null));
-            }
             for (ObjectMap.Entry<String, Entity> entityEntry : entitiesCreated) {
                 List<T> entityData = convertToEntityData(entityEntry.value);
                 session.sendMessage(new NetworkMessage<>(entityEntry.key, NetworkMessage.Type.ENTITY_CREATED, entityData));
@@ -92,6 +89,9 @@ public class SerializingClientConnection<T> implements ClientConnection {
             }
             for (NetworkMessage<T> networkMessage : eventsToSend) {
                 session.sendMessage(networkMessage);
+            }
+            for (String entityId : entitiesRemoved) {
+                session.sendMessage(new NetworkMessage<>(entityId, NetworkMessage.Type.ENTITY_REMOVED, (T) null));
             }
 
             entitiesCreated.clear();

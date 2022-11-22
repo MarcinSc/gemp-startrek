@@ -19,8 +19,8 @@ public class BeamTest extends AbstractGameTest {
 
         ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
         Entity headquartersMission = MissionOperations.findMission(world, "test1", 2);
-        zoneOperations.moveCardToMission(personnel, headquartersMission, false);
-        zoneOperations.moveCardToMission(ship, headquartersMission, true);
+        zoneOperations.moveFromCurrentZoneToMission(personnel, headquartersMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(ship, headquartersMission, true);
 
         // Pass the play or draw
         sendDecisionSuccessfully("test1",
@@ -43,8 +43,8 @@ public class BeamTest extends AbstractGameTest {
 
         ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
         Entity headquartersMission = MissionOperations.findMission(world, "test1", 2);
-        zoneOperations.moveCardToMission(personnel, headquartersMission, false);
-        zoneOperations.moveCardToMission(ship, headquartersMission, true);
+        zoneOperations.moveFromCurrentZoneToMission(personnel, headquartersMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(ship, headquartersMission, true);
 
         // Pass the play or draw
         sendDecisionSuccessfully("test1",
@@ -73,9 +73,9 @@ public class BeamTest extends AbstractGameTest {
 
         ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
         Entity headquartersMission = MissionOperations.findMission(world, "test1", 2);
-        zoneOperations.moveCardToMission(personnel, headquartersMission, false);
-        zoneOperations.moveCardToMission(ship1, headquartersMission, true);
-        zoneOperations.moveCardToMission(ship2, headquartersMission, true);
+        zoneOperations.moveFromCurrentZoneToMission(personnel, headquartersMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(ship1, headquartersMission, true);
+        zoneOperations.moveFromCurrentZoneToMission(ship2, headquartersMission, true);
 
         // Pass the play or draw
         sendDecisionSuccessfully("test1",

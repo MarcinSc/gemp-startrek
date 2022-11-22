@@ -11,9 +11,8 @@
       "cardMemory": "playedCardId"
     },
     {
-      "type": "moveCardToZone",
-      "filter": "memory(playedCardId)",
-      "zone": "Core"
+      "type": "moveCardToCore",
+      "filter": "memory(playedCardId)"
     },
     {
       "tpl:extends": "game/effect/trigger/playMandatoryTriggers.template"

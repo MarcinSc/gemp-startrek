@@ -52,7 +52,7 @@ public abstract class AbstractGameTest {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         card.setOwner(player);
         card.setCardId(cardId);
-        world.getSystem(ZoneOperations.class).moveCardToTopOfDeck(cardEntity);
+        world.getSystem(ZoneOperations.class).setupCardToTopOfDeck(cardEntity);
     }
 
     protected Array<Entity> getCardsInHand(String player) {

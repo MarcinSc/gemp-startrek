@@ -14,6 +14,30 @@ import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.template.CardTemplates;
 
 public class CardZoneUtil {
+    public static boolean isCardRendered(CardZone zone) {
+        if (zone == CardZone.Deck || zone == CardZone.DilemmaPile || zone == CardZone.DilemmaStack)
+            return false;
+        return true;
+    }
+
+    public static boolean isBigCard(CardZone zone) {
+        if (zone == CardZone.Hand || zone == CardZone.Stack || zone == CardZone.DiscardPile)
+            return true;
+        return false;
+    }
+
+    public static boolean isCardFaceUp(CardZone zone, CardType cardType, boolean owner) {
+        if (zone == CardZone.Brig || zone == CardZone.Core || zone == CardZone.Stack || zone == CardZone.DiscardPile) {
+            return true;
+        }
+        if (owner && (zone == CardZone.Hand || zone == CardZone.Mission)) {
+            return true;
+        }
+        if (zone == CardZone.Mission && (cardType == CardType.Ship || cardType == CardType.Mission))
+            return true;
+        return false;
+    }
+
     public static void addCardInHand(Entity cardEntity, CardComponent card,
                                      CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
                                      CardRenderingSystem cardRenderingSystem) {
@@ -95,16 +119,6 @@ public class CardZoneUtil {
         cardRenderingSystem.getCommonZones().addObjectToStack(objectEntity, objectRepresentation);
     }
 
-    public static void addCardInMission(Entity cardEntity,
-                                        CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
-                                        CardRenderingSystem cardRenderingSystem) {
-        CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
-        int missionIndex = cardInMission.getMissionIndex();
-        String missionOwner = cardInMission.getMissionOwner();
-        addCardInMission(cardEntity, missionIndex, missionOwner,
-                cardLookupSystem, spawnSystem, cardRenderingSystem);
-    }
-
     public static void addAttachedCardInMission(
             Entity cardEntity, Entity attachedToCardEntity,
             CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
@@ -124,9 +138,9 @@ public class CardZoneUtil {
                 addAttachedCard(attachedToCardEntity, cardEntity, cardRepresentation);
     }
 
-    private static Entity addCardInMission(Entity cardEntity, int missionIndex, String missionOwner,
-                                           CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
-                                           CardRenderingSystem cardRenderingSystem) {
+    public static Entity addCardInMission(Entity cardEntity, String missionOwner, int missionIndex,
+                                          CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
+                                          CardRenderingSystem cardRenderingSystem) {
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);

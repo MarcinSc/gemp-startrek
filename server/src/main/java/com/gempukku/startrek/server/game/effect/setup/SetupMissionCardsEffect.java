@@ -53,7 +53,7 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
                 });
         for (int i = 0; i < playerMissions.size; i++) {
             Entity missionEntity = playerMissions.get(i);
-            zoneOperations.moveCardToMission(missionEntity, MissionOperations.findMission(world, username, i), true);
+            zoneOperations.moveFromCurrentZoneToMission(missionEntity, MissionOperations.findMission(world, username, i), true);
         }
     }
 

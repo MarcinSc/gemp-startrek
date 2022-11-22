@@ -31,8 +31,7 @@ public class MoveCardToStackEffect extends OneTimeEffectSystem {
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
-                        zoneOperations.removeFromCurrentZone(cardEntity);
-                        zoneOperations.moveCardToStack(cardEntity, abilityIndex);
+                        zoneOperations.moveFromCurrentZoneToStack(cardEntity, abilityIndex);
                     }
                 });
     }

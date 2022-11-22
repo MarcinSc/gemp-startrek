@@ -18,30 +18,37 @@ import com.gempukku.startrek.game.render.zone.MissionCards;
 import com.gempukku.startrek.game.render.zone.PlayerZones;
 import com.gempukku.startrek.game.template.CardTemplates;
 
-public class FaceDownCardTrackingSystem extends BaseSystem {
+public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
     private AuthenticationHolderSystem authenticationHolderSystem;
     private PlayerPositionSystem playerPositionSystem;
     private CardRenderingSystem cardRenderingSystem;
     private SpawnSystem spawnSystem;
     private TransformSystem transformSystem;
 
-    private boolean stateChanged = false;
+    private boolean initializedState = false;
+    private boolean processState = false;
 
     @EventListener
     public void serverStateChanged(ServerStateChanged serverStateChanged, Entity entity) {
-        stateChanged = true;
+        if (!initializedState) {
+            processState = true;
+            initializedState = true;
+        }
     }
 
     @Override
     protected void processSystem() {
-        if (stateChanged) {
-            stateChanged = false;
-
-            updateUnknownPlayersHands();
-            updatePlayersDecks();
-            updatePlayersDilemmaPiles();
-            updatePlayersMissions();
+        if (processState) {
+            processServerState();
+            processState = false;
         }
+    }
+
+    private void processServerState() {
+        updateUnknownPlayersHands();
+        updatePlayersDecks();
+        updatePlayersDilemmaPiles();
+        updatePlayersMissions();
     }
 
     private void updatePlayersMissions() {

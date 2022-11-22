@@ -2,22 +2,32 @@ package com.gempukku.startrek.game.zone;
 
 import com.artemis.*;
 import com.artemis.utils.IntBag;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.gempukku.libgdx.lib.artemis.animation.AnimationDirectorSystem;
 import com.gempukku.libgdx.lib.artemis.animation.animator.WaitAnimator;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
+import com.gempukku.startrek.card.CardType;
+import com.gempukku.startrek.common.AuthenticationHolderSystem;
+import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.common.OrderComponent;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.EffectComponent;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
+import com.gempukku.startrek.game.render.zone.MissionCards;
+import com.gempukku.startrek.game.template.CardTemplates;
 
 public class GameStateCardsTrackingSystem extends BaseSystem {
+    private static final float CARD_ON_STACK_PAUSE = 1f;
+
     private CardLookupSystem cardLookupSystem;
     private SpawnSystem spawnSystem;
     private CardRenderingSystem cardRenderingSystem;
     private AnimationDirectorSystem animationDirectorSystem;
+    private IncomingUpdatesProcessor incomingUpdatesProcessor;
+    private AuthenticationHolderSystem authenticationHolderSystem;
 
     private ComponentMapper<OrderComponent> orderComponentMapper;
 
@@ -62,7 +72,7 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
         EffectComponent effect = effectEntity.getComponent(EffectComponent.class);
         CardZoneUtil.addEffectOnStack(effectEntity, effect, cardLookupSystem, spawnSystem, cardRenderingSystem,
                 orderComponentMapper);
-        animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+        animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(CARD_ON_STACK_PAUSE));
     }
 
     private void effectRemoved(int entityId) {
@@ -83,27 +93,77 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
     }
 
     @EventListener
-    public void cardZoneChanged(CardChangedZones cardChangedZones, Entity cardEntity) {
-        CardComponent card = cardEntity.getComponent(CardComponent.class);
+    public void cardZoneChanged(CardChangedZones cardChangedZones, Entity entity) {
+        String cardId = cardChangedZones.getCardId();
+        Entity cardEntity = incomingUpdatesProcessor.getEntityById(cardId);
 
-        CardZone oldZone = cardChangedZones.getPreviousZone();
-        CardZone newZone = card.getCardZone();
+        String cardOwner = cardChangedZones.getCardOwner();
+        CardZone fromZone = cardChangedZones.getFromZone();
+        CardZone toZone = cardChangedZones.getToZone();
+        String missionOwner = cardChangedZones.getMissionOwner();
+        int missionIndex = cardChangedZones.getMissionIndex();
 
-        Entity renderedCard = cardRenderingSystem.removeRenderedCard(cardEntity, oldZone);
-        if (renderedCard != null) {
-            if (isBigCardZone(oldZone) == isBigCardZone(newZone)) {
-                moveCardToZone(cardEntity, renderedCard, card, oldZone, newZone);
-            } else {
+        System.out.println("From zone: " + fromZone + ", to zone: " + toZone);
+
+        if (cardEntity != null) {
+            // Moving card either to or from a zone where the card is known
+            CardComponent card = cardEntity.getComponent(CardComponent.class);
+            boolean owner = authenticationHolderSystem.getUsername().equals(card.getOwner());
+            CardType type = cardLookupSystem.getCardDefinition(cardEntity).getType();
+
+            boolean faceUpInFromZone = CardZoneUtil.isCardFaceUp(fromZone, type, owner);
+            boolean faceUpInToZone = CardZoneUtil.isCardFaceUp(toZone, type, owner);
+
+            if (faceUpInFromZone && faceUpInToZone) {
+                Entity renderedCard = cardRenderingSystem.removeRenderedCard(cardEntity, fromZone);
+                if (renderedCard != null) {
+                    if (CardZoneUtil.isBigCard(fromZone) == CardZoneUtil.isBigCard(toZone)) {
+                        moveCardToZone(cardEntity, renderedCard, card, toZone, missionOwner, missionIndex);
+                    } else {
+                        world.deleteEntity(renderedCard);
+                        createAndAddCardToZone(cardEntity, card, toZone, missionOwner, missionIndex);
+                    }
+                } else {
+                    createAndAddCardToZone(cardEntity, card, toZone, missionOwner, missionIndex);
+                }
+            } else if (faceUpInFromZone) {
+                Entity renderedCard = cardRenderingSystem.removeRenderedCard(cardEntity, fromZone);
                 world.deleteEntity(renderedCard);
-                createAndAddCardToZone(cardEntity, card, newZone);
+                if (CardZoneUtil.isCardRendered(toZone))
+                    createFaceDownCardAndAddToZone(cardOwner, toZone, missionOwner, missionIndex);
+            } else if (faceUpInToZone) {
+                if (CardZoneUtil.isCardRendered(fromZone)) {
+                    Entity renderedCard = removeFaceDownCard(cardOwner, fromZone, missionOwner, missionIndex);
+                    world.deleteEntity(renderedCard);
+                }
+                createAndAddCardToZone(cardEntity, card, toZone, missionOwner, missionIndex);
+            } else {
+                throw new GdxRuntimeException("Unexpected state, card is known, but not face up for the player");
             }
         } else {
-            createAndAddCardToZone(cardEntity, card, newZone);
+            // Moving card between unknown zones
+            boolean renderedInFromZone = CardZoneUtil.isCardRendered(fromZone);
+            boolean renderedInToZone = CardZoneUtil.isCardRendered(toZone);
+            if (renderedInFromZone && renderedInToZone) {
+                if (CardZoneUtil.isBigCard(fromZone) == CardZoneUtil.isBigCard(toZone)) {
+                    Entity removedCard = removeFaceDownCard(cardOwner, fromZone, missionOwner, missionIndex);
+                    moveFaceDownCardToZone(cardOwner, toZone, removedCard, missionOwner, missionIndex);
+                } else {
+                    Entity removedCard = removeFaceDownCard(cardOwner, fromZone, missionOwner, missionIndex);
+                    world.deleteEntity(removedCard);
+                    createFaceDownCardAndAddToZone(cardOwner, toZone, missionOwner, missionIndex);
+                }
+            } else if (renderedInFromZone) {
+                Entity removedCard = removeFaceDownCard(cardOwner, fromZone, missionOwner, missionIndex);
+                world.deleteEntity(removedCard);
+            } else if (renderedInToZone) {
+                createFaceDownCardAndAddToZone(cardOwner, fromZone, missionOwner, missionIndex);
+            }
         }
     }
 
     private void moveCardToZone(Entity cardEntity, Entity renderedCard, CardComponent card,
-                                CardZone oldZone, CardZone zone) {
+                                CardZone zone, String missionOwner, int missionIndex) {
         if (zone == CardZone.Hand)
             CardZoneUtil.moveCardToHand(cardEntity, renderedCard, card, cardRenderingSystem);
         if (zone == CardZone.Brig)
@@ -112,18 +172,57 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
             CardZoneUtil.moveCardToCore(cardEntity, renderedCard, card, cardRenderingSystem);
         if (zone == CardZone.Stack) {
             CardZoneUtil.moveObjectToStack(cardEntity, renderedCard, cardRenderingSystem);
-            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(CARD_ON_STACK_PAUSE));
         }
-
-        CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
-        if (cardInMission != null) {
+        if (zone == CardZone.Mission) {
             CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardEntity);
-            CardZoneUtil.moveCardToMission(cardEntity, cardInMission.getMissionOwner(), cardInMission.getMissionIndex(),
+            CardZoneUtil.moveCardToMission(cardEntity, missionOwner, missionIndex,
                     renderedCard, card, cardDefinition, cardRenderingSystem);
         }
     }
 
-    private void createAndAddCardToZone(Entity cardEntity, CardComponent card, CardZone zone) {
+    private Entity removeFaceDownCard(String cardOwner, CardZone zone, String missionOwner, int missionIndex) {
+        if (zone == CardZone.Hand) {
+            return cardRenderingSystem.getPlayerCards(cardOwner).removeOneCardInHand();
+        }
+        if (zone == CardZone.Mission) {
+            MissionCards missionCards = cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex);
+            boolean player = missionOwner.equals(cardOwner);
+            if (player) {
+                return missionCards.removeFaceDownPlayerCard();
+            } else {
+                return missionCards.removeFaceDownOpponentCard();
+            }
+        }
+        throw new GdxRuntimeException("Unable to remove face down card from unknown zone");
+    }
+
+    private void createFaceDownCardAndAddToZone(String cardOwner, CardZone zone, String missionOwner, int missionIndex) {
+        if (zone == CardZone.Hand) {
+            Entity faceDownCard = CardTemplates.createFaceDownCard(spawnSystem);
+            moveFaceDownCardToZone(cardOwner, zone, faceDownCard, missionOwner, missionIndex);
+        }
+        if (zone == CardZone.Mission) {
+            Entity faceDownCard = CardTemplates.createSmallFaceDownCard(spawnSystem);
+            moveFaceDownCardToZone(cardOwner, zone, faceDownCard, missionOwner, missionIndex);
+        }
+    }
+
+    private void moveFaceDownCardToZone(String cardOwner, CardZone zone, Entity renderedCard, String missionOwner, int missionIndex) {
+        if (zone == CardZone.Hand) {
+            cardRenderingSystem.getPlayerCards(cardOwner).addCardInHand(null, renderedCard);
+        }
+        if (zone == CardZone.Mission) {
+            MissionCards missionCards = cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex);
+            boolean player = missionOwner.equals(cardOwner);
+            if (player)
+                missionCards.addPlayerTopLevelCardInMission(null, renderedCard);
+            else
+                missionCards.addOpponentTopLevelCardInMission(null, renderedCard);
+        }
+    }
+
+    private void createAndAddCardToZone(Entity cardEntity, CardComponent card, CardZone zone, String missionOwner, int missionIndex) {
         if (zone == CardZone.Hand)
             CardZoneUtil.addCardInHand(cardEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem);
         if (zone == CardZone.Brig)
@@ -133,17 +232,11 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
         if (zone == CardZone.Stack) {
             CardZoneUtil.addCardOnStack(cardEntity, card, cardLookupSystem, spawnSystem, cardRenderingSystem,
                     orderComponentMapper);
-            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(CARD_ON_STACK_PAUSE));
         }
-
-        if (cardEntity.getComponent(CardInMissionComponent.class) != null)
-            CardZoneUtil.addCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);
-    }
-
-    private boolean isBigCardZone(CardZone zone) {
-        if (zone == CardZone.Hand || zone == CardZone.Stack)
-            return true;
-        return false;
+        if (zone == CardZone.Mission) {
+            CardZoneUtil.addCardInMission(cardEntity, missionOwner, missionIndex, cardLookupSystem, spawnSystem, cardRenderingSystem);
+        }
     }
 
     @Override

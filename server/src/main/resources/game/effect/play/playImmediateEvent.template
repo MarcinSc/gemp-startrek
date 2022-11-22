@@ -15,10 +15,9 @@
       "memoryCard": "playedCardId"
     },
     {
-      "type": "moveCardToZone",
+      "type": "moveCardToDiscardPile",
       "filter": "memory(playedCardId)",
-      "fromZone": "Stack",
-      "zone": "DiscardPile"
+      "fromZone": "Stack"
     },
     {
       "tpl:extends": "game/effect/trigger/playMandatoryTriggers.template"

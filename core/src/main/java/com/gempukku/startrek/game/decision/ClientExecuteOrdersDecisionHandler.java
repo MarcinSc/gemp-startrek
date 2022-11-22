@@ -172,7 +172,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
 
             VerticalGroup verticalGroup = new VerticalGroup();
 
-            beamFromMissionButton = new TextButton("From mission", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+            beamFromMissionButton = new TextButton("To ship", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
                 @Override
                 public float getPrefWidth() {
                     return 200;

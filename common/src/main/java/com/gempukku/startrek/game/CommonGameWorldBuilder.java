@@ -12,6 +12,8 @@ import com.gempukku.startrek.game.player.PlayerResolverSystem;
 public class CommonGameWorldBuilder {
     public static void createCommonSystems(WorldConfigurationBuilder worldConfigurationBuilder) {
         worldConfigurationBuilder.with(
+                new GameEntityProvider(),
+
                 new ExpressionSystem(),
 
                 // Player resolvers

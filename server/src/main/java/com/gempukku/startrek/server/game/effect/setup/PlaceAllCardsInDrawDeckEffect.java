@@ -39,7 +39,7 @@ public class PlaceAllCardsInDrawDeckEffect extends OneTimeEffectSystem {
                         if (cardComponent.getOwner().equals(player)) {
                             CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardComponent.getCardId());
                             if (cardDefinition.getType() != CardType.Dilemma && cardDefinition.getType() != CardType.Mission) {
-                                zoneOperations.moveCardToTopOfDeck(cardEntity);
+                                zoneOperations.setupCardToTopOfDeck(cardEntity);
                             }
                         }
                     }

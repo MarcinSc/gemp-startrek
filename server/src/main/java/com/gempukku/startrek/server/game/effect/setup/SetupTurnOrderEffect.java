@@ -4,8 +4,8 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
-import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.GameComponent;
+import com.gempukku.startrek.game.GameEntityProvider;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.turn.TurnSequenceComponent;
@@ -20,6 +20,7 @@ import java.util.List;
 public class SetupTurnOrderEffect extends EffectSystem {
     private SpawnSystem spawnSystem;
     private ExecutionStackSystem stackSystem;
+    private GameEntityProvider gameEntityProvider;
 
     private boolean test;
 
@@ -30,7 +31,7 @@ public class SetupTurnOrderEffect extends EffectSystem {
 
     @Override
     protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        GameComponent game = LazyEntityUtil.findEntityWithComponent(world, GameComponent.class).getComponent(GameComponent.class);
+        GameComponent game = gameEntityProvider.getGameEntity().getComponent(GameComponent.class);
 
         Entity turnSequenceEntity = spawnSystem.spawnEntity("game/turnSequence.template");
         Array<String> players = game.getPlayers();

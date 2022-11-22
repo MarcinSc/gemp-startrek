@@ -55,8 +55,11 @@ public class InitialGameStateCardsCreatorSystem extends BaseSystem {
 
     private void processTopLevelCardInMission(Entity cardEntity) {
         CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
-        if (cardInPlay.getAttachedToId() == null)
-            CardZoneUtil.addCardInMission(cardEntity, cardLookupSystem, spawnSystem, cardRenderingSystem);
+        if (cardInPlay.getAttachedToId() == null) {
+            CardInMissionComponent cardInMisison = cardEntity.getComponent(CardInMissionComponent.class);
+            CardZoneUtil.addCardInMission(cardEntity, cardInMisison.getMissionOwner(), cardInMisison.getMissionIndex(),
+                    cardLookupSystem, spawnSystem, cardRenderingSystem);
+        }
     }
 
     private void processAttachedCardInMission(Entity cardEntity) {

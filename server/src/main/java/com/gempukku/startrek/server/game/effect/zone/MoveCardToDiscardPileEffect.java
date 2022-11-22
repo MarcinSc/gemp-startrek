@@ -14,20 +14,19 @@ import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 
 import java.util.function.Consumer;
 
-public class MoveCardToZoneEffect extends OneTimeEffectSystem {
+public class MoveCardToDiscardPileEffect extends OneTimeEffectSystem {
     private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private EventSystem eventSystem;
     private ZoneOperations zoneOperations;
 
-    public MoveCardToZoneEffect() {
-        super("moveCardToZone");
+    public MoveCardToDiscardPileEffect() {
+        super("moveCardToDiscardPile");
     }
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String filter = gameEffect.getDataString("filter");
-        CardZone zone = CardZone.valueOf(gameEffect.getDataString("zone"));
         String fromZoneStr = gameEffect.getDataString("fromZone", null);
         CardZone fromZone = (fromZoneStr != null) ? CardZone.valueOf(fromZoneStr) : null;
 
@@ -38,8 +37,7 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
                         CardComponent card = cardEntity.getComponent(CardComponent.class);
                         CardZone oldZone = card.getCardZone();
                         if (fromZone == null || oldZone == fromZone) {
-                            zoneOperations.removeFromCurrentZone(cardEntity);
-                            zoneOperations.moveToNewZone(cardEntity, zone);
+                            zoneOperations.moveFromCurrentZoneToDiscardPile(cardEntity);
                         }
                     }
                 });
@@ -48,7 +46,7 @@ public class MoveCardToZoneEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter", "zone"},
+                new String[]{"filter"},
                 new String[]{"fromZone"});
         cardFilterResolverSystem.validateFilter(effect.getString("filter"));
         CardZone.valueOf(effect.getString("zone"));

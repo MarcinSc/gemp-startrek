@@ -11,7 +11,6 @@ import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
-import com.gempukku.startrek.server.game.effect.zone.MoveCardToZoneEffect;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 
 import java.util.function.Consumer;
@@ -21,7 +20,6 @@ public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
     private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private ZoneOperations zoneOperations;
-    private MoveCardToZoneEffect moveCardToZoneEffect;
 
     public PlaceCardInHandOnBottomOfDeckEffect() {
         super("placeCardInHandOnBottomOfDeck");
@@ -45,8 +43,7 @@ public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
         cardsToMove.shuffle();
 
         for (Entity card : cardsToMove) {
-            zoneOperations.removeFromCurrentZone(card);
-            zoneOperations.moveCardToBottomOfDeck(card);
+            zoneOperations.moveFromCurrentZoneToBottomOfDeck(card);
         }
     }
 

@@ -5,8 +5,8 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
-import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.game.GameComponent;
+import com.gempukku.startrek.game.GameEntityProvider;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
@@ -17,6 +17,8 @@ import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 public class StackActionEffect extends EffectSystem {
     private GameEffectSystem gameEffectSystem;
     private SpawnSystem spawnSystem;
+    private GameEntityProvider gameEntityProvider;
+
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
     private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;
 
@@ -50,7 +52,7 @@ public class StackActionEffect extends EffectSystem {
     }
 
     private void stackForEachPlayerEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        GameComponent game = LazyEntityUtil.findEntityWithComponent(world, GameComponent.class).getComponent(GameComponent.class);
+        GameComponent game = gameEntityProvider.getGameEntity().getComponent(GameComponent.class);
         Array<String> players = game.getPlayers();
 
         String playerIndex = memory.getValue("playerIndex");

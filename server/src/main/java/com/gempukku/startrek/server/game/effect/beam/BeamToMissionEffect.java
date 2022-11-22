@@ -5,8 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
-import com.gempukku.startrek.LazyEntityUtil;
-import com.gempukku.startrek.game.GameComponent;
+import com.gempukku.startrek.game.GameEntityProvider;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.card.CardFilteringSystem;
@@ -24,6 +23,7 @@ public class BeamToMissionEffect extends OneTimeEffectSystem {
     private ZoneOperations zoneOperations;
     private ServerEntityIdSystem serverEntityIdSystem;
     private EventSystem eventSystem;
+    private GameEntityProvider gameEntityProvider;
 
     public BeamToMissionEffect() {
         super("beamToMission");
@@ -44,7 +44,8 @@ public class BeamToMissionEffect extends OneTimeEffectSystem {
                     }
                 });
         eventSystem.fireEvent(new CardsBeamed(serverEntityIdSystem.getEntityId(shipEntity), null,
-                cardIds), LazyEntityUtil.findEntityWithComponent(world, GameComponent.class));
+                cardIds), gameEntityProvider.getGameEntity());
+
     }
 
     @Override

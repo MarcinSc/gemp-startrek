@@ -27,7 +27,7 @@ public class DestroyEffect extends OneTimeEffectSystem {
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
-                        zoneOperations.removeFromCurrentZone(cardEntity);
+                        zoneOperations.moveFromCurrentZoneToDiscardPile(cardEntity);
                     }
                 });
     }

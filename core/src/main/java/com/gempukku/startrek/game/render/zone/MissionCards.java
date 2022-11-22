@@ -60,7 +60,9 @@ public class MissionCards {
     }
 
     public Entity removeFaceDownPlayerCard() {
-        return faceDownPlayerCards.removeIndex(faceDownPlayerCards.size - 1);
+        Entity renderedCard = faceDownPlayerCards.removeIndex(faceDownPlayerCards.size - 1);
+        playerTopLevelCardsInMission.removeValue(renderedCard, true);
+        return renderedCard;
     }
 
     public Entity removePlayerTopLevelCardInMission(Entity card) {
@@ -88,7 +90,9 @@ public class MissionCards {
     }
 
     public Entity removeFaceDownOpponentCard() {
-        return faceDownOpponentCards.removeIndex(faceDownOpponentCards.size - 1);
+        Entity renderedCard = faceDownOpponentCards.removeIndex(faceDownPlayerCards.size - 1);
+        opponentTopLevelCardsInMission.removeValue(renderedCard, true);
+        return renderedCard;
     }
 
     public Entity removeOpponentTopLevelCardInMission(Entity card) {
@@ -120,22 +124,26 @@ public class MissionCards {
     }
 
     public void addAttachedCard(Entity attachedToCardEntity, Entity cardEntity, Entity cardRepresentation) {
-        renderedCards.put(cardEntity, cardRepresentation);
+        if (cardEntity != null) {
+            renderedCards.put(cardEntity, cardRepresentation);
+        }
         Entity renderedAttachedTo = renderedCards.get(attachedToCardEntity);
         attachedCardsInMission.get(renderedAttachedTo).add(cardRepresentation);
+        missionDirty = true;
     }
 
-    //
-//    public void addAttachedCardInMission(Entity card, Entity attachedTo, Entity renderedCard) {
-//        renderedCards.put(card, renderedCard);
-//        Array<Entity> attachedCards = attachedCardsInMission.get(attachedTo);
-//        attachedCards.add(renderedCard);
-//    }
-//
-//    public Entity removeAttachedCardInMission(Entity card, Entity attachedTo) {
-//        Entity rendered = renderedCards.remove(card);
-//        Array<Entity> attachedCards = attachedCardsInMission.get(attachedTo);
-//        attachedCards.removeValue(card, true);
-//        return rendered;
-//    }
+    public Entity removeAttachedCard(Entity attachedToCardEntity, Entity cardEntity) {
+        Entity renderedEntity = renderedCards.remove(cardEntity);
+        Entity renderedAttachedTo = renderedCards.get(attachedToCardEntity);
+        attachedCardsInMission.get(renderedAttachedTo).removeValue(renderedEntity, true);
+        missionDirty = true;
+        return renderedEntity;
+    }
+
+    public Entity removeFaceDownAttachedCard(Entity attachedToCardEntity) {
+        Entity renderedAttachedTo = renderedCards.get(attachedToCardEntity);
+        Array<Entity> entities = attachedCardsInMission.get(renderedAttachedTo);
+        missionDirty = true;
+        return entities.removeIndex(entities.size - 1);
+    }
 }

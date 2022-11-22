@@ -39,7 +39,7 @@ public class PlaceAllDilemmasInDeckEffect extends OneTimeEffectSystem {
                         if (cardComponent.getOwner().equals(player)) {
                             CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardComponent.getCardId());
                             if (cardDefinition.getType() == CardType.Dilemma) {
-                                zoneOperations.moveCardToTopOfDilemmaPile(cardEntity, false);
+                                zoneOperations.setupCardToTopOfDilemmaPile(cardEntity, false);
                             }
                         }
                     }

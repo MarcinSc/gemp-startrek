@@ -29,9 +29,7 @@ public class DrawCardEffect extends OneTimeEffectSystem {
         String player = gameEffect.getDataString("player");
         Entity playerEntity = playerResolverSystem.resolvePlayer(sourceEntity, memory, player);
 
-        Entity cardEntity = zoneOperations.removeTopCardOfDeck(playerEntity);
-        if (cardEntity != null)
-            zoneOperations.moveCardToHand(cardEntity);
+        zoneOperations.moveFromTopOfDeckToHand(playerEntity);
     }
 
     @Override
