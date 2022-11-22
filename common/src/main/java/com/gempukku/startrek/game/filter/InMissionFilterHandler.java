@@ -8,11 +8,11 @@ import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
-public class OnMissionFilterHandler extends CardFilterSystem {
+public class InMissionFilterHandler extends CardFilterSystem {
     private PlayerResolverSystem playerResolverSystem;
     private AmountResolverSystem amountResolverSystem;
 
-    public OnMissionFilterHandler() {
+    public InMissionFilterHandler() {
         super("inMission");
     }
 
