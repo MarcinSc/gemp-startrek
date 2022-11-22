@@ -197,12 +197,25 @@ public class ZoneOperations extends BaseSystem {
 
             CardComponent card = cardEntity.getComponent(CardComponent.class);
             decrementFaceDownCardCount(card.getOwner(), missionOwner, missionIndex);
+            incrementFaceDownCardOnCard(shipEntity);
         }
 
         String shipId = serverEntityIdSystem.getEntityId(shipEntity);
         CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
         cardInPlay.setAttachedToId(shipId);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+    }
+
+    private void incrementFaceDownCardOnCard(Entity shipEntity) {
+        CardInPlayComponent cardInPlay = shipEntity.getComponent(CardInPlayComponent.class);
+        cardInPlay.setAttachedFaceDownCount(cardInPlay.getAttachedFaceDownCount() + 1);
+        eventSystem.fireEvent(EntityUpdated.instance, shipEntity);
+    }
+
+    private void decrementFaceDownCardOnCard(Entity shipEntity) {
+        CardInPlayComponent cardInPlay = shipEntity.getComponent(CardInPlayComponent.class);
+        cardInPlay.setAttachedFaceDownCount(cardInPlay.getAttachedFaceDownCount() - 1);
+        eventSystem.fireEvent(EntityUpdated.instance, shipEntity);
     }
 
     public void unattachFromShip(Entity shipEntity, Entity cardEntity) {
@@ -216,6 +229,7 @@ public class ZoneOperations extends BaseSystem {
             String cardOwner = card.getOwner();
 
             incrementFaceDownCardCount(cardOwner, missionOwner, missionIndex);
+            decrementFaceDownCardOnCard(shipEntity);
         }
 
         CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
@@ -246,6 +260,9 @@ public class ZoneOperations extends BaseSystem {
         CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
         cardInPlay.setAttachedToId(shipId);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+
+        decrementFaceDownCardOnCard(fromShipEntity);
+        incrementFaceDownCardOnCard(toShipEntity);
     }
 
     public void moveFromCurrentZoneToCore(Entity cardEntity) {

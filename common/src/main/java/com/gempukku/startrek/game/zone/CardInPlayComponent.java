@@ -7,6 +7,7 @@ import com.gempukku.libgdx.network.server.config.annotation.ReplicateWithOthers;
 public class CardInPlayComponent extends Component {
     private boolean stopped;
     private String attachedToId;
+    private int attachedFaceDownCount;
 
     public boolean isStopped() {
         return stopped;
@@ -22,5 +23,13 @@ public class CardInPlayComponent extends Component {
 
     public void setAttachedToId(String attachedToId) {
         this.attachedToId = attachedToId;
+    }
+
+    public int getAttachedFaceDownCount() {
+        return attachedFaceDownCount;
+    }
+
+    public void setAttachedFaceDownCount(int attachedFaceDownCount) {
+        this.attachedFaceDownCount = attachedFaceDownCount;
     }
 }

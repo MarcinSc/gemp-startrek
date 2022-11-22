@@ -8,9 +8,11 @@ import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.common.ServerStateChanged;
+import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.PlayerPosition;
 import com.gempukku.startrek.game.PlayerPositionSystem;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
+import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
@@ -68,6 +70,16 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
     }
 
     private void updateFaceDownMissionCards(String missionOwner, MissionComponent mission, MissionCards missionCards) {
+        // At this point only top level revealed cards are there
+        for (Entity renderedCard : missionCards.getPlayerTopLevelCardsInMission()) {
+            Entity serverCard = world.getEntity(renderedCard.getComponent(ServerCardReferenceComponent.class).getEntityId());
+            addAttachedCards(serverCard, missionCards);
+        }
+        for (Entity renderedCard : missionCards.getOpponentTopLevelCardsInMission()) {
+            Entity serverCard = world.getEntity(renderedCard.getComponent(ServerCardReferenceComponent.class).getEntityId());
+            addAttachedCards(serverCard, missionCards);
+        }
+
         int playerFaceDownCardCount = 0;
         int opponentFaceDownCardCount = 0;
         for (ObjectMap.Entry<String, PlayerPosition> cardOwnerEntry : playerPositionSystem.getPlayerPositions()) {
@@ -81,33 +93,22 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
             }
         }
 
-        int existingPlayerFaceDownCards = missionCards.getFaceDownPlayerCardCount();
-        if (existingPlayerFaceDownCards > playerFaceDownCardCount) {
-            int destroyCount = existingPlayerFaceDownCards - playerFaceDownCardCount;
-            for (int i = 0; i < destroyCount; i++) {
-                Entity removedCard = missionCards.removeFaceDownPlayerCard();
-                world.deleteEntity(removedCard);
-            }
-
-        } else if (existingPlayerFaceDownCards < playerFaceDownCardCount) {
-            int createCount = playerFaceDownCardCount - existingPlayerFaceDownCards;
-            for (int i = 0; i < createCount; i++) {
-                addFaceDownPlayerCard(missionCards);
-            }
+        for (int i = 0; i < playerFaceDownCardCount; i++) {
+            addFaceDownPlayerCard(missionCards);
         }
+        for (int i = 0; i < opponentFaceDownCardCount; i++) {
+            addFaceDownOpponentCard(missionCards);
+        }
+    }
 
-        int existingOpponentFaceDownCards = missionCards.getFaceDownOpponentCardCount();
-        if (existingOpponentFaceDownCards > opponentFaceDownCardCount) {
-            int destroyCount = existingOpponentFaceDownCards - opponentFaceDownCardCount;
-            for (int i = 0; i < destroyCount; i++) {
-                Entity removedCard = missionCards.removeFaceDownOpponentCard();
-                world.deleteEntity(removedCard);
-            }
-
-        } else if (existingOpponentFaceDownCards < opponentFaceDownCardCount) {
-            int createCount = opponentFaceDownCardCount - existingOpponentFaceDownCards;
-            for (int i = 0; i < createCount; i++) {
-                addFaceDownOpponentCard(missionCards);
+    private void addAttachedCards(Entity topLevelCard, MissionCards missionCards) {
+        CardInPlayComponent cardInPlay = topLevelCard.getComponent(CardInPlayComponent.class);
+        String ownerUsername = topLevelCard.getComponent(CardComponent.class).getOwner();
+        // Process face down cards only for players that are not owners of the card
+        if (!ownerUsername.equals(authenticationHolderSystem.getUsername())) {
+            for (int i = 0; i < cardInPlay.getAttachedFaceDownCount(); i++) {
+                Entity cardRepresentation = CardTemplates.createSmallFaceDownCard(spawnSystem);
+                missionCards.addAttachedCard(topLevelCard, null, cardRepresentation);
             }
         }
     }
@@ -121,18 +122,8 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
 
             PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
             int deckCount = getRenderedDeckSize(publicStats.getDeckCount());
-            int renderedCount = playerZones.getCardInDeckCount();
-            if (renderedCount > deckCount) {
-                int destroyCount = renderedCount - deckCount;
-                for (int i = 0; i < destroyCount; i++) {
-                    Entity removedCard = playerZones.removeOneCardInDeck();
-                    world.deleteEntity(removedCard);
-                }
-            } else if (renderedCount < deckCount) {
-                int createCount = deckCount - renderedCount;
-                for (int i = 0; i < createCount; i++) {
-                    addFaceDownCardToDeck(playerZones);
-                }
+            for (int i = 0; i < deckCount; i++) {
+                addFaceDownCardToDeck(playerZones);
             }
         }
     }
@@ -146,18 +137,8 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
 
             PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
             int deckCount = getRenderedDeckSize(publicStats.getDilemmaCount());
-            int renderedCount = playerZones.getCardInDilemmaCount();
-            if (renderedCount > deckCount) {
-                int destroyCount = renderedCount - deckCount;
-                for (int i = 0; i < destroyCount; i++) {
-                    Entity removedCard = playerZones.removeOneCardInDilemmaPile();
-                    world.deleteEntity(removedCard);
-                }
-            } else if (renderedCount < deckCount) {
-                int createCount = deckCount - renderedCount;
-                for (int i = 0; i < createCount; i++) {
-                    addFaceDownCardToDilemmaPile(playerZones);
-                }
+            for (int i = 0; i < deckCount; i++) {
+                addFaceDownCardToDilemmaPile(playerZones);
             }
         }
     }
@@ -207,18 +188,8 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
     private void updatePlayerUnknownHand(PlayerPosition playerPosition, PlayerZones playerZones, Entity playerEntity) {
         PlayerPublicStatsComponent publicStats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         int handCount = publicStats.getHandCount();
-        int renderedCount = playerZones.getCardInHandCount();
-        if (renderedCount > handCount) {
-            int destroyCount = renderedCount - handCount;
-            for (int i = 0; i < destroyCount; i++) {
-                Entity removedCard = playerZones.removeOneCardInHand();
-                world.deleteEntity(removedCard);
-            }
-        } else if (renderedCount < handCount) {
-            int createCount = handCount - renderedCount;
-            for (int i = 0; i < createCount; i++) {
-                addFaceDownCardToHand(playerPosition);
-            }
+        for (int i = 0; i < handCount; i++) {
+            addFaceDownCardToHand(playerPosition);
         }
     }
 

@@ -35,6 +35,7 @@ public class BeamTest extends AbstractGameTest {
         assertEquals(getCardId(ship), personnel.getComponent(CardInPlayComponent.class).getAttachedToId());
         MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
         assertEquals(0, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
+        assertEquals(1, ship.getComponent(CardInPlayComponent.class).getAttachedFaceDownCount());
     }
 
     @Test
@@ -66,6 +67,7 @@ public class BeamTest extends AbstractGameTest {
         assertNull(personnel.getComponent(CardInPlayComponent.class).getAttachedToId());
         MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
         assertEquals(1, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
+        assertEquals(0, ship.getComponent(CardInPlayComponent.class).getAttachedFaceDownCount());
     }
 
     @Test
@@ -100,6 +102,8 @@ public class BeamTest extends AbstractGameTest {
         assertEquals(getCardId(ship2), personnel.getComponent(CardInPlayComponent.class).getAttachedToId());
         MissionComponent mission = MissionOperations.findMission(world, "test1", 2).getComponent(MissionComponent.class);
         assertEquals(0, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
+        assertEquals(0, ship1.getComponent(CardInPlayComponent.class).getAttachedFaceDownCount());
+        assertEquals(1, ship2.getComponent(CardInPlayComponent.class).getAttachedFaceDownCount());
     }
     // TODO add negative tests
 }
