@@ -84,6 +84,9 @@
     "1_390": {
       "tpl:extends": "card/set1/1_390.json"
     },
+    "1_393": {
+      "tpl:extends": "card/set1/1_393.json"
+    },
     "1_4": {
       "tpl:extends": "card/set1/1_4.json"
     },

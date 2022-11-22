@@ -1,0 +1,19 @@
+{
+  "type": "Ship",
+  "affiliation": "Federation",
+  "cost": "4",
+  "title": "U.S.S. Excelsior",
+  "shipClass": "Excelsior",
+  "staffingRequirements": [
+    "Stf",
+    "Stf",
+    "Stf"
+  ],
+  "icons": [
+    "E"
+  ],
+  "range": 8,
+  "weapons": 7,
+  "shields": 7,
+  "lore": "Although the transwarp drive experiment of the late 23rd century was a failure, the design of the ship itself was one of Starfleet's greatest successes. New Excelsior-class ships were still being constructed over 75 years later."
+}

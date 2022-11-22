@@ -95,6 +95,22 @@ public class CardFilteringSystem extends BaseSystem {
         return findFirstCard(sourceEntity, memory, cardFilter) == null;
     }
 
+    public Array<Entity> findAllInPlay(Entity sourceEntity, Memory memory, String filter) {
+        Array<Entity> result = new Array<>();
+        forEachCardInPlay(sourceEntity, memory, filter,
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity entity) {
+                        result.add(entity);
+                    }
+                });
+        return result;
+    }
+
+    public Entity findFirstCard(Entity sourceEntity, Memory memory, String filter) {
+        return findFirstCard(sourceEntity, memory, cardFilterResolverSystem.resolveCardFilter(filter));
+    }
+
     public Entity findFirstCard(Entity sourceEntity, Memory memory, CardFilter filter) {
         Array<Entity> result = new Array<>();
         forEachCard(sourceEntity, memory, filter,

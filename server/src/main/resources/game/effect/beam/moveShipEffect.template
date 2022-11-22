@@ -1,0 +1,16 @@
+{
+  "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
+    "memoryType": "moveShip",
+    "memory": {
+      "shipId": "[shipId]",
+      "missionId": "[missionId]"
+    }
+  },
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "moveShip",
+    "data": {
+      "ship": "memory(shipId)",
+      "mission": "memory(missionId)"
+    }
+  }
+}

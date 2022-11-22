@@ -25,6 +25,7 @@ public class CommonGameWorldBuilder {
                 new HandCountAmountHandler(),
                 new DeckCountAmountHandler(),
                 new CostToPlayAmountHandler(),
+                new ShipRangeAmountHandler(),
                 new MemoryAmountHandler(),
                 new PlayerCountAmountHandler(),
 
@@ -46,6 +47,8 @@ public class CommonGameWorldBuilder {
                 new CardZoneFilterHandler(),
                 new AffiliationFilterHandler(),
                 new SkillFilterHandler(),
+                new StaffedFilterHandler(),
+                new InRangeFilterHandler(),
                 new MissionTypeFilterHandler(),
                 new MissionMatchesFilterHandler(),
                 new QuadrantFilterHandler(),

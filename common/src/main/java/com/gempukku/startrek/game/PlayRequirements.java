@@ -12,6 +12,23 @@ import com.gempukku.startrek.game.filter.OrCardFilter;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
 public class PlayRequirements {
+    public static CardFilter createMoveShipRequirements(
+            String username,
+            CardFilterResolverSystem cardFilterResolverSystem) {
+        return cardFilterResolverSystem.resolveCardFilter(
+                "type(Ship),unstopped,owner(username(" + username + ")),staffed");
+    }
+
+    public static CardFilter createMoveShipMissionRequirements(
+            String username,
+            Entity shipEntity,
+            CardFilterResolverSystem cardFilterResolverSystem) {
+        CardInMissionComponent cardInMission = shipEntity.getComponent(CardInMissionComponent.class);
+        String missionOwner = cardInMission.getMissionOwner();
+        int missionIndex = cardInMission.getMissionIndex();
+        return cardFilterResolverSystem.resolveCardFilter("type(Mission),not(inMission(username(" + missionOwner + ")," + missionIndex + ")),inRange");
+    }
+
     public static CardFilter createBeamFromMissionShipRequirements(
             String username,
             CardFilterResolverSystem cardFilterResolverSystem) {

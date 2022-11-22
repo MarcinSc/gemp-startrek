@@ -9,6 +9,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.*;
+import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
@@ -17,12 +18,15 @@ import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
 import com.gempukku.startrek.server.game.deck.PlayerDilemmaPileComponent;
 import com.gempukku.startrek.server.game.stack.ObjectStackSystem;
 
+import java.util.function.Consumer;
+
 public class ZoneOperations extends BaseSystem {
     private EventSystem eventSystem;
     private PlayerResolverSystem playerResolverSystem;
     private ObjectStackSystem objectStackSystem;
     private ServerEntityIdSystem serverEntityIdSystem;
     private GameEntityProvider gameEntityProvider;
+    private CardFilteringSystem cardFilteringSystem;
 
     private ComponentMapper<CardInPlayComponent> cardInPlayComponentMapper;
     private ComponentMapper<FaceUpCardInMissionComponent> faceUpCardInMissionComponentMapper;
@@ -263,6 +267,32 @@ public class ZoneOperations extends BaseSystem {
 
         decrementFaceDownCardOnCard(fromShipEntity);
         incrementFaceDownCardOnCard(toShipEntity);
+    }
+
+    public void moveShip(Entity shipEntity, Entity missionCardEntity) {
+        CardInMissionComponent cardInMission = missionCardEntity.getComponent(CardInMissionComponent.class);
+        String missionOwner = cardInMission.getMissionOwner();
+        int missionIndex = cardInMission.getMissionIndex();
+
+        CardInMissionComponent shipInMission = shipEntity.getComponent(CardInMissionComponent.class);
+        shipInMission.setMissionOwner(missionOwner);
+        shipInMission.setMissionIndex(missionIndex);
+        eventSystem.fireEvent(EntityUpdated.instance, shipEntity);
+
+        Array<String> attachedCardIds = new Array<>();
+        cardFilteringSystem.forEachCardInPlay(shipEntity, null, "attachedTo(self)",
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity entity) {
+                        CardInMissionComponent cardInMission = entity.getComponent(CardInMissionComponent.class);
+                        cardInMission.setMissionOwner(missionOwner);
+                        cardInMission.setMissionIndex(missionIndex);
+                        eventSystem.fireEvent(EntityUpdated.instance, entity);
+                        attachedCardIds.add(serverEntityIdSystem.getEntityId(entity));
+                    }
+                });
+
+        eventSystem.fireEvent(new ShipMoved(serverEntityIdSystem.getEntityId(shipEntity), attachedCardIds), gameEntityProvider.getGameEntity());
     }
 
     public void moveFromCurrentZoneToCore(Entity cardEntity) {

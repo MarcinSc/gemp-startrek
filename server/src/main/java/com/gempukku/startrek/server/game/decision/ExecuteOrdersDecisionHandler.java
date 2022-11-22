@@ -9,6 +9,7 @@ import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.PlayRequirements;
+import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
@@ -19,6 +20,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
     private DecisionSystem decisionSystem;
     private ExecutionStackSystem stackSystem;
     private CardFilterResolverSystem cardFilterResolverSystem;
+    private CardFilteringSystem cardFilteringSystem;
     private ServerEntityIdSystem serverEntityIdSystem;
     private SpawnSystem spawnSystem;
 
@@ -41,11 +43,34 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
                 return validateBeamToMission(decisionPlayer, result);
             } else if (action.equals("beamBetweenShips")) {
                 return validateBeamBetweenShips(decisionPlayer, result);
+            } else if (action.equals("moveShip")) {
+                return validateMoveShip(decisionPlayer, result);
             }
         } catch (Exception exp) {
             // Ignore
         }
         return false;
+    }
+
+    private boolean validateMoveShip(String decisionPlayer, ObjectMap<String, String> result) {
+        String shipId = result.get("shipId");
+        Entity shipEntity = serverEntityIdSystem.findfromId(shipId);
+        if (shipEntity == null)
+            return false;
+        String missionId = result.get("missionId");
+        Entity toMissionCardEntity = serverEntityIdSystem.findfromId(missionId);
+        if (toMissionCardEntity == null)
+            return false;
+
+        CardFilter moveShipRequirements = PlayRequirements.createMoveShipRequirements(decisionPlayer, cardFilterResolverSystem);
+        if (!moveShipRequirements.accepts(null, null, shipEntity))
+            return false;
+
+        CardFilter missionRequirements = PlayRequirements.createMoveShipMissionRequirements(decisionPlayer, shipEntity, cardFilterResolverSystem);
+        if (!missionRequirements.accepts(shipEntity, null, toMissionCardEntity))
+            return false;
+
+        return true;
     }
 
     private boolean validateBeamBetweenShips(String decisionPlayer, ObjectMap<String, String> result) {
@@ -177,6 +202,13 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
             memory.setValue("fromShipId", result.get("fromShipId"));
             memory.setValue("toShipId", result.get("toShipId"));
             memory.setValue("beamedIds", result.get("beamedId"));
+            stackSystem.stackEntity(beamBetweenShipsEffect);
+        } else if (action.equals("moveShip")) {
+            Entity beamBetweenShipsEffect = spawnSystem.spawnEntity("game/effect/beam/moveShipEffect.template");
+            EffectMemoryComponent effectMemory = beamBetweenShipsEffect.getComponent(EffectMemoryComponent.class);
+            Memory memory = new Memory(effectMemory.getMemory());
+            memory.setValue("shipId", result.get("shipId"));
+            memory.setValue("missionId", result.get("missionId"));
             stackSystem.stackEntity(beamBetweenShipsEffect);
         }
     }

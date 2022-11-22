@@ -38,6 +38,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
     private DecisionInterface decisionInterface;
 
     private MainDecisionInterface mainDecisionInterface;
+    private MoveShipSelectionInterface moveShipSelectionInterface;
     private BeamSelectionInterface beamSelectionInterface;
     private BeamFromMissionChooseShipInterface beamFromMissionChooseShipInterface;
     private BeamToMissionChooseShipInterface beamToMissionChooseShipInterface;
@@ -50,6 +51,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
 
     private void initializeForDecisions() {
         mainDecisionInterface = new MainDecisionInterface();
+        moveShipSelectionInterface = new MoveShipSelectionInterface();
         beamSelectionInterface = new BeamSelectionInterface();
         beamFromMissionChooseShipInterface = new BeamFromMissionChooseShipInterface();
         beamToMissionChooseShipInterface = new BeamToMissionChooseShipInterface();
@@ -94,6 +96,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
     private class MainDecisionInterface implements DecisionInterface {
         private Table table;
         private TextButton beamButton;
+        private TextButton moveShipButton;
         private TextButton passButton;
 
         public MainDecisionInterface() {
@@ -116,6 +119,21 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
                         }
                     });
             verticalGroup.addActor(beamButton);
+
+            moveShipButton = new TextButton("Move ship", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            moveShipButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            initiateMoveShip();
+                        }
+                    });
+            verticalGroup.addActor(moveShipButton);
 
             passButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
                 @Override
@@ -151,11 +169,203 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             goToDecisionInterface(beamSelectionInterface);
         }
 
+        private void initiateMoveShip() {
+            goToDecisionInterface(moveShipSelectionInterface);
+        }
+
         private void pass() {
             ObjectMap<String, String> parameters = new ObjectMap<>();
             parameters.put("action", "pass");
             clientDecisionSystem.executeDecision(parameters);
             goToDecisionInterface(null);
+        }
+    }
+
+    private class MoveShipSelectionInterface implements DecisionInterface {
+        private Table table;
+        private TextButton acceptShipButton;
+        private TextButton cancelMoveButton;
+
+        private SelectionState selectionState;
+
+        public MoveShipSelectionInterface() {
+            Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
+            CardFilter playRequirementsFilter = PlayRequirements.createMoveShipRequirements(
+                    authenticationHolderSystem.getUsername(), cardFilterResolverSystem);
+
+            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+                    new SelectionCallback() {
+                        @Override
+                        public void selectionChanged(ObjectSet<Entity> selected) {
+                            enableButton(acceptShipButton, selected.size == 1);
+                        }
+                    });
+
+            table = new Table();
+            table.setFillParent(true);
+
+            VerticalGroup verticalGroup = new VerticalGroup();
+
+            acceptShipButton = new TextButton("Select", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            acceptShipButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            selectMoveToMission();
+                        }
+                    });
+            verticalGroup.addActor(acceptShipButton);
+
+            cancelMoveButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            cancelMoveButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            cancelMoveShip();
+                        }
+                    });
+            verticalGroup.addActor(cancelMoveButton);
+
+            table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
+        }
+
+        private void selectMoveToMission() {
+            Entity selected = selectionSystem.getSelectedEntities().iterator().next();
+            Entity shipEntity = getServerEntity(selected);
+            goToDecisionInterface(new MoveShipSelectMissionInterface(shipEntity));
+        }
+
+        private void cancelMoveShip() {
+            goToDecisionInterface(mainDecisionInterface);
+        }
+
+        @Override
+        public void proceedToDecision() {
+            Stage stage = stageSystem.getStage();
+
+            selectionState.markSelectableCards();
+            selectionSystem.startSelection(selectionState);
+
+            enableButton(acceptShipButton, false);
+
+            stage.addActor(table);
+        }
+
+        @Override
+        public void cleanupDecision() {
+            table.remove();
+            selectionState.cleanup();
+            selectionSystem.finishSelection();
+        }
+    }
+
+    private class MoveShipSelectMissionInterface implements DecisionInterface {
+        private Table table;
+        private TextButton moveShipButton;
+        private TextButton cancelMoveButton;
+
+        private SelectionState selectionState;
+
+        private Entity shipEntity;
+
+        public MoveShipSelectMissionInterface(Entity shipEntity) {
+            this.shipEntity = shipEntity;
+
+            Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
+            CardFilter playRequirementsFilter = PlayRequirements.createMoveShipMissionRequirements(
+                    authenticationHolderSystem.getUsername(), shipEntity, cardFilterResolverSystem);
+
+            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+                    new SelectionCallback() {
+                        @Override
+                        public void selectionChanged(ObjectSet<Entity> selected) {
+                            enableButton(moveShipButton, selected.size == 1);
+                        }
+                    });
+
+            table = new Table();
+            table.setFillParent(true);
+
+            VerticalGroup verticalGroup = new VerticalGroup();
+
+            moveShipButton = new TextButton("Make it so!", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            moveShipButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            moveShipToMission();
+                        }
+                    });
+            verticalGroup.addActor(moveShipButton);
+
+            cancelMoveButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            cancelMoveButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            cancelMoveShip();
+                        }
+                    });
+            verticalGroup.addActor(cancelMoveButton);
+
+            table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
+        }
+
+        private void moveShipToMission() {
+            String shipId = shipEntity.getComponent(ServerEntityComponent.class).getEntityId();
+            Entity missionCardEntity = selectionSystem.getSelectedEntities().iterator().next();
+            String missionId = missionCardEntity.getComponent(ServerEntityComponent.class).getEntityId();
+
+            ObjectMap<String, String> parameters = new ObjectMap<>();
+            parameters.put("action", "moveShip");
+            parameters.put("shipId", shipId);
+            parameters.put("missionId", missionId);
+            clientDecisionSystem.executeDecision(parameters);
+
+            goToDecisionInterface(null);
+        }
+
+        private void cancelMoveShip() {
+            goToDecisionInterface(mainDecisionInterface);
+        }
+
+        @Override
+        public void proceedToDecision() {
+            Stage stage = stageSystem.getStage();
+
+            selectionState.markSelectableCards();
+            selectionSystem.startSelection(selectionState);
+
+            enableButton(moveShipButton, false);
+
+            stage.addActor(table);
+        }
+
+        @Override
+        public void cleanupDecision() {
+            table.remove();
+            selectionState.cleanup();
+            selectionSystem.finishSelection();
         }
     }
 

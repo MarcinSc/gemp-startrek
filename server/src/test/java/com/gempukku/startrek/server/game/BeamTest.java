@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game;
 import com.artemis.Entity;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.mission.MissionOperations;
+import com.gempukku.startrek.game.zone.CardInMissionComponent;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 import org.junit.Test;
@@ -104,6 +105,41 @@ public class BeamTest extends AbstractGameTest {
         assertEquals(0, mission.getPlayerFaceDownCardsCount().get("test1", 0).intValue());
         assertEquals(0, ship1.getComponent(CardInPlayComponent.class).getAttachedFaceDownCount());
         assertEquals(1, ship2.getComponent(CardInPlayComponent.class).getAttachedFaceDownCount());
+    }
+
+    @Test
+    public void moveShip() {
+        setupGame(createDeckWithMissions());
+
+        Entity personnel1 = createCard("test1", "1_251");
+        Entity personnel2 = createCard("test1", "1_251");
+        Entity personnel3 = createCard("test1", "1_251");
+        Entity ship = createCard("test1", "1_393");
+
+        ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
+        Entity headquartersMission = MissionOperations.findMission(world, "test1", 2);
+        zoneOperations.moveFromCurrentZoneToMission(personnel1, headquartersMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(personnel2, headquartersMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(personnel3, headquartersMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(ship, headquartersMission, true);
+
+        zoneOperations.attachToShip(ship, personnel1);
+        zoneOperations.attachToShip(ship, personnel2);
+        zoneOperations.attachToShip(ship, personnel3);
+
+        // Pass the play or draw
+        sendDecisionSuccessfully("test1",
+                "action", "pass");
+
+        sendDecisionSuccessfully("test1",
+                "action", "moveShip",
+                "shipId", getCardId(ship),
+                "missionId", getCardId(findEntity("type(Mission),inMission(username(test1),0)")));
+
+        assertEquals(0, ship.getComponent(CardInMissionComponent.class).getMissionIndex());
+        assertEquals(0, personnel1.getComponent(CardInMissionComponent.class).getMissionIndex());
+        assertEquals(0, personnel2.getComponent(CardInMissionComponent.class).getMissionIndex());
+        assertEquals(0, personnel3.getComponent(CardInMissionComponent.class).getMissionIndex());
     }
     // TODO add negative tests
 }

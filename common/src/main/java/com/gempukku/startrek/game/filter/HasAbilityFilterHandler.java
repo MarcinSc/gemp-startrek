@@ -5,10 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.ability.CardAbility;
-import com.gempukku.startrek.game.ability.CardAbilitySystem;
-import com.gempukku.startrek.game.ability.PlaysInCoreAbility;
-import com.gempukku.startrek.game.ability.TriggerAbility;
+import com.gempukku.startrek.game.ability.*;
 
 public class HasAbilityFilterHandler extends CardFilterSystem {
     private CardAbilitySystem cardAbilitySystem;
@@ -39,6 +36,8 @@ public class HasAbilityFilterHandler extends CardFilterSystem {
             return PlaysInCoreAbility.class;
         if (type.equals("Trigger"))
             return TriggerAbility.class;
+        if (type.equals("MoveCostModifier"))
+            return MoveCostModifier.class;
         throw new GdxRuntimeException("Unable to find ability type: " + type);
     }
 }

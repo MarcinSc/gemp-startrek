@@ -84,6 +84,10 @@ public class CardDefinition {
         return shipClass;
     }
 
+    public Array<CardIcon> getStaffingRequirements() {
+        return staffingRequirements;
+    }
+
     public Array<PersonnelSkill> getSkills() {
         return skills;
     }

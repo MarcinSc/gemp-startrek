@@ -29,6 +29,7 @@ import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 import com.gempukku.startrek.server.game.effect.beam.BeamBetweenShipsEffect;
 import com.gempukku.startrek.server.game.effect.beam.BeamFromMissionEffect;
 import com.gempukku.startrek.server.game.effect.beam.BeamToMissionEffect;
+import com.gempukku.startrek.server.game.effect.beam.MoveShipEffect;
 import com.gempukku.startrek.server.game.effect.card.DestroyEffect;
 import com.gempukku.startrek.server.game.effect.card.ExecuteStopEffect;
 import com.gempukku.startrek.server.game.effect.card.PayCardCostEffect;
@@ -52,6 +53,7 @@ import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.effect.zone.*;
 import com.gempukku.startrek.server.game.filter.MemoryFilterHandler;
+import com.gempukku.startrek.server.game.filter.ServerAttachedToFilterHandler;
 import com.gempukku.startrek.server.game.filter.ServerFacingDilemmaFilterHandler;
 import com.gempukku.startrek.server.game.filter.ServerIdInFilterHandler;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
@@ -146,6 +148,7 @@ public class StarTrekGameHolder implements Disposable {
                 new BeamFromMissionEffect(),
                 new BeamToMissionEffect(),
                 new BeamBetweenShipsEffect(),
+                new MoveShipEffect(),
 
                 // Ability handlers
                 new DilemmaEffectHandler(),
@@ -166,6 +169,7 @@ public class StarTrekGameHolder implements Disposable {
                 // Server card filters
                 new MemoryFilterHandler(),
                 new ServerIdInFilterHandler(),
+                new ServerAttachedToFilterHandler(),
                 new ServerFacingDilemmaFilterHandler(),
 
                 // Network systems
