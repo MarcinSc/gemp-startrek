@@ -36,7 +36,8 @@ public class StackLayout {
 
             Entity objectOnStack = objectsOnStack.get(i);
             transformSystem.setTransform(objectOnStack,
-                    tmpMatrix.translate(stackPosition)
+                    tmpMatrix.idt()
+                            .translate(stackPosition)
                             .translate(separation)
                             .translate(depth)
                             .scl(scale)
