@@ -86,7 +86,7 @@ public class CardRenderingSystem extends BaseSystem {
                 PlayerPosition playerPosition = playerZonesStatus.key;
                 PlayerZones playerZones = playerZonesStatus.value;
                 if (playerZones.isHandDirty()) {
-                    HandLayout.layoutHand(playerZones, playerPosition,
+                    HandLayout.layoutHand(playerZones.getCardsInHand(), playerPosition,
                             camera, transformSystem);
                 }
                 for (int i = 0; i < 5; i++) {

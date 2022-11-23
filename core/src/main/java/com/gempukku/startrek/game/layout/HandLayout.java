@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.startrek.game.PlayerPosition;
-import com.gempukku.startrek.game.render.zone.PlayerZones;
+import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 
 public class HandLayout {
     private static final float VERTICAL_DISTANCE = 0.85f;
@@ -17,9 +17,9 @@ public class HandLayout {
 
     private static final Matrix4 tmpMatrix = new Matrix4();
 
-    public static void layoutHand(PlayerZones playerZones, PlayerPosition playerPosition,
+    public static void layoutHand(RenderedCardGroup handCards, PlayerPosition playerPosition,
                                   Camera camera, TransformSystem transformSystem) {
-        Array<Entity> cardsInHand = playerZones.getCardsInHand().getRenderedCards();
+        Array<Entity> cardsInHand = handCards.getRenderedCards();
 
         Vector3 basePlayerHandPosition =
                 new Vector3(camera.position)
@@ -40,7 +40,8 @@ public class HandLayout {
             float rotateY = (playerPosition == PlayerPosition.Lower) ? -indexBias * 1.5f : 180 + indexBias * 1.5f;
             float rotateZ = (playerPosition == PlayerPosition.Lower) ? -2 : 2;
             transformSystem.setTransform(cardInHand,
-                    tmpMatrix.translate(playerHandPosition.x + CARD_SEPARATION * indexBias, playerHandPosition.y, playerHandPosition.z)// + 0.005f * Math.abs(indexBias))
+                    tmpMatrix.idt()
+                            .translate(playerHandPosition.x + CARD_SEPARATION * indexBias, playerHandPosition.y, playerHandPosition.z)// + 0.005f * Math.abs(indexBias))
                             .scl(CARD_SCALE)
                             .rotate(1, 0, 0, rotateX)
                             .rotate(0, 1, 0, rotateY)
