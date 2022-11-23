@@ -18,6 +18,7 @@ import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.zone.MissionCards;
 import com.gempukku.startrek.game.render.zone.PlayerZones;
+import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 import com.gempukku.startrek.game.template.CardTemplates;
 
 public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
@@ -72,13 +73,13 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
 
     private void updateFaceDownMissionCards(String missionOwner, MissionComponent mission, MissionCards missionCards) {
         // At this point only top level revealed cards are there
-        for (Entity renderedCard : missionCards.getPlayerTopLevelCardsInMission()) {
+        for (Entity renderedCard : missionCards.getMissionOwnerCards().getRenderedCards()) {
             Entity serverCard = world.getEntity(renderedCard.getComponent(ServerCardReferenceComponent.class).getEntityId());
-            addAttachedCards(serverCard, missionCards);
+            addAttachedCards(serverCard, missionCards.getMissionOwnerCards());
         }
-        for (Entity renderedCard : missionCards.getOpponentTopLevelCardsInMission()) {
+        for (Entity renderedCard : missionCards.getOpposingCards().getRenderedCards()) {
             Entity serverCard = world.getEntity(renderedCard.getComponent(ServerCardReferenceComponent.class).getEntityId());
-            addAttachedCards(serverCard, missionCards);
+            addAttachedCards(serverCard, missionCards.getOpposingCards());
         }
 
         int playerFaceDownCardCount = 0;
@@ -102,14 +103,14 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
         }
     }
 
-    private void addAttachedCards(Entity topLevelCard, MissionCards missionCards) {
+    private void addAttachedCards(Entity topLevelCard, RenderedCardGroup renderedCardGroup) {
         CardInPlayComponent cardInPlay = topLevelCard.getComponent(CardInPlayComponent.class);
         String ownerUsername = topLevelCard.getComponent(CardComponent.class).getOwner();
         // Process face down cards only for players that are not owners of the card
         if (!ownerUsername.equals(authenticationHolderSystem.getUsername())) {
             for (int i = 0; i < cardInPlay.getAttachedFaceDownCount(); i++) {
                 Entity cardRepresentation = CardTemplates.createSmallFaceDownCard(spawnSystem);
-                missionCards.addAttachedCard(topLevelCard, null, cardRepresentation);
+                renderedCardGroup.addAttachedFaceDownCard(topLevelCard, cardRepresentation);
             }
         }
     }
@@ -146,22 +147,22 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
 
     private void addFaceDownPlayerCard(MissionCards missionCards) {
         Entity cardRepresentation = CardTemplates.createSmallFaceDownCard(spawnSystem);
-        missionCards.addPlayerTopLevelCardInMission(null, cardRepresentation);
+        missionCards.getMissionOwnerCards().addFaceDownCard(cardRepresentation);
     }
 
     private void addFaceDownOpponentCard(MissionCards missionCards) {
         Entity cardRepresentation = CardTemplates.createSmallFaceDownCard(spawnSystem);
-        missionCards.addOpponentTopLevelCardInMission(null, cardRepresentation);
+        missionCards.getOpposingCards().addFaceDownCard(cardRepresentation);
     }
 
     private void addFaceDownCardToDeck(PlayerZones playerZones) {
         Entity cardRepresentation = CardTemplates.createFaceDownCard(spawnSystem);
-        playerZones.addCardInDeck(cardRepresentation);
+        playerZones.getCardsInDeck().addFaceDownCard(cardRepresentation);
     }
 
     private void addFaceDownCardToDilemmaPile(PlayerZones playerZones) {
         Entity cardRepresentation = CardTemplates.createFaceDownCard(spawnSystem);
-        playerZones.addCardInDilemmaPile(cardRepresentation);
+        playerZones.getCardsInDilemmaPile().addFaceDownCard(cardRepresentation);
     }
 
     private static int getRenderedDeckSize(int realDeckSize) {
@@ -196,6 +197,6 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
 
     private void addFaceDownCardToHand(PlayerPosition playerPosition) {
         Entity cardRepresentation = CardTemplates.createFaceDownCard(spawnSystem);
-        cardRenderingSystem.getPlayerCards(playerPosition).addCardInHand(null, cardRepresentation);
+        cardRenderingSystem.getPlayerCards(playerPosition).getCardsInHand().addFaceDownCard(cardRepresentation);
     }
 }

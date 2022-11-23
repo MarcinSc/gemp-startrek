@@ -11,6 +11,7 @@ import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.EffectComponent;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
+import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 import com.gempukku.startrek.game.template.CardTemplates;
 
 public class CardZoneUtil {
@@ -52,7 +53,7 @@ public class CardZoneUtil {
     public static void moveCardToHand(Entity cardEntity, Entity cardRepresentation, CardComponent card,
                                       CardRenderingSystem cardRenderingSystem) {
         String owner = card.getOwner();
-        cardRenderingSystem.getPlayerCards(owner).addCardInHand(cardEntity, cardRepresentation);
+        cardRenderingSystem.getPlayerCards(owner).getCardsInHand().addFaceUpCard(cardEntity, cardRepresentation);
     }
 
     public static void addCardInCore(Entity cardEntity, CardComponent card,
@@ -68,7 +69,7 @@ public class CardZoneUtil {
     public static void moveCardToCore(Entity cardEntity, Entity cardRepresentation, CardComponent card,
                                       CardRenderingSystem cardRenderingSystem) {
         String owner = card.getOwner();
-        cardRenderingSystem.getPlayerCards(owner).addCardInCore(cardEntity, cardRepresentation);
+        cardRenderingSystem.getPlayerCards(owner).getCardsInCore().addFaceUpCard(cardEntity, cardRepresentation);
     }
 
     public static void addCardInBrig(Entity cardEntity, CardComponent card,
@@ -84,7 +85,7 @@ public class CardZoneUtil {
     public static void moveCardToBrig(Entity cardEntity,
                                       Entity cardRepresentation, CardRenderingSystem cardRenderingSystem) {
         CardInBrigComponent cardInBrig = cardEntity.getComponent(CardInBrigComponent.class);
-        cardRenderingSystem.getPlayerCards(cardInBrig.getBrigOwner()).addCardInBrig(cardEntity, cardRepresentation);
+        cardRenderingSystem.getPlayerCards(cardInBrig.getBrigOwner()).getCardsInBrig().addFaceUpCard(cardEntity, cardRepresentation);
     }
 
     public static void addCardOnStack(Entity objectEntity, CardComponent card,
@@ -135,9 +136,9 @@ public class CardZoneUtil {
             Entity cardEntity, Entity attachedToCardEntity,
             CardLookupSystem cardLookupSystem, SpawnSystem spawnSystem,
             CardRenderingSystem cardRenderingSystem) {
-        CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
-        int missionIndex = cardInMission.getMissionIndex();
-        String missionOwner = cardInMission.getMissionOwner();
+        CardType attachedToCardType = cardLookupSystem.getCardDefinition(attachedToCardEntity).getType();
+
+        CardInMissionComponent cardInMission = attachedToCardEntity.getComponent(CardInMissionComponent.class);
 
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         String cardId = card.getCardId();
@@ -146,8 +147,9 @@ public class CardZoneUtil {
         Entity cardRepresentation = CardTemplates.createSmallCard(cardDefinition, spawnSystem);
         cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(cardEntity.getId());
 
-        cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).
-                addAttachedCard(attachedToCardEntity, cardEntity, cardRepresentation);
+        getCardGroupForCardInMission(attachedToCardType, card.getOwner(),
+                cardInMission.getMissionOwner(), cardInMission.getMissionIndex(), cardRenderingSystem).
+                addAttachedFaceUpCard(attachedToCardEntity, cardEntity, cardRepresentation);
     }
 
     public static Entity addCardInMission(Entity cardEntity, String missionOwner, int missionIndex,
@@ -164,17 +166,20 @@ public class CardZoneUtil {
         return cardRepresentation;
     }
 
+    public static RenderedCardGroup getCardGroupForCardInMission(
+            CardType cardType, String cardOwner,
+            String missionOwner, int missionIndex,
+            CardRenderingSystem cardRenderingSystem) {
+        if (cardType == CardType.Mission)
+            return cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).getMissionCards();
+        if (missionOwner.equals(cardOwner))
+            return cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).getMissionOwnerCards();
+        return cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).getOpposingCards();
+    }
+
     public static void moveCardToMission(Entity cardEntity, String missionOwner, int missionIndex, Entity cardRepresentation,
                                          CardComponent card, CardDefinition cardDefinition, CardRenderingSystem cardRenderingSystem) {
-        if (cardDefinition.getType() == CardType.Mission) {
-            cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).addMissionCard(cardEntity, cardRepresentation);
-        } else {
-            boolean playerMission = missionOwner.equals(card.getOwner());
-            if (playerMission) {
-                cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).addPlayerTopLevelCardInMission(cardEntity, cardRepresentation);
-            } else {
-                cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex).addOpponentTopLevelCardInMission(cardEntity, cardRepresentation);
-            }
-        }
+        getCardGroupForCardInMission(cardDefinition.getType(), card.getOwner(), missionOwner, missionIndex, cardRenderingSystem).
+                addFaceUpCard(cardEntity, cardRepresentation);
     }
 }

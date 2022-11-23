@@ -6,29 +6,39 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.game.zone.CardZone;
 
 public class PlayerZones {
-    private final PlayerZonesStatus playerZonesStatus = new PlayerZonesStatus();
+    private final RenderedCardGroup cardsInHand;
+    private final RenderedCardGroup cardsInCore;
+    private final RenderedCardGroup cardsInBrig;
 
-    private final ObjectMap<Entity, Entity> cardToRenderedMap = new ObjectMap<>();
-    private final Array<Entity> cardsInHand = new Array<>();
-    private final Array<Entity> cardsInDeck = new Array<>();
-    private final Array<Entity> cardsInDilemmaPile = new Array<>();
-    private final Array<Entity> cardsInCore = new Array<>();
-    private final Array<Entity> cardsInBrig = new Array<>();
+    private final RenderedCardGroup cardsInDeck;
+    private final RenderedCardGroup cardsInDilemmaPile;
+
     private Entity topDiscardPileCard;
+    private boolean discardPileDirty;
 
     private final Array<MissionCards> missionCards = new Array<>();
+    private final ObjectMap<Entity, Entity> serverToRenderedMap;
 
-    public PlayerZones() {
+    public PlayerZones(ObjectMap<Entity, Entity> serverToRenderedMap,
+                       ObjectMap<Entity, RenderedCardGroup> attachedCards) {
+        this.serverToRenderedMap = serverToRenderedMap;
+
         for (int i = 0; i < 5; i++) {
-            missionCards.add(new MissionCards());
+            missionCards.add(new MissionCards(serverToRenderedMap, attachedCards));
         }
+
+        cardsInHand = new RenderedCardGroup(serverToRenderedMap, attachedCards);
+        cardsInCore = new RenderedCardGroup(serverToRenderedMap, attachedCards);
+        cardsInBrig = new RenderedCardGroup(serverToRenderedMap, attachedCards);
+        cardsInDeck = new RenderedCardGroup(serverToRenderedMap, attachedCards);
+        cardsInDilemmaPile = new RenderedCardGroup(serverToRenderedMap, attachedCards);
     }
 
     public Entity setTopDiscardPileCard(Entity card, Entity renderedCard) {
         Entity oldTopDiscardPileCard = topDiscardPileCard;
-        cardToRenderedMap.put(card, renderedCard);
+        serverToRenderedMap.put(card, renderedCard);
         topDiscardPileCard = renderedCard;
-        playerZonesStatus.setDiscardPileDirty();
+        discardPileDirty = true;
         return oldTopDiscardPileCard;
     }
 
@@ -36,121 +46,28 @@ public class PlayerZones {
         return topDiscardPileCard;
     }
 
-    public void addCardInCore(Entity card, Entity renderedCard) {
-        cardToRenderedMap.put(card, renderedCard);
-        cardsInCore.add(renderedCard);
-        playerZonesStatus.setCoreDirty();
-    }
-
-    public void addCardInBrig(Entity card, Entity renderedCard) {
-        cardToRenderedMap.put(card, renderedCard);
-        cardsInBrig.add(renderedCard);
-        playerZonesStatus.setBrigDirty();
-    }
-
-    public void addCardInHand(Entity card, Entity renderedCard) {
-        if (card != null) {
-            cardToRenderedMap.put(card, renderedCard);
-        }
-        cardsInHand.add(renderedCard);
-        playerZonesStatus.setHandDrity();
-    }
-
-    public void addCardInDeck(Entity renderedCard) {
-        cardsInDeck.add(renderedCard);
-        playerZonesStatus.setDeckDirty();
-    }
-
-    public void addCardInDilemmaPile(Entity renderedCard) {
-        cardsInDilemmaPile.add(renderedCard);
-        playerZonesStatus.setDilemmaPileDirty();
-    }
-
     public MissionCards getMissionCards(int missionIndex) {
         return missionCards.get(missionIndex);
     }
 
-    public Entity removeOneCardInHand() {
-        Entity renderedCard = removeLast(cardsInHand);
-        playerZonesStatus.setHandDrity();
-        return renderedCard;
-    }
-
-    public Entity removeCardInHand(Entity card) {
-        Entity renderedCard = cardToRenderedMap.remove(card);
-        cardsInHand.removeValue(renderedCard, true);
-        playerZonesStatus.setHandDrity();
-        return renderedCard;
-    }
-
-    public Entity removeOneCardInDeck() {
-        Entity renderedCard = removeLast(cardsInDeck);
-        playerZonesStatus.setDeckDirty();
-        return renderedCard;
-    }
-
-    public Entity removeOneCardInDilemmaPile() {
-        Entity renderedCard = removeLast(cardsInDilemmaPile);
-        playerZonesStatus.setDilemmaPileDirty();
-        return renderedCard;
-    }
-
-    public Entity removeCardInCore(Entity card) {
-        Entity renderedCard = cardToRenderedMap.remove(card);
-        cardsInCore.removeValue(renderedCard, true);
-        playerZonesStatus.setCoreDirty();
-        return renderedCard;
-    }
-
-    public Entity removeCardInBrig(Entity card) {
-        Entity renderedCard = cardToRenderedMap.remove(card);
-        cardsInBrig.removeValue(renderedCard, true);
-        playerZonesStatus.setBrigDirty();
-        return renderedCard;
-    }
-
-    private Entity removeLast(Array<Entity> deck) {
-        return deck.removeIndex(deck.size - 1);
-    }
-
-    public int getCardInHandCount() {
-        return cardsInHand.size;
-    }
-
-    public int getCardInDeckCount() {
-        return cardsInDeck.size;
-    }
-
-    public int getCardInDilemmaCount() {
-        return cardsInDilemmaPile.size;
-    }
-
-    public Array<Entity> getCardsInHand() {
+    public RenderedCardGroup getCardsInHand() {
         return cardsInHand;
     }
 
-    public Array<Entity> getCardsInDeck() {
+    public RenderedCardGroup getCardsInDeck() {
         return cardsInDeck;
     }
 
-    public Array<Entity> getCardsInDilemmaPile() {
+    public RenderedCardGroup getCardsInDilemmaPile() {
         return cardsInDilemmaPile;
     }
 
-    public Array<Entity> getCardsInCore() {
+    public RenderedCardGroup getCardsInCore() {
         return cardsInCore;
     }
 
-    public Entity findRenderedCard(Entity card) {
-        Entity result = cardToRenderedMap.get(card);
-        if (result == null) {
-            for (MissionCards missionCard : missionCards) {
-                result = missionCard.findRenderedCard(card);
-                if (result != null)
-                    return result;
-            }
-        }
-        return result;
+    public RenderedCardGroup getCardsInBrig() {
+        return cardsInBrig;
     }
 
     public boolean isMissionDirty(int missionIndex) {
@@ -158,46 +75,51 @@ public class PlayerZones {
     }
 
     public boolean isBrigDirty() {
-        return playerZonesStatus.isBrigDirty();
+        return cardsInBrig.isDirty();
     }
 
     public boolean isCoreDirty() {
-        return playerZonesStatus.isCoreDirty();
+        return cardsInCore.isDirty();
     }
 
     public boolean isHandDirty() {
-        return playerZonesStatus.isHandDrity();
+        return cardsInHand.isDirty();
     }
 
     public boolean isDeckDirty() {
-        return playerZonesStatus.isDeckDirty();
+        return cardsInDeck.isDirty();
     }
 
     public boolean isDilemmaPileDirty() {
-        return playerZonesStatus.isDilemmaPileDirty();
+        return cardsInDilemmaPile.isDirty();
     }
 
     public boolean isDiscardPileDirty() {
-        return playerZonesStatus.isDiscardPileDirty();
+        return discardPileDirty;
     }
 
     public void cleanup() {
-        playerZonesStatus.cleanZones();
         for (MissionCards missionCard : missionCards) {
             missionCard.cleanup();
         }
+        cardsInBrig.cleanup();
+        cardsInCore.cleanup();
+        cardsInHand.cleanup();
+        cardsInDeck.cleanup();
+        cardsInDilemmaPile.cleanup();
+        discardPileDirty = false;
     }
 
-    public Entity removeCard(Entity card, CardZone oldZone) {
+    public Entity removeFaceUpCard(Entity card, CardZone oldZone) {
         if (oldZone == CardZone.Brig)
-            return removeCardInBrig(card);
+            return cardsInBrig.removeFaceUpCard(card);
         if (oldZone == CardZone.Core)
-            return removeCardInCore(card);
+            return cardsInCore.removeFaceUpCard(card);
         if (oldZone == CardZone.Hand)
-            return removeCardInHand(card);
+            return cardsInHand.removeFaceUpCard(card);
         if (oldZone == CardZone.Mission) {
             for (MissionCards missionCard : missionCards) {
-                Entity renderedCard = missionCard.removeCard(card);
+                Entity renderedCard = missionCard.removeFaceUpCard(card);
                 if (renderedCard != null)
                     return renderedCard;
             }

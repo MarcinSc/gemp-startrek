@@ -10,6 +10,7 @@ import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.zone.MissionCards;
+import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 
 public class BeamingTrackingSystem extends BaseSystem {
     private IncomingUpdatesProcessor incomingUpdatesProcessor;
@@ -51,23 +52,19 @@ public class BeamingTrackingSystem extends BaseSystem {
         boolean player = cardOwner.equals(cardInMission.getMissionOwner());
         MissionCards missionCards = cardRenderingSystem.getPlayerCards(cardInMission.getMissionOwner()).getMissionCards(cardInMission.getMissionIndex());
         for (String entityId : entityIds) {
+            RenderedCardGroup cardGroup;
+            if (player)
+                cardGroup = missionCards.getMissionOwnerCards();
+            else
+                cardGroup = missionCards.getOpposingCards();
+
             Entity beamedEntity = incomingUpdatesProcessor.getEntityById(entityId);
             if (beamedEntity != null) {
-                Entity renderedCard;
-                if (player) {
-                    renderedCard = missionCards.removePlayerTopLevelCardInMission(beamedEntity);
-                } else {
-                    renderedCard = missionCards.removeOpponentTopLevelCardInMission(beamedEntity);
-                }
-                missionCards.addAttachedCard(shipEntity, beamedEntity, renderedCard);
+                Entity renderedCard = cardGroup.removeFaceUpCard(beamedEntity);
+                cardGroup.addAttachedFaceUpCard(shipEntity, beamedEntity, renderedCard);
             } else {
-                Entity renderedCard;
-                if (player) {
-                    renderedCard = missionCards.removeFaceDownPlayerCard();
-                } else {
-                    renderedCard = missionCards.removeFaceDownOpponentCard();
-                }
-                missionCards.addAttachedCard(shipEntity, null, renderedCard);
+                Entity renderedCard = cardGroup.removeFaceDownCard();
+                cardGroup.addAttachedFaceDownCard(shipEntity, renderedCard);
             }
         }
     }
@@ -80,20 +77,19 @@ public class BeamingTrackingSystem extends BaseSystem {
         boolean player = cardOwner.equals(cardInMission.getMissionOwner());
         MissionCards missionCards = cardRenderingSystem.getPlayerCards(cardInMission.getMissionOwner()).getMissionCards(cardInMission.getMissionIndex());
         for (String entityId : entityIds) {
+            RenderedCardGroup cardGroup;
+            if (player)
+                cardGroup = missionCards.getMissionOwnerCards();
+            else
+                cardGroup = missionCards.getOpposingCards();
+
             Entity beamedEntity = incomingUpdatesProcessor.getEntityById(entityId);
             if (beamedEntity != null) {
-                Entity renderedCard = missionCards.removeAttachedCard(shipEntity, beamedEntity);
-                if (player) {
-                    missionCards.addPlayerTopLevelCardInMission(beamedEntity, renderedCard);
-                } else {
-                    missionCards.addOpponentTopLevelCardInMission(beamedEntity, renderedCard);
-                }
+                Entity renderedCard = cardGroup.removeAttachedFaceUpCard(shipEntity, beamedEntity);
+                cardGroup.addFaceUpCard(beamedEntity, renderedCard);
             } else {
-                Entity renderedCard = missionCards.removeFaceDownAttachedCard(shipEntity);
-                if (player)
-                    missionCards.addPlayerTopLevelCardInMission(null, renderedCard);
-                else
-                    missionCards.addOpponentTopLevelCardInMission(null, renderedCard);
+                Entity renderedCard = cardGroup.removeAttachedFaceDownCard(shipEntity);
+                cardGroup.addFaceDownCard(renderedCard);
             }
         }
     }
@@ -103,15 +99,22 @@ public class BeamingTrackingSystem extends BaseSystem {
         Entity toShipEntity = incomingUpdatesProcessor.getEntityById(toShipId);
         CardInMissionComponent cardInMission = fromShipEntity.getComponent(CardInMissionComponent.class);
 
+        String cardOwner = fromShipEntity.getComponent(CardComponent.class).getOwner();
+        boolean player = cardOwner.equals(cardInMission.getMissionOwner());
         MissionCards missionCards = cardRenderingSystem.getPlayerCards(cardInMission.getMissionOwner()).getMissionCards(cardInMission.getMissionIndex());
         for (String entityId : entityIds) {
+            RenderedCardGroup cardGroup;
+            if (player)
+                cardGroup = missionCards.getMissionOwnerCards();
+            else
+                cardGroup = missionCards.getOpposingCards();
             Entity beamedEntity = incomingUpdatesProcessor.getEntityById(entityId);
             if (beamedEntity != null) {
-                Entity renderedCard = missionCards.removeAttachedCard(fromShipEntity, beamedEntity);
-                missionCards.addAttachedCard(toShipEntity, beamedEntity, renderedCard);
+                Entity renderedCard = cardGroup.removeAttachedFaceUpCard(fromShipEntity, beamedEntity);
+                cardGroup.addAttachedFaceUpCard(toShipEntity, beamedEntity, renderedCard);
             } else {
-                Entity renderedCard = missionCards.removeFaceDownAttachedCard(fromShipEntity);
-                missionCards.addAttachedCard(toShipEntity, null, renderedCard);
+                Entity renderedCard = cardGroup.removeAttachedFaceDownCard(fromShipEntity);
+                cardGroup.addAttachedFaceDownCard(toShipEntity, renderedCard);
             }
         }
     }

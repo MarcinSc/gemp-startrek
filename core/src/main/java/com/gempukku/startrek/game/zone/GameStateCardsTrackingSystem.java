@@ -77,7 +77,7 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
 
     private void effectRemoved(int entityId) {
         Entity effectEntity = world.getEntity(entityId);
-        Entity renderedCard = cardRenderingSystem.removeRenderedCard(effectEntity, CardZone.Stack);
+        Entity renderedCard = cardRenderingSystem.removeFaceUpCard(effectEntity, CardZone.Stack);
         if (renderedCard != null) {
             world.deleteEntity(renderedCard);
         }
@@ -86,7 +86,7 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
     private void cardRemoved(int entityId) {
         Entity cardEntity = world.getEntity(entityId);
         CardComponent card = cardEntity.getComponent(CardComponent.class);
-        Entity renderedCard = cardRenderingSystem.removeRenderedCard(cardEntity, card.getCardZone());
+        Entity renderedCard = cardRenderingSystem.removeFaceUpCard(cardEntity, card.getCardZone());
         if (renderedCard != null) {
             world.deleteEntity(renderedCard);
         }
@@ -113,7 +113,7 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
             boolean faceUpInToZone = CardZoneUtil.isCardFaceUp(toZone, type, owner);
 
             if (faceUpInFromZone && faceUpInToZone) {
-                Entity renderedCard = cardRenderingSystem.removeRenderedCard(cardEntity, fromZone);
+                Entity renderedCard = cardRenderingSystem.removeFaceUpCard(cardEntity, fromZone);
                 if (renderedCard != null) {
                     if (CardZoneUtil.isBigCard(fromZone) == CardZoneUtil.isBigCard(toZone)) {
                         moveCardToZone(cardEntity, renderedCard, card, toZone, missionOwner, missionIndex);
@@ -125,7 +125,7 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
                     createAndAddCardToZone(cardEntity, card, toZone, missionOwner, missionIndex);
                 }
             } else if (faceUpInFromZone) {
-                Entity renderedCard = cardRenderingSystem.removeRenderedCard(cardEntity, fromZone);
+                Entity renderedCard = cardRenderingSystem.removeFaceUpCard(cardEntity, fromZone);
                 world.deleteEntity(renderedCard);
                 if (CardZoneUtil.isCardRendered(toZone))
                     createFaceDownCardAndAddToZone(cardOwner, toZone, missionOwner, missionIndex);
@@ -186,15 +186,15 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
 
     private Entity removeFaceDownCard(String cardOwner, CardZone zone, String missionOwner, int missionIndex) {
         if (zone == CardZone.Hand) {
-            return cardRenderingSystem.getPlayerCards(cardOwner).removeOneCardInHand();
+            return cardRenderingSystem.getPlayerCards(cardOwner).getCardsInHand().removeFaceDownCard();
         }
         if (zone == CardZone.Mission) {
             MissionCards missionCards = cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex);
-            boolean player = missionOwner.equals(cardOwner);
-            if (player) {
-                return missionCards.removeFaceDownPlayerCard();
+            boolean isMissionOwner = missionOwner.equals(cardOwner);
+            if (isMissionOwner) {
+                return missionCards.getMissionOwnerCards().removeFaceDownCard();
             } else {
-                return missionCards.removeFaceDownOpponentCard();
+                return missionCards.getOpposingCards().removeFaceDownCard();
             }
         }
         throw new GdxRuntimeException("Unable to remove face down card from unknown zone");
@@ -213,15 +213,15 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
 
     private void moveFaceDownCardToZone(String cardOwner, CardZone zone, Entity renderedCard, String missionOwner, int missionIndex) {
         if (zone == CardZone.Hand) {
-            cardRenderingSystem.getPlayerCards(cardOwner).addCardInHand(null, renderedCard);
+            cardRenderingSystem.getPlayerCards(cardOwner).getCardsInDeck().addFaceDownCard(renderedCard);
         }
         if (zone == CardZone.Mission) {
             MissionCards missionCards = cardRenderingSystem.getPlayerCards(missionOwner).getMissionCards(missionIndex);
-            boolean player = missionOwner.equals(cardOwner);
-            if (player)
-                missionCards.addPlayerTopLevelCardInMission(null, renderedCard);
+            boolean isMissionOwner = missionOwner.equals(cardOwner);
+            if (isMissionOwner)
+                missionCards.getMissionOwnerCards().addFaceDownCard(renderedCard);
             else
-                missionCards.addOpponentTopLevelCardInMission(null, renderedCard);
+                missionCards.getOpposingCards().addFaceDownCard(renderedCard);
         }
     }
 

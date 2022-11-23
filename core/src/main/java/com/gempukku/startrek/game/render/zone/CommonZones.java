@@ -9,9 +9,7 @@ import com.gempukku.startrek.game.zone.CardZone;
 import java.util.Comparator;
 
 public class CommonZones {
-    private final CommonZonesStatus commonZonesStatus = new CommonZonesStatus();
-
-    private final ObjectMap<Entity, Entity> objectToRenderedMap = new ObjectMap<>();
+    private final ObjectMap<Entity, Entity> serverToRenderedMap;
     private final Array<Entity> objectsOnStack = new Array<>();
     private final Comparator<Entity> stackOrderComparator = new Comparator<Entity>() {
         @Override
@@ -20,18 +18,28 @@ public class CommonZones {
         }
     };
 
-    public void addObjectToStack(Entity entity, Entity renderedEntity) {
-        objectToRenderedMap.put(entity, renderedEntity);
-        objectsOnStack.add(renderedEntity);
+    private boolean stackDirty;
 
-        commonZonesStatus.setStackDirty();
+    public CommonZones(ObjectMap<Entity, Entity> serverToRenderedMap,
+                       ObjectMap<Entity, RenderedCardGroup> attachedCards) {
+        this.serverToRenderedMap = serverToRenderedMap;
+    }
+
+
+    public void addObjectToStack(Entity entity, Entity renderedEntity) {
+        serverToRenderedMap.put(entity, renderedEntity);
+        objectsOnStack.add(renderedEntity);
+        stackDirty = true;
     }
 
     public Entity removeObjectFromStack(Entity entity) {
-        Entity renderedEntity = objectToRenderedMap.remove(entity);
-        objectsOnStack.removeValue(renderedEntity, true);
-        commonZonesStatus.setStackDirty();
-        return renderedEntity;
+        if (objectsOnStack.contains(serverToRenderedMap.get(entity), true)) {
+            Entity renderedEntity = serverToRenderedMap.remove(entity);
+            objectsOnStack.removeValue(renderedEntity, true);
+            stackDirty = true;
+            return renderedEntity;
+        }
+        return null;
     }
 
     public Array<Entity> getObjectsOnStack() {
@@ -40,20 +48,20 @@ public class CommonZones {
     }
 
     public Entity findRenderedCard(Entity card) {
-        return objectToRenderedMap.get(card);
+        return serverToRenderedMap.get(card);
     }
 
     public boolean isStackDirty() {
-        return commonZonesStatus.isStackDirty();
+        return stackDirty;
     }
 
     public void cleanup() {
-        commonZonesStatus.cleanup();
+        stackDirty = false;
     }
 
-    public Entity removeObject(Entity entity, CardZone oldZone) {
-        if (oldZone == CardZone.Stack)
-            return removeObjectFromStack(entity);
+    public Entity removeFaceUpCard(Entity cardEntity, CardZone zone) {
+        if (zone == CardZone.Stack)
+            return removeObjectFromStack(cardEntity);
         return null;
     }
 }

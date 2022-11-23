@@ -34,23 +34,23 @@ public class RenderingMissionCards implements CardZoneCards {
     public Array<Entity> getTopLevelCards(int lineIndex) {
         switch (lineIndex) {
             case 0:
-                return missionCards.getOpponentTopLevelCardsInMission();
+                return missionCards.getOpposingCards().getRenderedCards();
             case 1:
-                return missionCards.getMissionCards();
+                return missionCards.getMissionCards().getRenderedCards();
             case 2:
-                return missionCards.getPlayerTopLevelCardsInMission();
+                return missionCards.getMissionOwnerCards().getRenderedCards();
         }
         return null;
     }
 
     @Override
     public Array<Entity> getAttachedCards(Entity entity) {
-        return missionCards.getAttachedCards(entity);
+        return missionCards.getAttachedCards(entity).getRenderedCards();
     }
 
     @Override
     public int getAttachedCardCount(Entity entity) {
-        return missionCards.getAttachedCards(entity).size;
+        return getAttachedCards(entity).size;
     }
 
     @Override

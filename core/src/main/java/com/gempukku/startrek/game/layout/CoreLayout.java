@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.startrek.game.PlayerPosition;
-import com.gempukku.startrek.game.render.zone.PlayerZones;
+import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 
 public class CoreLayout {
     private static final float MAXIMUM_SCALE = 1.3f;
@@ -23,7 +23,7 @@ public class CoreLayout {
     private static final float CORE_SPACE_WIDTH = 2f;
     private static final float CORE_SPACE_HEIGHT = 0.8f;
 
-    public static void layoutCore(PlayerZones playerZones, PlayerPosition playerPosition,
+    public static void layoutCore(RenderedCardGroup coreCards, PlayerPosition playerPosition,
                                   TransformSystem transformSystem) {
         DefaultGlyphOffseter defaultGlyphOffseter = new DefaultGlyphOffseter();
 
@@ -39,7 +39,7 @@ public class CoreLayout {
                 .rotate(new Vector3(0, 1, 0), yRotateDegrees)
                 .translate(CORE_CENTER_X_DISTANCE, 0, 0);
 
-        RenderingCoreCards renderingMissionCards = new RenderingCoreCards(playerZones, STACK_VERTICAL_GAP);
+        RenderingCoreCards renderingMissionCards = new RenderingCoreCards(coreCards, STACK_VERTICAL_GAP);
 
         CardZoneParsedText missionParsedText = new CardZoneParsedText(renderingMissionCards,
                 STACK_HEIGHT, STACK_WIDTH, STACK_HORIZONTAL_GAP, STACK_STICKOUT_PERC);

@@ -17,7 +17,7 @@ public class HandLayout {
 
     public static void layoutHand(PlayerZones playerZones, PlayerPosition playerPosition,
                                   Camera camera, TransformSystem transformSystem) {
-        Array<Entity> cardsInHand = playerZones.getCardsInHand();
+        Array<Entity> cardsInHand = playerZones.getCardsInHand().getRenderedCards();
 
         Vector3 basePlayerHandPosition =
                 new Vector3(camera.position)

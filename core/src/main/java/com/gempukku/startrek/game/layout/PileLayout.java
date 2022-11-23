@@ -6,16 +6,17 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.startrek.game.PlayerPosition;
 import com.gempukku.startrek.game.render.zone.PlayerZones;
+import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 
 public class PileLayout {
     private static final float[] deckRotation = new float[]{0f, -1f, 0.3f, 0.1f, -0.3f, -0.1f, 0f, 0.15f};
 
     public static void layoutPlayerDilemmaPile(
-            PlayerZones playerZones, PlayerPosition playerPosition,
+            RenderedCardGroup dilemmaPileCards, PlayerPosition playerPosition,
             TransformSystem transformSystem) {
         float xTranslate = -4f;
         float zTranslate = 3.3f;
-        Array<Entity> cardsInDilemmaPile = playerZones.getCardsInDilemmaPile();
+        Array<Entity> cardsInDilemmaPile = dilemmaPileCards.getRenderedCards();
         for (int i = 0; i < cardsInDilemmaPile.size; i++) {
             Entity cardRepresentation = cardsInDilemmaPile.get(i);
 
@@ -32,11 +33,11 @@ public class PileLayout {
     }
 
     public static void layoutPlayerDeck(
-            PlayerZones playerZones, PlayerPosition playerPosition,
+            RenderedCardGroup deckCards, PlayerPosition playerPosition,
             TransformSystem transformSystem) {
         float xTranslate = 4f;
         float zTranslate = 3.3f;
-        Array<Entity> cardsInDeck = playerZones.getCardsInDeck();
+        Array<Entity> cardsInDeck = deckCards.getRenderedCards();
         for (int i = 0; i < cardsInDeck.size; i++) {
             Entity cardRepresentation = cardsInDeck.get(i);
 

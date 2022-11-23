@@ -14,6 +14,7 @@ import com.gempukku.startrek.game.PlayerPositionSystem;
 import com.gempukku.startrek.game.layout.*;
 import com.gempukku.startrek.game.render.zone.CommonZones;
 import com.gempukku.startrek.game.render.zone.PlayerZones;
+import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 import com.gempukku.startrek.game.zone.CardZone;
 
 public class CardRenderingSystem extends BaseSystem {
@@ -22,8 +23,11 @@ public class CardRenderingSystem extends BaseSystem {
     private CameraSystem cameraSystem;
     private TransformSystem transformSystem;
 
+    private final ObjectMap<Entity, Entity> serverToRenderedMap = new ObjectMap<>();
+    private final ObjectMap<Entity, RenderedCardGroup> attachedCards = new ObjectMap<>();
+
     private final ObjectMap<PlayerPosition, PlayerZones> playerCardsMap = new ObjectMap<>();
-    private final CommonZones commonZones = new CommonZones();
+    private final CommonZones commonZones = new CommonZones(serverToRenderedMap, attachedCards);
 
     private boolean stateChanged = false;
 
@@ -35,34 +39,26 @@ public class CardRenderingSystem extends BaseSystem {
     public PlayerZones getPlayerCards(PlayerPosition playerPosition) {
         PlayerZones playerZones = playerCardsMap.get(playerPosition);
         if (playerZones == null) {
-            playerZones = new PlayerZones();
+            playerZones = new PlayerZones(serverToRenderedMap, attachedCards);
             playerCardsMap.put(playerPosition, playerZones);
         }
         return playerZones;
     }
 
-    public Entity removeRenderedCard(Entity cardEntity, CardZone oldZone) {
+    public Entity removeFaceUpCard(Entity cardEntity, CardZone oldZone) {
         for (PlayerZones playerZones : playerCardsMap.values()) {
-            Entity renderedCard = playerZones.removeCard(cardEntity, oldZone);
+            Entity renderedCard = playerZones.removeFaceUpCard(cardEntity, oldZone);
             if (renderedCard != null)
                 return renderedCard;
         }
-        Entity renderedCard = commonZones.removeObject(cardEntity, oldZone);
+        Entity renderedCard = commonZones.removeFaceUpCard(cardEntity, oldZone);
         if (renderedCard != null)
             return renderedCard;
         return null;
     }
 
     public Entity findRenderedCard(Entity cardEntity) {
-        for (PlayerZones playerZones : playerCardsMap.values()) {
-            Entity renderedCard = playerZones.findRenderedCard(cardEntity);
-            if (renderedCard != null)
-                return renderedCard;
-        }
-        Entity renderedCard = commonZones.findRenderedCard(cardEntity);
-        if (renderedCard != null)
-            return renderedCard;
-        return null;
+        return serverToRenderedMap.get(cardEntity);
     }
 
     public CommonZones getCommonZones() {
@@ -99,13 +95,13 @@ public class CardRenderingSystem extends BaseSystem {
                     }
                 }
                 if (playerZones.isCoreDirty()) {
-                    CoreLayout.layoutCore(playerZones, playerPosition, transformSystem);
+                    CoreLayout.layoutCore(playerZones.getCardsInCore(), playerPosition, transformSystem);
                 }
                 if (playerZones.isDeckDirty()) {
-                    PileLayout.layoutPlayerDeck(playerZones, playerPosition, transformSystem);
+                    PileLayout.layoutPlayerDeck(playerZones.getCardsInDeck(), playerPosition, transformSystem);
                 }
                 if (playerZones.isDilemmaPileDirty()) {
-                    PileLayout.layoutPlayerDilemmaPile(playerZones, playerPosition, transformSystem);
+                    PileLayout.layoutPlayerDilemmaPile(playerZones.getCardsInDilemmaPile(), playerPosition, transformSystem);
                 }
                 if (playerZones.isDiscardPileDirty())
                     PileLayout.layoutPlayerDiscardPile(playerZones, playerPosition, transformSystem);
