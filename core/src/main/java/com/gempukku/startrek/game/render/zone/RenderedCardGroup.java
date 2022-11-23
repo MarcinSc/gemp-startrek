@@ -28,23 +28,31 @@ public class RenderedCardGroup {
     public Entity removeFaceDownCard() {
         if (faceDownCards.size == 0)
             return null;
-        Entity removedCard = faceDownCards.removeIndex(faceDownCards.size - 1);
-        attachedCards.remove(removedCard);
-        renderedCards.removeValue(removedCard, true);
+        Entity renderedEntity = faceDownCards.removeIndex(faceDownCards.size - 1);
+        attachedCards.remove(renderedEntity);
+        renderedCards.removeValue(renderedEntity, true);
         dirty = true;
-        return removedCard;
+        return renderedEntity;
     }
 
     public void addFaceUpCard(Entity cardEntity, Entity renderedEntity) {
         serverToRenderedMap.put(cardEntity, renderedEntity);
-        attachedCards.put(renderedEntity, new RenderedCardGroup(serverToRenderedMap, attachedCards));
+        if (!attachedCards.containsKey(renderedEntity)) {
+            attachedCards.put(renderedEntity, new RenderedCardGroup(serverToRenderedMap, attachedCards));
+        }
         renderedCards.add(renderedEntity);
         dirty = true;
     }
 
     public Entity removeFaceUpCard(Entity cardEntity) {
+        return removeFaceUpCard(cardEntity, true);
+    }
+
+    public Entity removeFaceUpCard(Entity cardEntity, boolean removeAttached) {
         if (hasServerCard(cardEntity)) {
             Entity renderedEntity = serverToRenderedMap.remove(cardEntity);
+            if (removeAttached)
+                attachedCards.remove(renderedEntity);
             renderedCards.removeValue(renderedEntity, true);
             dirty = true;
             return renderedEntity;

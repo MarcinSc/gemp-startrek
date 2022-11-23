@@ -271,16 +271,18 @@ public class ZoneOperations extends BaseSystem {
     }
 
     public void moveShip(Entity shipEntity, Entity missionCardEntity) {
+        CardInMissionComponent shipInMission = shipEntity.getComponent(CardInMissionComponent.class);
+        String missionOwnerFrom = shipInMission.getMissionOwner();
+        int missionIndexFrom = shipInMission.getMissionIndex();
+
         CardInMissionComponent cardInMission = missionCardEntity.getComponent(CardInMissionComponent.class);
         String missionOwner = cardInMission.getMissionOwner();
         int missionIndex = cardInMission.getMissionIndex();
 
-        CardInMissionComponent shipInMission = shipEntity.getComponent(CardInMissionComponent.class);
         shipInMission.setMissionOwner(missionOwner);
         shipInMission.setMissionIndex(missionIndex);
         eventSystem.fireEvent(EntityUpdated.instance, shipEntity);
 
-        Array<String> attachedCardIds = new Array<>();
         cardFilteringSystem.forEachCardInPlay(shipEntity, null, "attachedTo(self)",
                 new Consumer<Entity>() {
                     @Override
@@ -289,11 +291,13 @@ public class ZoneOperations extends BaseSystem {
                         cardInMission.setMissionOwner(missionOwner);
                         cardInMission.setMissionIndex(missionIndex);
                         eventSystem.fireEvent(EntityUpdated.instance, entity);
-                        attachedCardIds.add(serverEntityIdSystem.getEntityId(entity));
                     }
                 });
 
-        eventSystem.fireEvent(new ShipMoved(serverEntityIdSystem.getEntityId(shipEntity), attachedCardIds), gameEntityProvider.getGameEntity());
+        eventSystem.fireEvent(new ShipMoved(
+                serverEntityIdSystem.getEntityId(shipEntity),
+                missionOwnerFrom, missionIndexFrom,
+                missionOwner, missionIndex), gameEntityProvider.getGameEntity());
     }
 
     public void moveFromCurrentZoneToCore(Entity cardEntity) {
