@@ -16,7 +16,7 @@ public class PlayRequirements {
             String username,
             CardFilterResolverSystem cardFilterResolverSystem) {
         return cardFilterResolverSystem.resolveCardFilter(
-                "type(Ship),unstopped,owner(username(" + username + ")),staffed");
+                "zone(Mission),type(Ship),unstopped,owner(username(" + username + ")),staffed");
     }
 
     public static CardFilter createMoveShipMissionRequirements(
@@ -26,17 +26,17 @@ public class PlayRequirements {
         CardInMissionComponent cardInMission = shipEntity.getComponent(CardInMissionComponent.class);
         String missionOwner = cardInMission.getMissionOwner();
         int missionIndex = cardInMission.getMissionIndex();
-        return cardFilterResolverSystem.resolveCardFilter("type(Mission),not(inMission(username(" + missionOwner + ")," + missionIndex + ")),inRange");
+        return cardFilterResolverSystem.resolveCardFilter("zone(Mission),type(Mission),not(inMission(username(" + missionOwner + ")," + missionIndex + ")),inRange");
     }
 
     public static CardFilter createBeamFromMissionShipRequirements(
             String username,
             CardFilterResolverSystem cardFilterResolverSystem) {
-        return cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped,owner(username(" + username + "))");
+        return cardFilterResolverSystem.resolveCardFilter("zone(Mission),type(Ship),unstopped,owner(username(" + username + "))");
     }
 
     public static CardFilter createBeamToMissionShipRequirements(String username, CardFilterResolverSystem cardFilterResolverSystem) {
-        return cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped,owner(username(" + username + ")),missionMatches(or(missionType(Planet),missionType(Headquarters)))");
+        return cardFilterResolverSystem.resolveCardFilter("zone(Mission),type(Ship),unstopped,owner(username(" + username + ")),missionMatches(or(missionType(Planet),missionType(Headquarters)))");
     }
 
     public static CardFilter createBeamSelectAnotherShipRequirements(
@@ -46,7 +46,7 @@ public class PlayRequirements {
         CardInMissionComponent ship = shipEntity.getComponent(CardInMissionComponent.class);
         String missionOwner = ship.getMissionOwner();
         int missionIndex = ship.getMissionIndex();
-        CardFilter shipFilter = cardFilterResolverSystem.resolveCardFilter("type(Ship),unstopped," +
+        CardFilter shipFilter = cardFilterResolverSystem.resolveCardFilter("zone(Mission),type(Ship),unstopped," +
                 "inMission(username(" + missionOwner + ")," + missionIndex + ")," +
                 "owner(username(" + username + "))");
 
@@ -70,7 +70,7 @@ public class PlayRequirements {
         String missionOwner = cardInMission.getMissionOwner();
         int missionIndex = cardInMission.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
-                "or(type(Personnel),type(Equipment)),unstopped," +
+                "zone(Mission),or(type(Personnel),type(Equipment)),unstopped," +
                         "inMission(username(" + missionOwner + ")," + missionIndex + ")," +
                         "notAboardShip," +
                         "owner(username(" + username + "))");
@@ -85,7 +85,7 @@ public class PlayRequirements {
         String missionOwner = cardInMission.getMissionOwner();
         int missionIndex = cardInMission.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
-                "or(type(Personnel),type(Equipment)),unstopped," +
+                "zone(Mission),or(type(Personnel),type(Equipment)),unstopped," +
                         "inMission(username(" + missionOwner + ")," + missionIndex + ")," +
                         "owner(username(" + username + "))");
     }
@@ -100,7 +100,7 @@ public class PlayRequirements {
         String missionOwner = ship.getMissionOwner();
         int missionIndex = ship.getMissionIndex();
         return cardFilterResolverSystem.resolveCardFilter(
-                "or(type(Personnel),type(Equipment)),unstopped," +
+                "zone(Mission),or(type(Personnel),type(Equipment)),unstopped," +
                         "inMission(username(" + missionOwner + ")," + missionIndex + ")," +
                         "owner(username(" + username + "))");
     }
@@ -110,8 +110,8 @@ public class PlayRequirements {
             CardFilteringSystem cardFilteringSystem,
             CardFilterResolverSystem cardFilterResolverSystem,
             CardAbilitySystem cardAbilitySystem) {
-        OrCardFilter playabilityFilter = playabilityCheckFilter(username, cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
         CardFilter handOwnedFilter = cardFilterResolverSystem.resolveCardFilter("zone(Hand),owner(username(" + username + "))");
+        OrCardFilter playabilityFilter = playabilityCheckFilter(username, cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
 
         return new AndCardFilter(handOwnedFilter, playabilityFilter);
     }

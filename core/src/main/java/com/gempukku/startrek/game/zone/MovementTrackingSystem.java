@@ -12,7 +12,7 @@ import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.zone.MissionCards;
 import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 
-public class BeamingTrackingSystem extends BaseSystem {
+public class MovementTrackingSystem extends BaseSystem {
     private IncomingUpdatesProcessor incomingUpdatesProcessor;
     private AudioSystem audioSystem;
     private CardRenderingSystem cardRenderingSystem;
