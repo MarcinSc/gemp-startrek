@@ -25,6 +25,7 @@ import com.gempukku.startrek.game.filter.AndCardFilter;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
+import com.gempukku.startrek.game.render.PromptRenderingSystem;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
 
 public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements DecisionHandler {
@@ -34,6 +35,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
     private AuthenticationHolderSystem authenticationHolderSystem;
     private CardFilteringSystem cardFilteringSystem;
     private PlayerResolverSystem playerResolverSystem;
+    private PromptRenderingSystem promptRenderingSystem;
 
     private DecisionInterface decisionInterface;
 
@@ -158,11 +160,15 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             Stage stage = stageSystem.getStage();
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Execute order");
         }
 
         @Override
         public void cleanupDecision() {
             table.remove();
+
+            promptRenderingSystem.removePrompt();
         }
 
         private void initiateBeam() {
@@ -221,7 +227,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
                     });
             verticalGroup.addActor(acceptShipButton);
 
-            cancelMoveButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+            cancelMoveButton = new TextButton("Cancel", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
                 @Override
                 public float getPrefWidth() {
                     return 200;
@@ -259,6 +265,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             enableButton(acceptShipButton, false);
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose ship to move");
         }
 
         @Override
@@ -266,6 +274,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             table.remove();
             selectionState.cleanup();
             selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
         }
     }
 
@@ -313,7 +323,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
                     });
             verticalGroup.addActor(moveShipButton);
 
-            cancelMoveButton = new TextButton("Pass", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+            cancelMoveButton = new TextButton("Cancel", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
                 @Override
                 public float getPrefWidth() {
                     return 200;
@@ -359,6 +369,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             enableButton(moveShipButton, false);
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose mission to move to");
         }
 
         @Override
@@ -366,6 +378,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             table.remove();
             selectionState.cleanup();
             selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
         }
     }
 
@@ -450,11 +464,14 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             Stage stage = stageSystem.getStage();
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose how to beam");
         }
 
         @Override
         public void cleanupDecision() {
             table.remove();
+            promptRenderingSystem.removePrompt();
         }
 
         private void cancelBeam() {
@@ -542,6 +559,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             enableButton(acceptShipButton, false);
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose ship to beam from");
         }
 
         @Override
@@ -549,6 +568,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             table.remove();
             selectionState.cleanup();
             selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
         }
 
         private void acceptShip() {
@@ -634,6 +655,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             enableButton(acceptShipButton, false);
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose ship to beam to");
         }
 
         @Override
@@ -641,6 +664,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             table.remove();
             selectionState.cleanup();
             selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
         }
 
         private void acceptShip() {
@@ -741,6 +766,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             enableButton(beamButton, false);
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose personnel and equipment to beam");
         }
 
         @Override
@@ -748,6 +775,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             table.remove();
             selectionState.cleanup();
             selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
         }
 
         private void beamSelected() {
@@ -842,6 +871,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             enableButton(acceptShipButton, false);
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose ship to beam to");
         }
 
         @Override
@@ -849,6 +880,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             table.remove();
             selectionState.cleanup();
             selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
         }
 
         private void acceptShip() {
@@ -930,6 +963,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             enableButton(acceptShipButton, false);
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose ship to beam from");
         }
 
         @Override
@@ -937,6 +972,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             table.remove();
             selectionState.cleanup();
             selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
         }
 
         private void acceptShip() {
@@ -1023,6 +1060,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             enableButton(beamButton, false);
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose personnel and equipment to beam");
         }
 
         @Override
@@ -1030,6 +1069,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             table.remove();
             selectionState.cleanup();
             selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
         }
 
         private void beamSelected() {
@@ -1139,6 +1180,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             enableButton(beamButton, false);
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose personnel and equipment to beam");
         }
 
         @Override
@@ -1146,6 +1189,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             table.remove();
             selectionState.cleanup();
             selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
         }
 
         private void beamSelected() {

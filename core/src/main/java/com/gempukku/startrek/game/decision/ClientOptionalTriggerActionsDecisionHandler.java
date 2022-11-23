@@ -24,6 +24,7 @@ import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
+import com.gempukku.startrek.game.render.PromptRenderingSystem;
 
 public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem implements DecisionHandler {
     private ClientDecisionSystem clientDecisionSystem;
@@ -34,6 +35,7 @@ public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem impl
     private SelectionSystem selectionSystem;
     private ConditionResolverSystem conditionResolverSystem;
     private ServerEntitySystem serverEntitySystem;
+    private PromptRenderingSystem promptRenderingSystem;
 
     private Table table;
     private TextButton useButton;
@@ -107,6 +109,8 @@ public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem impl
             enableButton(passButton, true);
 
             stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose optional trigger");
         }
     }
 
@@ -168,6 +172,8 @@ public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem impl
         table.remove();
         selectionState.cleanup();
         selectionSystem.finishSelection();
+
+        promptRenderingSystem.removePrompt();
     }
 
     @Override

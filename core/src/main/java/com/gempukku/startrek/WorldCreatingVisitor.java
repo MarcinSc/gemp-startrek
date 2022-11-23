@@ -50,10 +50,7 @@ import com.gempukku.startrek.game.decision.*;
 import com.gempukku.startrek.game.filter.ClientAttachedToFilterHandler;
 import com.gempukku.startrek.game.filter.ClientFacingDilemmaFilterHandler;
 import com.gempukku.startrek.game.filter.ClientIdInFilterHandler;
-import com.gempukku.startrek.game.render.CardRenderingSystem;
-import com.gempukku.startrek.game.render.PlayerInfoRenderingSystem;
-import com.gempukku.startrek.game.render.StackTextHighlightingSystem;
-import com.gempukku.startrek.game.render.TurnSegmentRenderingSystem;
+import com.gempukku.startrek.game.render.*;
 import com.gempukku.startrek.game.zone.GameStateCardsTrackingSystem;
 import com.gempukku.startrek.game.zone.InitialFaceDownCardsCreatorSystem;
 import com.gempukku.startrek.game.zone.InitialGameStateCardsCreatorSystem;
@@ -166,6 +163,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 // Rendering
                 new CardRenderingSystem(),
                 new PlayerInfoRenderingSystem(),
+                new PromptRenderingSystem(),
                 new TurnSegmentRenderingSystem());
 
         World world = new World(worldConfigurationBuilder.build());

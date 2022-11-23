@@ -28,6 +28,7 @@ import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
+import com.gempukku.startrek.game.render.PromptRenderingSystem;
 
 public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements DecisionHandler {
     private AuthenticationHolderSystem authenticationHolderSystem;
@@ -42,6 +43,7 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     private HierarchySystem hierarchySystem;
     private SpawnSystem spawnSystem;
     private SelectionSystem selectionSystem;
+    private PromptRenderingSystem promptRenderingSystem;
 
     private Table table;
     private TextButton playButton;
@@ -136,6 +138,8 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
         enableButton(playButton, false);
 
         stage.addActor(table);
+
+        promptRenderingSystem.setPrompt("Play and Draw Cards");
     }
 
     private void drawCard() {
@@ -181,6 +185,8 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
         table.remove();
         selectionState.cleanup();
         selectionSystem.finishSelection();
+
+        promptRenderingSystem.removePrompt();
     }
 
     @Override
