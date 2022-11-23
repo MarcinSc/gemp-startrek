@@ -15,6 +15,8 @@ public class HandLayout {
     private static final float CARD_SEPARATION = 0.15f;
     private static final float CARD_SCALE = 0.4f;
 
+    private static final Matrix4 tmpMatrix = new Matrix4();
+
     public static void layoutHand(PlayerZones playerZones, PlayerPosition playerPosition,
                                   Camera camera, TransformSystem transformSystem) {
         Array<Entity> cardsInHand = playerZones.getCardsInHand().getRenderedCards();
@@ -37,12 +39,12 @@ public class HandLayout {
             float rotateX = 10;
             float rotateY = (playerPosition == PlayerPosition.Lower) ? -indexBias * 1.5f : 180 + indexBias * 1.5f;
             float rotateZ = (playerPosition == PlayerPosition.Lower) ? -2 : 2;
-            transformSystem.setTransform(cardInHand, new Matrix4()
-                    .translate(playerHandPosition.x + CARD_SEPARATION * indexBias, playerHandPosition.y, playerHandPosition.z)// + 0.005f * Math.abs(indexBias))
-                    .scl(CARD_SCALE)
-                    .rotate(1, 0, 0, rotateX)
-                    .rotate(0, 1, 0, rotateY)
-                    .rotate(0, 0, 1, rotateZ));
+            transformSystem.setTransform(cardInHand,
+                    tmpMatrix.translate(playerHandPosition.x + CARD_SEPARATION * indexBias, playerHandPosition.y, playerHandPosition.z)// + 0.005f * Math.abs(indexBias))
+                            .scl(CARD_SCALE)
+                            .rotate(1, 0, 0, rotateX)
+                            .rotate(0, 1, 0, rotateY)
+                            .rotate(0, 0, 1, rotateZ));
 
             index++;
         }

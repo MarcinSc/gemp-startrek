@@ -23,39 +23,11 @@ public class MissionsLayout {
     private static final float MISSION_CENTER_Y_DISTANCE = 0.005f;
     private static final float MISSION_CENTER_Z_DISTANCE = 1.6f;
 
-    public static void layoutMissions(PlayerZones playerZones, PlayerPosition playerPosition,
-                                      TransformSystem transformSystem) {
-        DefaultGlyphOffseter defaultGlyphOffseter = new DefaultGlyphOffseter();
-
-        Matrix4 missionTransform = new Matrix4();
-        for (int i = 0; i < 5; i++) {
-            float verticalTranslate = (playerPosition == PlayerPosition.Lower) ?
-                    MISSION_CENTER_Z_DISTANCE : -MISSION_CENTER_Z_DISTANCE;
-            float horizontalTranslate = (i - 2) * (MISSION_SPACE_WIDTH + MISSION_SPACE_GAP);
-            float yRotateDegrees = (playerPosition == PlayerPosition.Lower) ? 0f : 180f;
-
-            // Move to mission center
-            missionTransform.idt()
-                    .translate(0, MISSION_CENTER_Y_DISTANCE, verticalTranslate)
-                    .rotate(new Vector3(0, 1, 0), yRotateDegrees)
-                    .translate(horizontalTranslate, 0, 0);
-
-            MissionCards missionCards = playerZones.getMissionCards(i);
-            RenderingMissionCards renderingMissionCards = new RenderingMissionCards(missionCards, STACK_VERTICAL_GAP);
-
-            CardZoneParsedText missionParsedText = new CardZoneParsedText(renderingMissionCards,
-                    STACK_HEIGHT, STACK_WIDTH, STACK_HORIZONTAL_GAP, STACK_STICKOUT_PERC);
-
-            CardsInZoneLayout.layoutCards(transformSystem, defaultGlyphOffseter, missionTransform, missionParsedText,
-                    MAXIMUM_SCALE, MISSION_SPACE_WIDTH, MISSION_SPACE_HEIGHT);
-        }
-    }
+    private static final Matrix4 tmpMatrix = new Matrix4();
 
     public static void layoutMission(PlayerZones playerZones, int missionIndex, PlayerPosition playerPosition,
                                      TransformSystem transformSystem) {
         DefaultGlyphOffseter defaultGlyphOffseter = new DefaultGlyphOffseter();
-
-        Matrix4 missionTransform = new Matrix4();
 
         float verticalTranslate = (playerPosition == PlayerPosition.Lower) ?
                 MISSION_CENTER_Z_DISTANCE : -MISSION_CENTER_Z_DISTANCE;
@@ -63,7 +35,7 @@ public class MissionsLayout {
         float yRotateDegrees = (playerPosition == PlayerPosition.Lower) ? 0f : 180f;
 
         // Move to mission center
-        missionTransform.idt()
+        tmpMatrix.idt()
                 .translate(0, MISSION_CENTER_Y_DISTANCE, verticalTranslate)
                 .rotate(new Vector3(0, 1, 0), yRotateDegrees)
                 .translate(horizontalTranslate, 0, 0);
@@ -74,7 +46,7 @@ public class MissionsLayout {
         CardZoneParsedText missionParsedText = new CardZoneParsedText(renderingMissionCards,
                 STACK_HEIGHT, STACK_WIDTH, STACK_HORIZONTAL_GAP, STACK_STICKOUT_PERC);
 
-        CardsInZoneLayout.layoutCards(transformSystem, defaultGlyphOffseter, missionTransform, missionParsedText,
+        CardsInZoneLayout.layoutCards(transformSystem, defaultGlyphOffseter, tmpMatrix, missionParsedText,
                 MAXIMUM_SCALE, MISSION_SPACE_WIDTH, MISSION_SPACE_HEIGHT);
     }
 }

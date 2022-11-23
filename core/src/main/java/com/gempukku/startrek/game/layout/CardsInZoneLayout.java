@@ -15,7 +15,7 @@ import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyleConstants;
 public class CardsInZoneLayout {
     private static final float ATTACH_CARD_Y_SEPARATION = 0.010f;
 
-    private static final Matrix4 tempMatrix4 = new Matrix4();
+    private static final Matrix4 tmpMatrix = new Matrix4();
 
     public static void layoutCards(TransformSystem transformSystem, GlyphOffseter glyphOffseter,
                                    Matrix4 startupTransform, CardZoneParsedText missionParsedText,
@@ -41,22 +41,22 @@ public class CardsInZoneLayout {
                     float translateY = 0;
                     Array<Entity> attachedEntities = missionParsedText.getAttachedEntities(indexInText);
                     for (Entity attachedEntity : attachedEntities) {
-                        tempMatrix4.set(startupTransform);
-                        tempMatrix4.translate(translateX, translateY, startY);
-                        tempMatrix4.scl(glyphScale);
+                        tmpMatrix.set(startupTransform);
+                        tmpMatrix.translate(translateX, translateY, startY);
+                        tmpMatrix.scl(glyphScale);
 
-                        transformSystem.setTransform(attachedEntity, tempMatrix4);
+                        transformSystem.setTransform(attachedEntity, tmpMatrix);
 
                         translateX += missionParsedText.getAttachedAdvance() * glyphScale;
                         translateY += ATTACH_CARD_Y_SEPARATION;
                     }
 
                     Entity cardEntity = missionParsedText.getEntity(indexInText);
-                    tempMatrix4.set(startupTransform);
-                    tempMatrix4.translate(translateX, translateY, startY);
-                    tempMatrix4.scl(glyphScale);
+                    tmpMatrix.set(startupTransform);
+                    tmpMatrix.translate(translateX, translateY, startY);
+                    tmpMatrix.scl(glyphScale);
 
-                    transformSystem.setTransform(cardEntity, tempMatrix4);
+                    transformSystem.setTransform(cardEntity, tmpMatrix);
                 }
             }
             startY += line.getHeight();

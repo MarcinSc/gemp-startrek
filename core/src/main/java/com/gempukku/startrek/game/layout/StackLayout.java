@@ -16,6 +16,8 @@ public class StackLayout {
     private static final float STACK_DEPTH = 0.01f;
     private static final float STACK_SCALE = 0.01f;
 
+    private static final Matrix4 tmpMatrix = new Matrix4();
+
     public static void layoutStack(CommonZones commonZones,
                                    Camera camera, TransformSystem transformSystem) {
         Vector3 cameraRight = new Vector3(camera.direction).crs(camera.up);
@@ -33,12 +35,12 @@ public class StackLayout {
             Vector3 separation = new Vector3(cameraRight).scl((stackSize - i - 1) * CARD_SEPARATION);
 
             Entity objectOnStack = objectsOnStack.get(i);
-            transformSystem.setTransform(objectOnStack, new Matrix4()
-                    .translate(stackPosition)
-                    .translate(separation)
-                    .translate(depth)
-                    .scl(scale)
-                    .rotate(1, 0, 0, 10));
+            transformSystem.setTransform(objectOnStack,
+                    tmpMatrix.translate(stackPosition)
+                            .translate(separation)
+                            .translate(depth)
+                            .scl(scale)
+                            .rotate(1, 0, 0, 10));
         }
     }
 }

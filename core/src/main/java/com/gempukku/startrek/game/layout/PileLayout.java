@@ -10,6 +10,7 @@ import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 
 public class PileLayout {
     private static final float[] deckRotation = new float[]{0f, -1f, 0.3f, 0.1f, -0.3f, -0.1f, 0f, 0.15f};
+    private static final Matrix4 tmpMatrix = new Matrix4();
 
     public static void layoutPlayerDilemmaPile(
             RenderedCardGroup dilemmaPileCards, PlayerPosition playerPosition,
@@ -20,15 +21,15 @@ public class PileLayout {
         for (int i = 0; i < cardsInDilemmaPile.size; i++) {
             Entity cardRepresentation = cardsInDilemmaPile.get(i);
 
-            float yRotation = (playerPosition == PlayerPosition.Lower) ? 0 : 180;
-            yRotation += 3 * deckRotation[i];
-            float zMove = playerPosition == PlayerPosition.Lower ? zTranslate : -zTranslate;
+            float playerRotation = (playerPosition == PlayerPosition.Lower) ? 0f : 180f;
+            float cardRotation = 3 * deckRotation[i];
 
             transformSystem.setTransform(cardRepresentation,
-                    new Matrix4().idt()
-                            .translate(xTranslate, 0f + i * 0.005f, zMove)
+                    tmpMatrix.idt()
+                            .rotate(0, 1, 0, playerRotation)
+                            .translate(xTranslate, 0f + i * 0.005f, zTranslate)
                             // A bit crooked
-                            .rotate(0, 1, 0, yRotation));
+                            .rotate(0, 1, 0, cardRotation));
         }
     }
 
@@ -41,15 +42,15 @@ public class PileLayout {
         for (int i = 0; i < cardsInDeck.size; i++) {
             Entity cardRepresentation = cardsInDeck.get(i);
 
-            float yRotation = (playerPosition == PlayerPosition.Lower) ? 0 : 180;
-            yRotation += 3 * deckRotation[i];
-            float zMove = playerPosition == PlayerPosition.Lower ? zTranslate : -zTranslate;
+            float playerRotation = (playerPosition == PlayerPosition.Lower) ? 0f : 180f;
+            float cardRotation = 3 * deckRotation[i];
 
             transformSystem.setTransform(cardRepresentation,
-                    new Matrix4().idt()
-                            .translate(xTranslate, 0f + i * 0.005f, zMove)
+                    tmpMatrix.idt()
+                            .rotate(0, 1, 0, playerRotation)
+                            .translate(xTranslate, 0f + i * 0.005f, zTranslate)
                             // A bit crooked
-                            .rotate(0, 1, 0, yRotation));
+                            .rotate(0, 1, 0, cardRotation));
         }
     }
 
@@ -60,14 +61,12 @@ public class PileLayout {
         float zTranslate = 3.3f;
         Entity cardRepresentation = playerZones.getTopDiscardPileCard();
         if (cardRepresentation != null) {
-            float yRotation = (playerPosition == PlayerPosition.Lower) ? 0 : 180;
-            float zMove = playerPosition == PlayerPosition.Lower ? zTranslate : -zTranslate;
+            float playerRotation = (playerPosition == PlayerPosition.Lower) ? 0f : 180f;
 
             transformSystem.setTransform(cardRepresentation,
-                    new Matrix4().idt()
-                            .translate(xTranslate, 0f, zMove)
-                            // A bit crooked
-                            .rotate(0, 1, 0, yRotation));
+                    tmpMatrix.idt()
+                            .rotate(0, 1, 0, playerRotation)
+                            .translate(xTranslate, 0f, zTranslate));
         }
     }
 }

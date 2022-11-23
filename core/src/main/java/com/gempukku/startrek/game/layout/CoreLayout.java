@@ -23,18 +23,18 @@ public class CoreLayout {
     private static final float CORE_SPACE_WIDTH = 2f;
     private static final float CORE_SPACE_HEIGHT = 0.8f;
 
+    private static final Matrix4 tmpMatrix = new Matrix4();
+
     public static void layoutCore(RenderedCardGroup coreCards, PlayerPosition playerPosition,
                                   TransformSystem transformSystem) {
         DefaultGlyphOffseter defaultGlyphOffseter = new DefaultGlyphOffseter();
-
-        Matrix4 coreTransform = new Matrix4();
 
         float verticalTranslate = (playerPosition == PlayerPosition.Lower) ?
                 CORE_CENTER_Z_DISTANCE : -CORE_CENTER_Z_DISTANCE;
         float yRotateDegrees = (playerPosition == PlayerPosition.Lower) ? 0f : 180f;
 
         // Move to mission center
-        coreTransform.idt()
+        tmpMatrix.idt()
                 .translate(0, CORE_CENTER_Y_DISTANCE, verticalTranslate)
                 .rotate(new Vector3(0, 1, 0), yRotateDegrees)
                 .translate(CORE_CENTER_X_DISTANCE, 0, 0);
@@ -44,7 +44,7 @@ public class CoreLayout {
         CardZoneParsedText missionParsedText = new CardZoneParsedText(renderingMissionCards,
                 STACK_HEIGHT, STACK_WIDTH, STACK_HORIZONTAL_GAP, STACK_STICKOUT_PERC);
 
-        CardsInZoneLayout.layoutCards(transformSystem, defaultGlyphOffseter, coreTransform, missionParsedText,
+        CardsInZoneLayout.layoutCards(transformSystem, defaultGlyphOffseter, tmpMatrix, missionParsedText,
                 MAXIMUM_SCALE, CORE_SPACE_WIDTH, CORE_SPACE_HEIGHT);
     }
 }
