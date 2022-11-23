@@ -6,119 +6,126 @@ filter: Linear, Linear
 repeat: none
 Baj
   rotate: false
-  xy: 393, 80
+  xy: 393, 86
   size: 30, 29
   orig: 30, 29
   offset: 0, 0
   index: -1
+Black
+  rotate: false
+  xy: 2, 2
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
 Blank
   rotate: false
-  xy: 36, 2
+  xy: 36, 8
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Borg
   rotate: false
-  xy: 425, 80
+  xy: 425, 86
   size: 30, 29
   orig: 30, 29
   offset: 0, 0
   index: -1
 Car
   rotate: false
-  xy: 2, 2
+  xy: 2, 8
   size: 32, 30
   orig: 32, 30
   offset: 0, 0
   index: -1
 Cmd
   rotate: false
-  xy: 228, 47
+  xy: 228, 53
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 DS9
   rotate: false
-  xy: 327, 47
+  xy: 327, 53
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 Dom
   rotate: false
-  xy: 228, 79
+  xy: 228, 85
   size: 32, 30
   orig: 32, 30
   offset: 0, 0
   index: -1
 Fed
   rotate: false
-  xy: 262, 79
+  xy: 262, 85
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Fer
   rotate: false
-  xy: 361, 79
+  xy: 361, 85
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 Headquarters
   rotate: false
-  xy: 153, 36
+  xy: 153, 42
   size: 73, 73
   orig: 73, 73
   offset: 0, 0
   index: -1
 Kli
   rotate: false
-  xy: 359, 47
+  xy: 359, 53
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 NA
   rotate: false
-  xy: 261, 47
+  xy: 261, 53
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Planet
   rotate: false
-  xy: 2, 34
+  xy: 2, 40
   size: 74, 75
   orig: 74, 75
   offset: 0, 0
   index: -1
 Rom
   rotate: false
-  xy: 295, 79
+  xy: 295, 85
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Space
   rotate: false
-  xy: 78, 35
+  xy: 78, 41
   size: 73, 74
   orig: 73, 74
   offset: 0, 0
   index: -1
 Sta
   rotate: false
-  xy: 294, 47
+  xy: 294, 53
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Stf
   rotate: false
-  xy: 328, 79
+  xy: 328, 85
   size: 31, 30
   orig: 31, 30
   offset: 0, 0

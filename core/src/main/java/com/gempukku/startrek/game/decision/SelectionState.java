@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.ObjectSet;
 import com.badlogic.gdx.utils.Predicate;
 import com.gempukku.libgdx.lib.artemis.hierarchy.HierarchySystem;
 import com.gempukku.libgdx.lib.artemis.input.UserInputStateComponent;
+import com.gempukku.libgdx.lib.artemis.picking.ShapePickableComponent;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionDefinition;
 import com.gempukku.startrek.game.Memory;
@@ -18,17 +19,18 @@ import com.gempukku.startrek.game.zone.CardInHandComponent;
 import java.util.function.Consumer;
 
 public class SelectionState implements SelectionDefinition {
-    private World world;
-    private Entity userInputStateEntity;
-    private CardFilter cardFilter;
-    private Entity sourceEntity;
-    private Memory memory;
-    private SelectionCallback selectionCallback;
-    private int maxSelected;
+    private final World world;
+    private final Entity userInputStateEntity;
+    private final CardFilter cardFilter;
+    private final Entity sourceEntity;
+    private final Memory memory;
+    private final SelectionCallback selectionCallback;
+    private final int maxSelected;
 
-    private ObjectSet<Entity> matchingRenderedCards = new ObjectSet<>();
-    private ObjectSet<Entity> selectionEntities = new ObjectSet<>();
-    private ObjectSet<Entity> markedEntities = new ObjectSet<>();
+    private final ObjectSet<Entity> matchingRenderedCards = new ObjectSet<>();
+    private final ObjectSet<Entity> selectionEntities = new ObjectSet<>();
+    private final ObjectSet<Entity> markedEntities = new ObjectSet<>();
+    private final String selectionMask = "Selection";
 
     public SelectionState(World world, Entity userInputStateEntity, CardFilter cardFilter,
                           SelectionCallback selectionCallback) {
@@ -67,12 +69,12 @@ public class SelectionState implements SelectionDefinition {
 
     @Override
     public boolean canDeselect(ObjectSet<Entity> selectedEntities, Entity selected) {
-        return world.getSystem(HierarchySystem.class).getChildren(selected).iterator().hasNext();
+        return true;
     }
 
     @Override
     public boolean canSelect(ObjectSet<Entity> selectedEntities, Entity newSelected) {
-        return world.getSystem(HierarchySystem.class).getChildren(newSelected).iterator().hasNext();
+        return true;
     }
 
     @Override
@@ -96,6 +98,7 @@ public class SelectionState implements SelectionDefinition {
                     if (selectionEntity != null) {
                         selectionEntities.remove(selectionEntity);
                         world.deleteEntity(selectionEntity);
+                        matchingEntity.getComponent(ShapePickableComponent.class).getPickingMask().removeValue(selectionMask, false);
                     }
                 } else {
                     Entity markedEntity = findMarkedEntity(matchingEntity);
@@ -111,6 +114,7 @@ public class SelectionState implements SelectionDefinition {
                         selectionEntity = spawnSystem.spawnEntity("game/card/card-" + getSize(matchingEntity) + "-selection.template");
                         hierarchySystem.addHierarchy(matchingEntity, selectionEntity);
                         selectionEntities.add(selectionEntity);
+                        matchingEntity.getComponent(ShapePickableComponent.class).getPickingMask().add(selectionMask);
                     }
                 }
             }
@@ -150,6 +154,7 @@ public class SelectionState implements SelectionDefinition {
                         hierarchySystem.addHierarchy(renderedCardEntity, selectionEntity);
                         selectionEntities.add(selectionEntity);
                         matchingRenderedCards.add(renderedCardEntity);
+                        renderedCardEntity.getComponent(ShapePickableComponent.class).getPickingMask().add(selectionMask);
                     }
                 });
     }
@@ -168,6 +173,10 @@ public class SelectionState implements SelectionDefinition {
     }
 
     public void cleanup() {
+        for (Entity matchingRenderedCard : matchingRenderedCards) {
+            matchingRenderedCard.getComponent(ShapePickableComponent.class).getPickingMask().removeValue(selectionMask, false);
+        }
+
         for (Entity selectionEntity : selectionEntities) {
             world.deleteEntity(selectionEntity);
         }
@@ -181,7 +190,7 @@ public class SelectionState implements SelectionDefinition {
 
     @Override
     public String getMask() {
-        return "Selection";
+        return selectionMask;
     }
 
     @Override

@@ -87,7 +87,7 @@ public class ConfigureTextureSystem extends BaseEntitySystem {
         textureSystem.setDefaultTextureHandler(defaultTextureHandler);
 
         slotLoadingTextureHandler = new SlotLoadingTextureHandler(2048, 2048, 323, 200,
-                new LocalFileHandleResolver(), textureSystem.getTextureRegion("atlas/icons.atlas", "Blank"));
+                new LocalFileHandleResolver(), textureSystem.getTextureRegion("atlas/icons.atlas", "Black"));
         textureSystem.addTextureHandler(ATLAS_NAME, slotLoadingTextureHandler);
     }
 

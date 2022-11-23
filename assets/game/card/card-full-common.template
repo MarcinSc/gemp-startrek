@@ -46,7 +46,6 @@
     "shape": "square",
     "positionDataType": "position",
     "pickingMask": [
-      "Selection"
     ]
   }
 }
