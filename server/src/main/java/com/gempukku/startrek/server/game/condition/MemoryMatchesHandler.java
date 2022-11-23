@@ -5,13 +5,11 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.ConditionSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 
 public class MemoryMatchesHandler extends ConditionSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private ServerEntityIdSystem serverEntityIdSystem;
 
@@ -22,7 +20,7 @@ public class MemoryMatchesHandler extends ConditionSystem {
     @Override
     public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
         String memoryName = parameters.get(0);
-        CardFilter cardFilter = cardFilterResolverSystem.createAndFilter(parameters, 1);
+        CardFilter cardFilter = cardFilteringSystem.createAndFilter(parameters, 1);
         String cardIds = memory.getValue(memoryName);
         String[] cardIdsSplit = cardIds.split(",");
         for (String cardId : cardIdsSplit) {

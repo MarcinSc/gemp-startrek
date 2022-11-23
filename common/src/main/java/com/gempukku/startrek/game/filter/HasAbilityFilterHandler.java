@@ -38,6 +38,8 @@ public class HasAbilityFilterHandler extends CardFilterSystem {
             return TriggerAbility.class;
         if (type.equals("MoveCostModifier"))
             return MoveCostModifier.class;
+        if (type.equals("Order"))
+            return OrderAbility.class;
         throw new GdxRuntimeException("Unable to find ability type: " + type);
     }
 }

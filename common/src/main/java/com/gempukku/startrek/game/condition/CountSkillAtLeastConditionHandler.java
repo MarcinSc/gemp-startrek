@@ -8,14 +8,12 @@ import com.gempukku.startrek.card.PersonnelSkill;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 
 import java.util.function.Consumer;
 
 public class CountSkillAtLeastConditionHandler extends ConditionSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private AmountResolverSystem amountResolverSystem;
     private CardLookupSystem cardLookupSystem;
@@ -26,7 +24,7 @@ public class CountSkillAtLeastConditionHandler extends ConditionSystem {
 
     @Override
     public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
-        CardFilter filter = cardFilterResolverSystem.resolveCardFilter(parameters.get(0));
+        CardFilter filter = cardFilteringSystem.resolveCardFilter(parameters.get(0));
         PersonnelSkill skill = PersonnelSkill.valueOf(parameters.get(1));
         int amount = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(2));
         int[] result = new int[1];
@@ -47,7 +45,7 @@ public class CountSkillAtLeastConditionHandler extends ConditionSystem {
     @Override
     public void validate(Array<String> parameters) {
         ValidateUtil.exactly(parameters, 3);
-        cardFilterResolverSystem.validateFilter(parameters.get(0));
+        cardFilteringSystem.validateFilter(parameters.get(0));
         PersonnelSkill.valueOf(parameters.get(1));
         amountResolverSystem.validateAmount(parameters.get(2));
     }

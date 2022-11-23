@@ -6,18 +6,16 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 
 import java.util.function.Consumer;
 
 public class MoveCardToMissionEffect extends OneTimeEffectSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
-    private ConditionResolverSystem conditionResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
+    private ConditionResolverSystem conditionResolverSystem;
     private EventSystem eventSystem;
     private ZoneOperations zoneOperations;
     private ServerEntityIdSystem serverEntityIdSystem;
@@ -47,7 +45,7 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"filter", "missionMemory", "faceUp"},
                 new String[]{});
-        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
+        cardFilteringSystem.validateFilter(effect.getString("filter"));
         conditionResolverSystem.validateCondition(effect.getString("faceUp"));
     }
 }

@@ -4,10 +4,10 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.card.PersonnelSkill;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 
 public class GrantSkillAbilityHandler extends CardAbilityHandlerSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
+    private CardFilteringSystem cardFilteringSystem;
 
     public GrantSkillAbilityHandler() {
         super("grantSkill");
@@ -15,7 +15,7 @@ public class GrantSkillAbilityHandler extends CardAbilityHandlerSystem {
 
     @Override
     public CardAbility resolveCardAbility(JsonValue cardAbility) {
-        CardFilter filter = cardFilterResolverSystem.resolveCardFilter(cardAbility.getString("filter"));
+        CardFilter filter = cardFilteringSystem.resolveCardFilter(cardAbility.getString("filter"));
         PersonnelSkill skill = PersonnelSkill.valueOf(cardAbility.getString("skill"));
         return new GrantSkill(filter, skill);
     }
@@ -25,7 +25,7 @@ public class GrantSkillAbilityHandler extends CardAbilityHandlerSystem {
         ValidateUtil.abilityExpectedFields(cardAbility,
                 new String[]{"filter", "skill"},
                 new String[]{});
-        cardFilterResolverSystem.validateFilter(cardAbility.getString("filter"));
+        cardFilteringSystem.validateFilter(cardAbility.getString("filter"));
         PersonnelSkill.valueOf(cardAbility.getString("skill"));
     }
 }

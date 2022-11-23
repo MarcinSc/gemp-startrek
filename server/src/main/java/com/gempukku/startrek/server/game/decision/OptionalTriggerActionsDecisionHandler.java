@@ -8,17 +8,15 @@ import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.TriggerRequirements;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 
 public class OptionalTriggerActionsDecisionHandler extends BaseSystem implements DecisionTypeHandler {
     private DecisionSystem decisionSystem;
     private CardFilteringSystem cardFilteringSystem;
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private ExecutionStackSystem stackSystem;
     private SpawnSystem spawnSystem;
     private CardAbilitySystem cardAbilitySystem;
@@ -57,7 +55,7 @@ public class OptionalTriggerActionsDecisionHandler extends BaseSystem implements
                 String triggerType = decisionData.get("triggerType");
                 CardFilter triggerFilter = TriggerRequirements.createOptionalTriggerRequirements(
                         decisionPlayer, triggerType, usedIds,
-                        cardFilterResolverSystem);
+                        cardFilteringSystem);
                 if (triggerFilter.accepts(sourceEntity, new Memory(decisionData), usedCardEntity)) {
                     int usableTriggerIndex = TriggerRequirements.findUsableTriggerIndex(usedCardEntity, triggerType, true,
                             new Memory(decisionData), cardAbilitySystem, conditionResolverSystem);

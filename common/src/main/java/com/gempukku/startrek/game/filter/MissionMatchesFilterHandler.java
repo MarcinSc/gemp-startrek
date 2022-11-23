@@ -4,12 +4,10 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
 public class MissionMatchesFilterHandler extends CardFilterSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private MissionOperations missionOperations;
 
@@ -19,7 +17,7 @@ public class MissionMatchesFilterHandler extends CardFilterSystem {
 
     @Override
     public CardFilter resolveFilter(Array<String> parameters) {
-        CardFilter missionFilter = cardFilterResolverSystem.createAndFilter(parameters);
+        CardFilter missionFilter = cardFilteringSystem.createAndFilter(parameters);
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
@@ -36,7 +34,7 @@ public class MissionMatchesFilterHandler extends CardFilterSystem {
     public void validate(Array<String> parameters) {
         ValidateUtil.atLeast(parameters, 1);
         for (String parameter : parameters) {
-            cardFilterResolverSystem.validateFilter(parameter);
+            cardFilteringSystem.validateFilter(parameter);
         }
     }
 }

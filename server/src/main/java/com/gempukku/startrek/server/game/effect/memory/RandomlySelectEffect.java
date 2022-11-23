@@ -7,15 +7,13 @@ import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 
 import java.util.function.Consumer;
 
 public class RandomlySelectEffect extends OneTimeEffectSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private AmountResolverSystem amountResolverSystem;
 
@@ -56,7 +54,7 @@ public class RandomlySelectEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"memory", "filter"},
                 new String[]{"amount"});
-        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
+        cardFilteringSystem.validateFilter(effect.getString("filter"));
         amountResolverSystem.validateAmount(effect.getString("amount", "1"));
     }
 }

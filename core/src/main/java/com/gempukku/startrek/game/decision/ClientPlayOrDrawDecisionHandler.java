@@ -24,10 +24,9 @@ import com.gempukku.startrek.game.PlayerPositionSystem;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
 
 public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements DecisionHandler {
@@ -39,7 +38,6 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     private CardLookupSystem cardLookupSystem;
     private CardAbilitySystem cardAbilitySystem;
     private AmountResolverSystem amountResolverSystem;
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardRenderingSystem cardRenderingSystem;
     private HierarchySystem hierarchySystem;
     private SpawnSystem spawnSystem;
@@ -60,7 +58,7 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
     private void initializeForDecisions() {
         Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
         CardFilter playRequirementsFilter = PlayRequirements.createPlayRequirements(authenticationHolderSystem.getUsername(),
-                cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
+                cardFilteringSystem, cardAbilitySystem);
 
         selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                 new SelectionCallback() {

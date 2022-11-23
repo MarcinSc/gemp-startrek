@@ -9,15 +9,13 @@ import com.gempukku.startrek.game.EffectComponent;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 
 public class CreateEffectOnStackEffect extends OneTimeEffectSystem {
     private AmountResolverSystem amountResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private ZoneOperations zoneOperations;
     private ServerEntityIdSystem serverEntityIdSystem;
     private SpawnSystem spawnSystem;

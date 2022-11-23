@@ -4,7 +4,6 @@ import com.artemis.WorldConfigurationBuilder;
 import com.gempukku.startrek.expression.ExpressionSystem;
 import com.gempukku.startrek.game.ability.*;
 import com.gempukku.startrek.game.amount.*;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.condition.*;
 import com.gempukku.startrek.game.filter.*;
 import com.gempukku.startrek.game.mission.MissionOperations;
@@ -41,9 +40,9 @@ public class CommonGameWorldBuilder {
                 new CountAtLeastConditionHandler(),
                 new CountSkillAtLeastConditionHandler(),
                 new HasCardConditionHandler(),
+                new CanBeginEngagementInvolvingPersonnelConditionHandler(),
 
                 // Card filter resovlers
-                new CardFilterResolverSystem(),
                 new CardTypeFilterHandler(),
                 new CardIconFilterHandler(),
                 new CardZoneFilterHandler(),
@@ -65,6 +64,7 @@ public class CommonGameWorldBuilder {
                 new ConditionForMatchedFilterHandler(),
                 new HasAbilityFilterHandler(),
                 new TriggerConditionMatchesFilterHandler(),
+                new OrderConditionMatchesFilterHandler(),
 
                 // Card abilities
                 new CardAbilitySystem(),

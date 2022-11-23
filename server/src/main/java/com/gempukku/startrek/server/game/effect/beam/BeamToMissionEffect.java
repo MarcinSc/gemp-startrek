@@ -8,8 +8,7 @@ import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.GameEntityProvider;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.zone.CardsBeamed;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
@@ -18,7 +17,6 @@ import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 import java.util.function.Consumer;
 
 public class BeamToMissionEffect extends OneTimeEffectSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private ZoneOperations zoneOperations;
     private ServerEntityIdSystem serverEntityIdSystem;
@@ -53,7 +51,7 @@ public class BeamToMissionEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"ship", "filter"},
                 new String[]{});
-        cardFilterResolverSystem.validateFilter(effect.getString("ship"));
-        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
+        cardFilteringSystem.validateFilter(effect.getString("ship"));
+        cardFilteringSystem.validateFilter(effect.getString("filter"));
     }
 }

@@ -6,8 +6,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.zone.CardZone;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
@@ -15,7 +14,6 @@ import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import java.util.function.Consumer;
 
 public class MoveCardToDiscardPileEffect extends OneTimeEffectSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private EventSystem eventSystem;
     private ZoneOperations zoneOperations;
@@ -48,7 +46,7 @@ public class MoveCardToDiscardPileEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"filter"},
                 new String[]{"fromZone"});
-        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
+        cardFilteringSystem.validateFilter(effect.getString("filter"));
         CardZone.valueOf(effect.getString("zone"));
         String fromZone = effect.getString("fromZone");
         if (fromZone != null)

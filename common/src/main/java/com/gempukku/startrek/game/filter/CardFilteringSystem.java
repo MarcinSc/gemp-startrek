@@ -1,22 +1,31 @@
 package com.gempukku.startrek.game.filter;
 
-import com.artemis.BaseSystem;
-import com.artemis.Entity;
+import com.artemis.*;
+import com.artemis.utils.IntBag;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.expression.Expression;
 import com.gempukku.startrek.expression.ExpressionSystem;
+import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
+import com.gempukku.startrek.game.zone.CardInHandComponent;
+import com.gempukku.startrek.game.zone.CardZone;
 
-public class CardFilterResolverSystem extends BaseSystem {
+import java.util.function.Consumer;
+
+public class CardFilteringSystem extends BaseSystem {
+    private ComponentMapper<CardInHandComponent> cardInHandComponentMapper;
+    private EntitySubscription cardInHandSubscription;
+    private ComponentMapper<CardComponent> cardComponentMapper;
+    private EntitySubscription cardSubscription;
     private ExpressionSystem expressionSystem;
     private ObjectMap<String, CardFilter> cardFilterCache = new ObjectMap<>();
 
     private ObjectMap<String, CardFilterHandler> filterHandlers = new ObjectMap<>();
 
-    public CardFilterResolverSystem() {
+    public CardFilteringSystem() {
         registerFilterHandler("and",
                 new CardFilterHandler() {
                     @Override
@@ -28,7 +37,7 @@ public class CardFilterResolverSystem extends BaseSystem {
                     public void validate(Array<String> parameters) {
                         ValidateUtil.atLeast(parameters, 2);
                         for (String parameter : parameters) {
-                            CardFilterResolverSystem.this.validateFilter(parameter);
+                            validateFilter(parameter);
                         }
                     }
                 });
@@ -48,7 +57,7 @@ public class CardFilterResolverSystem extends BaseSystem {
                     public void validate(Array<String> parameters) {
                         ValidateUtil.atLeast(parameters, 2);
                         for (String parameter : parameters) {
-                            CardFilterResolverSystem.this.validateFilter(parameter);
+                            validateFilter(parameter);
                         }
                     }
                 });
@@ -85,7 +94,7 @@ public class CardFilterResolverSystem extends BaseSystem {
                     @Override
                     public void validate(Array<String> parameters) {
                         ValidateUtil.exactly(parameters, 1);
-                        CardFilterResolverSystem.this.validateFilter(parameters.get(0));
+                        validateFilter(parameters.get(0));
                     }
                 });
         registerFilterHandler("self",
@@ -181,9 +190,148 @@ public class CardFilterResolverSystem extends BaseSystem {
         }
     }
 
+
+    @Override
+    protected void initialize() {
+        cardInHandSubscription = world.getAspectSubscriptionManager().get(Aspect.all(CardInHandComponent.class));
+        cardSubscription = world.getAspectSubscriptionManager().get(Aspect.all(CardComponent.class));
+    }
+
+    public void forEachCardInHand(String username, Consumer<Entity> consumer) {
+        IntBag entities = cardInHandSubscription.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity cardInHandEntity = world.getEntity(entities.get(i));
+            CardComponent card = cardInHandEntity.getComponent(CardComponent.class);
+            if (card.getOwner().equals(username)) {
+                consumer.accept(cardInHandEntity);
+            }
+        }
+    }
+
+    public void forEachCard(Entity sourceEntity, Memory memory, String filter, Consumer<Entity> consumer) {
+        CardFilter cardFilter = resolveCardFilter(filter);
+        forEachCard(sourceEntity, memory, cardFilter, consumer);
+    }
+
+    public void forEachCard(Entity sourceEntity, Memory memory, CardFilter cardFilter, Consumer<Entity> consumer) {
+        IntBag entities = cardSubscription.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity cardEntity = world.getEntity(entities.get(i));
+            if (cardFilter.accepts(sourceEntity, memory, cardEntity)) {
+                consumer.accept(cardEntity);
+            }
+        }
+    }
+
+    public boolean hasMatchingInPlay(Entity sourceEntity, Memory memory, CardFilter cardFilter, int count) {
+        int result = 0;
+        IntBag entities = cardSubscription.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity cardEntity = world.getEntity(entities.get(i));
+            CardComponent card = cardComponentMapper.get(cardEntity);
+            CardZone cardZone = card.getCardZone();
+            if (cardZone == CardZone.Core || cardZone == CardZone.Brig || cardZone == CardZone.Mission
+                    && cardFilter.accepts(sourceEntity, memory, cardEntity)) {
+                result++;
+                if (result >= count)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public void forEachCardInPlay(Entity sourceEntity, Memory memory, String filter, Consumer<Entity> consumer) {
+        CardFilter cardFilter = resolveCardFilter(filter);
+        forEachCardInPlay(sourceEntity, memory, cardFilter, consumer);
+    }
+
+    public void forEachCardInPlay(Entity sourceEntity, Memory memory, CardFilter cardFilter, Consumer<Entity> consumer) {
+        IntBag entities = cardSubscription.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity cardEntity = world.getEntity(entities.get(i));
+            CardComponent card = cardComponentMapper.get(cardEntity);
+            CardZone cardZone = card.getCardZone();
+            if (cardZone == CardZone.Core || cardZone == CardZone.Brig || cardZone == CardZone.Mission
+                    && cardFilter.accepts(sourceEntity, memory, cardEntity)) {
+                consumer.accept(cardEntity);
+            }
+        }
+    }
+
+    public Entity findFirstCardInPlay(String filter) {
+        return findFirstCardInPlay(null, null, filter);
+    }
+
+    public boolean cantFindCard(Entity sourceEntity, Memory memory, CardFilter cardFilter) {
+        return findFirstCard(sourceEntity, memory, cardFilter) == null;
+    }
+
+    public Array<Entity> findAllInPlay(Entity sourceEntity, Memory memory, String filter) {
+        Array<Entity> result = new Array<>();
+        forEachCardInPlay(sourceEntity, memory, filter,
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity entity) {
+                        result.add(entity);
+                    }
+                });
+        return result;
+    }
+
+    public Entity findFirstCard(Entity sourceEntity, Memory memory, String filter) {
+        return findFirstCard(sourceEntity, memory, resolveCardFilter(filter));
+    }
+
+    public Entity findFirstCard(Entity sourceEntity, Memory memory, CardFilter filter) {
+        Array<Entity> result = new Array<>();
+        forEachCard(sourceEntity, memory, filter,
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity cardEntity) {
+                        if (result.size < 1) {
+                            result.add(cardEntity);
+                        }
+                    }
+                });
+        if (result.size > 0)
+            return result.get(0);
+        return null;
+    }
+
+    public Entity findFirstCardInPlay(Entity sourceEntity, Memory memory, String filter) {
+        Array<Entity> result = new Array<>();
+        forEachCardInPlay(sourceEntity, memory, filter,
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity cardEntity) {
+                        if (result.size < 1) {
+                            result.add(cardEntity);
+                        }
+                    }
+                });
+        if (result.size > 0)
+            return result.get(0);
+        return null;
+    }
+
+    public Entity findFirstCardInPlay(Entity sourceEntity, Memory memory, CardFilter cardFilter) {
+        Array<Entity> result = new Array<>();
+        forEachCardInPlay(sourceEntity, memory, cardFilter,
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity cardEntity) {
+                        if (result.size < 1) {
+                            result.add(cardEntity);
+                        }
+                    }
+                });
+        if (result.size > 0)
+            return result.get(0);
+        return null;
+    }
+
     @Override
     protected void processSystem() {
 
     }
-
 }

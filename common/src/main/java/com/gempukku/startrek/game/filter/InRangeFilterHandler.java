@@ -10,12 +10,10 @@ import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.ability.MoveCostModifier;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
 public class InRangeFilterHandler extends CardFilterSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private CardAbilitySystem cardAbilitySystem;
     private CardLookupSystem cardLookupSystem;
@@ -58,9 +56,9 @@ public class InRangeFilterHandler extends CardFilterSystem {
 
         for (Entity modifierCardEntity : cardFilteringSystem.findAllInPlay(shipEntity, null, "hasAbility(MoveCostModifier)")) {
             for (MoveCostModifier modifierAbility : cardAbilitySystem.getCardAbilities(modifierCardEntity, MoveCostModifier.class)) {
-                CardFilter shipFilter = cardFilterResolverSystem.resolveCardFilter(modifierAbility.getShipFilter());
-                CardFilter fromFilter = cardFilterResolverSystem.resolveCardFilter(modifierAbility.getFromFilter());
-                CardFilter toFilter = cardFilterResolverSystem.resolveCardFilter(modifierAbility.getToFilter());
+                CardFilter shipFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getShipFilter());
+                CardFilter fromFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getFromFilter());
+                CardFilter toFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getToFilter());
                 if (shipFilter.accepts(modifierCardEntity, null, shipEntity)
                         && fromFilter.accepts(modifierCardEntity, null, fromMissionEntity)
                         && toFilter.accepts(modifierCardEntity, null, toMissionEntity))

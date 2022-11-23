@@ -7,17 +7,17 @@ import com.gempukku.startrek.game.ability.CardAbilitySystem;
 import com.gempukku.startrek.game.ability.TriggerAbility;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 
 public class TriggerRequirements {
     public static CardFilter createMandatoryTriggerRequirements(
             String username,
             String triggerType,
             String usedIds,
-            CardFilterResolverSystem cardFilterResolverSystem) {
+            CardFilteringSystem cardFilteringSystem) {
         if (usedIds == null)
             usedIds = "";
-        return cardFilterResolverSystem.resolveCardFilter(
+        return cardFilteringSystem.resolveCardFilter(
                 "or(zone(Mission),zone(Core)),owner(username(" + username + ")),hasAbility(Trigger)," +
                         "not(idIn(" + usedIds + "))," +
                         "triggerConditionMatches(" + triggerType + ",false)");
@@ -27,8 +27,8 @@ public class TriggerRequirements {
             String username,
             String triggerType,
             String usedIds,
-            CardFilterResolverSystem cardFilterResolverSystem) {
-        return cardFilterResolverSystem.resolveCardFilter(
+            CardFilteringSystem cardFilteringSystem) {
+        return cardFilteringSystem.resolveCardFilter(
                 "or(zone(Mission),zone(Core)),owner(username(" + username + ")),hasAbility(Trigger)," +
                         "not(idIn(" + usedIds + "))," +
                         "triggerConditionMatches(" + triggerType + ",true)");

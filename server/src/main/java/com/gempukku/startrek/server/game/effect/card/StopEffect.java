@@ -6,13 +6,11 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 
 public class StopEffect extends EffectSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private EventSystem eventSystem;
     private SpawnSystem spawnSystem;
@@ -53,7 +51,7 @@ public class StopEffect extends EffectSystem {
                 new String[]{},
                 new String[]{"filter", "select"});
         ValidateUtil.hasExactlyOneOf(effect, "filter", "select");
-        cardFilterResolverSystem.validateFilter(effect.getString("filter", "any"));
-        cardFilterResolverSystem.validateFilter(effect.getString("select", "any"));
+        cardFilteringSystem.validateFilter(effect.getString("filter", "any"));
+        cardFilteringSystem.validateFilter(effect.getString("select", "any"));
     }
 }

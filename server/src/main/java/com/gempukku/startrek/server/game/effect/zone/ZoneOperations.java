@@ -9,7 +9,7 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.*;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;

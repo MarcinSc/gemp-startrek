@@ -5,9 +5,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
@@ -17,7 +16,6 @@ import java.util.function.Consumer;
 
 public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
     private PlayerResolverSystem playerResolverSystem;
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private ZoneOperations zoneOperations;
 
@@ -28,7 +26,7 @@ public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
         String username = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory, gameEffect.getDataString("player"));
-        CardFilter filter = cardFilterResolverSystem.resolveCardFilter(gameEffect.getDataString("filter"));
+        CardFilter filter = cardFilteringSystem.resolveCardFilter(gameEffect.getDataString("filter"));
 
         Array<Entity> cardsToMove = new Array<>();
         cardFilteringSystem.forEachCardInHand(username,
@@ -53,6 +51,6 @@ public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
                 new String[]{"player", "filter"},
                 new String[]{});
         playerResolverSystem.validatePlayer(effect.getString("player"));
-        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
+        cardFilteringSystem.validateFilter(effect.getString("filter"));
     }
 }

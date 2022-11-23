@@ -19,7 +19,7 @@ import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.decision.DecisionMade;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
 import com.gempukku.startrek.game.CardComponent;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.zone.CardInHandComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;

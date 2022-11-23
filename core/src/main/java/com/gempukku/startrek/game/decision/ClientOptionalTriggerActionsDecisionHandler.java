@@ -20,16 +20,14 @@ import com.gempukku.startrek.common.UISettings;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.TriggerRequirements;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 
 public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem implements DecisionHandler {
     private ClientDecisionSystem clientDecisionSystem;
     private CardFilteringSystem cardFilteringSystem;
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardAbilitySystem cardAbilitySystem;
     private AuthenticationHolderSystem authenticationHolderSystem;
     private StageSystem stageSystem;
@@ -126,7 +124,7 @@ public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem impl
         Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
         CardFilter triggerFilter = TriggerRequirements.createOptionalTriggerRequirements(
                 authenticationHolderSystem.getUsername(), triggerType, usedIds,
-                cardFilterResolverSystem);
+                cardFilteringSystem);
         selectionState = new SelectionState(world, userInputStateEntity, triggerFilter,
                 sourceEntity, memory,
                 new SelectionCallback() {

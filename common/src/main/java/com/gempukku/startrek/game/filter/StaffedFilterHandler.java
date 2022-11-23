@@ -8,7 +8,6 @@ import com.gempukku.startrek.card.CardIcon;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 
 public class StaffedFilterHandler extends CardFilterSystem {
     private CardFilteringSystem cardFilteringSystem;

@@ -3,7 +3,7 @@ package com.gempukku.startrek.game.filter;
 import com.artemis.BaseSystem;
 
 public abstract class CardFilterSystem extends BaseSystem implements CardFilterHandler {
-    private CardFilterResolverSystem cardFilterResolverSystem;
+    private CardFilteringSystem cardFilteringSystem;
     private String[] filterTypes;
 
     public CardFilterSystem(String... filterTypes) {
@@ -13,7 +13,7 @@ public abstract class CardFilterSystem extends BaseSystem implements CardFilterH
     @Override
     protected void initialize() {
         for (String filterType : filterTypes) {
-            cardFilterResolverSystem.registerFilterHandler(filterType, this);
+            cardFilteringSystem.registerFilterHandler(filterType, this);
         }
     }
 

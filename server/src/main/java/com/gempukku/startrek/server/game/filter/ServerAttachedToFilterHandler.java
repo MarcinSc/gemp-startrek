@@ -6,12 +6,12 @@ import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
 import com.gempukku.startrek.game.filter.CardFilterSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
 
 public class ServerAttachedToFilterHandler extends CardFilterSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
+    private CardFilteringSystem cardFilteringSystem;
     private ServerEntityIdSystem serverEntityIdSystem;
 
     public ServerAttachedToFilterHandler() {
@@ -28,7 +28,7 @@ public class ServerAttachedToFilterHandler extends CardFilterSystem {
                     String attachedToId = cardInPlay.getAttachedToId();
                     if (attachedToId != null) {
                         Entity attachedToEntity = serverEntityIdSystem.findfromId(attachedToId);
-                        CardFilter filter = cardFilterResolverSystem.createAndFilter(parameters);
+                        CardFilter filter = cardFilteringSystem.createAndFilter(parameters);
                         return filter.accepts(sourceEntity, memory, attachedToEntity);
                     }
                 }
@@ -41,7 +41,7 @@ public class ServerAttachedToFilterHandler extends CardFilterSystem {
     public void validate(Array<String> parameters) {
         ValidateUtil.atLeast(parameters, 1);
         for (String parameter : parameters) {
-            cardFilterResolverSystem.validateFilter(parameter);
+            cardFilteringSystem.validateFilter(parameter);
         }
     }
 }

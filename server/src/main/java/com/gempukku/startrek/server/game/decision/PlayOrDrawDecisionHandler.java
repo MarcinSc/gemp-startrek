@@ -12,9 +12,8 @@ import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.PlayRequirements;
 import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.ability.CardAbilitySystem;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
@@ -28,7 +27,6 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
     private SpawnSystem spawnSystem;
     private ExecutionStackSystem stackSystem;
     private EventSystem eventSystem;
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private CardAbilitySystem cardAbilitySystem;
     private ServerEntityIdSystem serverEntityIdSystem;
@@ -57,7 +55,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
                     return false;
 
                 CardFilter playFilter = PlayRequirements.createPlayRequirements(
-                        decisionPlayer, cardFilteringSystem, cardFilterResolverSystem, cardAbilitySystem);
+                        decisionPlayer, cardFilteringSystem, cardAbilitySystem);
 
                 if (playFilter.accepts(null, null, playedCardEntity))
                     return true;

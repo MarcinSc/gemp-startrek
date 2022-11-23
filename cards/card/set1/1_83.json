@@ -13,6 +13,7 @@
     {
       "text": "[b]Order[/b] - Destroy this event to begin an engagement involving your Leadership personnel. If you win, randomly kill an opponent's personnel involved.",
       "type": "order",
+      "condition": "canBeginEngagementInvolvingPersonnel(skill(Leadership))",
       "costs": [
         {
           "type": "destroy",

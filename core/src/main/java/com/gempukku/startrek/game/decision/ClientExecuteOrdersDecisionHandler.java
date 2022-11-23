@@ -23,7 +23,7 @@ import com.gempukku.startrek.game.PlayRequirements;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
 import com.gempukku.startrek.game.filter.AndCardFilter;
 import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
 
@@ -32,7 +32,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
     private StageSystem stageSystem;
     private SelectionSystem selectionSystem;
     private AuthenticationHolderSystem authenticationHolderSystem;
-    private CardFilterResolverSystem cardFilterResolverSystem;
+    private CardFilteringSystem cardFilteringSystem;
     private PlayerResolverSystem playerResolverSystem;
 
     private DecisionInterface decisionInterface;
@@ -191,7 +191,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
         public MoveShipSelectionInterface() {
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
             CardFilter playRequirementsFilter = PlayRequirements.createMoveShipRequirements(
-                    authenticationHolderSystem.getUsername(), cardFilterResolverSystem);
+                    authenticationHolderSystem.getUsername(), cardFilteringSystem);
 
             selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                     new SelectionCallback() {
@@ -283,7 +283,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
 
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
             CardFilter playRequirementsFilter = PlayRequirements.createMoveShipMissionRequirements(
-                    authenticationHolderSystem.getUsername(), shipEntity, cardFilterResolverSystem);
+                    authenticationHolderSystem.getUsername(), shipEntity, cardFilteringSystem);
 
             selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                     new SelectionCallback() {
@@ -484,7 +484,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
         public BeamBetweenShipsChooseFirstShipInterface() {
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
             CardFilter playRequirementsFilter = PlayRequirements.createBeamFromMissionShipRequirements(
-                    authenticationHolderSystem.getUsername(), cardFilterResolverSystem);
+                    authenticationHolderSystem.getUsername(), cardFilteringSystem);
 
             selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                     new SelectionCallback() {
@@ -576,7 +576,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
 
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
             CardFilter playRequirementsFilter = PlayRequirements.createBeamSelectAnotherShipRequirements(
-                    authenticationHolderSystem.getUsername(), firstShipEntity, cardFilterResolverSystem);
+                    authenticationHolderSystem.getUsername(), firstShipEntity, cardFilteringSystem);
 
             selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                     new SelectionCallback() {
@@ -673,7 +673,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
             CardFilter playRequirementsFilter = PlayRequirements.createBeamBetweenShipsRequirements(
                     authenticationHolderSystem.getUsername(),
-                    fromShipEntity, toShipEntity, cardFilterResolverSystem);
+                    fromShipEntity, toShipEntity, cardFilteringSystem);
 
             CardFilter onShip = new CardFilter() {
                 @Override
@@ -784,7 +784,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
         public BeamFromMissionChooseShipInterface() {
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
             CardFilter playRequirementsFilter = PlayRequirements.createBeamFromMissionShipRequirements(
-                    authenticationHolderSystem.getUsername(), cardFilterResolverSystem);
+                    authenticationHolderSystem.getUsername(), cardFilteringSystem);
 
             selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                     new SelectionCallback() {
@@ -872,7 +872,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
         public BeamToMissionChooseShipInterface() {
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
             CardFilter playRequirementsFilter = PlayRequirements.createBeamToMissionShipRequirements(
-                    authenticationHolderSystem.getUsername(), cardFilterResolverSystem);
+                    authenticationHolderSystem.getUsername(), cardFilteringSystem);
 
             selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                     new SelectionCallback() {
@@ -965,7 +965,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
             CardFilter playRequirementsFilter = PlayRequirements.createBeamFromMissionRequirements(
                     authenticationHolderSystem.getUsername(),
-                    shipEntity, cardFilterResolverSystem);
+                    shipEntity, cardFilteringSystem);
 
             selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
                     new SelectionCallback() {
@@ -1071,7 +1071,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
             CardFilter playRequirementsFilter = PlayRequirements.createBeamToMissionRequirements(
                     authenticationHolderSystem.getUsername(),
-                    shipEntity, cardFilterResolverSystem);
+                    shipEntity, cardFilteringSystem);
 
             CardFilter onShip = new CardFilter() {
                 @Override

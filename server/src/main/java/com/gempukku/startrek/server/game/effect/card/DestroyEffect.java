@@ -4,8 +4,7 @@ import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.card.CardFilteringSystem;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
@@ -13,7 +12,6 @@ import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 import java.util.function.Consumer;
 
 public class DestroyEffect extends OneTimeEffectSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
     private CardFilteringSystem cardFilteringSystem;
     private ZoneOperations zoneOperations;
 
@@ -37,6 +35,6 @@ public class DestroyEffect extends OneTimeEffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"filter"},
                 new String[]{});
-        cardFilterResolverSystem.validateFilter(effect.getString("filter"));
+        cardFilteringSystem.validateFilter(effect.getString("filter"));
     }
 }

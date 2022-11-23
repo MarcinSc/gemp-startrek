@@ -3,10 +3,10 @@ package com.gempukku.startrek.game.ability;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.game.filter.CardFilterResolverSystem;
+import com.gempukku.startrek.game.filter.CardFilteringSystem;
 
 public class MoveCostModifierAbilityHandler extends CardAbilityHandlerSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
+    private CardFilteringSystem cardFilteringSystem;
     private AmountResolverSystem amountResolverSystem;
 
     public MoveCostModifierAbilityHandler() {
@@ -32,9 +32,9 @@ public class MoveCostModifierAbilityHandler extends CardAbilityHandlerSystem {
         String toFilter = cardAbility.getString("toFilter", "any");
         String amount = cardAbility.getString("amount");
 
-        cardFilterResolverSystem.validateFilter(shipFilter);
-        cardFilterResolverSystem.validateFilter(fromFilter);
-        cardFilterResolverSystem.validateFilter(toFilter);
+        cardFilteringSystem.validateFilter(shipFilter);
+        cardFilteringSystem.validateFilter(fromFilter);
+        cardFilteringSystem.validateFilter(toFilter);
         amountResolverSystem.validateAmount(amount);
     }
 }

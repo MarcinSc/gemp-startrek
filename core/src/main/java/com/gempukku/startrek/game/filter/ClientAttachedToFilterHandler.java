@@ -8,7 +8,7 @@ import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
 
 public class ClientAttachedToFilterHandler extends CardFilterSystem {
-    private CardFilterResolverSystem cardFilterResolverSystem;
+    private CardFilteringSystem cardFilteringSystem;
     private IncomingUpdatesProcessor incomingUpdatesProcessor;
 
     public ClientAttachedToFilterHandler() {
@@ -25,7 +25,7 @@ public class ClientAttachedToFilterHandler extends CardFilterSystem {
                     String attachedToId = cardInPlay.getAttachedToId();
                     if (attachedToId != null) {
                         Entity attachedToEntity = incomingUpdatesProcessor.getEntityById(attachedToId);
-                        CardFilter filter = cardFilterResolverSystem.createAndFilter(parameters);
+                        CardFilter filter = cardFilteringSystem.createAndFilter(parameters);
                         return filter.accepts(sourceEntity, memory, attachedToEntity);
                     }
                 }
@@ -38,7 +38,7 @@ public class ClientAttachedToFilterHandler extends CardFilterSystem {
     public void validate(Array<String> parameters) {
         ValidateUtil.atLeast(parameters, 1);
         for (String parameter : parameters) {
-            cardFilterResolverSystem.validateFilter(parameter);
+            cardFilteringSystem.validateFilter(parameter);
         }
     }
 }
