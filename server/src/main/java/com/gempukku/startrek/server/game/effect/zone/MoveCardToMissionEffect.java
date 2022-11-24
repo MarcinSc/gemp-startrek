@@ -31,13 +31,13 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
         boolean faceUp = conditionResolverSystem.resolveBoolean(sourceEntity, memory, gameEffect.getDataString("faceUp"));
         Entity missionEntity = serverEntityIdSystem.findfromId(missionId);
 
-        cardFilteringSystem.forEachCard(sourceEntity, memory, filter,
-                new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
                         zoneOperations.moveFromCurrentZoneToMission(cardEntity, missionEntity, faceUp);
                     }
-                });
+                }, filter
+        );
     }
 
     @Override

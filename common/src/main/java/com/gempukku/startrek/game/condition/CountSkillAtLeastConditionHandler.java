@@ -8,7 +8,6 @@ import com.gempukku.startrek.card.PersonnelSkill;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
-import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 
 import java.util.function.Consumer;
@@ -24,21 +23,19 @@ public class CountSkillAtLeastConditionHandler extends ConditionSystem {
 
     @Override
     public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
-        CardFilter filter = cardFilteringSystem.resolveCardFilter(parameters.get(0));
         PersonnelSkill skill = PersonnelSkill.valueOf(parameters.get(1));
         int amount = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(2));
         int[] result = new int[1];
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, filter,
-                new Consumer<Entity>() {
-                    @Override
-                    public void accept(Entity entity) {
-                        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(entity);
-                        for (PersonnelSkill cardSkill : cardDefinition.getSkills()) {
-                            if (cardSkill == skill)
-                                result[0]++;
-                        }
-                    }
-                });
+        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
+            @Override
+            public void accept(Entity entity) {
+                CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(entity);
+                for (PersonnelSkill cardSkill : cardDefinition.getSkills()) {
+                    if (cardSkill == skill)
+                        result[0]++;
+                }
+            }
+        }, parameters.get(0));
         return result[0] >= amount;
     }
 

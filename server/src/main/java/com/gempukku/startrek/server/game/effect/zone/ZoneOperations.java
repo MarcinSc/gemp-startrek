@@ -283,8 +283,7 @@ public class ZoneOperations extends BaseSystem {
         shipInMission.setMissionIndex(missionIndex);
         eventSystem.fireEvent(EntityUpdated.instance, shipEntity);
 
-        cardFilteringSystem.forEachCardInPlay(shipEntity, null, "attachedTo(self)",
-                new Consumer<Entity>() {
+        cardFilteringSystem.forEachCardInPlay(shipEntity, null, new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
                         CardInMissionComponent cardInMission = entity.getComponent(CardInMissionComponent.class);
@@ -292,7 +291,8 @@ public class ZoneOperations extends BaseSystem {
                         cardInMission.setMissionIndex(missionIndex);
                         eventSystem.fireEvent(EntityUpdated.instance, entity);
                     }
-                });
+                }, "attachedTo(self)"
+        );
 
         eventSystem.fireEvent(new ShipMoved(
                 serverEntityIdSystem.getEntityId(shipEntity),

@@ -25,11 +25,10 @@ public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        String username = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory, gameEffect.getDataString("player"));
         CardFilter filter = cardFilteringSystem.resolveCardFilter(gameEffect.getDataString("filter"));
 
         Array<Entity> cardsToMove = new Array<>();
-        cardFilteringSystem.forEachCardInHand(username,
+        cardFilteringSystem.forEachCardInHand(sourceEntity, memory,
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
@@ -37,7 +36,7 @@ public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
                             cardsToMove.add(cardEntity);
                         }
                     }
-                });
+                }, "owner(" + gameEffect.getDataString("player") + ")");
         cardsToMove.shuffle();
 
         for (Entity card : cardsToMove) {

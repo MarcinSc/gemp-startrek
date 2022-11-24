@@ -21,13 +21,13 @@ public class DestroyEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, gameEffect.getDataString("filter"),
-                new Consumer<Entity>() {
+        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
                         zoneOperations.moveFromCurrentZoneToDiscardPile(cardEntity);
                     }
-                });
+                }, gameEffect.getDataString("filter")
+        );
     }
 
     @Override

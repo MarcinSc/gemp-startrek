@@ -30,13 +30,13 @@ public class RandomlySelectEffect extends OneTimeEffectSystem {
         int count = amountResolverSystem.resolveAmount(sourceEntity, memory, amount);
 
         Array<Entity> matchingEntities = new Array<>();
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, filter,
-                new Consumer<Entity>() {
+        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
                         matchingEntities.add(entity);
                     }
-                });
+                }, filter
+        );
 
         matchingEntities.shuffle();
 

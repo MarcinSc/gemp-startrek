@@ -5,7 +5,6 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 
 public class CanBeginEngagementInvolvingPersonnelConditionHandler extends ConditionSystem {
@@ -17,12 +16,11 @@ public class CanBeginEngagementInvolvingPersonnelConditionHandler extends Condit
 
     @Override
     public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
-        CardFilter yourShip = cardFilteringSystem.resolveCardFilter(
-                "type(Ship)," +
-                        "missionMatches(not(missionType(Headquarters)))," +
-                        "staffed," +
-                        "hasOnBoard(" + StringUtils.merge(parameters, ",") + ")," +
-                        "hasInSameMission(type(Ship),not(owner(self)))");
+        String yourShip = "type(Ship)," +
+                "missionMatches(not(missionType(Headquarters)))," +
+                "staffed," +
+                "hasOnBoard(" + StringUtils.merge(parameters, ",") + ")," +
+                "hasInSameMission(type(Ship),not(owner(self)))";
         return cardFilteringSystem.findFirstCardInPlay(sourceEntity, memory, yourShip) != null;
     }
 

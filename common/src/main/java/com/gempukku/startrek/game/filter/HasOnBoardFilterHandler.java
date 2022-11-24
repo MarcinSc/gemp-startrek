@@ -21,7 +21,7 @@ public class HasOnBoardFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                Array<Entity> onBoard = cardFilteringSystem.findAllInPlay(sourceEntity, memory, "attachedTo(idIn(" + idProviderSystem.getEntityId(cardEntity) + "))");
+                Array<Entity> onBoard = cardFilteringSystem.getAllCardsInPlay(sourceEntity, memory, "attachedTo(idIn(" + idProviderSystem.getEntityId(cardEntity) + "))");
                 for (Entity entity : onBoard) {
                     if (filter.accepts(sourceEntity, memory, entity))
                         return true;

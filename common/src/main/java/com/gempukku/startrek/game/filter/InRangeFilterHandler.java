@@ -54,7 +54,7 @@ public class InRangeFilterHandler extends CardFilterSystem {
         if (fromQuadrant != toQuadrant)
             moveCost += 2;
 
-        for (Entity modifierCardEntity : cardFilteringSystem.findAllInPlay(shipEntity, null, "hasAbility(MoveCostModifier)")) {
+        for (Entity modifierCardEntity : cardFilteringSystem.getAllCardsInPlay(shipEntity, null, "hasAbility(MoveCostModifier)")) {
             for (MoveCostModifier modifierAbility : cardAbilitySystem.getCardAbilities(modifierCardEntity, MoveCostModifier.class)) {
                 CardFilter shipFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getShipFilter());
                 CardFilter fromFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getFromFilter());

@@ -89,7 +89,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
         } else if (action.equals("play")) {
             String cardId = result.get("cardId");
 
-            Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay("missionType(Headquarters),owner(username(" + decisionPlayer + "))");
+            Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay(null, null, "missionType(Headquarters),owner(username(" + decisionPlayer + "))");
             CardInMissionComponent cardInMission = playerHeadquarter.getComponent(CardInMissionComponent.class);
             Entity missionEntity = missionOperations.findMission(cardInMission.getMissionOwner(), cardInMission.getMissionIndex());
 

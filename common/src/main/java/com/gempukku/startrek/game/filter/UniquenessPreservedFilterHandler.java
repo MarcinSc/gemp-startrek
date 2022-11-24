@@ -36,8 +36,7 @@ public class UniquenessPreservedFilterHandler extends CardFilterSystem {
     }
 
     private boolean cantFindCardInPlayWithSameTitle(CardComponent card, CardDefinition cardDefinition) {
-        Entity cardWithSameTitle = cardFilteringSystem.findFirstCardInPlay("title(" + cardDefinition.getTitle() + ")," +
+        return !cardFilteringSystem.hasCardInPlay(null, null, "title(" + cardDefinition.getTitle() + ")," +
                 "owner(username(" + card.getOwner() + "))");
-        return cardWithSameTitle == null;
     }
 }

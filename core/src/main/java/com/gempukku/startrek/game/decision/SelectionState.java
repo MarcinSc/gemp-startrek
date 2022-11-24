@@ -145,18 +145,17 @@ public class SelectionState implements SelectionDefinition {
         CardRenderingSystem cardRenderingSystem = world.getSystem(CardRenderingSystem.class);
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
         HierarchySystem hierarchySystem = world.getSystem(HierarchySystem.class);
-        cardFilteringSystem.forEachCard(sourceEntity, memory, cardFilter,
-                new Consumer<Entity>() {
-                    @Override
-                    public void accept(Entity cardEntity) {
-                        Entity renderedCardEntity = cardRenderingSystem.findRenderedCard(cardEntity);
-                        Entity selectionEntity = spawnSystem.spawnEntity("game/card/card-" + getSize(renderedCardEntity) + "-selection.template");
-                        hierarchySystem.addHierarchy(renderedCardEntity, selectionEntity);
-                        selectionEntities.add(selectionEntity);
-                        matchingRenderedCards.add(renderedCardEntity);
-                        renderedCardEntity.getComponent(ShapePickableComponent.class).getPickingMask().add(selectionMask);
-                    }
-                });
+        cardFilteringSystem.forEachCard(sourceEntity, memory, new Consumer<Entity>() {
+            @Override
+            public void accept(Entity cardEntity) {
+                Entity renderedCardEntity = cardRenderingSystem.findRenderedCard(cardEntity);
+                Entity selectionEntity = spawnSystem.spawnEntity("game/card/card-" + getSize(renderedCardEntity) + "-selection.template");
+                hierarchySystem.addHierarchy(renderedCardEntity, selectionEntity);
+                selectionEntities.add(selectionEntity);
+                matchingRenderedCards.add(renderedCardEntity);
+                renderedCardEntity.getComponent(ShapePickableComponent.class).getPickingMask().add(selectionMask);
+            }
+        }, cardFilter);
     }
 
     private String getSize(Entity renderedCardEntity) {

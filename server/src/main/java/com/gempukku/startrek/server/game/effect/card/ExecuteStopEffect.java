@@ -6,7 +6,6 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -24,17 +23,15 @@ public class ExecuteStopEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        CardFilter cardFilter = cardFilteringSystem.resolveCardFilter(gameEffect.getDataString("filter"));
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, cardFilter,
-                new Consumer<Entity>() {
-                    @Override
-                    public void accept(Entity entity) {
-                        CardInPlayComponent cardInPlay = entity.getComponent(CardInPlayComponent.class);
-                        if (cardInPlay != null)
-                            cardInPlay.setStopped(true);
-                        eventSystem.fireEvent(EntityUpdated.instance, entity);
-                    }
-                });
+        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
+            @Override
+            public void accept(Entity entity) {
+                CardInPlayComponent cardInPlay = entity.getComponent(CardInPlayComponent.class);
+                if (cardInPlay != null)
+                    cardInPlay.setStopped(true);
+                eventSystem.fireEvent(EntityUpdated.instance, entity);
+            }
+        }, gameEffect.getDataString("filter"));
     }
 
     @Override

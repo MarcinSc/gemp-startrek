@@ -28,8 +28,7 @@ public class MoveCardToCoreEffect extends OneTimeEffectSystem {
         String fromZoneStr = gameEffect.getDataString("fromZone", null);
         CardZone fromZone = (fromZoneStr != null) ? CardZone.valueOf(fromZoneStr) : null;
 
-        cardFilteringSystem.forEachCard(sourceEntity, memory, filter,
-                new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
                         CardComponent card = cardEntity.getComponent(CardComponent.class);
@@ -38,7 +37,8 @@ public class MoveCardToCoreEffect extends OneTimeEffectSystem {
                             zoneOperations.moveFromCurrentZoneToCore(cardEntity);
                         }
                     }
-                });
+                }, filter
+        );
     }
 
     @Override

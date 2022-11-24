@@ -25,13 +25,13 @@ public class MoveCardToStackEffect extends OneTimeEffectSystem {
         String filter = gameEffect.getDataString("filter");
         int abilityIndex = amountResolverSystem.resolveAmount(sourceEntity, memory, gameEffect.getDataString("abilityIndex", "-1"));
 
-        cardFilteringSystem.forEachCard(sourceEntity, memory, filter,
-                new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
                         zoneOperations.moveFromCurrentZoneToStack(cardEntity, abilityIndex);
                     }
-                });
+                }, filter
+        );
     }
 
     @Override

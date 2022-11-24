@@ -33,14 +33,14 @@ public class BeamFromMissionEffect extends OneTimeEffectSystem {
         String cardFilter = gameEffect.getDataString("filter");
         Entity shipEntity = cardFilteringSystem.findFirstCardInPlay(sourceEntity, memory, shipFilter);
         Array<String> cardIds = new Array<>();
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, cardFilter,
-                new Consumer<Entity>() {
+        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
                         zoneOperations.attachToShip(shipEntity, entity);
                         cardIds.add(serverEntityIdSystem.getEntityId(entity));
                     }
-                });
+                }, cardFilter
+        );
         eventSystem.fireEvent(new CardsBeamed(null, serverEntityIdSystem.getEntityId(shipEntity),
                 cardIds), gameEntityProvider.getGameEntity());
 
