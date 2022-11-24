@@ -7,7 +7,8 @@ public class StarTrekServerDeckSystem extends BaseSystem {
     private StarTrekDeck temporaryDeck;
 
     public StarTrekServerDeckSystem() {
-        this.temporaryDeck = createTestDeck();
+        //this.temporaryDeck = createTestDeck();
+        this.temporaryDeck = createDeepSpaceNineStarterDeck();
     }
 
     private StarTrekDeck createTestDeck() {

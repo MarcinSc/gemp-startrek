@@ -18,6 +18,9 @@ public class DualGameApplication extends ApplicationAdapter {
     private SpriteBatch spriteBatch;
     private BitmapFont font;
 
+    private ApplicationProfiler profiler = new ApplicationProfiler("skin/startrek/startrek.json");
+    private boolean profile;
+
     public DualGameApplication(GameSceneProvider game1, GameSceneProvider game2) {
         this.game1 = game1;
         this.game2 = game2;
@@ -45,6 +48,7 @@ public class DualGameApplication extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
+        profiler.resized(width, height);
         spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
 
         currentGame.resize(width, height);
@@ -52,6 +56,16 @@ public class DualGameApplication extends ApplicationAdapter {
 
     @Override
     public void render() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+            if (profile)
+                disableProfiler();
+            else
+                enableProfiler();
+        }
+
+        if (profile)
+            profiler.startFrame();
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.GRAVE)) {
             currentGame.setInactive();
             operateOnFirstContext = !operateOnFirstContext;
@@ -67,6 +81,19 @@ public class DualGameApplication extends ApplicationAdapter {
         spriteBatch.begin();
         font.draw(spriteBatch, getScreenName(), 10, 20);
         spriteBatch.end();
+
+        if (profile)
+            profiler.endFrame();
+    }
+
+    private void enableProfiler() {
+        profiler.enableProfiler();
+        profile = true;
+    }
+
+    private void disableProfiler() {
+        profiler.disableProfiler();
+        profile = false;
     }
 
     @Override
