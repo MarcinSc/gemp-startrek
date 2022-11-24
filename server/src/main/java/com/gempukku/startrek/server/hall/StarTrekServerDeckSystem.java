@@ -7,83 +7,133 @@ public class StarTrekServerDeckSystem extends BaseSystem {
     private StarTrekDeck temporaryDeck;
 
     public StarTrekServerDeckSystem() {
-        temporaryDeck = new StarTrekDeck();
-        temporaryDeck.setDeckId("deckId");
-        temporaryDeck.setDeckName("Deep Space Nine Starter Deck");
+        this.temporaryDeck = createTestDeck();
+    }
 
-        temporaryDeck.getDillemas().add("1_4");
-        temporaryDeck.getDillemas().add("1_4");
-        temporaryDeck.getDillemas().add("1_8");
-        temporaryDeck.getDillemas().add("1_17");
-        temporaryDeck.getDillemas().add("1_17");
-        temporaryDeck.getDillemas().add("1_25");
-        temporaryDeck.getDillemas().add("1_33");
-        temporaryDeck.getDillemas().add("1_33");
-        temporaryDeck.getDillemas().add("1_34");
-        temporaryDeck.getDillemas().add("1_34");
-        temporaryDeck.getDillemas().add("1_41");
-        temporaryDeck.getDillemas().add("1_43");
-        temporaryDeck.getDillemas().add("1_43");
-        temporaryDeck.getDillemas().add("1_48");
-        temporaryDeck.getDillemas().add("1_48");
-        temporaryDeck.getDillemas().add("1_50");
-        temporaryDeck.getDillemas().add("1_50");
-        temporaryDeck.getDillemas().add("1_52");
-        temporaryDeck.getDillemas().add("1_57");
-        temporaryDeck.getDillemas().add("1_60");
+    private StarTrekDeck createTestDeck() {
+        StarTrekDeck deck = new StarTrekDeck();
+        deck.setDeckId("deckId");
+        deck.setDeckName("Deep Space Nine Starter Deck");
 
-//        // Equipment
-//        temporaryDeck.getDrawDeck().add("1_68");
+        addBasicDillemas(deck);
+        addBasicMissions(deck);
 
-//        // Event
-//        temporaryDeck.getDrawDeck().add("1_83");
-//        temporaryDeck.getDrawDeck().add("1_83");
-//        temporaryDeck.getDrawDeck().add("1_84");
-//        temporaryDeck.getDrawDeck().add("1_84");
+        deck.getDrawDeck().add("1_83");
 
-//        // Interrupts
-//        temporaryDeck.getDrawDeck().add("1_136");
-//        temporaryDeck.getDrawDeck().add("1_136");
-//        temporaryDeck.getDrawDeck().add("1_145");
-//        temporaryDeck.getDrawDeck().add("1_145");
+        return deck;
+    }
+
+    private void addBasicMissions(StarTrekDeck deck) {
+        // Missions
+        deck.getMissions().add("1_170");
+        deck.getMissions().add("1_187");
+        deck.getMissions().add("1_188");
+        deck.getMissions().add("1_198");
+        deck.getMissions().add("1_199");
+    }
+
+    private void addBasicDillemas(StarTrekDeck deck) {
+        deck.getDillemas().add("1_4");
+        deck.getDillemas().add("1_4");
+        deck.getDillemas().add("1_8");
+        deck.getDillemas().add("1_17");
+        deck.getDillemas().add("1_17");
+        deck.getDillemas().add("1_25");
+        deck.getDillemas().add("1_33");
+        deck.getDillemas().add("1_33");
+        deck.getDillemas().add("1_34");
+        deck.getDillemas().add("1_34");
+        deck.getDillemas().add("1_41");
+        deck.getDillemas().add("1_43");
+        deck.getDillemas().add("1_43");
+        deck.getDillemas().add("1_48");
+        deck.getDillemas().add("1_48");
+        deck.getDillemas().add("1_50");
+        deck.getDillemas().add("1_50");
+        deck.getDillemas().add("1_52");
+        deck.getDillemas().add("1_57");
+        deck.getDillemas().add("1_60");
+    }
+
+    private StarTrekDeck createDeepSpaceNineStarterDeck() {
+        StarTrekDeck deck = new StarTrekDeck();
+        deck.setDeckId("deckId");
+        deck.setDeckName("Deep Space Nine Starter Deck");
+
+        deck.getDillemas().add("1_4");
+        deck.getDillemas().add("1_4");
+        deck.getDillemas().add("1_8");
+        deck.getDillemas().add("1_17");
+        deck.getDillemas().add("1_17");
+        deck.getDillemas().add("1_25");
+        deck.getDillemas().add("1_33");
+        deck.getDillemas().add("1_33");
+        deck.getDillemas().add("1_34");
+        deck.getDillemas().add("1_34");
+        deck.getDillemas().add("1_41");
+        deck.getDillemas().add("1_43");
+        deck.getDillemas().add("1_43");
+        deck.getDillemas().add("1_48");
+        deck.getDillemas().add("1_48");
+        deck.getDillemas().add("1_50");
+        deck.getDillemas().add("1_50");
+        deck.getDillemas().add("1_52");
+        deck.getDillemas().add("1_57");
+        deck.getDillemas().add("1_60");
+
+        // Equipment
+        deck.getDrawDeck().add("1_68");
+
+        // Event
+        deck.getDrawDeck().add("1_83");
+        deck.getDrawDeck().add("1_83");
+        deck.getDrawDeck().add("1_84");
+        deck.getDrawDeck().add("1_84");
+
+        // Interrupts
+        deck.getDrawDeck().add("1_136");
+        deck.getDrawDeck().add("1_136");
+        deck.getDrawDeck().add("1_145");
+        deck.getDrawDeck().add("1_145");
 
         // Missions
-        temporaryDeck.getMissions().add("1_170");
-        temporaryDeck.getMissions().add("1_187");
-        temporaryDeck.getMissions().add("1_188");
-        temporaryDeck.getMissions().add("1_198");
-        temporaryDeck.getMissions().add("1_199");
+        deck.getMissions().add("1_170");
+        deck.getMissions().add("1_187");
+        deck.getMissions().add("1_188");
+        deck.getMissions().add("1_198");
+        deck.getMissions().add("1_199");
 
         // Personnel - Bajoran
-        temporaryDeck.getDrawDeck().add("1_207");
-        temporaryDeck.getDrawDeck().add("1_207");
-//        temporaryDeck.getDrawDeck().add("1_210");
-//        temporaryDeck.getDrawDeck().add("1_210");
-//        temporaryDeck.getDrawDeck().add("1_214");
-//        temporaryDeck.getDrawDeck().add("1_214");
-//        temporaryDeck.getDrawDeck().add("1_217");
-//        temporaryDeck.getDrawDeck().add("1_225");
-//        temporaryDeck.getDrawDeck().add("1_225");
-//        // Personnel - Federation
-//        temporaryDeck.getDrawDeck().add("1_251");
-//        temporaryDeck.getDrawDeck().add("1_254");
-//        temporaryDeck.getDrawDeck().add("1_256");
-//        temporaryDeck.getDrawDeck().add("1_256");
-//        temporaryDeck.getDrawDeck().add("1_265");
-//        temporaryDeck.getDrawDeck().add("1_265");
-//        temporaryDeck.getDrawDeck().add("1_278");
-//        temporaryDeck.getDrawDeck().add("1_278");
-//        temporaryDeck.getDrawDeck().add("1_280");
-//        temporaryDeck.getDrawDeck().add("1_285");
-//        temporaryDeck.getDrawDeck().add("1_291");
-//        // Personnel - Non-Aligned
-//        temporaryDeck.getDrawDeck().add("1_320");
-//        temporaryDeck.getDrawDeck().add("1_334");
-//        temporaryDeck.getDrawDeck().add("1_351");
+        deck.getDrawDeck().add("1_207");
+        deck.getDrawDeck().add("1_207");
+        deck.getDrawDeck().add("1_210");
+        deck.getDrawDeck().add("1_210");
+        deck.getDrawDeck().add("1_214");
+        deck.getDrawDeck().add("1_214");
+        deck.getDrawDeck().add("1_217");
+        deck.getDrawDeck().add("1_225");
+        deck.getDrawDeck().add("1_225");
+        // Personnel - Federation
+        deck.getDrawDeck().add("1_251");
+        deck.getDrawDeck().add("1_254");
+        deck.getDrawDeck().add("1_256");
+        deck.getDrawDeck().add("1_256");
+        deck.getDrawDeck().add("1_265");
+        deck.getDrawDeck().add("1_265");
+        deck.getDrawDeck().add("1_278");
+        deck.getDrawDeck().add("1_278");
+        deck.getDrawDeck().add("1_280");
+        deck.getDrawDeck().add("1_285");
+        deck.getDrawDeck().add("1_291");
+        // Personnel - Non-Aligned
+        deck.getDrawDeck().add("1_320");
+        deck.getDrawDeck().add("1_334");
+        deck.getDrawDeck().add("1_351");
         // Ship - Federation
-        temporaryDeck.getDrawDeck().add("1_390");
-        temporaryDeck.getDrawDeck().add("1_390");
-        temporaryDeck.getDrawDeck().add("1_390");
+        deck.getDrawDeck().add("1_390");
+        deck.getDrawDeck().add("1_390");
+        deck.getDrawDeck().add("1_390");
+        return deck;
     }
 
     public StarTrekDeck getStarterDeck(String starterDeckId) {

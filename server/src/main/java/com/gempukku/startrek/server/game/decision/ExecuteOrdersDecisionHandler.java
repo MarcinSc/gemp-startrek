@@ -8,7 +8,7 @@ import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.game.Memory;
-import com.gempukku.startrek.game.PlayRequirements;
+import com.gempukku.startrek.game.OrderMoveRequirements;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
@@ -60,11 +60,11 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
         if (toMissionCardEntity == null)
             return false;
 
-        CardFilter moveShipRequirements = PlayRequirements.createMoveShipRequirements(decisionPlayer, cardFilteringSystem);
+        CardFilter moveShipRequirements = OrderMoveRequirements.createMoveShipRequirements(decisionPlayer, cardFilteringSystem);
         if (!moveShipRequirements.accepts(null, null, shipEntity))
             return false;
 
-        CardFilter missionRequirements = PlayRequirements.createMoveShipMissionRequirements(decisionPlayer, shipEntity, cardFilteringSystem);
+        CardFilter missionRequirements = OrderMoveRequirements.createMoveShipMissionRequirements(decisionPlayer, shipEntity, cardFilteringSystem);
         if (!missionRequirements.accepts(shipEntity, null, toMissionCardEntity))
             return false;
 
@@ -81,12 +81,12 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
         if (toShipEntity == null)
             return false;
 
-        CardFilter firstShipRequirements = PlayRequirements.createBeamFromMissionShipRequirements(
+        CardFilter firstShipRequirements = OrderMoveRequirements.createBeamFromMissionShipRequirements(
                 decisionPlayer, cardFilteringSystem);
         if (!firstShipRequirements.accepts(null, null, fromShipEntity))
             return false;
 
-        CardFilter secondShipRequirements = PlayRequirements.createBeamSelectAnotherShipRequirements(
+        CardFilter secondShipRequirements = OrderMoveRequirements.createBeamSelectAnotherShipRequirements(
                 decisionPlayer, fromShipEntity, cardFilteringSystem);
         if (!secondShipRequirements.accepts(null, null, toShipEntity))
             return false;
@@ -100,7 +100,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
         if (beamedEntities.size == 0)
             return false;
 
-        CardFilter cardFilter = PlayRequirements.createBeamBetweenShipsRequirements(
+        CardFilter cardFilter = OrderMoveRequirements.createBeamBetweenShipsRequirements(
                 decisionPlayer, fromShipEntity, toShipEntity, cardFilteringSystem);
         for (Entity beamedEntity : beamedEntities) {
             if (!cardFilter.accepts(null, null, beamedEntity))
@@ -118,7 +118,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
         if (shipEntity == null)
             return false;
 
-        CardFilter shipRequirements = PlayRequirements.createBeamToMissionShipRequirements(
+        CardFilter shipRequirements = OrderMoveRequirements.createBeamToMissionShipRequirements(
                 decisionPlayer, cardFilteringSystem);
         if (!shipRequirements.accepts(null, null, shipEntity))
             return false;
@@ -132,7 +132,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
         if (beamedEntities.size == 0)
             return false;
 
-        CardFilter cardFilter = PlayRequirements.createBeamToMissionRequirements(
+        CardFilter cardFilter = OrderMoveRequirements.createBeamToMissionRequirements(
                 decisionPlayer, shipEntity, cardFilteringSystem);
         for (Entity beamedEntity : beamedEntities) {
             if (!cardFilter.accepts(null, null, beamedEntity))
@@ -149,7 +149,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
         if (shipEntity == null)
             return false;
 
-        CardFilter shipRequirements = PlayRequirements.createBeamFromMissionShipRequirements(
+        CardFilter shipRequirements = OrderMoveRequirements.createBeamFromMissionShipRequirements(
                 decisionPlayer, cardFilteringSystem);
         if (!shipRequirements.accepts(null, null, shipEntity))
             return false;
@@ -163,7 +163,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
         if (beamedEntities.size == 0)
             return false;
 
-        CardFilter cardFilter = PlayRequirements.createBeamFromMissionRequirements(
+        CardFilter cardFilter = OrderMoveRequirements.createBeamFromMissionRequirements(
                 decisionPlayer, shipEntity, cardFilteringSystem);
         for (Entity beamedEntity : beamedEntities) {
             if (!cardFilter.accepts(null, null, beamedEntity))

@@ -43,6 +43,10 @@ public class CommonGameWorldBuilder {
                 new CanBeginEngagementInvolvingPersonnelConditionHandler(),
 
                 // Card filter resovlers
+                new MemoryFilterHandler(),
+                new IdInFilterHandler(),
+                new AttachedToFilterHandler(),
+                new FacingDilemmaFilterHandler(),
                 new CardTypeFilterHandler(),
                 new CardIconFilterHandler(),
                 new CardZoneFilterHandler(),
@@ -57,6 +61,7 @@ public class CommonGameWorldBuilder {
                 new YourFilterHandler(),
                 new UnstoppedFilterHandler(),
                 new InMissionFilterHandler(),
+                new HasInSameMissionFilterHandler(),
                 new NotAboardShipFilterHandler(),
                 new TitleFilterHandler(),
                 new UniquenessPreservedFilterHandler(),
@@ -65,6 +70,7 @@ public class CommonGameWorldBuilder {
                 new HasAbilityFilterHandler(),
                 new TriggerConditionMatchesFilterHandler(),
                 new OrderConditionMatchesFilterHandler(),
+                new HasOnBoardFilterHandler(),
 
                 // Card abilities
                 new CardAbilitySystem(),

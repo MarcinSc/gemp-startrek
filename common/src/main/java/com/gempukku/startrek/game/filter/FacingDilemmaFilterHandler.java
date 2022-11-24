@@ -1,22 +1,20 @@
-package com.gempukku.startrek.server.game.filter;
+package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.CardType;
+import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.FacedDilemmaComponent;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterSystem;
 
-public class ServerFacingDilemmaFilterHandler extends CardFilterSystem {
-    private ServerEntityIdSystem serverEntityIdSystem;
+public class FacingDilemmaFilterHandler extends CardFilterSystem {
+    private IdProviderSystem idProviderSystem;
     private CardLookupSystem cardLookupSystem;
 
-    public ServerFacingDilemmaFilterHandler() {
+    public FacingDilemmaFilterHandler() {
         super("facingDilemma");
     }
 
@@ -32,7 +30,7 @@ public class ServerFacingDilemmaFilterHandler extends CardFilterSystem {
                 if (facedDilemmaEntity == null)
                     return false;
 
-                String cardEntityId = serverEntityIdSystem.getEntityId(cardEntity);
+                String cardEntityId = idProviderSystem.getEntityId(cardEntity);
 
                 FacedDilemmaComponent facedDilemma = facedDilemmaEntity.getComponent(FacedDilemmaComponent.class);
                 for (String entityId : facedDilemma.getFacingPersonnel()) {

@@ -37,6 +37,10 @@ public class IncomingUpdatesProcessor extends BaseSystem {
         return informationPacketUtil.getEntityById(entityId);
     }
 
+    public String getEntityId(Entity entity) {
+        return informationPacketUtil.getEntityId(entity);
+    }
+
     @EventListener
     public void incomingServerUpdates(ReceivedUpdateFromServer<JsonValue> updates, Entity entity) {
         awaitingUpdates.add(updates.getPackets());

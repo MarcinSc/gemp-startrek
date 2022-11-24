@@ -39,17 +39,11 @@ import com.gempukku.libgdx.network.json.JsonValueNetworkMessageMarshaller;
 import com.gempukku.libgdx.network.json.JsonValueServerSessionProducer;
 import com.gempukku.startrek.card.CardData;
 import com.gempukku.startrek.card.CardLookupSystem;
-import com.gempukku.startrek.common.ConfigureTextureSystem;
-import com.gempukku.startrek.common.ConnectionParamSystem;
-import com.gempukku.startrek.common.FontProviderSystem;
-import com.gempukku.startrek.common.IncomingUpdatesProcessor;
+import com.gempukku.startrek.common.*;
 import com.gempukku.startrek.game.*;
 import com.gempukku.startrek.game.ability.*;
 import com.gempukku.startrek.game.config.ConfigureTextSystem;
 import com.gempukku.startrek.game.decision.*;
-import com.gempukku.startrek.game.filter.ClientAttachedToFilterHandler;
-import com.gempukku.startrek.game.filter.ClientFacingDilemmaFilterHandler;
-import com.gempukku.startrek.game.filter.ClientIdInFilterHandler;
 import com.gempukku.startrek.game.render.*;
 import com.gempukku.startrek.game.zone.GameStateCardsTrackingSystem;
 import com.gempukku.startrek.game.zone.InitialFaceDownCardsCreatorSystem;
@@ -97,6 +91,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                         new JsonValueNetworkMessageMarshaller()),
                 new FontProviderSystem(),
                 new IncomingUpdatesProcessor(),
+                new IdProviderSystem(new ClientIdProvider()),
                 new TransitionToGame());
 
         World world = new World(worldConfigurationBuilder.build());
@@ -127,6 +122,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new SpriteSystem(),
                 new CameraSystem(new TopDownCameraController()),
                 new IncomingUpdatesProcessor(),
+                new IdProviderSystem(new ClientIdProvider()),
 
                 new CardLookupSystem(cardData),
                 new PlayerPositionSystem(),
@@ -155,10 +151,6 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new ClientOptionalTriggerActionsDecisionHandler(),
 
                 new UserInputSystem(1),
-
-                new ClientIdInFilterHandler(),
-                new ClientAttachedToFilterHandler(),
-                new ClientFacingDilemmaFilterHandler(),
 
                 // Rendering
                 new CardRenderingSystem(),

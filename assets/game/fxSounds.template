@@ -5,6 +5,10 @@
       {
         "name": "transporter",
         "path": "sound/transporter.ogg"
+      },
+      {
+        "name": "warp",
+        "path": "sound/warp.ogg"
       }
     ]
   }

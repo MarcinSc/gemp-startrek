@@ -1,16 +1,14 @@
-package com.gempukku.startrek.server.game.filter;
+package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
+import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
-import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterSystem;
 
-public class ServerIdInFilterHandler extends CardFilterSystem {
-    private ServerEntityIdSystem serverEntityIdSystem;
+public class IdInFilterHandler extends CardFilterSystem {
+    private IdProviderSystem idProviderSystem;
 
-    public ServerIdInFilterHandler() {
+    public IdInFilterHandler() {
         super("idIn");
     }
 
@@ -28,7 +26,7 @@ public class ServerIdInFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                String id = serverEntityIdSystem.getEntityId(cardEntity);
+                String id = idProviderSystem.getEntityId(cardEntity);
                 for (String parameter : parameters) {
                     if (parameter.equals(id))
                         return true;

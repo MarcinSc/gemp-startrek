@@ -15,11 +15,13 @@ import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardData;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
+import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.CommonGameWorldBuilder;
 import com.gempukku.startrek.game.GameComponent;
 import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
+import com.gempukku.startrek.server.ServerIdProvider;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
 import com.gempukku.startrek.server.game.ability.*;
 import com.gempukku.startrek.server.game.condition.MemoryMatchesHandler;
@@ -55,10 +57,6 @@ import com.gempukku.startrek.server.game.effect.setup.SetupTurnOrderEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.effect.zone.*;
-import com.gempukku.startrek.server.game.filter.MemoryFilterHandler;
-import com.gempukku.startrek.server.game.filter.ServerAttachedToFilterHandler;
-import com.gempukku.startrek.server.game.filter.ServerFacingDilemmaFilterHandler;
-import com.gempukku.startrek.server.game.filter.ServerIdInFilterHandler;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 import com.gempukku.startrek.server.game.stack.ObjectStackSystem;
 
@@ -94,6 +92,7 @@ public class StarTrekGameHolder implements Disposable {
         worldConfigurationBuilder.with(
                 // Entity id
                 serverEntityIdSystem,
+                new IdProviderSystem(new ServerIdProvider()),
 
                 // Base systems
                 new SpawnSystem(),
@@ -169,10 +168,6 @@ public class StarTrekGameHolder implements Disposable {
                 new MemoryMatchesHandler(),
 
                 // Server card filters
-                new MemoryFilterHandler(),
-                new ServerIdInFilterHandler(),
-                new ServerAttachedToFilterHandler(),
-                new ServerFacingDilemmaFilterHandler(),
 
                 // Network systems
                 new RemoteEntityManagerHandler(serverEntityIdSystem),

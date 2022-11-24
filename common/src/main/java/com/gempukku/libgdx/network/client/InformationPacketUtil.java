@@ -30,6 +30,10 @@ public class InformationPacketUtil<T> {
         return serverEntityMap.get(entityId);
     }
 
+    public String getEntityId(Entity entity) {
+        return entity.getComponent(ServerEntityComponent.class).getEntityId();
+    }
+
     public void applyInformationPacket(IncomingInformationPacket<T> packet) {
         if (packet.getType() == IncomingInformationPacket.Type.EVENT) {
             String entityId = packet.getEntityId();

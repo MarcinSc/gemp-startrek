@@ -30,6 +30,7 @@ public class MovementTrackingSystem extends BaseSystem {
     @EventListener
     public void shipMoved(ShipMoved shipMoved, Entity entity) {
         shipEventsToProcess.add(shipMoved);
+        audioSystem.playSound("fx", "warp");
     }
 
     @Override

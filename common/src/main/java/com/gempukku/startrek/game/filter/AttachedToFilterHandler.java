@@ -1,20 +1,17 @@
-package com.gempukku.startrek.server.game.filter;
+package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
+import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterSystem;
-import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
 
-public class ServerAttachedToFilterHandler extends CardFilterSystem {
+public class AttachedToFilterHandler extends CardFilterSystem {
     private CardFilteringSystem cardFilteringSystem;
-    private ServerEntityIdSystem serverEntityIdSystem;
+    private IdProviderSystem idProviderSystem;
 
-    public ServerAttachedToFilterHandler() {
+    public AttachedToFilterHandler() {
         super("attachedTo");
     }
 
@@ -27,7 +24,7 @@ public class ServerAttachedToFilterHandler extends CardFilterSystem {
                 if (cardInPlay != null) {
                     String attachedToId = cardInPlay.getAttachedToId();
                     if (attachedToId != null) {
-                        Entity attachedToEntity = serverEntityIdSystem.findfromId(attachedToId);
+                        Entity attachedToEntity = idProviderSystem.getEntityById(attachedToId);
                         CardFilter filter = cardFilteringSystem.createAndFilter(parameters);
                         return filter.accepts(sourceEntity, memory, attachedToEntity);
                     }
