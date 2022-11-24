@@ -7,6 +7,13 @@ import com.gempukku.startrek.game.Memory;
 public class OrCardFilter implements CardFilter {
     private Array<CardFilter> filters;
 
+    public OrCardFilter(CardFilter... cardFilters) {
+        filters = new Array<>();
+        for (CardFilter cardFilter : cardFilters) {
+            filters.add(cardFilter);
+        }
+    }
+
     public OrCardFilter(Array<CardFilter> filters) {
         this.filters = filters;
     }

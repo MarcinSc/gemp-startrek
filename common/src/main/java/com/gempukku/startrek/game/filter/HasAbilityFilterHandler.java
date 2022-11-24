@@ -20,7 +20,7 @@ public class HasAbilityFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                return cardAbilitySystem.getCardAbilities(cardEntity, cardAbilityType).size > 0;
+                return cardAbilitySystem.hasCardAbility(cardEntity, cardAbilityType);
             }
         };
     }
@@ -40,6 +40,8 @@ public class HasAbilityFilterHandler extends CardFilterSystem {
             return MoveCostModifier.class;
         if (type.equals("Order"))
             return OrderAbility.class;
+        if (type.equals("OrderInterrupt"))
+            return OrderInterruptAbility.class;
         throw new GdxRuntimeException("Unable to find ability type: " + type);
     }
 }

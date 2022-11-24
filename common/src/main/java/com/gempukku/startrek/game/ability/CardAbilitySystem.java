@@ -32,6 +32,15 @@ public class CardAbilitySystem extends BaseSystem {
         return abilitiesMap.get(cardId);
     }
 
+    public boolean hasCardAbility(Entity cardEntity, Class<? extends CardAbility> clazz) {
+        Array<CardAbility> cardAbilities = abilitiesMap.get(cardEntity.getComponent(CardComponent.class).getCardId());
+        for (CardAbility cardAbility : cardAbilities) {
+            if (cardAbility != null && clazz.isAssignableFrom(cardAbility.getClass()))
+                return true;
+        }
+        return false;
+    }
+
     public <T extends CardAbility> Array<T> getCardAbilities(Entity cardEntity, Class<T> clazz) {
         return getCardAbilities(cardEntity.getComponent(CardComponent.class).getCardId(), clazz);
     }

@@ -157,6 +157,7 @@ public class StarTrekGameHolder implements Disposable {
                 new ServerInterruptAbilityHandler(),
                 new ServerTriggerAbilityHandler(),
                 new ServerOrderAbilityHandler(),
+                new ServerOrderInterruptAbilityHandler(),
 
                 // Decision handlers
                 new PlayOrDrawDecisionHandler(),

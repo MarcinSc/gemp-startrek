@@ -142,6 +142,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new ClientInterruptAbilityHandler(),
                 new ClientTriggerAbilityHandler(),
                 new ClientOrderAbilityHandler(),
+                new ClientOrderInterruptAbilityHandler(),
 
                 // Decision-related
                 new ClientDecisionSystem(),
