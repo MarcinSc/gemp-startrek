@@ -36,7 +36,7 @@ public class AmountResolverSystem extends BaseSystem {
             throw new GdxRuntimeException("Unable to find amount handler: " + type);
         }
 
-        return amountHandler.resolveAmount(type, sourceEntity, memory, expression.getParameters());
+        return amountHandler.resolveAmount(sourceEntity, memory, expression.getParameters());
     }
 
     public void validateAmount(String value) {

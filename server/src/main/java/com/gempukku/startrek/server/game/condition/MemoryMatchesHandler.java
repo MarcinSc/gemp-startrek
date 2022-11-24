@@ -18,7 +18,7 @@ public class MemoryMatchesHandler extends ConditionSystem {
     }
 
     @Override
-    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
         String memoryName = parameters.get(0);
         CardFilter cardFilter = cardFilteringSystem.createAndFilter(parameters, 1);
         String cardIds = memory.getValue(memoryName);

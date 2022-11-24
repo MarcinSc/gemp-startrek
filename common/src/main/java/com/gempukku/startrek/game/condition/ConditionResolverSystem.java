@@ -19,7 +19,7 @@ public class ConditionResolverSystem extends BaseSystem {
         registerConditionHandler("false",
                 new ConditionHandler() {
                     @Override
-                    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+                    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
                         return false;
                     }
 
@@ -31,7 +31,7 @@ public class ConditionResolverSystem extends BaseSystem {
         registerConditionHandler("true",
                 new ConditionHandler() {
                     @Override
-                    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+                    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
                         return true;
                     }
 
@@ -43,7 +43,7 @@ public class ConditionResolverSystem extends BaseSystem {
         registerConditionHandler("and",
                 new ConditionHandler() {
                     @Override
-                    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+                    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
                         for (String parameter : parameters) {
                             if (!resolveBoolean(sourceEntity, memory, parameter))
                                 return false;
@@ -64,7 +64,7 @@ public class ConditionResolverSystem extends BaseSystem {
         registerConditionHandler("or",
                 new ConditionHandler() {
                     @Override
-                    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+                    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
                         for (String parameter : parameters) {
                             if (resolveBoolean(sourceEntity, memory, parameter))
                                 return true;
@@ -96,7 +96,7 @@ public class ConditionResolverSystem extends BaseSystem {
             if (conditionHandler == null)
                 throw new GdxRuntimeException("Unable to find condition handler: " + type);
 
-            boolean result = conditionHandler.resolveCondition(type, sourceEntity, memory, expression.getParameters());
+            boolean result = conditionHandler.resolveCondition(sourceEntity, memory, expression.getParameters());
             if (!result)
                 return false;
         }

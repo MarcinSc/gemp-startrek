@@ -14,7 +14,7 @@ public class CostToPlayAmountHandler extends AmountSystem {
     }
 
     @Override
-    public int resolveAmount(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public int resolveAmount(Entity sourceEntity, Memory memory, Array<String> parameters) {
         return cardLookupSystem.getCardDefinition(sourceEntity).getCost();
     }
 

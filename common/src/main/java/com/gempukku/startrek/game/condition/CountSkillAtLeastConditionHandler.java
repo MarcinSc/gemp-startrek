@@ -22,7 +22,7 @@ public class CountSkillAtLeastConditionHandler extends ConditionSystem {
     }
 
     @Override
-    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
         PersonnelSkill skill = PersonnelSkill.valueOf(parameters.get(1));
         int amount = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(2));
         int[] result = new int[1];

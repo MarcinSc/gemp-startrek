@@ -15,7 +15,7 @@ public class CounterCountAmountHandler extends AmountSystem {
     }
 
     @Override
-    public int resolveAmount(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public int resolveAmount(Entity sourceEntity, Memory memory, Array<String> parameters) {
         Entity playerEntity = playerResolverSystem.resolvePlayer(sourceEntity, memory, parameters.get(0));
         return playerEntity.getComponent(PlayerPublicStatsComponent.class).getCounterCount();
     }

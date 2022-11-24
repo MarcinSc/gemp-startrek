@@ -16,7 +16,7 @@ public class CountAtLeastConditionHandler extends ConditionSystem {
     }
 
     @Override
-    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
         int amount = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(1));
         return cardFilteringSystem.hasCardCountInPlay(sourceEntity, memory, amount, parameters.get(0));
     }

@@ -14,7 +14,7 @@ public class AtLeastConditionHandler extends ConditionSystem {
     }
 
     @Override
-    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
         int firstValue = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(0));
         int secondValue = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(1));
         return firstValue >= secondValue;

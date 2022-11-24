@@ -11,7 +11,7 @@ public class MemoryConditionHandler extends ConditionSystem {
     }
 
     @Override
-    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
         String key = parameters.get(0);
         String value = parameters.get(1);
         String stored = memory.getValue(key);

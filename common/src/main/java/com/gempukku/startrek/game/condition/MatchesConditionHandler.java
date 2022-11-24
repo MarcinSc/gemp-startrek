@@ -14,7 +14,7 @@ public class MatchesConditionHandler extends ConditionSystem {
     }
 
     @Override
-    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
         return cardFilteringSystem.resolveCardFilter(parameters.get(0)).
                 accepts(sourceEntity, memory, sourceEntity);
     }

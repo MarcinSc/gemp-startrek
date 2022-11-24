@@ -15,7 +15,7 @@ public class CanBeginEngagementInvolvingPersonnelConditionHandler extends Condit
     }
 
     @Override
-    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
         String yourShip = "type(Ship)," +
                 "missionMatches(not(missionType(Headquarters)))," +
                 "staffed," +

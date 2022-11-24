@@ -15,7 +15,7 @@ public class HasCardConditionHandler extends ConditionSystem {
     }
 
     @Override
-    public boolean resolveCondition(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
         CardFilter cardFilter = cardFilteringSystem.createAndFilter(parameters);
         Entity card = cardFilteringSystem.findFirstCardInPlay(sourceEntity, memory, cardFilter);
         return card != null;

@@ -16,7 +16,7 @@ public class ShipRangeAmountHandler extends AmountSystem {
     }
 
     @Override
-    public int resolveAmount(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public int resolveAmount(Entity sourceEntity, Memory memory, Array<String> parameters) {
         CardDefinition shipDefinition = cardLookupSystem.getCardDefinition(sourceEntity);
         int usedRanged = 0;
         CardInPlayComponent cardInPlay = sourceEntity.getComponent(CardInPlayComponent.class);

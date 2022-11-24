@@ -15,7 +15,7 @@ public class PlayerCountAmountHandler extends AmountSystem {
     }
 
     @Override
-    public int resolveAmount(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public int resolveAmount(Entity sourceEntity, Memory memory, Array<String> parameters) {
         Entity gameEntity = gameEntityProvider.getGameEntity();
         return gameEntity.getComponent(GameComponent.class).getPlayers().size;
     }

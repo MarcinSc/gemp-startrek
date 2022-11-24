@@ -11,7 +11,7 @@ public class MemoryAmountHandler extends AmountSystem {
     }
 
     @Override
-    public int resolveAmount(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public int resolveAmount(Entity sourceEntity, Memory memory, Array<String> parameters) {
         String value = memory.getValue(parameters.get(0));
         if (value == null)
             return 0;

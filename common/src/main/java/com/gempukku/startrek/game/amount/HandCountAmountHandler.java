@@ -15,7 +15,7 @@ public class HandCountAmountHandler extends AmountSystem {
     }
 
     @Override
-    public int resolveAmount(String type, Entity sourceEntity, Memory memory, Array<String> parameters) {
+    public int resolveAmount(Entity sourceEntity, Memory memory, Array<String> parameters) {
         Entity entity = playerResolverSystem.resolvePlayer(sourceEntity, memory, parameters.get(0));
         PlayerPublicStatsComponent stats = entity.getComponent(PlayerPublicStatsComponent.class);
         return stats.getHandCount();
