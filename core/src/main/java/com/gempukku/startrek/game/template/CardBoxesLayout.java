@@ -49,7 +49,7 @@ public class CardBoxesLayout {
         if (isSmall(cardZone)) {
             if (isMission(cardDefinition))
                 return SMALL_MISSION_TITLE_INDEX;
-            if (isNoun(cardDefinition))
+            if (isAffiliated(cardDefinition))
                 return SMALL_NOUN_TITLE_INDEX;
             return SMALL_VERB_TITLE_INDEX;
         } else {
@@ -61,7 +61,7 @@ public class CardBoxesLayout {
         if (isSmall(cardZone)) {
             return -1;
         } else {
-            if (isNoun(cardDefinition))
+            if (isAffiliated(cardDefinition))
                 return FULL_SUBTITLE_INDEX;
             return -1;
         }
