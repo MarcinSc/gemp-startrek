@@ -46,12 +46,12 @@ public class CardTemplates {
             CardBoxesLayout.getTextureReference(renderedEntity, missionTypeIndex).
                     setRegion(cardDefinition.getMissionType().name());
         }
-//
-//        int affiliationTextureIndex = CardBoxesLayout.getAffiliationTextureIndex(cardDefinition, cardZone);
-//        if (affiliationTextureIndex > -1) {
-//            CardBoxesLayout.getTextureReference(renderedEntity, affiliationTextureIndex).
-//                    setRegion(cardDefinition.getAffiliation().getIcon().name());
-//        }
+
+        int affiliationTextureIndex = CardBoxesLayout.getAffiliationTextureIndex(cardDefinition, cardZone);
+        if (affiliationTextureIndex > -1) {
+            CardBoxesLayout.getTextureReference(renderedEntity, affiliationTextureIndex).
+                    setRegion(cardDefinition.getAffiliation().getIcon().name());
+        }
 
         // Icons
         Array<CardIcon> icons = cardDefinition.getIcons();

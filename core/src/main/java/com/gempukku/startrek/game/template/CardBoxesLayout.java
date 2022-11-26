@@ -12,10 +12,12 @@ import com.gempukku.startrek.game.zone.CardZone;
 public class CardBoxesLayout {
     private static final int TEMPLATE_INDEX = 0;
     private static final int IMAGE_INDEX = 1;
-    private static final int MISSION_TYPE_INDEX = 2;
-    private static final int AFFILIATION_INDEX = 2;
-    private static final int ICON_START_INDEX = 3;
+
     private static final int FULL_ICON_START_INDEX = 2;
+
+    private static final int SMALL_MISSION_TYPE_INDEX = 2;
+    private static final int SMALL_AFFILIATION_INDEX = 2;
+    private static final int SMALL_ICON_START_INDEX = 3;
 
     private static final int FULL_TITLE_INDEX = 0;
     private static final int FULL_SUBTITLE_INDEX = 1;
@@ -198,20 +200,20 @@ public class CardBoxesLayout {
 
     public static int getMissionTypeTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
         if (isMission(cardDefinition))
-            return MISSION_TYPE_INDEX;
+            return SMALL_MISSION_TYPE_INDEX;
         return -1;
     }
 
     public static int getAffiliationTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
-        if (isMission(cardDefinition))
-            return AFFILIATION_INDEX;
+        if (isSmall(cardZone) && isAffiliated(cardDefinition))
+            return SMALL_AFFILIATION_INDEX;
         return -1;
     }
 
     public static int getIconTextureIndex(CardDefinition cardDefinition, int iconIndex, CardZone cardZone) {
         if (isSmall(cardZone)) {
             if (isAffiliated(cardDefinition))
-                return ICON_START_INDEX + iconIndex;
+                return SMALL_ICON_START_INDEX + iconIndex;
         } else {
             if (isAffiliated(cardDefinition))
                 return FULL_ICON_START_INDEX + iconIndex;

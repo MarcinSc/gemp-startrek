@@ -10,7 +10,7 @@ import com.gempukku.startrek.game.PlayerPosition;
 import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 
 public class HandLayout {
-    private static final float VERTICAL_DISTANCE = 0.25f;//0.85f;
+    private static final float VERTICAL_DISTANCE = 0.85f;
     private static final float DISTANCE_FROM_CAMERA = 3f;
     private static final float CARD_SEPARATION = 0.15f;
     private static final float CARD_SCALE = 0.4f;
