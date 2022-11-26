@@ -61,7 +61,7 @@ public class CardZoneUtil {
                                      CardRenderingSystem cardRenderingSystem) {
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
-        Entity cardRepresentation = CardTemplates.createSmallCard(cardDefinition, spawnSystem);
+        Entity cardRepresentation = CardTemplates.createRenderedCard(cardDefinition, CardZone.Core, spawnSystem);
         cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(cardEntity.getId());
         moveCardToCore(cardEntity, cardRepresentation, card, cardRenderingSystem);
     }
@@ -77,7 +77,7 @@ public class CardZoneUtil {
                                      CardRenderingSystem cardRenderingSystem) {
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
-        Entity cardRepresentation = CardTemplates.createSmallCard(cardDefinition, spawnSystem);
+        Entity cardRepresentation = CardTemplates.createRenderedCard(cardDefinition, CardZone.Brig, spawnSystem);
         cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(cardEntity.getId());
         moveCardToBrig(cardEntity, cardRepresentation, cardRenderingSystem);
     }
@@ -144,7 +144,7 @@ public class CardZoneUtil {
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
 
-        Entity cardRepresentation = CardTemplates.createSmallCard(cardDefinition, spawnSystem);
+        Entity cardRepresentation = CardTemplates.createRenderedCard(cardDefinition, CardZone.Mission, spawnSystem);
         cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(cardEntity.getId());
 
         cardRenderingSystem.addFaceUpAttachedCard(attachedToCardEntity, cardEntity, cardRepresentation);
@@ -157,7 +157,7 @@ public class CardZoneUtil {
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
 
-        Entity cardRepresentation = CardTemplates.createSmallCard(cardDefinition, spawnSystem);
+        Entity cardRepresentation = CardTemplates.createRenderedCard(cardDefinition, CardZone.Mission, spawnSystem);
         cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(cardEntity.getId());
         moveCardToMission(cardEntity, missionOwner, missionIndex, cardRepresentation, card, cardDefinition, cardRenderingSystem);
 

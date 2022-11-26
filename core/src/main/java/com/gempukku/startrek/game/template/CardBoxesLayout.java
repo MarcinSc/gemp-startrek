@@ -12,11 +12,13 @@ import com.gempukku.startrek.game.zone.CardZone;
 public class CardBoxesLayout {
     private static final int TEMPLATE_INDEX = 0;
     private static final int IMAGE_INDEX = 1;
-
+    private static final int MISSION_TYPE_INDEX = 2;
+    private static final int AFFILIATION_INDEX = 2;
+    private static final int ICON_START_INDEX = 3;
 
     private static final int SMALL_MISSION_TITLE_INDEX = 0;
     private static final int SMALL_MISSION_POINTS_INDEX = 1;
-    private static final int SMALL_MISSION_QUADRANT_INDEX = 2;
+    private static final int SMALL_MISSION_SPAN_INDEX = 2;
     private static final int SMALL_MISSION_AFFILIATION_INDEX = 3;
 
     private static final int SMALL_NOUN_TITLE_INDEX = 0;
@@ -73,6 +75,36 @@ public class CardBoxesLayout {
         }
     }
 
+    public static int getPointsTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (isSmall(cardZone) && isMission(cardDefinition))
+            return SMALL_MISSION_POINTS_INDEX;
+        return -1;
+    }
+
+    public static int getSpanTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (isSmall(cardZone) && isMission(cardDefinition))
+            return SMALL_MISSION_SPAN_INDEX;
+        return -1;
+    }
+
+    public static int getAffiliationsTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (isSmall(cardZone) && isMission(cardDefinition))
+            return SMALL_MISSION_AFFILIATION_INDEX;
+        return -1;
+    }
+
+    public static int getPersonnelStatsTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (isSmall(cardZone) && cardDefinition.getType() == CardType.Personnel)
+            return SMALL_NOUN_STATS_INDEX;
+        return -1;
+    }
+
+    public static int getShipStatsTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (isSmall(cardZone) && cardDefinition.getType() == CardType.Ship)
+            return SMALL_NOUN_STATS_INDEX;
+        return -1;
+    }
+
     public static TextureReference getTextureReference(Entity renderedEntity, int textureIndex) {
         SpriteComponent cardTemplateSprite = renderedEntity.getComponent(SpriteComponent.class);
         return (TextureReference) cardTemplateSprite.getSprites().get(textureIndex).getProperties().get("Texture");
@@ -84,6 +116,24 @@ public class CardBoxesLayout {
 
     public static int getImageTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
         return IMAGE_INDEX;
+    }
+
+    public static int getMissionTypeTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (isMission(cardDefinition))
+            return MISSION_TYPE_INDEX;
+        return -1;
+    }
+
+    public static int getAffiliationTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (isNoun(cardDefinition))
+            return AFFILIATION_INDEX;
+        return -1;
+    }
+
+    public static int getIconTextureIndex(CardDefinition cardDefinition, int iconIndex, CardZone cardZone) {
+        if (isNoun(cardDefinition))
+            return ICON_START_INDEX + iconIndex;
+        return -1;
     }
 
     private static boolean isSmall(CardZone cardZone) {
