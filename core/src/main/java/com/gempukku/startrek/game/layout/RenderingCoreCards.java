@@ -6,13 +6,16 @@ import com.gempukku.libgdx.lib.graph.artemis.text.TextHorizontalAlignment;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextVerticalAlignment;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyleConstants;
+import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 
 public class RenderingCoreCards implements CardZoneCards {
     private TextStyle normalTextStyle;
+    private CardRenderingSystem cardRenderingSystem;
     private RenderedCardGroup coreCards;
 
-    public RenderingCoreCards(RenderedCardGroup coreCards, float lineSpacing) {
+    public RenderingCoreCards(CardRenderingSystem cardRenderingSystem, RenderedCardGroup coreCards, float lineSpacing) {
+        this.cardRenderingSystem = cardRenderingSystem;
         this.coreCards = coreCards;
 
         normalTextStyle = new TextStyle();
@@ -33,7 +36,7 @@ public class RenderingCoreCards implements CardZoneCards {
 
     @Override
     public Array<Entity> getAttachedCards(Entity entity) {
-        return coreCards.getAttachedCards(entity).getRenderedCards();
+        return cardRenderingSystem.getAttachedRenderedcards(entity);
     }
 
     @Override

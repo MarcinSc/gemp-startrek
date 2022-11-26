@@ -20,8 +20,7 @@ public class CommonZones {
 
     private boolean stackDirty;
 
-    public CommonZones(ObjectMap<Entity, Entity> serverToRenderedMap,
-                       ObjectMap<Entity, RenderedCardGroup> attachedCards) {
+    public CommonZones(ObjectMap<Entity, Entity> serverToRenderedMap) {
         this.serverToRenderedMap = serverToRenderedMap;
     }
 

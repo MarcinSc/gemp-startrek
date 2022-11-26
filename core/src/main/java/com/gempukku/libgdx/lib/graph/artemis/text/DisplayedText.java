@@ -125,7 +125,6 @@ Color - character color
                     char character = parsedText.getCharAt(line.getStartIndex() + glyphIndex);
                     TextStyle textStyle = line.getGlyphStyle(glyphIndex);
                     BitmapFont bitmapFont = (BitmapFont) textStyle.getAttribute(TextStyleConstants.Font);
-                    BitmapFont.Glyph glyph = bitmapFont.getData().getGlyph(character);
 
                     float fontScale = getFontScale(textStyle);
 
@@ -150,6 +149,7 @@ Color - character color
                         SpriteDefinitionAdapter sprite = spriteSystem.addSprite(null, null, spriteDefinition);
                         externalSprites.add(sprite);
                     } else {
+                        BitmapFont.Glyph glyph = bitmapFont.getData().getGlyph(character);
                         PropertyContainer stylePropertyContainer = getStylePropertyContainer(stylePropertyContainerMap, textStyle);
 
                         addGlyph(glyph, bitmapFont,

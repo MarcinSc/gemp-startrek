@@ -147,9 +147,7 @@ public class CardZoneUtil {
         Entity cardRepresentation = CardTemplates.createSmallCard(cardDefinition, spawnSystem);
         cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(cardEntity.getId());
 
-        getCardGroupForCardInMission(attachedToCardType, card.getOwner(),
-                cardInMission.getMissionOwner(), cardInMission.getMissionIndex(), cardRenderingSystem).
-                addAttachedFaceUpCard(attachedToCardEntity, cardEntity, cardRepresentation);
+        cardRenderingSystem.addFaceUpAttachedCard(attachedToCardEntity, cardEntity, cardRepresentation);
     }
 
     public static Entity addCardInMission(Entity cardEntity, String missionOwner, int missionIndex,

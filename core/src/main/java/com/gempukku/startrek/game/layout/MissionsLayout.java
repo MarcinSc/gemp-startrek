@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.startrek.game.PlayerPosition;
+import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.zone.MissionCards;
 import com.gempukku.startrek.game.render.zone.PlayerZones;
 
@@ -13,7 +14,7 @@ public class MissionsLayout {
 
     private static final float STACK_HORIZONTAL_GAP = 0.03f;
     private static final float STACK_VERTICAL_GAP = 0.03f;
-    private static final float STACK_WIDTH = 0.715257f;
+    private static final float STACK_WIDTH = 0.497570f;
     private static final float STACK_HEIGHT = 0.497570f;
     private static final float STACK_STICKOUT_PERC = 0.25f;
 
@@ -25,7 +26,7 @@ public class MissionsLayout {
 
     private static final Matrix4 tmpMatrix = new Matrix4();
 
-    public static void layoutMission(PlayerZones playerZones, int missionIndex, PlayerPosition playerPosition,
+    public static void layoutMission(CardRenderingSystem cardRenderingSystem, PlayerZones playerZones, int missionIndex, PlayerPosition playerPosition,
                                      TransformSystem transformSystem) {
         DefaultGlyphOffseter defaultGlyphOffseter = new DefaultGlyphOffseter();
 
@@ -41,7 +42,8 @@ public class MissionsLayout {
                 .translate(horizontalTranslate, 0, 0);
 
         MissionCards missionCards = playerZones.getMissionCards(missionIndex);
-        RenderingMissionCards renderingMissionCards = new RenderingMissionCards(missionCards, STACK_VERTICAL_GAP);
+        RenderingMissionCards renderingMissionCards = new RenderingMissionCards(cardRenderingSystem, missionCards,
+                STACK_VERTICAL_GAP);
 
         CardZoneParsedText missionParsedText = new CardZoneParsedText(renderingMissionCards,
                 STACK_HEIGHT, STACK_WIDTH, STACK_HORIZONTAL_GAP, STACK_STICKOUT_PERC);

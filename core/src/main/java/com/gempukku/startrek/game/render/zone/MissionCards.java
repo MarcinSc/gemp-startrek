@@ -8,11 +8,10 @@ public class MissionCards {
     private final RenderedCardGroup missionOwnerCards;
     private final RenderedCardGroup opposingCards;
 
-    public MissionCards(ObjectMap<Entity, Entity> serverToRenderedCards,
-                        ObjectMap<Entity, RenderedCardGroup> attachedCards) {
-        missionCards = new RenderedCardGroup(serverToRenderedCards, attachedCards);
-        missionOwnerCards = new RenderedCardGroup(serverToRenderedCards, attachedCards);
-        opposingCards = new RenderedCardGroup(serverToRenderedCards, attachedCards);
+    public MissionCards(ObjectMap<Entity, Entity> serverToRenderedCards) {
+        missionCards = new RenderedCardGroup(serverToRenderedCards);
+        missionOwnerCards = new RenderedCardGroup(serverToRenderedCards);
+        opposingCards = new RenderedCardGroup(serverToRenderedCards);
     }
 
     public RenderedCardGroup getMissionCards() {
@@ -25,15 +24,6 @@ public class MissionCards {
 
     public RenderedCardGroup getOpposingCards() {
         return opposingCards;
-    }
-
-    public RenderedCardGroup getAttachedCards(Entity renderedCard) {
-        RenderedCardGroup result = missionCards.getAttachedCards(renderedCard);
-        if (result == null)
-            result = missionOwnerCards.getAttachedCards(renderedCard);
-        if (result == null)
-            result = opposingCards.getAttachedCards(renderedCard);
-        return result;
     }
 
     public void cleanup() {

@@ -19,19 +19,18 @@ public class PlayerZones {
     private final Array<MissionCards> missionCards = new Array<>();
     private final ObjectMap<Entity, Entity> serverToRenderedMap;
 
-    public PlayerZones(ObjectMap<Entity, Entity> serverToRenderedMap,
-                       ObjectMap<Entity, RenderedCardGroup> attachedCards) {
+    public PlayerZones(ObjectMap<Entity, Entity> serverToRenderedMap) {
         this.serverToRenderedMap = serverToRenderedMap;
 
         for (int i = 0; i < 5; i++) {
-            missionCards.add(new MissionCards(serverToRenderedMap, attachedCards));
+            missionCards.add(new MissionCards(serverToRenderedMap));
         }
 
-        cardsInHand = new RenderedCardGroup(serverToRenderedMap, attachedCards);
-        cardsInCore = new RenderedCardGroup(serverToRenderedMap, attachedCards);
-        cardsInBrig = new RenderedCardGroup(serverToRenderedMap, attachedCards);
-        cardsInDeck = new RenderedCardGroup(serverToRenderedMap, attachedCards);
-        cardsInDilemmaPile = new RenderedCardGroup(serverToRenderedMap, attachedCards);
+        cardsInHand = new RenderedCardGroup(serverToRenderedMap);
+        cardsInCore = new RenderedCardGroup(serverToRenderedMap);
+        cardsInBrig = new RenderedCardGroup(serverToRenderedMap);
+        cardsInDeck = new RenderedCardGroup(serverToRenderedMap);
+        cardsInDilemmaPile = new RenderedCardGroup(serverToRenderedMap);
     }
 
     public Entity setTopDiscardPileCard(Entity card, Entity renderedCard) {

@@ -1,6 +1,6 @@
 
 card-templates.png
-size: 4096, 4096
+size: 2048, 4096
 format: RGBA8888
 filter: Linear, Linear
 repeat: none
@@ -13,7 +13,7 @@ bajoran-template
   index: -1
 cardback
   rotate: false
-  xy: 740, 532
+  xy: 1478, 2080
   size: 357, 499
   orig: 357, 499
   offset: 0, 0
@@ -55,29 +55,29 @@ interrupt-template
   index: -1
 mission-template-small
   rotate: false
-  xy: 740, 1033
-  size: 736, 512
-  orig: 736, 512
+  xy: 1478, 3095
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1
 nonAligned-template
   rotate: false
-  xy: 1478, 2578
+  xy: 740, 516
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
-personnel-template-small
+noun-template-small
   rotate: false
-  xy: 1478, 2064
-  size: 736, 512
-  orig: 736, 512
+  xy: 740, 2
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1
-unaffiliated-template-small
+verb-template-small
   rotate: false
-  xy: 2216, 3095
-  size: 736, 512
-  orig: 736, 512
+  xy: 1478, 2581
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1

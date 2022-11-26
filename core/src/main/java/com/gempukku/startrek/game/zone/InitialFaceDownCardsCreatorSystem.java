@@ -110,7 +110,7 @@ public class InitialFaceDownCardsCreatorSystem extends BaseSystem {
         if (!ownerUsername.equals(authenticationHolderSystem.getUsername())) {
             for (int i = 0; i < cardInPlay.getAttachedFaceDownCount(); i++) {
                 Entity cardRepresentation = CardTemplates.createSmallFaceDownCard(spawnSystem);
-                renderedCardGroup.addAttachedFaceDownCard(topLevelCard, cardRepresentation);
+                cardRenderingSystem.addFaceDownAttachedCard(topLevelCard, cardRepresentation);
             }
         }
     }

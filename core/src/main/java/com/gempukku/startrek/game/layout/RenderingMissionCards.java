@@ -6,14 +6,17 @@ import com.gempukku.libgdx.lib.graph.artemis.text.TextHorizontalAlignment;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextVerticalAlignment;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
 import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyleConstants;
+import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.zone.MissionCards;
 
 public class RenderingMissionCards implements CardZoneCards {
+    private CardRenderingSystem cardRenderingSystem;
     private MissionCards missionCards;
     private TextStyle normalTextStyle;
     private TextStyle missionTextStyle;
 
-    public RenderingMissionCards(MissionCards missionCards, float lineSpacing) {
+    public RenderingMissionCards(CardRenderingSystem cardRenderingSystem, MissionCards missionCards, float lineSpacing) {
+        this.cardRenderingSystem = cardRenderingSystem;
         this.missionCards = missionCards;
 
         normalTextStyle = new TextStyle();
@@ -45,7 +48,7 @@ public class RenderingMissionCards implements CardZoneCards {
 
     @Override
     public Array<Entity> getAttachedCards(Entity entity) {
-        return missionCards.getAttachedCards(entity).getRenderedCards();
+        return cardRenderingSystem.getAttachedRenderedcards(entity);
     }
 
     @Override

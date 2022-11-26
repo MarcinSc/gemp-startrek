@@ -11,6 +11,7 @@ import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextComponent;
 import com.gempukku.startrek.card.*;
+import com.gempukku.startrek.game.zone.CardZone;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,11 +80,10 @@ public class CardTemplates {
 
         String cardTemplate = getUnaffiliatedCardTemplate(cardType);
 
-        SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
-        TextureReference cardTemplateTexture = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
+        TextureReference cardTemplateTexture = CardBoxesLayout.getTextureReference(cardRepresentation, CardBoxesLayout.getTemplateTextureIndex(cardDefinition, CardZone.Stack));
         cardTemplateTexture.setRegion(cardTemplate);
 
-        TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
+        TextureReference cardImageTexture = CardBoxesLayout.getTextureReference(cardRepresentation, CardBoxesLayout.getImageTextureIndex(cardDefinition, CardZone.Stack));
         cardImageTexture.setRegion(cardDefinition.getCardImagePath());
 
         TextComponent text = cardRepresentation.getComponent(TextComponent.class);
@@ -483,7 +483,7 @@ public class CardTemplates {
     }
 
     private static Entity createSmallPersonnelCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/personnel-small.template");
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/noun-small.template");
 
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
 
@@ -523,7 +523,7 @@ public class CardTemplates {
     }
 
     private static Entity createSmallShipCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/personnel-small.template");
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/noun-small.template");
 
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
 
@@ -563,7 +563,7 @@ public class CardTemplates {
     }
 
     private static Entity createSmallUnaffilatedCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/unaffiliated-small.template");
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/verb-small.template");
 
         SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
 

@@ -31,7 +31,7 @@
               ]
             },
             "rightVector": {
-              "x": 0.715257,
+              "x": 0.497570,
               "y": 0,
               "z": 0
             },
@@ -70,21 +70,21 @@
                 0,
                 1,
                 0,
-                0.047,
+                -0.0014577246,
                 -0.005,
-                0,
+                -0.02137996,
                 1
               ]
             },
             "rightVector": {
-              "x": 0.60,
+              "x": 0.45966917,
               "y": 0,
               "z": 0
             },
             "upVector": {
               "x": 0,
               "y": 0,
-              "z": 0.371963
+              "z": 0.28571403
             }
           },
           "Texture": {
@@ -116,21 +116,21 @@
                 0,
                 1,
                 0,
-                -0.289,
+                -0.19436328,
                 0.002,
-                -0.180,
+                -0.19436328,
                 1
               ]
             },
             "rightVector": {
-              "x": 0.093,
+              "x": 0.073858045,
               "y": 0,
               "z": 0
             },
             "upVector": {
               "x": 0,
               "y": 0,
-              "z": 0.093
+              "z": 0.073858045
             }
           },
           "Texture": {
@@ -159,21 +159,21 @@
             0,
             1,
             0,
-            0.055,
+            0.046647187,
             0.002,
-            -0.193,
+            -0.20262372,
             1
           ]
         },
         "rightVector": {
-          "x": 0.55,
+          "x": 0.35957208,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
           "y": 0,
-          "z": 0.065
+          "z": 0.049562637
         },
         "width": 0.5,
         "edge": 0.03,
@@ -188,7 +188,8 @@
         "scaleDownToFit": true,
         "verticalAlignment": "center",
         "horizontalAlignment": "center",
-        "bitmapFontPath": "font/arial.fnt"
+        "bitmapFontPath": "font/arial.fnt",
+        "text": "[title]"
       },
       {
         "transform": {
@@ -205,21 +206,21 @@
             0,
             1,
             0,
-            -0.288,
+            -0.20213781,
             0.002,
-            -0.069,
+            0.13119522,
             1
           ]
         },
         "rightVector": {
-          "x": 0.08,
+          "x": 0.04859082,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
           "y": 0,
-          "z": 0.08
+          "z": 0.04859082
         },
         "width": 0.5,
         "edge": 0.03,
@@ -234,7 +235,8 @@
         "scaleDownToFit": true,
         "verticalAlignment": "center",
         "horizontalAlignment": "center",
-        "bitmapFontPath": "font/arial.fnt"
+        "bitmapFontPath": "font/arial.fnt",
+        "text": "[mission points]"
       },
       {
         "transform": {
@@ -251,21 +253,21 @@
             0,
             1,
             0,
-            -0.288,
+            -0.18561694,
             0.002,
-            0.175,
+            0.20019418,
             1
           ]
         },
         "rightVector": {
-          "x": 0.08,
+          "x": 0.04859082,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
           "y": 0,
-          "z": 0.08
+          "z": 0.04859082
         },
         "width": 0.5,
         "edge": 0.03,
@@ -280,7 +282,8 @@
         "scaleDownToFit": true,
         "verticalAlignment": "center",
         "horizontalAlignment": "center",
-        "bitmapFontPath": "font/arial.fnt"
+        "bitmapFontPath": "font/arial.fnt",
+        "text": "[mission quadrant]"
       },
       {
         "transform": {
@@ -297,21 +300,21 @@
             0,
             1,
             0,
-            0.048,
+            0.046647187,
             0.002,
-            0.195,
+            0.18270148,
             1
           ]
         },
         "rightVector": {
-          "x": 0.52,
+          "x": 0.35957208,
           "y": 0,
           "z": 0
         },
         "upVector": {
           "x": 0,
           "y": 0,
-          "z": 0.065
+          "z": 0.08551984
         },
         "width": 0.5,
         "edge": 0.03,
@@ -327,7 +330,7 @@
         "verticalAlignment": "center",
         "horizontalAlignment": "center",
         "bitmapFontPath": "font/arial.fnt",
-        "text": "[affiliations]"
+        "text": "[mission affiliations]"
       }
     ]
   }

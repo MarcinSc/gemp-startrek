@@ -70,7 +70,7 @@ public class MovementTrackingSystem extends BaseSystem {
             fromCards = missionCardsFrom.getMissionOwnerCards();
         else
             fromCards = missionCardsFrom.getOpposingCards();
-        Entity renderedShipEntity = fromCards.removeFaceUpCard(shipEntity, false);
+        Entity renderedShipEntity = fromCards.removeFaceUpCard(shipEntity);
 
         MissionCards missionCardsTo = cardRenderingSystem.getPlayerCards(missionOwnerTo).getMissionCards(missionIndexTo);
         RenderedCardGroup toCards;
@@ -98,10 +98,10 @@ public class MovementTrackingSystem extends BaseSystem {
             Entity beamedEntity = incomingUpdatesProcessor.getEntityById(entityId);
             if (beamedEntity != null) {
                 Entity renderedCard = cardGroup.removeFaceUpCard(beamedEntity);
-                cardGroup.addAttachedFaceUpCard(shipEntity, beamedEntity, renderedCard);
+                cardRenderingSystem.addFaceUpAttachedCard(shipEntity, beamedEntity, renderedCard);
             } else {
                 Entity renderedCard = cardGroup.removeFaceDownCard();
-                cardGroup.addAttachedFaceDownCard(shipEntity, renderedCard);
+                cardRenderingSystem.addFaceDownAttachedCard(shipEntity, renderedCard);
             }
         }
     }
@@ -122,10 +122,10 @@ public class MovementTrackingSystem extends BaseSystem {
 
             Entity beamedEntity = incomingUpdatesProcessor.getEntityById(entityId);
             if (beamedEntity != null) {
-                Entity renderedCard = cardGroup.removeAttachedFaceUpCard(shipEntity, beamedEntity);
+                Entity renderedCard = cardRenderingSystem.removeFaceUpAttachedCard(shipEntity, beamedEntity);
                 cardGroup.addFaceUpCard(beamedEntity, renderedCard);
             } else {
-                Entity renderedCard = cardGroup.removeAttachedFaceDownCard(shipEntity);
+                Entity renderedCard = cardRenderingSystem.removeFaceDownAttachedCard(shipEntity);
                 cardGroup.addFaceDownCard(renderedCard);
             }
         }
@@ -147,11 +147,11 @@ public class MovementTrackingSystem extends BaseSystem {
                 cardGroup = missionCards.getOpposingCards();
             Entity beamedEntity = incomingUpdatesProcessor.getEntityById(entityId);
             if (beamedEntity != null) {
-                Entity renderedCard = cardGroup.removeAttachedFaceUpCard(fromShipEntity, beamedEntity);
-                cardGroup.addAttachedFaceUpCard(toShipEntity, beamedEntity, renderedCard);
+                Entity renderedCard = cardRenderingSystem.removeFaceUpAttachedCard(fromShipEntity, beamedEntity);
+                cardRenderingSystem.addFaceUpAttachedCard(toShipEntity, beamedEntity, renderedCard);
             } else {
-                Entity renderedCard = cardGroup.removeAttachedFaceDownCard(fromShipEntity);
-                cardGroup.addAttachedFaceDownCard(toShipEntity, renderedCard);
+                Entity renderedCard = cardRenderingSystem.removeFaceDownAttachedCard(fromShipEntity);
+                cardRenderingSystem.addFaceDownAttachedCard(toShipEntity, renderedCard);
             }
         }
     }

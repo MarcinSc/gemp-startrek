@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.layout.DefaultGlyphOffseter;
 import com.gempukku.startrek.game.PlayerPosition;
+import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 
 public class CoreLayout {
@@ -16,7 +17,7 @@ public class CoreLayout {
 
     private static final float STACK_HORIZONTAL_GAP = 0.03f;
     private static final float STACK_VERTICAL_GAP = 0.03f;
-    private static final float STACK_WIDTH = 0.715257f;
+    private static final float STACK_WIDTH = 0.497570f;
     private static final float STACK_HEIGHT = 0.497570f;
     private static final float STACK_STICKOUT_PERC = 0.25f;
 
@@ -25,7 +26,7 @@ public class CoreLayout {
 
     private static final Matrix4 tmpMatrix = new Matrix4();
 
-    public static void layoutCore(RenderedCardGroup coreCards, PlayerPosition playerPosition,
+    public static void layoutCore(CardRenderingSystem cardRenderingSystem, RenderedCardGroup coreCards, PlayerPosition playerPosition,
                                   TransformSystem transformSystem) {
         DefaultGlyphOffseter defaultGlyphOffseter = new DefaultGlyphOffseter();
 
@@ -39,7 +40,7 @@ public class CoreLayout {
                 .rotate(new Vector3(0, 1, 0), yRotateDegrees)
                 .translate(CORE_CENTER_X_DISTANCE, 0, 0);
 
-        RenderingCoreCards renderingMissionCards = new RenderingCoreCards(coreCards, STACK_VERTICAL_GAP);
+        RenderingCoreCards renderingMissionCards = new RenderingCoreCards(cardRenderingSystem, coreCards, STACK_VERTICAL_GAP);
 
         CardZoneParsedText missionParsedText = new CardZoneParsedText(renderingMissionCards,
                 STACK_HEIGHT, STACK_WIDTH, STACK_HORIZONTAL_GAP, STACK_STICKOUT_PERC);

@@ -3,6 +3,7 @@ package com.gempukku.startrek.game.render;
 import com.artemis.BaseSystem;
 import com.artemis.Entity;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
@@ -27,7 +28,7 @@ public class CardRenderingSystem extends BaseSystem {
     private final ObjectMap<Entity, RenderedCardGroup> attachedCards = new ObjectMap<>();
 
     private final ObjectMap<PlayerPosition, PlayerZones> playerCardsMap = new ObjectMap<>();
-    private final CommonZones commonZones = new CommonZones(serverToRenderedMap, attachedCards);
+    private final CommonZones commonZones = new CommonZones(serverToRenderedMap);
 
     private boolean stateChanged = false;
 
@@ -39,7 +40,7 @@ public class CardRenderingSystem extends BaseSystem {
     public PlayerZones getPlayerCards(PlayerPosition playerPosition) {
         PlayerZones playerZones = playerCardsMap.get(playerPosition);
         if (playerZones == null) {
-            playerZones = new PlayerZones(serverToRenderedMap, attachedCards);
+            playerZones = new PlayerZones(serverToRenderedMap);
             playerCardsMap.put(playerPosition, playerZones);
         }
         return playerZones;
@@ -63,6 +64,55 @@ public class CardRenderingSystem extends BaseSystem {
 
     public CommonZones getCommonZones() {
         return commonZones;
+    }
+
+    public RenderedCardGroup getAttachedCards(Entity renderedEntity) {
+        return attachedCards.get(renderedEntity);
+    }
+
+    public Array<Entity> getAttachedRenderedcards(Entity renderedEntity) {
+        RenderedCardGroup attachedCards = getAttachedCards(renderedEntity);
+        if (attachedCards == null)
+            return new Array<>();
+        return attachedCards.getRenderedCards();
+    }
+
+    public void addFaceUpAttachedCard(Entity attachedToCardEntity, Entity cardEntity, Entity renderedEntity) {
+        RenderedCardGroup attachedGroup = getOrCreateAttachedGroup(attachedToCardEntity);
+        attachedGroup.addFaceUpCard(cardEntity, renderedEntity);
+    }
+
+    public Entity removeFaceUpAttachedCard(Entity attachedToCardEntity, Entity cardEntity) {
+        RenderedCardGroup attachedGroup = getOrCreateAttachedGroup(attachedToCardEntity);
+        Entity renderedEntity = attachedGroup.removeFaceUpCard(cardEntity);
+        if (attachedGroup.isEmpty()) {
+            attachedCards.remove(attachedToCardEntity);
+        }
+        return renderedEntity;
+    }
+
+    public void addFaceDownAttachedCard(Entity attachedToCardEntity, Entity renderedEntity) {
+        RenderedCardGroup attachedGroup = getOrCreateAttachedGroup(attachedToCardEntity);
+        attachedGroup.addFaceDownCard(renderedEntity);
+    }
+
+    public Entity removeFaceDownAttachedCard(Entity attachedToCardEntity) {
+        RenderedCardGroup attachedGroup = getOrCreateAttachedGroup(attachedToCardEntity);
+        Entity renderedEntity = attachedGroup.removeFaceDownCard();
+        if (attachedGroup.isEmpty()) {
+            attachedCards.remove(attachedToCardEntity);
+        }
+        return renderedEntity;
+    }
+
+    private RenderedCardGroup getOrCreateAttachedGroup(Entity attachedToCardEntity) {
+        Entity attachedToRenderedCard = findRenderedCard(attachedToCardEntity);
+        RenderedCardGroup attachedGroup = attachedCards.get(attachedToRenderedCard);
+        if (attachedGroup == null) {
+            attachedGroup = new RenderedCardGroup(serverToRenderedMap);
+            attachedCards.put(attachedToRenderedCard, attachedGroup);
+        }
+        return attachedGroup;
     }
 
     @EventListener
@@ -91,11 +141,11 @@ public class CardRenderingSystem extends BaseSystem {
                 }
                 for (int i = 0; i < 5; i++) {
                     if (playerZones.isMissionDirty(i)) {
-                        MissionsLayout.layoutMission(playerZones, i, playerPosition, transformSystem);
+                        MissionsLayout.layoutMission(this, playerZones, i, playerPosition, transformSystem);
                     }
                 }
                 if (playerZones.isCoreDirty()) {
-                    CoreLayout.layoutCore(playerZones.getCardsInCore(), playerPosition, transformSystem);
+                    CoreLayout.layoutCore(this, playerZones.getCardsInCore(), playerPosition, transformSystem);
                 }
                 if (playerZones.isDeckDirty()) {
                     PileLayout.layoutPlayerDeck(playerZones.getCardsInDeck(), playerPosition, transformSystem);
