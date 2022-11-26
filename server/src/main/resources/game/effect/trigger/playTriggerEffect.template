@@ -6,10 +6,15 @@
       "triggerIndex": "[triggerIndex]"
     }
   },
+  "com.gempukku.startrek.server.game.effect.EffectRevealedCardsComponent": {},
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
     "type": "sequence",
     "data": {
       "actions": [
+        {
+          "type": "revealCards",
+          "filter": "memory(usedCardId)"
+        },
         {
           "type": "createEffectOnStack",
           "sourceMemory": "usedCardId",
@@ -22,6 +27,9 @@
         },
         {
           "type": "removeEffectFromStack"
+        },
+        {
+          "type": "flipRevealedCards"
         }
       ]
     }

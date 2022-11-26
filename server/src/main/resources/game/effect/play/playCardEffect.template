@@ -6,24 +6,34 @@
       "missionId": "[missionId]"
     }
   },
+  "com.gempukku.startrek.server.game.effect.EffectRevealedCardsComponent": {},
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
-    "type": "condition",
+    "type": "sequence",
     "data": {
-      "condition": "memoryMatches(playedCardId,type(Event))",
-      "trueEffect": {
-        "type": "condition",
-        "conditionMemory": "checkTypeOfEvent",
-        "condition": "memoryMatches(playedCardId,hasAbility(PlaysInCore))",
-        "trueEffect": {
-          "tpl:extends": "game/effect/play/playPlaysToCoreEvent.template"
+      "memory": "playCardMainSequence",
+      "actions": [
+        {
+          "type": "condition",
+          "condition": "memoryMatches(playedCardId,type(Event))",
+          "trueEffect": {
+            "type": "condition",
+            "conditionMemory": "checkTypeOfEvent",
+            "condition": "memoryMatches(playedCardId,hasAbility(PlaysInCore))",
+            "trueEffect": {
+              "tpl:extends": "game/effect/play/playPlaysToCoreEvent.template"
+            },
+            "falseEffect": {
+              "tpl:extends": "game/effect/play/playImmediateEvent.template"
+            }
+          },
+          "falseEffect": {
+            "tpl:extends": "game/effect/play/playNonEvent.template"
+          }
         },
-        "falseEffect": {
-          "tpl:extends": "game/effect/play/playImmediateEvent.template"
+        {
+          "type": "flipRevealedCards"
         }
-      },
-      "falseEffect": {
-        "tpl:extends": "game/effect/play/playNonEvent.template"
-      }
+      ]
     }
   }
 }

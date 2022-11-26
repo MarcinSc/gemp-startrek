@@ -7,12 +7,21 @@
       "beamedIds": "[beamedIds]"
     }
   },
+  "com.gempukku.startrek.server.game.effect.EffectRevealedCardsComponent": {},
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
-    "type": "beamBetweenShips",
+    "type": "sequence",
     "data": {
-      "fromShip": "memory(fromShipId)",
-      "toShip": "memory(toShipId)",
-      "filter": "memory(beamedIds)"
+      "actions": [
+        {
+          "type": "beamBetweenShips",
+          "fromShip": "memory(fromShipId)",
+          "toShip": "memory(toShipId)",
+          "filter": "memory(beamedIds)"
+        },
+        {
+          "type": "flipRevealedCards"
+        }
+      ]
     }
   }
 }

@@ -50,6 +50,8 @@ import com.gempukku.startrek.server.game.effect.play.PlayoutEventEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutTriggerEffect;
 import com.gempukku.startrek.server.game.effect.play.SetEffectStepEffect;
 import com.gempukku.startrek.server.game.effect.player.PlayerCounterEffect;
+import com.gempukku.startrek.server.game.effect.reveal.FlipRevealedCardsEffects;
+import com.gempukku.startrek.server.game.effect.reveal.RevealCardsEffect;
 import com.gempukku.startrek.server.game.effect.setup.PlaceAllCardsInDrawDeckEffect;
 import com.gempukku.startrek.server.game.effect.setup.PlaceAllDilemmasInDeckEffect;
 import com.gempukku.startrek.server.game.effect.setup.SetupMissionCardsEffect;
@@ -150,6 +152,9 @@ public class StarTrekGameHolder implements Disposable {
                 new BeamToMissionEffect(),
                 new BeamBetweenShipsEffect(),
                 new MoveShipEffect(),
+
+                new RevealCardsEffect(),
+                new FlipRevealedCardsEffects(),
 
                 // Ability handlers
                 new DilemmaEffectHandler(),

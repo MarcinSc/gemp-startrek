@@ -6,11 +6,20 @@
       "missionId": "[missionId]"
     }
   },
+  "com.gempukku.startrek.server.game.effect.EffectRevealedCardsComponent": {},
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
-    "type": "moveShip",
+    "type": "sequence",
     "data": {
-      "ship": "memory(shipId)",
-      "mission": "memory(missionId)"
+      "actions": [
+        {
+          "type": "moveShip",
+          "ship": "memory(shipId)",
+          "mission": "memory(missionId)"
+        },
+        {
+          "type": "flipRevealedCards"
+        }
+      ]
     }
   }
 }

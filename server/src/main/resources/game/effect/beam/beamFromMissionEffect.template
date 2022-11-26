@@ -6,11 +6,20 @@
       "beamedIds": "[beamedIds]"
     }
   },
+  "com.gempukku.startrek.server.game.effect.EffectRevealedCardsComponent": {},
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
-    "type": "beamFromMission",
+    "type": "sequence",
     "data": {
-      "ship": "memory(shipId)",
-      "filter": "memory(beamedIds)"
+      "actions": [
+        {
+          "type": "beamFromMission",
+          "ship": "memory(shipId)",
+          "filter": "memory(beamedIds)"
+        },
+        {
+          "type": "flipRevealedCards"
+        }
+      ]
     }
   }
 }
