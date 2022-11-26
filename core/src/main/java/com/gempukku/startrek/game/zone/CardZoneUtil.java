@@ -45,7 +45,7 @@ public class CardZoneUtil {
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
 
-        Entity cardRepresentation = CardTemplates.createFullCard(cardDefinition, spawnSystem);
+        Entity cardRepresentation = CardTemplates.createRenderedCard(cardDefinition, CardZone.Hand, spawnSystem);
         cardRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(cardEntity.getId());
         moveCardToHand(cardEntity, cardRepresentation, card, cardRenderingSystem);
     }
@@ -95,7 +95,7 @@ public class CardZoneUtil {
         String cardId = card.getCardId();
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
         ObjectOnStackComponent objectOnStack = objectEntity.getComponent(ObjectOnStackComponent.class);
-        Entity objectRepresentation = CardTemplates.createFullCard(cardDefinition, spawnSystem);
+        Entity objectRepresentation = CardTemplates.createRenderedCard(cardDefinition, CardZone.Stack, spawnSystem);
         OrderComponent order = orderComponentMapper.create(objectRepresentation);
         order.setValue(objectOnStack.getStackIndex());
         objectRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(objectEntity.getId());
@@ -123,7 +123,7 @@ public class CardZoneUtil {
     public static Entity setTopDiscardPileCard(Entity cardEntity, CardComponent card, CardLookupSystem cardLookupSystem,
                                                SpawnSystem spawnSystem, CardRenderingSystem cardRenderingSystem) {
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardEntity);
-        Entity renderedCard = CardTemplates.createFullCard(cardDefinition, spawnSystem);
+        Entity renderedCard = CardTemplates.createRenderedCard(cardDefinition, CardZone.DiscardPile, spawnSystem);
         return cardRenderingSystem.getPlayerCards(card.getOwner()).setTopDiscardPileCard(cardEntity, renderedCard);
     }
 

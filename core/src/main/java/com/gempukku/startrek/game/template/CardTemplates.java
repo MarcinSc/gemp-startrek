@@ -20,15 +20,23 @@ public class CardTemplates {
     private static Pattern stepStartPattern = Pattern.compile("(\\[s [^]]+])");
 
     public static Entity createRenderedCard(CardDefinition cardDefinition, CardZone cardZone, SpawnSystem spawnSystem) {
-        boolean smallZone = isSmallZone(cardZone);
-        if (smallZone)
-            return createSmallCard(cardDefinition, cardZone, spawnSystem);
-        else
-            return createFullCard(cardDefinition, spawnSystem);
-    }
+        Entity renderedEntity = spawnSystem.spawnEntity(getTemplate(cardDefinition, cardZone));
 
-    private static Entity createSmallCard(CardDefinition cardDefinition, CardZone cardZone, SpawnSystem spawnSystem) {
-        Entity renderedEntity = spawnSystem.spawnEntity(getSmallTemplate(cardDefinition));
+        int affiliationTemplateIndex = CardBoxesLayout.getAffiliationTemplateTextureIndex(cardDefinition, cardZone);
+        if (affiliationTemplateIndex > -1) {
+            Affiliation affiliation = cardDefinition.getAffiliation();
+            if (affiliation != null) {
+                String cardTemplate = getAffiliatedCardTemplate(affiliation);
+
+                CardBoxesLayout.getTextureReference(renderedEntity, affiliationTemplateIndex).
+                        setRegion(cardTemplate);
+            } else {
+                String cardTemplate = getUnaffiliatedCardTemplate(cardDefinition.getType());
+
+                CardBoxesLayout.getTextureReference(renderedEntity, affiliationTemplateIndex).
+                        setRegion(cardTemplate);
+            }
+        }
 
         TextureReference cardImageTexture = CardBoxesLayout.getTextureReference(renderedEntity, CardBoxesLayout.getImageTextureIndex(cardDefinition, cardZone));
         cardImageTexture.setRegion(cardDefinition.getCardImagePath());
@@ -38,12 +46,12 @@ public class CardTemplates {
             CardBoxesLayout.getTextureReference(renderedEntity, missionTypeIndex).
                     setRegion(cardDefinition.getMissionType().name());
         }
-
-        int affiliationTextureIndex = CardBoxesLayout.getAffiliationTextureIndex(cardDefinition, cardZone);
-        if (affiliationTextureIndex > -1) {
-            CardBoxesLayout.getTextureReference(renderedEntity, affiliationTextureIndex).
-                    setRegion(cardDefinition.getAffiliation().getIcon().name());
-        }
+//
+//        int affiliationTextureIndex = CardBoxesLayout.getAffiliationTextureIndex(cardDefinition, cardZone);
+//        if (affiliationTextureIndex > -1) {
+//            CardBoxesLayout.getTextureReference(renderedEntity, affiliationTextureIndex).
+//                    setRegion(cardDefinition.getAffiliation().getIcon().name());
+//        }
 
         // Icons
         Array<CardIcon> icons = cardDefinition.getIcons();
@@ -66,13 +74,29 @@ public class CardTemplates {
             }
         }
 
+        String titleText = (cardDefinition.isUnique() ? "• " : "") + cardDefinition.getTitle();
         CardBoxesLayout.getTextBlock(renderedEntity, CardBoxesLayout.getTitleTextIndex(cardDefinition, cardZone)).
-                setText(cardDefinition.getTitle());
+                setText(titleText);
+
+        int subtitleIndex = CardBoxesLayout.getSubtitleTextIndex(cardDefinition, cardZone);
+        if (subtitleIndex > -1) {
+            // Subtitle
+            String subtitle = cardDefinition.getSubtitle();
+            if (subtitle != null) {
+                CardBoxesLayout.getTextBlock(renderedEntity, subtitleIndex).setText(subtitle);
+            }
+        }
 
         int pointsIndex = CardBoxesLayout.getPointsTextIndex(cardDefinition, cardZone);
         if (pointsIndex > -1) {
             CardBoxesLayout.getTextBlock(renderedEntity, pointsIndex).
                     setText(String.valueOf(cardDefinition.getPoints()));
+        }
+
+        int costIndex = CardBoxesLayout.getCostTextIndex(cardDefinition, cardZone);
+        if (costIndex > -1) {
+            CardBoxesLayout.getTextBlock(renderedEntity, costIndex).
+                    setText(String.valueOf(cardDefinition.getCost()));
         }
 
         int spanIndex = CardBoxesLayout.getSpanTextIndex(cardDefinition, cardZone);
@@ -82,10 +106,32 @@ public class CardTemplates {
                     setText(span);
         }
 
+        int speciesIndex = CardBoxesLayout.getSpeciesTextIndex(cardDefinition, cardZone);
+        if (speciesIndex > -1) {
+            CardBoxesLayout.getTextBlock(renderedEntity, speciesIndex).setText(cardDefinition.getSpecies().toString());
+        }
+
+        int shipClassIndex = CardBoxesLayout.getShipClassTextIndex(cardDefinition, cardZone);
+        if (shipClassIndex > -1) {
+            String shipClass = "[font font/arial-italic.fnt]" + cardDefinition.getShipClass() + "[/font] Class";
+            CardBoxesLayout.getTextBlock(renderedEntity, shipClassIndex).setText(shipClass);
+        }
+
+        int typeIndex = CardBoxesLayout.getTypeTextIndex(cardDefinition, cardZone);
+        if (typeIndex > -1) {
+            CardBoxesLayout.getTextBlock(renderedEntity, typeIndex).setText(cardDefinition.getType().name());
+        }
+
         int affiliationsIndex = CardBoxesLayout.getAffiliationsTextIndex(cardDefinition, cardZone);
         if (affiliationsIndex > -1) {
             CardBoxesLayout.getTextBlock(renderedEntity, affiliationsIndex).
                     setText(cardDefinition.getAffiliationsText());
+        }
+
+        int textIndex = CardBoxesLayout.getTextIndex(cardDefinition, cardZone);
+        if (textIndex > -1) {
+            String text = createCardText(cardDefinition);
+            CardBoxesLayout.getTextBlock(renderedEntity, textIndex).setText(text);
         }
 
         int personnelStatsIndex = CardBoxesLayout.getPersonnelStatsTextIndex(cardDefinition, cardZone);
@@ -103,6 +149,42 @@ public class CardTemplates {
                     setText(stats);
         }
 
+        int integrityIndex = CardBoxesLayout.getIntegrityTextIndex(cardDefinition, cardZone);
+        if (integrityIndex > -1) {
+            String integrity = "I[scale 0.8]NTEGRITY[/scale] " + cardDefinition.getIntegrity();
+            CardBoxesLayout.getTextBlock(renderedEntity, integrityIndex).setText(integrity);
+        }
+
+        int cunningIndex = CardBoxesLayout.getCunningTextIndex(cardDefinition, cardZone);
+        if (cunningIndex > -1) {
+            String cunning = "C[scale 0.8]UNNING[/scale] " + cardDefinition.getCunning();
+            CardBoxesLayout.getTextBlock(renderedEntity, cunningIndex).setText(cunning);
+        }
+
+        int strengthIndex = CardBoxesLayout.getStrengthTextIndex(cardDefinition, cardZone);
+        if (strengthIndex > -1) {
+            String strength = "S[scale 0.8]TRENGTH[/scale] " + cardDefinition.getStrength();
+            CardBoxesLayout.getTextBlock(renderedEntity, strengthIndex).setText(strength);
+        }
+
+        int rangeIndex = CardBoxesLayout.getRangeTextIndex(cardDefinition, cardZone);
+        if (rangeIndex > -1) {
+            String range = "R[scale 0.8]ANGE[/scale] " + cardDefinition.getRange();
+            CardBoxesLayout.getTextBlock(renderedEntity, rangeIndex).setText(range);
+        }
+
+        int weaponsIndex = CardBoxesLayout.getWeaponsTextIndex(cardDefinition, cardZone);
+        if (weaponsIndex > -1) {
+            String weapons = "W[scale 0.8]EAPONS[/scale] " + cardDefinition.getWeapons();
+            CardBoxesLayout.getTextBlock(renderedEntity, weaponsIndex).setText(weapons);
+        }
+
+        int shieldsIndex = CardBoxesLayout.getShieldsTextIndex(cardDefinition, cardZone);
+        if (shieldsIndex > -1) {
+            String shields = "S[scale 0.8]HIELDS[/scale] " + cardDefinition.getShields();
+            CardBoxesLayout.getTextBlock(renderedEntity, shieldsIndex).setText(shields);
+        }
+
         return renderedEntity;
     }
 
@@ -114,18 +196,25 @@ public class CardTemplates {
         return cardDefinition.getType() == CardType.Mission;
     }
 
-    private static boolean isNoun(CardDefinition cardDefinition) {
+    private static boolean isAffiliatedCard(CardDefinition cardDefinition) {
         CardType type = cardDefinition.getType();
         return type == CardType.Personnel || type == CardType.Ship;
     }
 
-    private static String getSmallTemplate(CardDefinition cardDefinition) {
-        if (isMission(cardDefinition))
-            return "game/card/mission-small.template";
-        else if (isNoun(cardDefinition))
-            return "game/card/noun-small.template";
-        else
-            return "game/card/verb-small.template";
+    private static String getTemplate(CardDefinition cardDefinition, CardZone cardZone) {
+        if (isSmallZone(cardZone)) {
+            if (isMission(cardDefinition))
+                return "game/card/mission-small.template";
+            else if (isAffiliatedCard(cardDefinition))
+                return "game/card/noun-small.template";
+            else
+                return "game/card/verb-small.template";
+        } else {
+            if (isAffiliatedCard(cardDefinition))
+                return "game/card/card-full-affiliated.template";
+            else
+                return "game/card/card-full-unaffiliated.template";
+        }
     }
 
     public static Entity createFaceDownCard(SpawnSystem spawnSystem) {
@@ -134,18 +223,6 @@ public class CardTemplates {
 
     public static Entity createSmallFaceDownCard(SpawnSystem spawnSystem) {
         return spawnSystem.spawnEntity("game/card/card-small-facedown.template");
-    }
-
-    public static Entity createFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem) {
-        CardType cardType = cardDefinition.getType();
-
-        if (cardType == CardType.Personnel || cardType == CardType.Ship) {
-            return createAffiliatedFullCard(cardDefinition, spawnSystem, cardType);
-        } else if (cardType == CardType.Equipment || cardType == CardType.Event
-                || cardType == CardType.Interrupt || cardType == CardType.Dilemma) {
-            return createUnaffiliatedFullCard(cardDefinition, spawnSystem, cardType);
-        }
-        throw new GdxRuntimeException("Unable to create a full card for card type: " + cardType);
     }
 
     public static Entity createEffect(CardDefinition cardDefinition, int abilityIndex, SpawnSystem spawnSystem) {
@@ -168,7 +245,7 @@ public class CardTemplates {
 
         String cardTemplate = getUnaffiliatedCardTemplate(cardType);
 
-        TextureReference cardTemplateTexture = CardBoxesLayout.getTextureReference(cardRepresentation, CardBoxesLayout.getTemplateTextureIndex(cardDefinition, CardZone.Stack));
+        TextureReference cardTemplateTexture = CardBoxesLayout.getTextureReference(cardRepresentation, CardBoxesLayout.getAffiliationTemplateTextureIndex(cardDefinition, CardZone.Stack));
         cardTemplateTexture.setRegion(cardTemplate);
 
         TextureReference cardImageTexture = CardBoxesLayout.getTextureReference(cardRepresentation, CardBoxesLayout.getImageTextureIndex(cardDefinition, CardZone.Stack));
@@ -197,46 +274,6 @@ public class CardTemplates {
             // Text
             TextBlock textBlock = text.getTextBlocks().get(3);
             textBlock.setText(createEffectText(cardDefinition, abilityIndex));
-        }
-        return cardRepresentation;
-    }
-
-    private static Entity createUnaffiliatedFullCard(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType) {
-        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/card-full-unaffiliated.template");
-        //Entity cardRepresentation = spawnSystem.spawnEntity("game/card-full-textboxes.template");
-
-        String cardTemplate = getUnaffiliatedCardTemplate(cardType);
-
-        SpriteComponent cardTemplateSprite = cardRepresentation.getComponent(SpriteComponent.class);
-        TextureReference cardTemplateTexture = (TextureReference) cardTemplateSprite.getSprites().get(0).getProperties().get("Texture");
-        cardTemplateTexture.setRegion(cardTemplate);
-
-        TextureReference cardImageTexture = (TextureReference) cardTemplateSprite.getSprites().get(1).getProperties().get("Texture");
-        cardImageTexture.setRegion(cardDefinition.getCardImagePath());
-
-        TextComponent text = cardRepresentation.getComponent(TextComponent.class);
-        if (text != null) {
-            // Title
-            TextBlock titleBlock = text.getTextBlocks().get(0);
-            String titleText = (cardDefinition.isUnique() ? "• " : "") + cardDefinition.getTitle();
-            titleBlock.setText(titleText);
-
-            if (cardType != CardType.Interrupt) {
-                // Cost
-                TextBlock costBlock = text.getTextBlocks().get(1);
-                costBlock.setText(String.valueOf(cardDefinition.getCost()));
-            } else {
-                TextBlock costBlock = text.getTextBlocks().get(1);
-                costBlock.setText("");
-            }
-
-            // Type
-            TextBlock typeBlock = text.getTextBlocks().get(2);
-            typeBlock.setText(cardType.name());
-
-            // Text
-            TextBlock textBlock = text.getTextBlocks().get(3);
-            textBlock.setText(createCardText(cardDefinition));
         }
         return cardRepresentation;
     }

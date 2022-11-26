@@ -15,6 +15,20 @@ public class CardBoxesLayout {
     private static final int MISSION_TYPE_INDEX = 2;
     private static final int AFFILIATION_INDEX = 2;
     private static final int ICON_START_INDEX = 3;
+    private static final int FULL_ICON_START_INDEX = 2;
+
+    private static final int FULL_TITLE_INDEX = 0;
+    private static final int FULL_SUBTITLE_INDEX = 1;
+    private static final int FULL_COST_INDEX = 2;
+    private static final int FULL_TYPE_INDEX = 3;
+    private static final int FULL_TEXT_INDEX = 4;
+    private static final int FULL_STAT1_TYPE_INDEX = 5;
+    private static final int FULL_STAT2_TYPE_INDEX = 6;
+    private static final int FULL_STAT3_TYPE_INDEX = 7;
+
+    private static final int FULL_UNAFFILIATED_COST_INDEX = 1;
+    private static final int FULL_UNAFFILIATED_TYPE_INDEX = 2;
+    private static final int FULL_UNAFFILIATED_TEXT_INDEX = 3;
 
     private static final int SMALL_MISSION_TITLE_INDEX = 0;
     private static final int SMALL_MISSION_POINTS_INDEX = 1;
@@ -39,7 +53,7 @@ public class CardBoxesLayout {
                 return SMALL_NOUN_TITLE_INDEX;
             return SMALL_VERB_TITLE_INDEX;
         } else {
-            return -1;
+            return FULL_TITLE_INDEX;
         }
     }
 
@@ -47,6 +61,8 @@ public class CardBoxesLayout {
         if (isSmall(cardZone)) {
             return -1;
         } else {
+            if (isNoun(cardDefinition))
+                return FULL_SUBTITLE_INDEX;
             return -1;
         }
     }
@@ -55,6 +71,12 @@ public class CardBoxesLayout {
         if (isSmall(cardZone)) {
             return -1;
         } else {
+            if (hasCost(cardDefinition)) {
+                if (isAffiliated(cardDefinition))
+                    return FULL_COST_INDEX;
+                else
+                    return FULL_UNAFFILIATED_COST_INDEX;
+            }
             return -1;
         }
     }
@@ -63,15 +85,67 @@ public class CardBoxesLayout {
         if (isSmall(cardZone)) {
             return -1;
         } else {
+            if (!isAffiliated(cardDefinition))
+                return FULL_UNAFFILIATED_TYPE_INDEX;
             return -1;
         }
+    }
+
+    public static int getSpeciesTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (!isSmall(cardZone) && isPersonnel(cardDefinition))
+            return FULL_TYPE_INDEX;
+        return -1;
+    }
+
+    public static int getShipClassTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (!isSmall(cardZone) && isShip(cardDefinition))
+            return FULL_TYPE_INDEX;
+        return -1;
+    }
+
+    public static int getIntegrityTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (!isSmall(cardZone) && isPersonnel(cardDefinition))
+            return FULL_STAT1_TYPE_INDEX;
+        return -1;
+    }
+
+    public static int getCunningTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (!isSmall(cardZone) && isPersonnel(cardDefinition))
+            return FULL_STAT2_TYPE_INDEX;
+        return -1;
+    }
+
+    public static int getStrengthTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (!isSmall(cardZone) && isPersonnel(cardDefinition))
+            return FULL_STAT3_TYPE_INDEX;
+        return -1;
+    }
+
+    public static int getRangeTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (!isSmall(cardZone) && isShip(cardDefinition))
+            return FULL_STAT1_TYPE_INDEX;
+        return -1;
+    }
+
+    public static int getWeaponsTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (!isSmall(cardZone) && isShip(cardDefinition))
+            return FULL_STAT2_TYPE_INDEX;
+        return -1;
+    }
+
+    public static int getShieldsTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (!isSmall(cardZone) && isShip(cardDefinition))
+            return FULL_STAT3_TYPE_INDEX;
+        return -1;
     }
 
     public static int getTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
         if (isSmall(cardZone)) {
             return -1;
         } else {
-            return -1;
+            if (isAffiliated(cardDefinition))
+                return FULL_TEXT_INDEX;
+            return FULL_UNAFFILIATED_TEXT_INDEX;
         }
     }
 
@@ -94,13 +168,13 @@ public class CardBoxesLayout {
     }
 
     public static int getPersonnelStatsTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
-        if (isSmall(cardZone) && cardDefinition.getType() == CardType.Personnel)
+        if (isSmall(cardZone) && isPersonnel(cardDefinition))
             return SMALL_NOUN_STATS_INDEX;
         return -1;
     }
 
     public static int getShipStatsTextIndex(CardDefinition cardDefinition, CardZone cardZone) {
-        if (isSmall(cardZone) && cardDefinition.getType() == CardType.Ship)
+        if (isSmall(cardZone) && isShip(cardDefinition))
             return SMALL_NOUN_STATS_INDEX;
         return -1;
     }
@@ -110,8 +184,12 @@ public class CardBoxesLayout {
         return (TextureReference) cardTemplateSprite.getSprites().get(textureIndex).getProperties().get("Texture");
     }
 
-    public static int getTemplateTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
-        return TEMPLATE_INDEX;
+    public static int getAffiliationTemplateTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (isSmall(cardZone)) {
+            return -1;
+        } else {
+            return TEMPLATE_INDEX;
+        }
     }
 
     public static int getImageTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
@@ -125,14 +203,19 @@ public class CardBoxesLayout {
     }
 
     public static int getAffiliationTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
-        if (isNoun(cardDefinition))
+        if (isMission(cardDefinition))
             return AFFILIATION_INDEX;
         return -1;
     }
 
     public static int getIconTextureIndex(CardDefinition cardDefinition, int iconIndex, CardZone cardZone) {
-        if (isNoun(cardDefinition))
-            return ICON_START_INDEX + iconIndex;
+        if (isSmall(cardZone)) {
+            if (isAffiliated(cardDefinition))
+                return ICON_START_INDEX + iconIndex;
+        } else {
+            if (isAffiliated(cardDefinition))
+                return FULL_ICON_START_INDEX + iconIndex;
+        }
         return -1;
     }
 
@@ -144,7 +227,23 @@ public class CardBoxesLayout {
         return cardDefinition.getType() == CardType.Mission;
     }
 
+    private static boolean isAffiliated(CardDefinition cardDefinition) {
+        return isPersonnel(cardDefinition) || isShip(cardDefinition);
+    }
+
     private static boolean isNoun(CardDefinition cardDefinition) {
-        return cardDefinition.getType() == CardType.Personnel || cardDefinition.getType() == CardType.Ship;
+        return isPersonnel(cardDefinition) || isShip(cardDefinition) || cardDefinition.getType() == CardType.Equipment;
+    }
+
+    private static boolean hasCost(CardDefinition cardDefinition) {
+        return isNoun(cardDefinition) || cardDefinition.getType() == CardType.Event;
+    }
+
+    private static boolean isPersonnel(CardDefinition cardDefinition) {
+        return cardDefinition.getType() == CardType.Personnel;
+    }
+
+    private static boolean isShip(CardDefinition cardDefinition) {
+        return cardDefinition.getType() == CardType.Ship;
     }
 }

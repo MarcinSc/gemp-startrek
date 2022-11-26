@@ -189,8 +189,7 @@
         "scaleDownToFit": true,
         "verticalAlignment": "center",
         "horizontalAlignment": "center",
-        "bitmapFontPath": "font/arial.fnt",
-        "text": "[cost]"
+        "bitmapFontPath": "font/arial.fnt"
       },
       {
         "transform": {
@@ -284,8 +283,7 @@
         "scaleDownMultiplier": 1.05,
         "verticalAlignment": "top",
         "horizontalAlignment": "left",
-        "bitmapFontPath": "font/arial.fnt",
-        "text": "[text]"
+        "bitmapFontPath": "font/arial.fnt"
       }
     ]
   }
