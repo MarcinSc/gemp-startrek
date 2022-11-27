@@ -9,6 +9,7 @@ import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.OrderMoveRequirements;
+import com.gempukku.startrek.game.OrderRequirements;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
@@ -43,11 +44,71 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
                 return validateBeamBetweenShips(decisionPlayer, result);
             } else if (action.equals("moveShip")) {
                 return validateMoveShip(decisionPlayer, result);
+            } else if (action.equals("attemptPlanetMission")) {
+                return validateAttemptPlanetMission(decisionPlayer, result);
+            } else if (action.equals("attemptSpaceMission")) {
+                return validateAttemptSpaceMission(decisionPlayer, result);
             }
         } catch (Exception exp) {
             // Ignore
         }
         return false;
+    }
+
+    private boolean validateAttemptPlanetMission(String decisionPlayer, ObjectMap<String, String> result) {
+        String missionId = result.get("missionId");
+        Entity missionEntity = serverEntityIdSystem.findfromId(missionId);
+        if (missionEntity == null)
+            return false;
+
+        Memory memory = new Memory(result);
+
+        if (!cardFilteringSystem.resolveCardFilter("missionType(Planet)").
+                accepts(null, memory, missionEntity))
+            return false;
+
+        CardFilter requirements = OrderRequirements.createAttemptMissionRequirements(decisionPlayer, cardFilteringSystem);
+        if (!requirements.accepts(null, memory, missionEntity))
+            return false;
+
+        return true;
+    }
+
+    private boolean validateAttemptSpaceMission(String decisionPlayer, ObjectMap<String, String> result) {
+        String missionId = result.get("missionId");
+        Entity missionEntity = serverEntityIdSystem.findfromId(missionId);
+        if (missionEntity == null)
+            return false;
+
+        Memory memory = new Memory(result);
+
+        if (!cardFilteringSystem.resolveCardFilter("missionType(Space)").
+                accepts(null, memory, missionEntity))
+            return false;
+
+        CardFilter requirements = OrderRequirements.createAttemptMissionRequirements(decisionPlayer, cardFilteringSystem);
+        if (!requirements.accepts(null, memory, missionEntity))
+            return false;
+
+        CardFilter shipMissionAffiliationsRequirements = OrderRequirements.createMissionAffiliationsShipRequirements(cardFilteringSystem);
+
+        String[] shipIds = StringUtils.split(result.get("shipIds"), ",");
+        if (shipIds.length < 1)
+            return false;
+        boolean matchesAffiliation = false;
+        CardFilter shipRequirements = OrderRequirements.createAttemptMissionShipsRequirements(missionEntity, cardFilteringSystem);
+        for (String shipId : shipIds) {
+            Entity shipEntity = serverEntityIdSystem.findfromId(shipId);
+            if (!shipRequirements.accepts(null, memory, shipEntity))
+                return false;
+            if (shipMissionAffiliationsRequirements.accepts(null, memory, shipEntity))
+                matchesAffiliation = true;
+        }
+
+        if (!matchesAffiliation)
+            return false;
+
+        return true;
     }
 
     private boolean validateMoveShip(String decisionPlayer, ObjectMap<String, String> result) {
@@ -208,6 +269,18 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
             memory.setValue("shipId", result.get("shipId"));
             memory.setValue("missionId", result.get("missionId"));
             stackSystem.stackEntity(beamBetweenShipsEffect);
+        } else if (action.equals("attemptPlanetMission")) {
+            Entity attemptPlanetMissionEffect = spawnSystem.spawnEntity("game/effect/mission/attemptPlanetMission.template");
+            EffectMemoryComponent effectMemory = attemptPlanetMissionEffect.getComponent(EffectMemoryComponent.class);
+            Memory memory = new Memory(effectMemory.getMemory());
+            memory.setValue("missionId", result.get("missionId"));
+            stackSystem.stackEntity(attemptPlanetMissionEffect);
+        } else if (action.equals("attemptSpaceMission")) {
+            Entity attemptPlanetMissionEffect = spawnSystem.spawnEntity("game/effect/mission/attemptSpaceMission.template");
+            EffectMemoryComponent effectMemory = attemptPlanetMissionEffect.getComponent(EffectMemoryComponent.class);
+            Memory memory = new Memory(effectMemory.getMemory());
+            memory.setValue("missionId", result.get("missionId"));
+            stackSystem.stackEntity(attemptPlanetMissionEffect);
         }
     }
 

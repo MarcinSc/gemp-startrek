@@ -23,6 +23,12 @@ public class PlayerResolverSystem extends BaseSystem {
         Expression expression = expressions.get(0);
         if (expression.getType().equals("currentPlayer")) {
             return LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class).getComponent(TurnSequenceComponent.class).getCurrentPlayer();
+        } else if (expression.getType().equals("nextPlayer")) {
+            TurnSequenceComponent turnSequence = LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class).getComponent(TurnSequenceComponent.class);
+            String currentPlayer = turnSequence.getCurrentPlayer();
+            int currentPlayerIndex = turnSequence.getPlayers().indexOf(currentPlayer, false);
+            int nextPlayerIndex = (currentPlayerIndex + 1) % turnSequence.getPlayers().size;
+            return turnSequence.getPlayers().get(nextPlayerIndex);
         } else if (expression.getType().equals("username")) {
             return expression.getParameters().get(0);
         } else if (expression.getType().equals("owner")) {

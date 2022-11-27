@@ -15,6 +15,9 @@ import com.gempukku.libgdx.lib.graph.artemis.selection.SelectionSystem;
 import com.gempukku.libgdx.lib.graph.artemis.ui.StageSystem;
 import com.gempukku.libgdx.network.client.ServerEntityComponent;
 import com.gempukku.startrek.LazyEntityUtil;
+import com.gempukku.startrek.card.CardDefinition;
+import com.gempukku.startrek.card.CardLookupSystem;
+import com.gempukku.startrek.card.MissionType;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.common.UISettings;
@@ -41,10 +44,12 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
     private PlayerResolverSystem playerResolverSystem;
     private ConditionResolverSystem conditionResolverSystem;
     private PromptRenderingSystem promptRenderingSystem;
+    private CardLookupSystem cardLookupSystem;
 
     private DecisionInterface decisionInterface;
 
     private MainDecisionInterface mainDecisionInterface;
+    private AttemptMissionInterface attemptMissionInterface;
     private MoveShipSelectionInterface moveShipSelectionInterface;
     private BeamSelectionInterface beamSelectionInterface;
     private BeamFromMissionChooseShipInterface beamFromMissionChooseShipInterface;
@@ -60,6 +65,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
 
     private void initializeForDecisions() {
         mainDecisionInterface = new MainDecisionInterface();
+        attemptMissionInterface = new AttemptMissionInterface();
         moveShipSelectionInterface = new MoveShipSelectionInterface();
         beamSelectionInterface = new BeamSelectionInterface();
         beamFromMissionChooseShipInterface = new BeamFromMissionChooseShipInterface();
@@ -107,6 +113,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
     private class MainDecisionInterface implements DecisionInterface {
         private Table table;
         private TextButton executeOrderButton;
+        private TextButton attemptMissionButton;
         private TextButton beamButton;
         private TextButton moveShipButton;
         private TextButton passButton;
@@ -145,6 +152,21 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
                         }
                     });
             verticalGroup.addActor(executeOrderButton);
+
+            attemptMissionButton = new TextButton("Attempt mission", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            attemptMissionButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            attemptMission();
+                        }
+                    });
+            verticalGroup.addActor(attemptMissionButton);
 
             beamButton = new TextButton("Beam", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
                 @Override
@@ -235,6 +257,10 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             goToDecisionInterface(null);
         }
 
+        private void attemptMission() {
+            goToDecisionInterface(attemptMissionInterface);
+        }
+
         private void initiateBeam() {
             goToDecisionInterface(beamSelectionInterface);
         }
@@ -248,6 +274,222 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             parameters.put("action", "pass");
             clientDecisionSystem.executeDecision(parameters);
             goToDecisionInterface(null);
+        }
+    }
+
+    private class AttemptMissionInterface implements DecisionInterface {
+        private Table table;
+        private TextButton goOnMissionButton;
+        private TextButton cancelButton;
+
+        private SelectionState selectionState;
+
+        public AttemptMissionInterface() {
+            Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
+            CardFilter playRequirementsFilter = OrderRequirements.createAttemptMissionRequirements(
+                    authenticationHolderSystem.getUsername(), cardFilteringSystem);
+
+            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+                    new SelectionCallback() {
+                        @Override
+                        public void selectionChanged(ObjectSet<Entity> selected) {
+                            enableButton(goOnMissionButton, selected.size == 1);
+                        }
+                    });
+
+            table = new Table();
+            table.setFillParent(true);
+
+            VerticalGroup verticalGroup = new VerticalGroup();
+
+            goOnMissionButton = new TextButton("Go on mission", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            goOnMissionButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            goOnMission();
+                        }
+                    });
+            verticalGroup.addActor(goOnMissionButton);
+
+            cancelButton = new TextButton("Cancel", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            cancelButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            cancelMission();
+                        }
+                    });
+            verticalGroup.addActor(cancelButton);
+
+            table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
+        }
+
+        private void goOnMission() {
+            Entity missionEntity = getServerEntity(selectionSystem.getSelectedEntities().iterator().next());
+            CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(missionEntity);
+            if (cardDefinition.getMissionType() == MissionType.Planet) {
+                goToDecisionInterface(new ChooseShipsAttemptingMissionInterface(missionEntity));
+            } else {
+                String missionId = missionEntity.getComponent(ServerEntityComponent.class).getEntityId();
+
+                ObjectMap<String, String> parameters = new ObjectMap<>();
+                parameters.put("action", "attemptPlanetMission");
+                parameters.put("missionId", missionId);
+                clientDecisionSystem.executeDecision(parameters);
+
+                goToDecisionInterface(null);
+            }
+        }
+
+        private void cancelMission() {
+            goToDecisionInterface(mainDecisionInterface);
+        }
+
+        @Override
+        public void proceedToDecision() {
+            Stage stage = stageSystem.getStage();
+
+            selectionState.markSelectableCards();
+            selectionSystem.startSelection(selectionState);
+
+            enableButton(goOnMissionButton, false);
+
+            stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose mission to attempt");
+        }
+
+        @Override
+        public void cleanupDecision() {
+            table.remove();
+            selectionState.cleanup();
+            selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
+        }
+    }
+
+    private class ChooseShipsAttemptingMissionInterface implements DecisionInterface {
+        private Table table;
+        private TextButton goOnMissionButton;
+        private TextButton cancelButton;
+
+        private SelectionState selectionState;
+        private Entity missionEntity;
+
+        public ChooseShipsAttemptingMissionInterface(Entity missionEntity) {
+            this.missionEntity = missionEntity;
+            Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
+            CardFilter playRequirementsFilter = OrderRequirements.createAttemptMissionShipsRequirements(
+                    missionEntity, cardFilteringSystem);
+            CardFilter shipMissionAffiliationsRequirement = OrderRequirements.createMissionAffiliationsShipRequirements(cardFilteringSystem);
+
+            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+                    new SelectionCallback() {
+                        @Override
+                        public void selectionChanged(ObjectSet<Entity> selected) {
+                            boolean valid = false;
+                            for (Entity entity : selected) {
+                                Entity shipEntity = getServerEntity(entity);
+                                if (shipMissionAffiliationsRequirement.accepts(null, null, shipEntity))
+                                    valid = true;
+                            }
+
+                            enableButton(goOnMissionButton, valid && selected.size > 0);
+                        }
+                    }, Integer.MAX_VALUE);
+
+            table = new Table();
+            table.setFillParent(true);
+
+            VerticalGroup verticalGroup = new VerticalGroup();
+
+            goOnMissionButton = new TextButton("Go on mission", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            goOnMissionButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            goOnMission();
+                        }
+                    });
+            verticalGroup.addActor(goOnMissionButton);
+
+            cancelButton = new TextButton("Cancel", stageSystem.getSkin(), UISettings.alternativeButtonStyle) {
+                @Override
+                public float getPrefWidth() {
+                    return 200;
+                }
+            };
+            cancelButton.addListener(
+                    new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            cancelMission();
+                        }
+                    });
+            verticalGroup.addActor(cancelButton);
+
+            table.add(verticalGroup).expand().bottom().right().pad(Value.percentHeight(0.02f, table));
+        }
+
+        private void goOnMission() {
+            String missionId = missionEntity.getComponent(ServerEntityComponent.class).getEntityId();
+
+            Array<String> ids = new Array<>();
+            for (Entity selectedEntity : selectionSystem.getSelectedEntities()) {
+                ids.add(getServerEntity(selectedEntity).getComponent(ServerEntityComponent.class).getEntityId());
+            }
+
+            ObjectMap<String, String> parameters = new ObjectMap<>();
+            parameters.put("action", "attemptSpaceMission");
+            parameters.put("missionId", missionId);
+            parameters.put("shipIds", StringUtils.merge(ids, ","));
+            clientDecisionSystem.executeDecision(parameters);
+
+            goToDecisionInterface(null);
+        }
+
+        private void cancelMission() {
+            goToDecisionInterface(mainDecisionInterface);
+        }
+
+        @Override
+        public void proceedToDecision() {
+            Stage stage = stageSystem.getStage();
+
+            selectionState.markSelectableCards();
+            selectionSystem.startSelection(selectionState);
+
+            enableButton(goOnMissionButton, false);
+
+            stage.addActor(table);
+
+            promptRenderingSystem.setPrompt("Choose ships to attempt mission");
+        }
+
+        @Override
+        public void cleanupDecision() {
+            table.remove();
+            selectionState.cleanup();
+            selectionSystem.finishSelection();
+
+            promptRenderingSystem.removePrompt();
         }
     }
 

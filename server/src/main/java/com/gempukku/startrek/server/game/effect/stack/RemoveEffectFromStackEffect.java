@@ -1,10 +1,11 @@
-package com.gempukku.startrek.server.game.effect.zone;
+package com.gempukku.startrek.server.game.effect.stack;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
+import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 
 public class RemoveEffectFromStackEffect extends OneTimeEffectSystem {
     private ZoneOperations zoneOperations;

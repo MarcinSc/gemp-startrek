@@ -29,6 +29,7 @@ import org.junit.BeforeClass;
 
 import java.util.function.Consumer;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractGameTest {
@@ -155,6 +156,10 @@ public abstract class AbstractGameTest {
 
     protected void sendDecisionSuccessfully(String player, String... decisionKeysAndValues) {
         assertTrue(sendDecision(player, decisionKeysAndValues));
+    }
+
+    protected void sendDecisionFailure(String player, String... decisionKeysAndValues) {
+        assertFalse(sendDecision(player, decisionKeysAndValues));
     }
 
     protected void playCardSuccessfully(Entity playedCard) {

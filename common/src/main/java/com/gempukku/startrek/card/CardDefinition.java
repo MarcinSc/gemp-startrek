@@ -44,6 +44,10 @@ public class CardDefinition {
     // Dilemma specific
     private DilemmaType dilemmaType;
 
+    public DilemmaType getDilemmaType() {
+        return dilemmaType;
+    }
+
     public String getCardImagePath() {
         return cardImagePath;
     }
@@ -146,6 +150,14 @@ public class CardDefinition {
 
     public int getPoints() {
         return points;
+    }
+
+    public String getRequirements() {
+        return requirements;
+    }
+
+    public String getAffiliations() {
+        return affiliations;
     }
 
     public String getAffiliationsText() {

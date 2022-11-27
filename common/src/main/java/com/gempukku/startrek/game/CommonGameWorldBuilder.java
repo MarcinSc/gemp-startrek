@@ -22,6 +22,8 @@ public class CommonGameWorldBuilder {
 
                 // Amount resolvers
                 new AmountResolverSystem(),
+                new MinusAmountHandler(),
+                new CardMatchingCount(),
                 new CounterCountAmountHandler(),
                 new HandCountAmountHandler(),
                 new DeckCountAmountHandler(),
@@ -71,6 +73,9 @@ public class CommonGameWorldBuilder {
                 new TriggerConditionMatchesFilterHandler(),
                 new OrderConditionMatchesFilterHandler(),
                 new HasOnBoardFilterHandler(),
+                new MatchesMissionAffiliationsFilterHandler(),
+                new IsInMissionFilterHandler(),
+                new CompletedMissionFilterHandler(),
 
                 // Card abilities
                 new CardAbilitySystem(),

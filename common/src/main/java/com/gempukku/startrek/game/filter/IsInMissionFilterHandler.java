@@ -6,28 +6,31 @@ import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
-public class HasInSameMissionFilterHandler extends CardFilterSystem {
+public class IsInMissionFilterHandler extends CardFilterSystem {
     private CardFilteringSystem cardFilteringSystem;
 
-    public HasInSameMissionFilterHandler() {
-        super("hasInSameMission");
+    public IsInMissionFilterHandler() {
+        super("isInMission");
     }
 
     @Override
     public CardFilter resolveFilter(Array<String> parameters) {
-        CardFilter filter = cardFilteringSystem.createAndFilter(parameters);
+        CardFilter missionFilter = cardFilteringSystem.createAndFilter(parameters);
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
+                Array<Entity> missionEntities = cardFilteringSystem.getAllCardsInPlay(sourceEntity, memory, missionFilter);
                 CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
-                String missionOwner = cardInMission.getMissionOwner();
-                int missionIndex = cardInMission.getMissionIndex();
+                if (cardInMission == null)
+                    return false;
+                for (Entity missionEntity : missionEntities) {
+                    CardInMissionComponent mission = missionEntity.getComponent(CardInMissionComponent.class);
+                    if (!mission.getMissionOwner().equals(cardInMission.getMissionOwner()) ||
+                            mission.getMissionIndex() != cardInMission.getMissionIndex())
+                        return false;
+                }
 
-                CardFilter sameMissionFilter = cardFilteringSystem.resolveCardFilter("inMission(username(" + missionOwner + ")," + missionIndex + ")");
-
-                AndCardFilter resultFilter = new AndCardFilter(sameMissionFilter, filter);
-
-                return cardFilteringSystem.hasCard(sourceEntity, memory, resultFilter);
+                return false;
             }
         };
     }

@@ -1,0 +1,54 @@
+{
+  "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
+    "memoryType": "attemptPlanetMission",
+    "memory": {
+      "missionId": "[missionId]"
+    }
+  },
+  "com.gempukku.startrek.server.game.effect.EffectRevealedCardsComponent": {},
+  "com.gempukku.startrek.game.mission.AttemptedMissionComponent": {},
+  "com.gempukku.startrek.game.zone.ObjectOnStackComponent": {
+    "type": "missionAttempt"
+  },
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "sequence",
+    "data": {
+      "memory": "attemptPlanetMissionSequence",
+      "actions": [
+        {
+          "type": "placeAttemptedMissionOnStack"
+        },
+        {
+          "type": "assignAttemptingPersonnel",
+          "memory": "attemptingPersonnel",
+          "filter": "type(Personnel),unstopped,isInMission(memory(missionId))"
+        },
+        {
+          "type": "memorizeAmount",
+          "memory": "dilemmaDifference",
+          "amount": "minus(cardMatchingCount(memory(attemptingPersonnel)),cardMatchingCount(type(Dilemma),attachedTo(memory(missionId))))"
+        },
+        {
+          "type": "createDilemmaStack",
+          "player": "nextPlayer",
+          "amountMemory": "dilemmaDifference",
+          "costResultMemory": "costResult"
+        },
+        {
+          "type": "processDecision",
+          "player": "nextPlayer",
+          "decisionType": "setupDilemmas",
+          "memoryData": {
+            "costCount": "costResult"
+          }
+        },
+        {
+          "type": "flipRevealedCards"
+        },
+        {
+          "type": "removeEffectFromStack"
+        }
+      ]
+    }
+  }
+}

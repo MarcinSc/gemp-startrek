@@ -259,6 +259,18 @@ public class CardFilteringSystem extends BaseSystem {
         return false;
     }
 
+    public int countMatchingCards(Entity sourceEntity, Memory memory, CardFilter... cardFilters) {
+        int total = 0;
+        IntBag entities = cardSubscription.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity cardEntity = world.getEntity(entities.get(i));
+            if (matchesFilters(sourceEntity, memory, cardEntity, cardFilters)) {
+                total++;
+            }
+        }
+        return total;
+    }
+
     private boolean matchesFilters(Entity sourceEntity, Memory memory, Entity cardEntity, CardFilter... cardFilters) {
         for (CardFilter cardFilter : cardFilters) {
             if (!cardFilter.accepts(sourceEntity, memory, cardEntity))
@@ -309,6 +321,10 @@ public class CardFilteringSystem extends BaseSystem {
 
     public Array<Entity> getAllCardsInPlay(Entity sourceEntity, Memory memory, String filter) {
         return getAllCards(sourceEntity, memory, inPlayFilter(), resolveCardFilter(filter));
+    }
+
+    public Array<Entity> getAllCardsInPlay(Entity sourceEntity, Memory memory, CardFilter filter) {
+        return getAllCards(sourceEntity, memory, inPlayFilter(), filter);
     }
 
     @Override

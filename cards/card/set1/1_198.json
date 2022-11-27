@@ -6,7 +6,7 @@
   "quadrant": "Alpha",
   "span": 2,
   "points": 35,
-  "requirements": "skill(Leadership),skill(Officer),skill(Programming),skill(Security),attributeTotalMoreThan(Strength,36)",
+  "requirements": "onMission(skill(Leadership),skill(Officer),skill(Programming),skill(Security)),onMissionAttributeMoreThan(Strength,36)",
   "requirementsText": "Leadership, Officer, Programming, Security, and Strength>36",
   "affiliations": "or(affiliation(Bajoran),affiliation(Cardassian))",
   "affiliationsText": "[Baj][Car]",

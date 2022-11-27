@@ -46,6 +46,7 @@ import com.gempukku.startrek.server.game.effect.deck.ShuffleDeckEffect;
 import com.gempukku.startrek.server.game.effect.memory.ClearMemoryEffect;
 import com.gempukku.startrek.server.game.effect.memory.MemorizeAmountEffect;
 import com.gempukku.startrek.server.game.effect.memory.RandomlySelectEffect;
+import com.gempukku.startrek.server.game.effect.mission.AssignAttemptingPersonnelEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutEventEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutTriggerEffect;
 import com.gempukku.startrek.server.game.effect.play.SetEffectStepEffect;
@@ -56,6 +57,9 @@ import com.gempukku.startrek.server.game.effect.setup.PlaceAllCardsInDrawDeckEff
 import com.gempukku.startrek.server.game.effect.setup.PlaceAllDilemmasInDeckEffect;
 import com.gempukku.startrek.server.game.effect.setup.SetupMissionCardsEffect;
 import com.gempukku.startrek.server.game.effect.setup.SetupTurnOrderEffect;
+import com.gempukku.startrek.server.game.effect.stack.CreateEffectOnStackEffect;
+import com.gempukku.startrek.server.game.effect.stack.PlaceAttemptedMissionOnStackEffect;
+import com.gempukku.startrek.server.game.effect.stack.RemoveEffectFromStackEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.effect.zone.*;
@@ -139,6 +143,7 @@ public class StarTrekGameHolder implements Disposable {
                 new MoveCardToMissionEffect(),
                 new MoveCardToStackEffect(),
                 new CreateEffectOnStackEffect(),
+                new PlaceAttemptedMissionOnStackEffect(),
                 new RemoveEffectFromStackEffect(),
                 new PayCardCostEffect(),
                 new ClearMemoryEffect(),
@@ -155,6 +160,8 @@ public class StarTrekGameHolder implements Disposable {
 
                 new RevealCardsEffect(),
                 new FlipRevealedCardsEffects(),
+
+                new AssignAttemptingPersonnelEffect(),
 
                 // Ability handlers
                 new DilemmaEffectHandler(),

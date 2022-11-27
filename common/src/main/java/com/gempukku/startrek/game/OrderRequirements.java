@@ -11,8 +11,33 @@ import com.gempukku.startrek.game.filter.AndCardFilter;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.filter.OrCardFilter;
+import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
 public class OrderRequirements {
+    public static CardFilter createAttemptMissionRequirements(
+            String username,
+            CardFilteringSystem cardFilteringSystem) {
+        String filter = "type(Mission),owner(username(" + username + "))," +
+                "not(missionType(Headquarters)),not(completedMission)," +
+                "hasInSameMission(type(Personnel),unstopped,matchesMissionAffiliations)";
+        return cardFilteringSystem.resolveCardFilter(filter);
+    }
+
+    public static CardFilter createAttemptMissionShipsRequirements(
+            Entity missionEntity,
+            CardFilteringSystem cardFilteringSystem) {
+        CardInMissionComponent mission = missionEntity.getComponent(CardInMissionComponent.class);
+        String filter = "type(Ship),unstopped," +
+                "inMission(username(" + mission.getMissionOwner() + ")," + mission.getMissionIndex() + ")";
+        return cardFilteringSystem.resolveCardFilter(filter);
+    }
+
+    public static CardFilter createMissionAffiliationsShipRequirements(
+            CardFilteringSystem cardFilteringSystem) {
+        String filter = "hasOnBoard(type(Personnel),unstopped,matchesMissionAffiliations)";
+        return cardFilteringSystem.resolveCardFilter(filter);
+    }
+
     public static CardFilter createOrderRequirements(
             String username,
             CardFilteringSystem cardFilteringSystem) {
