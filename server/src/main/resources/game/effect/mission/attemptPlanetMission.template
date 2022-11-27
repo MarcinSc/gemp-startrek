@@ -26,8 +26,13 @@
         },
         {
           "type": "memorizeAmount",
+          "memory": "attemptingPersonnelCount",
+          "amount": "cardMatchingCount(memory(attemptingPersonnel))"
+        },
+        {
+          "type": "memorizeAmount",
           "memory": "dilemmaDifference",
-          "amount": "minus(cardMatchingCount(memory(attemptingPersonnel)),cardMatchingCount(type(Dilemma),attachedTo(memory(missionId))))"
+          "amount": "minus(memory(attemptingPersonnelCount),cardMatchingCount(type(Dilemma),attachedTo(memory(missionId))))"
         },
         {
           "type": "createDilemmaStack",
@@ -40,6 +45,7 @@
           "player": "nextPlayer",
           "decisionType": "setupDilemmas",
           "memoryData": {
+            "personnelCount": "attemptingPersonnelCount",
             "costCount": "costResult"
           }
         },
