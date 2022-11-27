@@ -20,6 +20,7 @@
         },
         {
           "type": "assignAttemptingPersonnel",
+          "player": "currentPlayer",
           "memory": "attemptingPersonnel",
           "filter": "type(Personnel),unstopped,isInMission(memory(missionId))"
         },

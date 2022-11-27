@@ -11,6 +11,7 @@ import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.mission.AttemptedMissionComponent;
+import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
@@ -19,6 +20,7 @@ import java.util.function.Consumer;
 
 public class AssignAttemptingPersonnelEffect extends OneTimeEffectSystem {
     private CardFilteringSystem cardFilteringSystem;
+    private PlayerResolverSystem playerResolverSystem;
     private IdProviderSystem idProviderSystem;
     private ExecutionStackSystem executionStackSystem;
     private EventSystem eventSystem;
@@ -29,6 +31,7 @@ public class AssignAttemptingPersonnelEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+        String player = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory, gameEffect.getDataString("player"));
         String memoryName = gameEffect.getDataString("memory");
         String filter = gameEffect.getDataString("filter");
         Array<String> personnelIds = new Array<>();
@@ -42,6 +45,7 @@ public class AssignAttemptingPersonnelEffect extends OneTimeEffectSystem {
 
         Entity attemptedMissionEntity = executionStackSystem.getTopMostStackEntityWithComponent(AttemptedMissionComponent.class);
         AttemptedMissionComponent attemptedMission = attemptedMissionEntity.getComponent(AttemptedMissionComponent.class);
+        attemptedMission.setOwner(player);
         attemptedMission.getAttemptingPersonnel().addAll(personnelIds);
         eventSystem.fireEvent(EntityUpdated.instance, attemptedMissionEntity);
     }
@@ -49,8 +53,9 @@ public class AssignAttemptingPersonnelEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter", "memory"},
+                new String[]{"filter", "memory", "player"},
                 new String[]{});
         cardFilteringSystem.validateFilter(effect.getString("filter"));
+        playerResolverSystem.validatePlayer(effect.getString("player"));
     }
 }
