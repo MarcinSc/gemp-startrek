@@ -24,10 +24,7 @@ import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.ServerIdProvider;
 import com.gempukku.startrek.server.common.NetworkEntityConfigurationSystem;
 import com.gempukku.startrek.server.game.ability.*;
-import com.gempukku.startrek.server.game.condition.DilemmaStackEmptyHandler;
-import com.gempukku.startrek.server.game.condition.MemoryMatchesHandler;
-import com.gempukku.startrek.server.game.condition.MissionTypeMatchesAttemptedHandler;
-import com.gempukku.startrek.server.game.condition.TitleInMemoryHandler;
+import com.gempukku.startrek.server.game.condition.*;
 import com.gempukku.startrek.server.game.decision.*;
 import com.gempukku.startrek.server.game.deck.PlayerDecklistComponent;
 import com.gempukku.startrek.server.game.effect.GameEffectSystem;
@@ -194,6 +191,8 @@ public class StarTrekGameHolder implements Disposable {
                 new DilemmaStackEmptyHandler(),
                 new TitleInMemoryHandler(),
                 new MissionTypeMatchesAttemptedHandler(),
+                new MissionAttemptMatchesHandler(),
+                new OnMissionSkillCountHandler(),
 
                 // Server card filters
 

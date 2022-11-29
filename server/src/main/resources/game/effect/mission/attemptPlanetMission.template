@@ -60,13 +60,20 @@
           }
         },
         {
-          "type": "playoutMissionRequirements"
+          "type": "condition",
+          "memory": "missionRequirements",
+          "condition": "missionAttemptMatches",
+          "trueEffect": {
+            "type": "completeMission",
+            "missionMemory": "missionId"
+          }
         },
         {
           "type": "flipRevealedCards"
         },
         {
-          "type": "removeEffectFromStack"
+          "type": "removeEffectFromStack",
+          "destroy": "false"
         }
       ]
     }

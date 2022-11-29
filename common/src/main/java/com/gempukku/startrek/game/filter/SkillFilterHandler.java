@@ -2,10 +2,8 @@ package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.PersonnelSkill;
-import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.amount.AmountResolverSystem;
@@ -27,13 +25,8 @@ public class SkillFilterHandler extends CardFilterSystem {
                 int count = 1;
                 if (parameters.size > 1)
                     count = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(1));
-                CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardEntity.getComponent(CardComponent.class).getCardId());
-                int found = 0;
-                for (PersonnelSkill charSkill : cardDefinition.getSkills()) {
-                    if (charSkill == skill)
-                        found++;
-                }
 
+                int found = amountResolverSystem.resolveAmount(cardEntity, memory, "skillCount(" + skill.name() + ")");
                 return found >= count;
             }
         };

@@ -2,11 +2,13 @@ package com.gempukku.startrek.server.game;
 
 import com.artemis.Entity;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
+import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.mission.MissionOperations;
+import com.gempukku.startrek.game.zone.CardInPlayComponent;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class MissionAttemptTest extends AbstractGameTest {
     @Test
@@ -66,6 +68,10 @@ public class MissionAttemptTest extends AbstractGameTest {
         sendDecisionSuccessfully("test2",
                 "dilemmaStack", "1_8",
                 "discardedDilemmas", "");
+
+        assertTrue(personnel1.getComponent(CardInPlayComponent.class).isStopped());
+        assertTrue(personnel2.getComponent(CardInPlayComponent.class).isStopped());
+        assertFalse(planetMission.getComponent(MissionComponent.class).isCompleted());
     }
 
     @Test

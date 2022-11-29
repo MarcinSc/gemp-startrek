@@ -2,7 +2,6 @@ package com.gempukku.startrek.game.condition;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.card.PersonnelSkill;
 import com.gempukku.startrek.game.Memory;
@@ -29,11 +28,7 @@ public class CountMemorySkillAtLeastConditionHandler extends ConditionSystem {
         cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
             @Override
             public void accept(Entity entity) {
-                CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(entity);
-                for (PersonnelSkill cardSkill : cardDefinition.getSkills()) {
-                    if (cardSkill == skill)
-                        result[0]++;
-                }
+                result[0] += amountResolverSystem.resolveAmount(entity, memory, "skillCount(" + skill.name() + ")");
             }
         }, parameters.get(0));
         return result[0] >= amount;

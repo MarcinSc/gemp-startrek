@@ -91,9 +91,10 @@ public class ZoneOperations extends BaseSystem {
         eventSystem.fireEvent(EntityUpdated.instance, effectEntity);
     }
 
-    public void removeEffectFromStack() {
+    public void removeEffectFromStack(boolean destroy) {
         Entity effectEntity = objectStackSystem.removeTopMostFromStack();
-        world.deleteEntity(effectEntity);
+        if (destroy)
+            world.deleteEntity(effectEntity);
     }
 
     public void moveFromCurrentZoneToStack(Entity cardEntity, int abilityIndex) {
