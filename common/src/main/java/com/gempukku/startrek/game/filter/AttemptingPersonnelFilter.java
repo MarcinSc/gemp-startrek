@@ -1,19 +1,14 @@
-package com.gempukku.startrek.server.game.filter;
+package com.gempukku.startrek.game.filter;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.filter.AndCardFilter;
-import com.gempukku.startrek.game.filter.CardFilter;
-import com.gempukku.startrek.game.filter.CardFilterSystem;
-import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.mission.AttemptedMissionComponent;
-import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 
 public class AttemptingPersonnelFilter extends CardFilterSystem {
-    private ExecutionStackSystem executionStackSystem;
     private CardFilteringSystem cardFilteringSystem;
     private IdProviderSystem idProviderSystem;
 
@@ -26,7 +21,7 @@ public class AttemptingPersonnelFilter extends CardFilterSystem {
         CardFilter idFilter = new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                Entity attemptedMissionEntity = executionStackSystem.getTopMostStackEntityWithComponent(AttemptedMissionComponent.class);
+                Entity attemptedMissionEntity = LazyEntityUtil.findEntityWithComponent(world, AttemptedMissionComponent.class);
                 if (attemptedMissionEntity == null)
                     return false;
                 AttemptedMissionComponent attemptedMission = attemptedMissionEntity.getComponent(AttemptedMissionComponent.class);

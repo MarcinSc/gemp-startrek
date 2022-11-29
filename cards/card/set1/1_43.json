@@ -11,7 +11,7 @@
         {
           "type": "randomlySelect",
           "memory": "selectedPersonnel1",
-          "filter": "facingDilemma,type(Personnel)"
+          "filter": "attemptingPersonnel,type(Personnel)"
         },
         {
           "type": "stop",
@@ -19,12 +19,12 @@
         },
         {
           "type": "condition",
-          "condition": "countAtLeast(and(facingDilemma,type(Personnel)),9)",
+          "condition": "countAtLeast(and(attemptingPersonnel,type(Personnel)),9)",
           "trueEffect": [
             {
               "type": "randomlySelect",
               "memory": "selectedPersonnel2",
-              "filter": "facingDilemma,type(Personnel)"
+              "filter": "attemptingPersonnel,type(Personnel)"
             },
             {
               "type": "stop",
@@ -32,12 +32,12 @@
             },
             {
               "type": "condition",
-              "condition": "countAtLeast(and(facingDilemma,type(Personnel)),10)",
+              "condition": "countAtLeast(and(attemptingPersonnel,type(Personnel)),10)",
               "trueEffect": [
                 {
                   "type": "randomlySelect",
                   "memory": "selectedPersonnel3",
-                  "filter": "facingDilemma,type(Personnel)"
+                  "filter": "attemptingPersonnel,type(Personnel)"
                 },
                 {
                   "type": "stop",

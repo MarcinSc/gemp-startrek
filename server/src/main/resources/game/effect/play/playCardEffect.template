@@ -17,7 +17,7 @@
           "condition": "memoryMatches(playedCardId,type(Event))",
           "trueEffect": {
             "type": "condition",
-            "conditionMemory": "checkTypeOfEvent",
+            "memory": "checkTypeOfEvent",
             "condition": "memoryMatches(playedCardId,hasAbility(PlaysInCore))",
             "trueEffect": {
               "tpl:extends": "game/effect/play/playPlaysToCoreEvent.template"

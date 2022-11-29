@@ -4,22 +4,22 @@
   "actions": [
     {
       "type": "moveTopDilemmaStackCardToStack",
-      "memory": "movedCard"
+      "memory": "dilemmaCard"
     },
     {
       "type": "condition",
-      "condition": "lessOrEqual(costToPlay(memory(movedCard)),memory(costResult))",
-      "conditionMemory": "checkForDilemmaCost",
+      "condition": "lessOrEqual(costToPlay(memory(dilemmaCard)),memory(dilemmaPointsLeft))",
+      "memory": "checkForDilemmaCost",
       "trueEffect": {
         "type": "condition",
-        "condition": "and(not(titleInMemory(facedDilemmas,memory(movedCard))),missionTypeMatchesAttempted(memory(movedCard)))",
-        "conditionMemory": "checkForDilemmaRequirements",
+        "condition": "and(not(titleInMemory(facedDilemmas,memory(dilemmaCard))),missionTypeMatchesAttempted(memory(dilemmaCard)))",
+        "memory": "checkForDilemmaRequirements",
         "trueEffect": {
-          "type": "blah"
+          "tpl:extends": "game/effect/mission/faceOneDilemma.template"
         },
         "falseEffect": {
           "type": "overcomeDilemma",
-          "filter": "memory(movedCard)"
+          "cardMemory": "dilemmaCard"
         }
       },
       "falseEffect": {
@@ -28,7 +28,7 @@
         "actions": [
           {
             "type": "overcomeDilemma",
-            "filter": "memory(movedCard)"
+            "cardMemory": "dilemmaCard"
           },
           {
             "type": "overcomeRemainingDilemmasInStack"

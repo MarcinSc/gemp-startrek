@@ -10,15 +10,15 @@
       "effects": [
         {
           "type": "condition",
-          "condition": "or(countSkillAtLeast(facingDilemma,Biology,1),countSkillAtLeast(facingDilemma,Medical,1))",
+          "condition": "or(countSkillAtLeast(attemptingPersonnel,Biology,1),countSkillAtLeast(attemptingPersonnel,Medical,1))",
           "trueEffect": {
             "type": "stop",
-            "select": "facingDilemma,type(Personnel),or(skill(Biology),skill(Medical))"
+            "select": "attemptingPersonnel,type(Personnel),or(skill(Biology),skill(Medical))"
           },
           "falseEffect": [
             {
               "type": "randomlySelect",
-              "filter": "facingDilemma,type(Personnel)",
+              "filter": "attemptingPersonnel,type(Personnel)",
               "memory": "randomPersonnel"
             },
             {

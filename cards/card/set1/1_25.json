@@ -10,7 +10,7 @@
       "effects": [
         {
           "type": "returnToHand",
-          "filter": "facingDilemma,type(Equipment)"
+          "filter": "type(Equipment)"
         }
       ]
     }

@@ -5,12 +5,12 @@
     {
       "text": "When your [Baj] personnel is facing a dilemma, he or she gains all skills on a [Baj] personnel in your discard pile. This effect lasts until the end of that dilemma.",
       "type": "interrupt",
-      "condition": "hasCard(your,affiliation(Bajoran),type(Personnel),facingDilemma)",
+      "condition": "hasCard(your,affiliation(Bajoran),type(Personnel),attemptingPersonnel)",
       "effects": [
         {
           "type": "select",
           "memory": "livingCharacter",
-          "filter": "your,affiliation(Bajoran),type(Personnel),facingDilemma"
+          "filter": "your,affiliation(Bajoran),type(Personnel),attemptingPersonnel"
         },
         {
           "type": "selectInDiscard",

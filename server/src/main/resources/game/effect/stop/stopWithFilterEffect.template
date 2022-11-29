@@ -4,8 +4,8 @@
     "data": {
       "actions": [
         {
-          "type": "memorize",
-          "filter": "internal.stopFilter",
+          "type": "memorizeCards",
+          "filterMemory": "internal.stopFilter",
           "memory": "internal.stopMemory"
         },
         {

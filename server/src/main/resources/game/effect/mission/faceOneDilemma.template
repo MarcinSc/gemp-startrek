@@ -1,0 +1,25 @@
+{
+  "type": "sequence",
+  "memory": "faceOneDilemmaSequence",
+  "actions": [
+    {
+      "type": "addTitleToMemory",
+      "memory": "facedDilemmas",
+      "filter": "memory(dilemmaCard)"
+    },
+    {
+      "type": "memorizeAmount",
+      "memory": "dilemmaPointsLeft",
+      "amount": "minus(memory(dilemmaPointsLeft),costToPlay(memory(dilemmaCard)))"
+    },
+    {
+      "type": "playoutDilemmaEffect",
+      "memoryCard": "dilemmaCard"
+    },
+    {
+      "type": "overcomeDilemma",
+      "memoryCard": "dilemmaCard",
+      "fromZone": "Stack"
+    }
+  ]
+}

@@ -19,7 +19,7 @@ public class ConditionEffect extends EffectSystem {
 
     @Override
     protected void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
-        String conditionMemory = gameEffect.getDataString("conditionMemory", "effectStacked");
+        String conditionMemory = gameEffect.getDataString("memory", "effectStacked");
         String effectStacked = memory.getValue(conditionMemory);
         if (effectStacked != null && effectStacked.equals("true")) {
             memory.removeValue(conditionMemory);
@@ -43,8 +43,8 @@ public class ConditionEffect extends EffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"condition"},
-                new String[]{"conditionMemory", "trueEffect", "falseEffect"});
+                new String[]{"condition", "memory"},
+                new String[]{"trueEffect", "falseEffect"});
         conditionResolverSystem.validateCondition(effect.getString("condition"));
         JsonValue trueEffect = effect.get("trueEffect");
         if (trueEffect != null)

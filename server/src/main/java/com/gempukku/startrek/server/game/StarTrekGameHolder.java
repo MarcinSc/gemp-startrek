@@ -47,10 +47,9 @@ import com.gempukku.startrek.server.game.effect.deck.CreateDilemmaStackEffect;
 import com.gempukku.startrek.server.game.effect.deck.DrawCardEffect;
 import com.gempukku.startrek.server.game.effect.deck.PlaceCardInHandOnBottomOfDeckEffect;
 import com.gempukku.startrek.server.game.effect.deck.ShuffleDeckEffect;
-import com.gempukku.startrek.server.game.effect.memory.ClearMemoryEffect;
-import com.gempukku.startrek.server.game.effect.memory.MemorizeAmountEffect;
-import com.gempukku.startrek.server.game.effect.memory.RandomlySelectEffect;
+import com.gempukku.startrek.server.game.effect.memory.*;
 import com.gempukku.startrek.server.game.effect.mission.AssignAttemptingPersonnelEffect;
+import com.gempukku.startrek.server.game.effect.play.PlayoutDilemmaEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutEventEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutTriggerEffect;
 import com.gempukku.startrek.server.game.effect.play.SetEffectStepEffect;
@@ -67,7 +66,6 @@ import com.gempukku.startrek.server.game.effect.stack.RemoveEffectFromStackEffec
 import com.gempukku.startrek.server.game.effect.turn.SetTurnPlayerEffect;
 import com.gempukku.startrek.server.game.effect.turn.SetTurnSegmentEffect;
 import com.gempukku.startrek.server.game.effect.zone.*;
-import com.gempukku.startrek.server.game.filter.AttemptingPersonnelFilter;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 import com.gempukku.startrek.server.game.stack.ObjectStackSystem;
 
@@ -134,6 +132,7 @@ public class StarTrekGameHolder implements Disposable {
 
                 // Core game effects
                 new PlayoutEventEffect(),
+                new PlayoutDilemmaEffect(),
                 new PlayoutTriggerEffect(),
                 new SetEffectStepEffect(),
 
@@ -144,6 +143,8 @@ public class StarTrekGameHolder implements Disposable {
                 new DrawCardEffect(),
                 new PlaceCardInHandOnBottomOfDeckEffect(),
                 new MoveCardToCoreEffect(),
+                new MoveCardToDilemmaPileEffect(),
+                new OvercomeDilemmaEffect(),
                 new MoveCardToDiscardPileEffect(),
                 new MoveCardToMissionEffect(),
                 new MoveCardToStackEffect(),
@@ -154,6 +155,9 @@ public class StarTrekGameHolder implements Disposable {
                 new PayCardCostEffect(),
                 new ClearMemoryEffect(),
                 new MemorizeAmountEffect(),
+                new MemorizeStringEffect(),
+                new MemorizeCardsEffect(),
+                new AddTitleToMemoryEffect(),
                 new RandomlySelectEffect(),
                 new DestroyEffect(),
                 new StopEffect(),
@@ -192,7 +196,6 @@ public class StarTrekGameHolder implements Disposable {
                 new MissionTypeMatchesAttemptedHandler(),
 
                 // Server card filters
-                new AttemptingPersonnelFilter(),
 
                 // Network systems
                 new RemoteEntityManagerHandler(serverEntityIdSystem),

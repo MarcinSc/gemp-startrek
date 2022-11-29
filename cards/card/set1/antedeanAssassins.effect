@@ -1,0 +1,39 @@
+{
+  "type": "condition",
+  "memory": "outsideCondition",
+  "condition": "or(countMemorySkillAtLeast(attemptingPersonnel,firstSkill,2),countMemorySkillAtLeast(attemptingPersonnel,secondSkill,2))",
+  "falseEffect": {
+    "type": "condition",
+    "memory": "insideCondition",
+    "condition": "hasCard(attemptingPersonnel,or(memorySkill(firstSkill),memorySkill(secondSkill)))",
+    "trueEffect": {
+      "type": "sequence",
+      "memory": "opponentStopsPersonnel",
+      "actions": [
+        {
+          "type": "opponentSelect",
+          "filter": "attemptingPersonnel,or(memorySkill(firstSkill),memorySkill(secondSkill))",
+          "memorize": "selectedCharacter"
+        },
+        {
+          "type": "stop",
+          "filter": "memory(selectedCharacter)"
+        }
+      ]
+    },
+    "falseEffect": {
+      "type": "sequence",
+      "memory": "stopAllPersonnel",
+      "actions": [
+        {
+          "type": "stop",
+          "filter": "type(personnel),attemptingPersonnel"
+        },
+        {
+          "type": "moveCardToDilemmaPile",
+          "filter": "self"
+        }
+      ]
+    }
+  }
+}

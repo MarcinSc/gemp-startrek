@@ -98,9 +98,9 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
             int triggerIndex = Integer.parseInt(result.get("triggerIndex"));
 
             Entity memoryEntity = stackSystem.getTopMostStackEntityWithComponent(EffectMemoryComponent.class);
-            ObjectMap<String, String> memory = memoryEntity.getComponent(EffectMemoryComponent.class).getMemory();
-            memory.put("playersPassed", "0");
-            memory.put("usedIds", appendToList(memory.get("usedIds"), String.valueOf(cardId)));
+            Memory memory = new Memory(memoryEntity.getComponent(EffectMemoryComponent.class).getMemory());
+            memory.setValue("playersPassed", "0");
+            memory.appendValue("usedIds", String.valueOf(cardId));
 
             Entity playCardEffect = spawnSystem.spawnEntity("game/effect/trigger/playTriggerEffect.template");
             EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);
@@ -109,12 +109,6 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
             triggerMemory.setValue("triggerIndex", String.valueOf(triggerIndex));
             stackSystem.stackEntity(playCardEffect);
         }
-    }
-
-    private String appendToList(String source, String appended) {
-        if (source == null)
-            return appended;
-        return source + "," + appended;
     }
 
     @Override

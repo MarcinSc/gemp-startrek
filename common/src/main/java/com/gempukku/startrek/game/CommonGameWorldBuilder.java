@@ -41,6 +41,7 @@ public class CommonGameWorldBuilder {
                 new AtLeastConditionHandler(),
                 new CountAtLeastConditionHandler(),
                 new CountSkillAtLeastConditionHandler(),
+                new CountMemorySkillAtLeastConditionHandler(),
                 new HasCardConditionHandler(),
                 new CanBeginEngagementInvolvingPersonnelConditionHandler(),
 
@@ -48,12 +49,12 @@ public class CommonGameWorldBuilder {
                 new MemoryFilterHandler(),
                 new IdInFilterHandler(),
                 new AttachedToFilterHandler(),
-                new FacingDilemmaFilterHandler(),
                 new CardTypeFilterHandler(),
                 new CardIconFilterHandler(),
                 new CardZoneFilterHandler(),
                 new AffiliationFilterHandler(),
                 new SkillFilterHandler(),
+                new MemorySkillFilterHandler(),
                 new StaffedFilterHandler(),
                 new InRangeFilterHandler(),
                 new MissionTypeFilterHandler(),
@@ -76,6 +77,7 @@ public class CommonGameWorldBuilder {
                 new MatchesMissionAffiliationsFilterHandler(),
                 new IsInMissionFilterHandler(),
                 new CompletedMissionFilterHandler(),
+                new AttemptingPersonnelFilter(),
 
                 // Card abilities
                 new CardAbilitySystem(),

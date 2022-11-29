@@ -10,15 +10,15 @@
       "effects": [
         {
           "type": "condition",
-          "condition": "or(countSkillAtLeast(facingDilemma,Engineer,1),countSkillAtLeast(facingDilemma,Programming,1))",
+          "condition": "or(countSkillAtLeast(attemptingPersonnel,Engineer,1),countSkillAtLeast(attemptingPersonnel,Programming,1))",
           "trueEffect": {
             "type": "stop",
-            "select": "facingDilemma,type(Personnel),or(skill(Engineer),skill(Programming))"
+            "select": "attemptingPersonnel,type(Personnel),or(skill(Engineer),skill(Programming))"
           },
           "falseEffect": [
             {
               "type": "stop",
-              "filter": "facingDilemma,type(Personnel)"
+              "filter": "attemptingPersonnel,type(Personnel)"
             },
             {
               "type": "putInDilemmaPile",

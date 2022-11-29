@@ -9,33 +9,17 @@
       "type": "dilemmaEffect",
       "effects": [
         {
-          "type": "condition",
-          "condition": "or(countSkillAtLeast(facingDilemma,Anthropology,2),countSkillAtLeast(facingDilemma,Archeology,2))",
-          "falseEffect": {
-            "type": "condition",
-            "condition": "hasCard(facingDilemma,or(skill(Anthropology),skill(Archeology)))",
-            "trueEffect": [
-              {
-                "type": "opponentSelect",
-                "filter": "facingDilemma,or(skill(Anthropology),skill(Archeology))",
-                "memorize": "selectedCharacter"
-              },
-              {
-                "type": "stop",
-                "filter": "memory(selectedCharacter)"
-              }
-            ],
-            "falseEffect": [
-              {
-                "type": "stop",
-                "filter": "facingDilemma,type(personnel)"
-              },
-              {
-                "type": "putDilemmaInDilemmaPile",
-                "filter": "self"
-              }
-            ]
-          }
+          "type": "memorizeString",
+          "memory": "firstSkill",
+          "value": "Anthropology"
+        },
+        {
+          "type": "memorizeString",
+          "memory": "secondSkill",
+          "value": "Archaeology"
+        },
+        {
+          "tpl:extends": "card/set1/antedeanAssassins.effect"
         }
       ]
     }

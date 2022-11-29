@@ -172,6 +172,23 @@ public class ZoneOperations extends BaseSystem {
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
 
+    public void attachDilemmaToMission(Entity cardEntity, Entity missionEntity) {
+        removeFromCurrentZone(cardEntity);
+
+        CardInMissionComponent mission = missionEntity.getComponent(CardInMissionComponent.class);
+
+        CardInMissionComponent cardInMission = cardInMissionComponentMapper.create(cardEntity);
+        cardInMission.setMissionOwner(mission.getMissionOwner());
+        cardInMission.setMissionIndex(mission.getMissionIndex());
+
+        FaceUpCardInMissionComponent faceUpInMission = faceUpCardInMissionComponentMapper.create(cardEntity);
+
+        String missionId = serverEntityIdSystem.getEntityId(missionEntity);
+        CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+        cardInPlay.setAttachedToId(missionId);
+        eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+    }
+
     public void moveFromCurrentZoneToMission(Entity cardEntity, Entity missionEntity, boolean faceUp) {
         removeFromCurrentZone(cardEntity);
 

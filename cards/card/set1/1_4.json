@@ -5,37 +5,21 @@
   "title": "Antedean Assassins",
   "abilities": [
     {
-      "text": "Unless you have a personnel who has 2 Anthropology or a personnel who has 2 Telepathy, your opponent chooses an Anthropology or Telepathy personnel to be stopped.  If your opponent cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
+      "text": "Unless you have a personnel who has 2 Anthropology or a personnel who has 2 Telepathy, your opponent chooses an Anthropology or Telepathy personnel to be stopped. If your opponent cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile.",
       "type": "dilemmaEffect",
       "effects": [
         {
-          "type": "condition",
-          "condition": "or(countSkillAtLeast(facingDilemma,Anthropology,2),countSkillAtLeast(facingDilemma,Telepathy,2))",
-          "falseEffect": {
-            "type": "condition",
-            "condition": "hasCard(facingDilemma,or(skill(Anthropology),skill(Telepathy)))",
-            "trueEffect": [
-              {
-                "type": "opponentSelect",
-                "filter": "facingDilemma,or(skill(Anthropology),skill(Telepathy))",
-                "memorize": "selectedCharacter"
-              },
-              {
-                "type": "stop",
-                "filter": "memory(selectedCharacter)"
-              }
-            ],
-            "falseEffect": [
-              {
-                "type": "stop",
-                "filter": "facingDilemma,type(personnel)"
-              },
-              {
-                "type": "putDilemmaInDilemmaPile",
-                "filter": "self"
-              }
-            ]
-          }
+          "type": "memorizeString",
+          "memory": "firstSkill",
+          "value": "Anthropology"
+        },
+        {
+          "type": "memorizeString",
+          "memory": "secondSkill",
+          "value": "Telepathy"
+        },
+        {
+          "tpl:extends": "card/set1/antedeanAssassins.effect"
         }
       ]
     }

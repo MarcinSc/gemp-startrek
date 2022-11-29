@@ -1,6 +1,7 @@
 package com.gempukku.startrek.expression;
 
 import com.badlogic.gdx.utils.Array;
+import com.gempukku.startrek.common.StringUtils;
 
 public class Expression {
     private String type;
@@ -28,11 +29,7 @@ public class Expression {
         sb.append(type);
         if (parameters != null && parameters.size > 0) {
             sb.append("(");
-            sb.append(parameters.get(0));
-            for (int i = 1; i < parameters.size; i++) {
-                sb.append(",");
-                sb.append(parameters.get(i));
-            }
+            sb.append(StringUtils.merge(parameters));
             sb.append(")");
         }
         return sb.toString();

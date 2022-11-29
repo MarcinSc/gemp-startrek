@@ -11,11 +11,11 @@
         {
           "type": "randomlySelect",
           "memory": "selectedPersonnel",
-          "filter": "facingDilemma,type(Personnel)"
+          "filter": "type(Personnel),attemptingPersonnel"
         },
         {
           "type": "condition",
-          "condition": "or(and(countSkillAtLeast(facingDilemma,Diplomacy,1),countSkillAtLeast(facingDilemma,Medical,1)),countSkillAtLeast(facingDilemma,Security,2))",
+          "condition": "or(and(countSkillAtLeast(attemptingPersonnel,Diplomacy,1),countSkillAtLeast(attemptingPersonnel,Medical,1)),countSkillAtLeast(facingDilemma,Security,2))",
           "trueEffect": {
             "type": "stop",
             "filter": "memory(selectedPersonnel)"
@@ -27,7 +27,7 @@
             },
             {
               "type": "stop",
-              "filter": "facingDilemma,not(memory(selectedPersonnel))"
+              "filter": "attemptingPersonnel,not(memory(selectedPersonnel))"
             },
             {
               "type": "putInDilemmaPile",

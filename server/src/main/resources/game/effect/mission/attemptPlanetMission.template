@@ -39,7 +39,7 @@
           "type": "createDilemmaStack",
           "player": "nextPlayer",
           "amountMemory": "dilemmaDifference",
-          "costResultMemory": "costResult",
+          "costResultMemory": "dilemmaPointsLeft",
           "dilemmaMemory": "dilemmaCards"
         },
         {
@@ -48,7 +48,7 @@
           "decisionType": "setupDilemmas",
           "memoryData": {
             "personnelCount": "attemptingPersonnelCount",
-            "costCount": "costResult",
+            "costCount": "dilemmaPointsLeft",
             "dilemmaCardIds": "dilemmaCards"
           }
         },
@@ -58,6 +58,9 @@
           "action": {
             "tpl:extends": "game/effect/mission/faceDilemmas.template"
           }
+        },
+        {
+          "type": "playoutMissionRequirements"
         },
         {
           "type": "flipRevealedCards"
