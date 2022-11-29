@@ -1,5 +1,7 @@
 {
   "com.gempukku.startrek.game.GameComponent": {},
+  "com.gempukku.startrek.game.DilemmaStackComponent": {},
+  "com.gempukku.startrek.server.game.deck.HiddenDilemmaStackComponent": {},
   "com.gempukku.startrek.server.game.effect.EffectMemoryComponent": {
     "memoryType": "game"
   },

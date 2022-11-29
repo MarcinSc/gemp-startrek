@@ -1,4 +1,4 @@
-package com.gempukku.startrek.game.zone;
+package com.gempukku.startrek.game.event;
 
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.event.EntityEvent;

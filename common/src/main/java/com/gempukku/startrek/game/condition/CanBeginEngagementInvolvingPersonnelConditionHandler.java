@@ -19,7 +19,7 @@ public class CanBeginEngagementInvolvingPersonnelConditionHandler extends Condit
         String yourShip = "type(Ship)," +
                 "missionMatches(not(missionType(Headquarters)))," +
                 "staffed," +
-                "hasOnBoard(" + StringUtils.merge(parameters, ",") + ")," +
+                "hasOnBoard(" + StringUtils.merge(parameters) + ")," +
                 "hasInSameMission(type(Ship),not(owner(self)))";
         return cardFilteringSystem.findFirstCardInPlay(sourceEntity, memory, yourShip) != null;
     }

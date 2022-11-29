@@ -16,7 +16,7 @@ public class MemorizeAmountEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String memoryName = gameEffect.getDataString("memory");
         String amount = gameEffect.getDataString("amount");
 

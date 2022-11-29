@@ -3,6 +3,7 @@ package com.gempukku.startrek.game.filter;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.common.IdProviderSystem;
+import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 
@@ -21,7 +22,7 @@ public class MemoryFilterHandler extends CardFilterSystem {
                 String cardIds = memory.getValue(parameters.get(0));
                 if (cardIds == null)
                     return false;
-                String[] cardIdSplit = cardIds.split(",");
+                String[] cardIdSplit = StringUtils.split(cardIds);
                 for (String cardId : cardIdSplit) {
                     if (cardId.equals(matchingCardId))
                         return true;

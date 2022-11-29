@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game.condition;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
+import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.condition.ConditionSystem;
@@ -22,7 +23,7 @@ public class MemoryMatchesHandler extends ConditionSystem {
         String memoryName = parameters.get(0);
         CardFilter cardFilter = cardFilteringSystem.createAndFilter(parameters, 1);
         String cardIds = memory.getValue(memoryName);
-        String[] cardIdsSplit = cardIds.split(",");
+        String[] cardIdsSplit = StringUtils.split(cardIds);
         for (String cardId : cardIdsSplit) {
             Entity entity = serverEntityIdSystem.findfromId(cardId);
             if (cardFilter.accepts(sourceEntity, memory, entity))

@@ -20,7 +20,7 @@ public class StopEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         boolean stopStacked = Boolean.parseBoolean(memory.getValue("internal.stopStacked", "false"));
         if (!stopStacked) {
             String filter = gameEffect.getDataString("filter", null);

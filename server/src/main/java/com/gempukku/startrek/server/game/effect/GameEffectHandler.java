@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.startrek.game.Memory;
 
 public interface GameEffectHandler {
-    boolean processEndingEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory);
+    boolean processEndingEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect);
 
     void validate(JsonValue effect);
 }

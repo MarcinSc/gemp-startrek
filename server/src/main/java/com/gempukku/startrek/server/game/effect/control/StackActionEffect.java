@@ -27,7 +27,7 @@ public class StackActionEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    public void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String effectType = gameEffect.getType();
         if (effectType.equals("stackForEachPlayer")) {
             stackForEachPlayerEffect(sourceEntity, gameEffect, memory);

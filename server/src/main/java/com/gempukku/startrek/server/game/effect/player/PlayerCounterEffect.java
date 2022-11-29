@@ -22,7 +22,7 @@ public class PlayerCounterEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         int amount = amountResolverSystem.resolveAmount(sourceEntity, memory,
                 gameEffect.getDataString("amount"));
 

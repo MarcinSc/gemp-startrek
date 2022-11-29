@@ -459,7 +459,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             ObjectMap<String, String> parameters = new ObjectMap<>();
             parameters.put("action", "attemptSpaceMission");
             parameters.put("missionId", missionId);
-            parameters.put("shipIds", StringUtils.merge(ids, ","));
+            parameters.put("shipIds", StringUtils.merge(ids));
             clientDecisionSystem.executeDecision(parameters);
 
             goToDecisionInterface(null);
@@ -1098,7 +1098,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             parameters.put("action", "beamBetweenShips");
             parameters.put("fromShipId", fromShipId);
             parameters.put("toShipId", toShipId);
-            parameters.put("beamedId", StringUtils.merge(ids, ","));
+            parameters.put("beamedId", StringUtils.merge(ids));
             clientDecisionSystem.executeDecision(parameters);
 
             goToDecisionInterface(null);
@@ -1390,7 +1390,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             ObjectMap<String, String> parameters = new ObjectMap<>();
             parameters.put("action", "beamFromMission");
             parameters.put("shipId", shipId);
-            parameters.put("beamedId", StringUtils.merge(ids, ","));
+            parameters.put("beamedId", StringUtils.merge(ids));
             clientDecisionSystem.executeDecision(parameters);
 
             goToDecisionInterface(null);
@@ -1510,7 +1510,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             ObjectMap<String, String> parameters = new ObjectMap<>();
             parameters.put("action", "beamToMission");
             parameters.put("shipId", shipId);
-            parameters.put("beamedId", StringUtils.merge(ids, ","));
+            parameters.put("beamedId", StringUtils.merge(ids));
             clientDecisionSystem.executeDecision(parameters);
 
             goToDecisionInterface(null);

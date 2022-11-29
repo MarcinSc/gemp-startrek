@@ -92,7 +92,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
 
         CardFilter shipMissionAffiliationsRequirements = OrderRequirements.createMissionAffiliationsShipRequirements(cardFilteringSystem);
 
-        String[] shipIds = StringUtils.split(result.get("shipIds"), ",");
+        String[] shipIds = StringUtils.split(result.get("shipIds"));
         if (shipIds.length < 1)
             return false;
         boolean matchesAffiliation = false;
@@ -154,7 +154,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
 
         String beamedId = result.get("beamedId");
         Array<Entity> beamedEntities = new Array<>();
-        for (String id : StringUtils.split(beamedId, ",")) {
+        for (String id : StringUtils.split(beamedId)) {
             beamedEntities.add(serverEntityIdSystem.findfromId(id));
         }
 
@@ -186,7 +186,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
 
         String beamedId = result.get("beamedId");
         Array<Entity> beamedEntities = new Array<>();
-        for (String id : StringUtils.split(beamedId, ",")) {
+        for (String id : StringUtils.split(beamedId)) {
             beamedEntities.add(serverEntityIdSystem.findfromId(id));
         }
 
@@ -217,7 +217,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
 
         String beamedId = result.get("beamedId");
         Array<Entity> beamedEntities = new Array<>();
-        for (String id : StringUtils.split(beamedId, ",")) {
+        for (String id : StringUtils.split(beamedId)) {
             beamedEntities.add(serverEntityIdSystem.findfromId(id));
         }
 

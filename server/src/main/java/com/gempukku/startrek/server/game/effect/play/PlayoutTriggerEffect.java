@@ -20,7 +20,7 @@ public class PlayoutTriggerEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String memoryName = gameEffect.getDataString("cardMemory");
         String cardId = memory.getValue(memoryName);
         Entity cardEntity = serverEntityIdSystem.findfromId(cardId);

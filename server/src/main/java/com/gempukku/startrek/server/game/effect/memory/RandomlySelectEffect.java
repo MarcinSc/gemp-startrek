@@ -22,7 +22,7 @@ public class RandomlySelectEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String filter = gameEffect.getDataString("filter");
         String amount = gameEffect.getDataString("amount", "1");
         String memoryName = gameEffect.getDataString("memory");
@@ -31,8 +31,8 @@ public class RandomlySelectEffect extends OneTimeEffectSystem {
 
         Array<Entity> matchingEntities = new Array<>();
         cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
-                    @Override
-                    public void accept(Entity entity) {
+            @Override
+            public void accept(Entity entity) {
                         matchingEntities.add(entity);
                     }
                 }, filter
@@ -45,7 +45,7 @@ public class RandomlySelectEffect extends OneTimeEffectSystem {
             selected.add(String.valueOf(matchingEntities.get(i).getId()));
         }
 
-        String result = StringUtils.merge(selected, ",");
+        String result = StringUtils.merge(selected);
         memory.setValue(memoryName, result);
     }
 

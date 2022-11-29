@@ -52,12 +52,12 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
     }
 
     @Override
-    public boolean processEndingEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
-        processEffect(sourceEntity, gameEffect, memory);
+    public boolean processEndingEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
+        processEffect(sourceEntity, memory, gameEffect);
         return false;
     }
 
-    protected abstract void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory);
+    protected abstract void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect);
 
     protected void validateEffects(JsonValue effects) {
         if (effects.type() == JsonValue.ValueType.object)

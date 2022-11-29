@@ -30,7 +30,7 @@ public class IsInMissionFilterHandler extends CardFilterSystem {
                         return false;
                 }
 
-                return false;
+                return true;
             }
         };
     }

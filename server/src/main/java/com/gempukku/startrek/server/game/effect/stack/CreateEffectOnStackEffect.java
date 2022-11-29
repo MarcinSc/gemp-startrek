@@ -26,7 +26,7 @@ public class CreateEffectOnStackEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String sourceMemory = gameEffect.getDataString("sourceMemory");
         String cardId = memory.getValue(sourceMemory);
         Entity cardEntity = serverEntityIdSystem.findfromId(cardId);

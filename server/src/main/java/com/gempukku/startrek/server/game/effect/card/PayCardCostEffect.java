@@ -24,7 +24,7 @@ public class PayCardCostEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String cardId = memory.getValue(gameEffect.getDataString("cardMemory"));
         Entity cardEntity = serverEntityIdSystem.findfromId(cardId);
 

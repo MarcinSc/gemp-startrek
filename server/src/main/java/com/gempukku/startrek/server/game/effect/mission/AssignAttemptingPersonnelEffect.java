@@ -30,7 +30,7 @@ public class AssignAttemptingPersonnelEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String player = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory, gameEffect.getDataString("player"));
         String memoryName = gameEffect.getDataString("memory");
         String filter = gameEffect.getDataString("filter");
@@ -41,7 +41,7 @@ public class AssignAttemptingPersonnelEffect extends OneTimeEffectSystem {
                 personnelIds.add(idProviderSystem.getEntityId(entity));
             }
         }, filter);
-        memory.setValue(memoryName, StringUtils.merge(personnelIds, ","));
+        memory.setValue(memoryName, StringUtils.merge(personnelIds));
 
         Entity attemptedMissionEntity = executionStackSystem.getTopMostStackEntityWithComponent(AttemptedMissionComponent.class);
         AttemptedMissionComponent attemptedMission = attemptedMissionEntity.getComponent(AttemptedMissionComponent.class);

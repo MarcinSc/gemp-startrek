@@ -23,17 +23,17 @@ public class MoveCardToDiscardPileEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String filter = gameEffect.getDataString("filter");
         String fromZoneStr = gameEffect.getDataString("fromZone", null);
         CardZone fromZone = (fromZoneStr != null) ? CardZone.valueOf(fromZoneStr) : null;
 
         cardFilteringSystem.forEachCard(sourceEntity, memory, new Consumer<Entity>() {
-                    @Override
-                    public void accept(Entity cardEntity) {
-                        CardComponent card = cardEntity.getComponent(CardComponent.class);
-                        CardZone oldZone = card.getCardZone();
-                        if (fromZone == null || oldZone == fromZone) {
+            @Override
+            public void accept(Entity cardEntity) {
+                CardComponent card = cardEntity.getComponent(CardComponent.class);
+                CardZone oldZone = card.getCardZone();
+                if (fromZone == null || oldZone == fromZone) {
                             zoneOperations.moveFromCurrentZoneToDiscardPile(cardEntity);
                         }
                     }

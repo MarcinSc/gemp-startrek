@@ -8,6 +8,8 @@ import com.gempukku.libgdx.lib.artemis.event.EventListener;
 import com.gempukku.startrek.common.AuthenticationHolderSystem;
 import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.event.CardsBeamed;
+import com.gempukku.startrek.game.event.ShipMoved;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.zone.MissionCards;
 import com.gempukku.startrek.game.render.zone.RenderedCardGroup;

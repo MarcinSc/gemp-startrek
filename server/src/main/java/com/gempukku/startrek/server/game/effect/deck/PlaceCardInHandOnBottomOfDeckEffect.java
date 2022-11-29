@@ -24,7 +24,7 @@ public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         CardFilter filter = cardFilteringSystem.resolveCardFilter(gameEffect.getDataString("filter"));
 
         Array<Entity> cardsToMove = new Array<>();

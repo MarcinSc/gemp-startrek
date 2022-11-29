@@ -9,11 +9,14 @@ import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.*;
+import com.gempukku.startrek.game.event.CardChangedZones;
+import com.gempukku.startrek.game.event.ShipMoved;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.*;
+import com.gempukku.startrek.server.game.deck.HiddenDilemmaStackComponent;
 import com.gempukku.startrek.server.game.deck.PlayerDeckComponent;
 import com.gempukku.startrek.server.game.deck.PlayerDilemmaPileComponent;
 import com.gempukku.startrek.server.game.stack.ObjectStackSystem;
@@ -375,7 +378,7 @@ public class ZoneOperations extends BaseSystem {
         if (cards.size == 0)
             return null;
 
-        Entity cardEntity = world.getEntity(cards.removeIndex(cards.size - 1));
+        Entity cardEntity = world.getEntity(cards.pop());
 
         PlayerPublicStatsComponent stats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
         stats.setDeckCount(cards.size);
@@ -460,9 +463,37 @@ public class ZoneOperations extends BaseSystem {
         notifyZoneChange(cardEntity, oldZone, newZone, missionOwner, missionIndex);
     }
 
-    public void setupCardToTopOfDilemmaPile(Entity cardEntity, boolean faceUp) {
+    public void moveFromCurrentZoneToTopOfDilemmaStack(Entity cardEntity) {
+        String missionOwner = null;
+        int missionIndex = -1;
+        CardInMissionComponent inMission = cardEntity.getComponent(CardInMissionComponent.class);
+        if (inMission != null) {
+            missionOwner = inMission.getMissionOwner();
+            missionIndex = inMission.getMissionIndex();
+        }
+        removeFromCurrentZone(cardEntity);
+
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.DilemmaStack;
+        card.setCardZone(newZone);
+
+        Entity gameEntity = gameEntityProvider.getGameEntity();
+        DilemmaStackComponent dilemmaStack = gameEntity.getComponent(DilemmaStackComponent.class);
+        dilemmaStack.setCardCount(dilemmaStack.getCardCount() + 1);
+
+        HiddenDilemmaStackComponent hiddenDilemmaStack = gameEntity.getComponent(HiddenDilemmaStackComponent.class);
+        Array<Integer> cards = hiddenDilemmaStack.getCards();
+        cards.insert(0, cardEntity.getId());
+
+        eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+        eventSystem.fireEvent(EntityUpdated.instance, gameEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone, missionOwner, missionIndex);
+    }
+
+    public void setupCardToTopOfDilemmaPile(Entity cardEntity, boolean faceUp) {
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
         CardZone newZone = CardZone.DilemmaPile;
         card.setCardZone(newZone);
         CardInDilemmaPileComponent cardInDilemmaPile = cardInDilemmaPileComponentMapper.create(cardEntity);
@@ -483,7 +514,7 @@ public class ZoneOperations extends BaseSystem {
         if (cards.size == 0)
             return null;
 
-        Entity cardEntity = world.getEntity(cards.removeIndex(cards.size - 1));
+        Entity cardEntity = world.getEntity(cards.pop());
         cardInDilemmaPileComponentMapper.remove(cardEntity);
 
         PlayerPublicStatsComponent stats = playerEntity.getComponent(PlayerPublicStatsComponent.class);

@@ -36,7 +36,7 @@ public class SetupMissionCardsEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String username = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory,
                 gameEffect.getDataString("player"));
         Array<Entity> playerMissions = getAllPlayerMissions(username);

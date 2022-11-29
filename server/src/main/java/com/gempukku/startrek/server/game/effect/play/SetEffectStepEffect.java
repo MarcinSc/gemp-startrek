@@ -18,7 +18,7 @@ public class SetEffectStepEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         int step = Integer.parseInt(gameEffect.getDataString("step"));
         ObjectOnStackComponent cardOnStack = sourceEntity.getComponent(ObjectOnStackComponent.class);
         cardOnStack.setEffectStep(step);

@@ -8,8 +8,8 @@ import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.game.GameEntityProvider;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
+import com.gempukku.startrek.game.event.CardsBeamed;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
-import com.gempukku.startrek.game.zone.CardsBeamed;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
@@ -28,17 +28,17 @@ public class BeamFromMissionEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String shipFilter = gameEffect.getDataString("ship");
         String cardFilter = gameEffect.getDataString("filter");
         Entity shipEntity = cardFilteringSystem.findFirstCardInPlay(sourceEntity, memory, shipFilter);
         Array<String> cardIds = new Array<>();
         cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
-                    @Override
-                    public void accept(Entity entity) {
-                        zoneOperations.attachToShip(shipEntity, entity);
-                        cardIds.add(serverEntityIdSystem.getEntityId(entity));
-                    }
+            @Override
+            public void accept(Entity entity) {
+                zoneOperations.attachToShip(shipEntity, entity);
+                cardIds.add(serverEntityIdSystem.getEntityId(entity));
+            }
                 }, cardFilter
         );
         eventSystem.fireEvent(new CardsBeamed(null, serverEntityIdSystem.getEntityId(shipEntity),

@@ -8,8 +8,8 @@ import com.gempukku.libgdx.network.EntityUpdated;
 import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
+import com.gempukku.startrek.game.event.CardRevealed;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
-import com.gempukku.startrek.game.zone.CardRevealed;
 import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
 import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.server.game.effect.EffectRevealedCardsComponent;
@@ -33,7 +33,7 @@ public class RevealCardsEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         EffectRevealedCardsComponent revealedCards = executionStackSystem.getTopMostStackEntityWithComponent(EffectRevealedCardsComponent.class).getComponent(EffectRevealedCardsComponent.class);
         String filter = gameEffect.getDataString("filter");
         cardFilteringSystem.forEachCardInPlay(sourceEntity, memory,

@@ -20,7 +20,7 @@ public class SetTurnSegmentEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         TurnSegment turnSegment = TurnSegment.valueOf(gameEffect.getDataString("segment"));
         Entity turnEntity = LazyEntityUtil.findEntityWithComponent(world, TurnComponent.class);
         TurnComponent turn = turnEntity.getComponent(TurnComponent.class);

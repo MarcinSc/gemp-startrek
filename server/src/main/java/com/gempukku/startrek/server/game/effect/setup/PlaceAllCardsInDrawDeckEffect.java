@@ -28,7 +28,7 @@ public class PlaceAllCardsInDrawDeckEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String player = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory,
                 gameEffect.getDataString("player"));
         LazyEntityUtil.forEachEntityWithComponent(world, CardComponent.class,

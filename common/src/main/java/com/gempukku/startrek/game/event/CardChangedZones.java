@@ -1,7 +1,8 @@
-package com.gempukku.startrek.game.zone;
+package com.gempukku.startrek.game.event;
 
 import com.gempukku.libgdx.lib.artemis.event.EntityEvent;
 import com.gempukku.libgdx.network.server.config.annotation.SendToClients;
+import com.gempukku.startrek.game.zone.CardZone;
 
 @SendToClients
 public class CardChangedZones implements EntityEvent {

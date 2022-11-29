@@ -20,7 +20,7 @@ public class SequenceEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         sequence(sourceEntity, gameEffect, memory);
     }
 

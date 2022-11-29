@@ -1,16 +1,17 @@
-package com.gempukku.startrek.game.zone;
+package com.gempukku.startrek.game.event;
 
 import com.gempukku.libgdx.lib.artemis.event.EntityEvent;
 import com.gempukku.libgdx.network.server.config.annotation.SendToClients;
 
 @SendToClients
-public class CardRevealed implements EntityEvent {
+public class CardHidden implements EntityEvent {
     private String cardId;
 
-    public CardRevealed() {
+    public CardHidden() {
+
     }
 
-    public CardRevealed(String cardId) {
+    public CardHidden(String cardId) {
         this.cardId = cardId;
     }
 

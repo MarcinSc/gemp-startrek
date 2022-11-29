@@ -18,7 +18,7 @@ public class ConditionEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String conditionMemory = gameEffect.getDataString("conditionMemory", "effectStacked");
         String effectStacked = memory.getValue(conditionMemory);
         if (effectStacked != null && effectStacked.equals("true")) {

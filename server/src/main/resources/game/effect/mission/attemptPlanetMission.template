@@ -38,7 +38,8 @@
           "type": "createDilemmaStack",
           "player": "nextPlayer",
           "amountMemory": "dilemmaDifference",
-          "costResultMemory": "costResult"
+          "costResultMemory": "costResult",
+          "dilemmaMemory": "dilemmaCards"
         },
         {
           "type": "processDecision",
@@ -46,7 +47,21 @@
           "decisionType": "setupDilemmas",
           "memoryData": {
             "personnelCount": "attemptingPersonnelCount",
-            "costCount": "costResult"
+            "costCount": "costResult",
+            "dilemmaCardIds": "dilemmaCards"
+          }
+        },
+        {
+          "type": "repeatUntil",
+          "condition": "or(dilemmaStackEmpty,equals(cardMatchingCount(attemptingPersonnel),0))",
+          "action": {
+            "type": "sequence",
+            "memory": "facingDilemmaSequence",
+            "actions": [
+              {
+                "type": "blah"
+              }
+            ]
           }
         },
         {

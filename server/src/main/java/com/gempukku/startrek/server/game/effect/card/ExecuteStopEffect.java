@@ -22,7 +22,7 @@ public class ExecuteStopEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
             @Override
             public void accept(Entity entity) {

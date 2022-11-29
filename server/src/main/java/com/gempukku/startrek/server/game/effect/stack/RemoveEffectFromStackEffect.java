@@ -15,7 +15,7 @@ public class RemoveEffectFromStackEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         zoneOperations.removeEffectFromStack();
     }
 

@@ -2,6 +2,7 @@ package com.gempukku.startrek.server.game.effect.memory;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
@@ -13,9 +14,9 @@ public class ClearMemoryEffect extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String memoryList = gameEffect.getDataString("memory");
-        String[] memories = memoryList.split(",");
+        String[] memories = StringUtils.split(memoryList);
         for (String memoryName : memories) {
             memory.removeValue(memoryName);
         }

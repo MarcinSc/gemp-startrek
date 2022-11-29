@@ -48,7 +48,7 @@ public class GameEffectSystem extends BaseSystem {
 
             EffectMemoryComponent effectMemory = effectMemoryEntity.getComponent(EffectMemoryComponent.class);
             Memory memory = new Memory(effectMemory.getMemory());
-            action.setFinishedProcessing(gameEffectHandler.processEndingEffect(sourceEntity, gameEffect, memory));
+            action.setFinishedProcessing(gameEffectHandler.processEndingEffect(sourceEntity, memory, gameEffect));
         }
     }
 

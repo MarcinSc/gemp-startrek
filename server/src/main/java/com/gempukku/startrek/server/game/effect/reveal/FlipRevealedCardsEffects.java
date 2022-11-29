@@ -9,7 +9,7 @@ import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
-import com.gempukku.startrek.game.zone.CardHidden;
+import com.gempukku.startrek.game.event.CardHidden;
 import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
 import com.gempukku.startrek.game.zone.FaceUpCardInMissionComponent;
 import com.gempukku.startrek.server.game.effect.EffectRevealedCardsComponent;
@@ -30,7 +30,7 @@ public class FlipRevealedCardsEffects extends OneTimeEffectSystem {
     }
 
     @Override
-    protected void processOneTimeEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         EffectRevealedCardsComponent revealedCards = executionStackSystem.getTopMostStackEntityWithComponent(EffectRevealedCardsComponent.class).getComponent(EffectRevealedCardsComponent.class);
         for (String revealedCard : revealedCards.getRevealedCards()) {
             Entity entity = idProviderSystem.getEntityById(revealedCard);
