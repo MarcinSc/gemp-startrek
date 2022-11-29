@@ -193,6 +193,7 @@ public class StarTrekGameHolder implements Disposable {
                 new MissionTypeMatchesAttemptedHandler(),
                 new MissionAttemptMatchesHandler(),
                 new OnMissionSkillCountHandler(),
+                new OnMissionAttributeMoreThanHandler(),
 
                 // Server card filters
 

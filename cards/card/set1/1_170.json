@@ -6,7 +6,7 @@
   "quadrant": "Alpha",
   "span": 3,
   "points": 35,
-  "requirements": "skill(Astrometrics),skill(Engineer),skill(Physics),skill(Science),attributeTotalMoreThan(Cunning,36)",
+  "requirements": "onMissionSkillCount(Astrometrics),onMissionSkillCount(Engineer),onMissionSkillCount(Physics),onMissionSkillCount(Science),onMissionAttributeMoreThan(Cunning,36)",
   "requirementsText": "Astrometics, Engineer, Physics, Science, and Cunning>36",
   "affiliations": "any",
   "affiliationsText": "Any affiliation may attempt this mission.",

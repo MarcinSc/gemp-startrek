@@ -38,7 +38,6 @@ public class CountMemorySkillAtLeastConditionHandler extends ConditionSystem {
     public void validate(Array<String> parameters) {
         ValidateUtil.exactly(parameters, 3);
         cardFilteringSystem.validateFilter(parameters.get(0));
-        PersonnelSkill.valueOf(parameters.get(1));
         amountResolverSystem.validateAmount(parameters.get(2));
     }
 }

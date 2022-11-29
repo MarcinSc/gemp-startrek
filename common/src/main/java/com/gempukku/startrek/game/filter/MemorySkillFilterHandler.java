@@ -35,7 +35,6 @@ public class MemorySkillFilterHandler extends CardFilterSystem {
     @Override
     public void validate(Array<String> parameters) {
         ValidateUtil.between(parameters, 1, 2);
-        PersonnelSkill.valueOf(parameters.get(0));
         if (parameters.size > 1)
             amountResolverSystem.validateAmount(parameters.get(1));
     }

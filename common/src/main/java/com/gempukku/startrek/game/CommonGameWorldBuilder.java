@@ -28,6 +28,7 @@ public class CommonGameWorldBuilder {
                 new HandCountAmountHandler(),
                 new DeckCountAmountHandler(),
                 new CostToPlayAmountHandler(),
+                new AttributeAmountHandler(),
                 new ShipRangeAmountHandler(),
                 new SkillCountHandler(),
                 new MemoryAmountHandler(),

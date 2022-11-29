@@ -50,6 +50,6 @@ public class SequenceEffect extends EffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"actions"},
                 new String[]{});
-        validate(effect.get("actions"));
+        validateEffects(effect.get("actions"));
     }
 }

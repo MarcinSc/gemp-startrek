@@ -6,7 +6,7 @@
   "quadrant": "Alpha",
   "span": 3,
   "points": 35,
-  "requirements": "onMission(skill(Engineer),skill(Geology),skill(Physics),skill(Science)),onMissionAttributeMoreThan(Cunning,34)",
+  "requirements": "onMissionSkillCount(Engineer),onMissionSkillCount(Geology),onMissionSkillCount(Physics),onMissionSkillCount(Science),onMissionAttributeMoreThan(Cunning,34)",
   "requirementsText": "Engineer, Geology, Physics, Science, and Cunning>34",
   "affiliations": "not(affiliation(Borg))",
   "affiliationsText": "Any affiliation (except [Borg]) may attempt this mission.",
