@@ -30,7 +30,7 @@ public class SetupTurnOrderEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
+    protected void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         GameComponent game = gameEntityProvider.getGameEntity().getComponent(GameComponent.class);
 
         Entity turnSequenceEntity = spawnSystem.spawnEntity("game/turnSequence.template");

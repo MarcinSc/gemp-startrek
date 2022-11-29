@@ -1,6 +1,5 @@
 {
   "type": "sequence",
-  "memory": "faceOneDilemmaSequence",
   "actions": [
     {
       "type": "addTitleToMemory",

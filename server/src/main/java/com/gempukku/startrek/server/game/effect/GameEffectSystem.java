@@ -6,14 +6,14 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
-import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
+import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 
 public class GameEffectSystem extends BaseSystem {
     private ExecutionStackSystem stackSystem;
-    private ServerEntityIdSystem serverEntityIdSystem;
+    private IdProviderSystem idProviderSystem;
 
     private ObjectMap<String, GameEffectHandler> gameEffectHandlers = new ObjectMap<>();
 
@@ -36,7 +36,7 @@ public class GameEffectSystem extends BaseSystem {
             Entity sourceEntity = null;
             String sourceEntityId = gameEffect.getSourceEntityId();
             if (sourceEntityId != null)
-                sourceEntity = serverEntityIdSystem.findfromId(sourceEntityId);
+                sourceEntity = idProviderSystem.getEntityById(sourceEntityId);
             String type = gameEffect.getType();
             GameEffectHandler gameEffectHandler = gameEffectHandlers.get(type);
             if (gameEffectHandler == null) {
@@ -48,7 +48,7 @@ public class GameEffectSystem extends BaseSystem {
 
             EffectMemoryComponent effectMemory = effectMemoryEntity.getComponent(EffectMemoryComponent.class);
             Memory memory = new Memory(effectMemory.getMemory());
-            action.setFinishedProcessing(gameEffectHandler.processEndingEffect(sourceEntity, memory, gameEffect));
+            action.setFinishedProcessing(gameEffectHandler.processEndingEffect(sourceEntity, memory, effectEntity, gameEffect));
         }
     }
 

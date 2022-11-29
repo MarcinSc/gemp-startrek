@@ -10,14 +10,12 @@
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
     "type": "sequence",
     "data": {
-      "memory": "playCardMainSequence",
       "actions": [
         {
           "type": "condition",
           "condition": "memoryMatches(playedCardId,type(Event))",
           "trueEffect": {
             "type": "condition",
-            "memory": "checkTypeOfEvent",
             "condition": "memoryMatches(playedCardId,hasAbility(PlaysInCore))",
             "trueEffect": {
               "tpl:extends": "game/effect/play/playPlaysToCoreEvent.template"

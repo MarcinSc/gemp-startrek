@@ -25,7 +25,7 @@ public class RepeatEffect extends EffectSystem {
     }
 
     @Override
-    public void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
+    public void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         String type = gameEffect.getType();
         if (type.equals("repeatTimes")) {
             repeat(sourceEntity, gameEffect, memory);

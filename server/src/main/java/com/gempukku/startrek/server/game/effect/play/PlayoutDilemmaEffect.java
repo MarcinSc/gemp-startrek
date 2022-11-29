@@ -22,7 +22,7 @@ public class PlayoutDilemmaEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
+    protected void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         String memoryName = gameEffect.getDataString("memoryCard");
         String cardId = memory.getValue(memoryName);
         Entity cardEntity = serverEntityIdSystem.findfromId(cardId);

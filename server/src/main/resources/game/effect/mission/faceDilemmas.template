@@ -1,6 +1,5 @@
 {
   "type": "sequence",
-  "memory": "facingDilemmaSequence",
   "actions": [
     {
       "type": "moveTopDilemmaStackCardToStack",
@@ -9,11 +8,9 @@
     {
       "type": "condition",
       "condition": "lessOrEqual(costToPlay(memory(dilemmaCard)),memory(dilemmaPointsLeft))",
-      "memory": "checkForDilemmaCost",
       "trueEffect": {
         "type": "condition",
         "condition": "and(not(titleInMemory(facedDilemmas,memory(dilemmaCard))),missionTypeMatchesAttempted(memory(dilemmaCard)))",
-        "memory": "checkForDilemmaRequirements",
         "trueEffect": {
           "tpl:extends": "game/effect/mission/faceOneDilemma.template"
         },
@@ -24,7 +21,6 @@
       },
       "falseEffect": {
         "type": "sequence",
-        "memory": "overcomeRemainingDilemmas",
         "actions": [
           {
             "type": "overcomeDilemma",

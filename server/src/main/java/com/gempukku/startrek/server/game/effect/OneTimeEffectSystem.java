@@ -9,7 +9,7 @@ public abstract class OneTimeEffectSystem extends EffectSystem {
     }
 
     @Override
-    protected final void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
+    protected final void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         processOneTimeEffect(sourceEntity, memory, gameEffect);
         removeTopEffectFromStack();
     }

@@ -1,14 +1,11 @@
 {
   "type": "condition",
-  "memory": "outsideCondition",
   "condition": "or(countMemorySkillAtLeast(attemptingPersonnel,firstSkill,2),countMemorySkillAtLeast(attemptingPersonnel,secondSkill,2))",
   "falseEffect": {
     "type": "condition",
-    "memory": "insideCondition",
     "condition": "hasCard(attemptingPersonnel,or(memorySkill(firstSkill),memorySkill(secondSkill)))",
     "trueEffect": {
       "type": "sequence",
-      "memory": "opponentStopsPersonnel",
       "actions": [
         {
           "type": "opponentSelect",
@@ -23,7 +20,6 @@
     },
     "falseEffect": {
       "type": "sequence",
-      "memory": "stopAllPersonnel",
       "actions": [
         {
           "type": "stop",

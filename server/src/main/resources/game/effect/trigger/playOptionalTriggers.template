@@ -1,6 +1,5 @@
 {
   "type": "sequence",
-  "memory": "optionalTriggerActionIndex",
   "actions": [
     {
       "type": "repeatUntilInTurnOrder",

@@ -13,7 +13,6 @@
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
     "type": "sequence",
     "data": {
-      "memory": "attemptPlanetMissionSequence",
       "actions": [
         {
           "type": "placeAttemptedMissionOnStack"
@@ -61,7 +60,6 @@
         },
         {
           "type": "condition",
-          "memory": "missionRequirements",
           "condition": "missionAttemptMatches",
           "trueEffect": {
             "type": "completeMission",

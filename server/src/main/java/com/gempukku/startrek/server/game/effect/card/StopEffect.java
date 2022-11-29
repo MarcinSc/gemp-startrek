@@ -20,25 +20,25 @@ public class StopEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
+    protected void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         boolean stopStacked = Boolean.parseBoolean(memory.getValue("internal.stopStacked", "false"));
         if (!stopStacked) {
             String filter = gameEffect.getDataString("filter", null);
             String select = gameEffect.getDataString("select", null);
-            Entity effectEntity;
+            Entity stopEffectEntity;
             if (filter != null) {
                 memory.setValue("internal.stopFilter", filter);
                 memory.setValue("internal.stopMemory", "cardsToStop");
-                effectEntity = spawnSystem.spawnEntity("game/effect/stop/stopWithFilterEffect.template");
+                stopEffectEntity = spawnSystem.spawnEntity("game/effect/stop/stopWithFilterEffect.template");
             } else {
                 memory.setValue("internal.prompt", "Choose cards to stop");
                 memory.setValue("internal.stopFilter", select);
                 memory.setValue("internal.stopMin", "1");
                 memory.setValue("internal.stopMax", "1");
-                effectEntity = spawnSystem.spawnEntity("game/effect/stop/stopWithSelectEffect.template");
+                stopEffectEntity = spawnSystem.spawnEntity("game/effect/stop/stopWithSelectEffect.template");
             }
             memory.setValue("internal.stopStacked", "true");
-            stackEffect(effectEntity);
+            stackEffect(stopEffectEntity);
         } else {
             memory.removeValue("internal.stopStacked");
             removeTopEffectFromStack();

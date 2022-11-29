@@ -3,6 +3,7 @@ package com.gempukku.startrek.server.game.effect.control;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
@@ -12,6 +13,8 @@ import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 
 public class SequenceEffect extends EffectSystem {
     private GameEffectSystem gameEffectSystem;
+    private IdProviderSystem idProviderSystem;
+
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
     private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;
 
@@ -20,21 +23,9 @@ public class SequenceEffect extends EffectSystem {
     }
 
     @Override
-    protected void processEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
-        sequence(sourceEntity, gameEffect, memory);
-    }
-
-    @Override
-    public void validate(JsonValue effect) {
-        ValidateUtil.effectExpectedFields(effect,
-                new String[]{"actions"},
-                new String[]{});
-        validate(effect.get("actions"));
-    }
-
-    private void sequence(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    protected void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         JsonValue action = gameEffect.getClonedDataObject("actions");
-        String indexMemoryName = gameEffect.getDataString("memory", "stackedIndex");
+        String indexMemoryName = "sequenceIndex." + idProviderSystem.getEntityId(effectEntity);
         String stackedIndex = memory.getValue(indexMemoryName);
         int nextActionIndex = 0;
         if (stackedIndex != null) {
@@ -52,5 +43,13 @@ public class SequenceEffect extends EffectSystem {
 
             stackEffect(stackedEntity);
         }
+    }
+
+    @Override
+    public void validate(JsonValue effect) {
+        ValidateUtil.effectExpectedFields(effect,
+                new String[]{"actions"},
+                new String[]{});
+        validate(effect.get("actions"));
     }
 }
