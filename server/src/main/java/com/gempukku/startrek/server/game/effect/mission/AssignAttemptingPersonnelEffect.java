@@ -46,6 +46,7 @@ public class AssignAttemptingPersonnelEffect extends OneTimeEffectSystem {
         Entity attemptedMissionEntity = executionStackSystem.getTopMostStackEntityWithComponent(AttemptedMissionComponent.class);
         AttemptedMissionComponent attemptedMission = attemptedMissionEntity.getComponent(AttemptedMissionComponent.class);
         attemptedMission.setOwner(player);
+        attemptedMission.setMissionId(memory.getValue(gameEffect.getDataString("missionMemory")));
         attemptedMission.getAttemptingPersonnel().addAll(personnelIds);
         eventSystem.fireEvent(EntityUpdated.instance, attemptedMissionEntity);
     }
@@ -53,7 +54,7 @@ public class AssignAttemptingPersonnelEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter", "memory", "player"},
+                new String[]{"filter", "memory", "missionMemory", "player"},
                 new String[]{});
         cardFilteringSystem.validateFilter(effect.getString("filter"));
         playerResolverSystem.validatePlayer(effect.getString("player"));

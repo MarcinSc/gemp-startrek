@@ -119,6 +119,24 @@ public class ZoneOperations extends BaseSystem {
         notifyZoneChange(cardEntity, oldZone, newZone, missionOwner, missionIndex);
     }
 
+    public Entity moveTopDilemmaStackCardToStack(int abilityIndex) {
+        Entity cardEntity = removeTopCardFromDilemmaStack();
+
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.Stack;
+        card.setCardZone(newZone);
+        ObjectOnStackComponent cardOnStack = cardOnStackComponentMapper.create(cardEntity);
+        cardOnStack.setType("card");
+        cardOnStack.setAbilityIndex(abilityIndex);
+        objectStackSystem.stackEntity(cardEntity);
+        eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone, null, -1);
+
+        return cardEntity;
+    }
+
     public void removeCardFromStack(Entity cardEntity) {
         cardOnStackComponentMapper.remove(cardEntity);
         objectStackSystem.removeFromStack(cardEntity);
@@ -508,7 +526,7 @@ public class ZoneOperations extends BaseSystem {
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
     }
 
-    public Entity removeTopCardFromDilemmaPile(Entity playerEntity) {
+    private Entity removeTopCardFromDilemmaPile(Entity playerEntity) {
         PlayerDilemmaPileComponent dilemmaPile = playerEntity.getComponent(PlayerDilemmaPileComponent.class);
         Array<Integer> cards = dilemmaPile.getCards();
         if (cards.size == 0)
@@ -521,6 +539,20 @@ public class ZoneOperations extends BaseSystem {
         stats.setDilemmaCount(cards.size);
         eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+
+        return cardEntity;
+    }
+
+    private Entity removeTopCardFromDilemmaStack() {
+        Entity gameEntity = gameEntityProvider.getGameEntity();
+        HiddenDilemmaStackComponent hiddenDilemmaStack = gameEntity.getComponent(HiddenDilemmaStackComponent.class);
+        DilemmaStackComponent dilemmaStack = gameEntity.getComponent(DilemmaStackComponent.class);
+
+        Array<Integer> cards = hiddenDilemmaStack.getCards();
+        Entity cardEntity = world.getEntity(cards.pop());
+        dilemmaStack.setCardCount(cards.size);
+
+        eventSystem.fireEvent(EntityUpdated.instance, gameEntity);
 
         return cardEntity;
     }

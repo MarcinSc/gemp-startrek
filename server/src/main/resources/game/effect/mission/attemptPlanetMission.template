@@ -21,6 +21,7 @@
         {
           "type": "assignAttemptingPersonnel",
           "player": "currentPlayer",
+          "missionMemory": "missionId",
           "memory": "attemptingPersonnel",
           "filter": "type(Personnel),unstopped,isInMission(memory(missionId))"
         },
@@ -55,13 +56,7 @@
           "type": "repeatUntil",
           "condition": "or(dilemmaStackEmpty,equals(cardMatchingCount(attemptingPersonnel),0))",
           "action": {
-            "type": "sequence",
-            "memory": "facingDilemmaSequence",
-            "actions": [
-              {
-                "type": "blah"
-              }
-            ]
+            "tpl:extends": "game/effect/mission/faceDilemmas.template"
           }
         },
         {

@@ -28,7 +28,7 @@ public class PayCardCostEffect extends OneTimeEffectSystem {
         String cardId = memory.getValue(gameEffect.getDataString("cardMemory"));
         Entity cardEntity = serverEntityIdSystem.findfromId(cardId);
 
-        int costToPlay = amountResolverSystem.resolveAmount(cardEntity, memory, "costToPlay");
+        int costToPlay = amountResolverSystem.resolveAmount(cardEntity, memory, "costToPlay(self)");
 
         Entity ownerEntity = playerResolverSystem.resolvePlayer(cardEntity, memory, "owner");
         PlayerPublicStatsComponent stats = ownerEntity.getComponent(PlayerPublicStatsComponent.class);

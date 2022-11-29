@@ -22,6 +22,7 @@ public class ConditionEffect extends EffectSystem {
         String conditionMemory = gameEffect.getDataString("conditionMemory", "effectStacked");
         String effectStacked = memory.getValue(conditionMemory);
         if (effectStacked != null && effectStacked.equals("true")) {
+            memory.removeValue(conditionMemory);
             removeTopEffectFromStack();
         } else {
             String condition = gameEffect.getDataString("condition");

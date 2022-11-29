@@ -40,6 +40,18 @@ public class ConditionResolverSystem extends BaseSystem {
 
                     }
                 });
+        registerConditionHandler("not",
+                new ConditionHandler() {
+                    @Override
+                    public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
+                        return !resolveBoolean(sourceEntity, memory, parameters.get(0));
+                    }
+
+                    @Override
+                    public void validate(Array<String> parameters) {
+                        ValidateUtil.exactly(parameters, 1);
+                    }
+                });
         registerConditionHandler("and",
                 new ConditionHandler() {
                     @Override

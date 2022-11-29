@@ -1,0 +1,40 @@
+{
+  "type": "sequence",
+  "memory": "facingDilemmaSequence",
+  "actions": [
+    {
+      "type": "moveTopDilemmaStackCardToStack",
+      "memory": "movedCard"
+    },
+    {
+      "type": "condition",
+      "condition": "lessOrEqual(costToPlay(memory(movedCard)),memory(costResult))",
+      "conditionMemory": "checkForDilemmaCost",
+      "trueEffect": {
+        "type": "condition",
+        "condition": "and(not(titleInMemory(facedDilemmas,memory(movedCard))),missionTypeMatchesAttempted(memory(movedCard)))",
+        "conditionMemory": "checkForDilemmaRequirements",
+        "trueEffect": {
+          "type": "blah"
+        },
+        "falseEffect": {
+          "type": "overcomeDilemma",
+          "filter": "memory(movedCard)"
+        }
+      },
+      "falseEffect": {
+        "type": "sequence",
+        "memory": "overcomeRemainingDilemmas",
+        "actions": [
+          {
+            "type": "overcomeDilemma",
+            "filter": "memory(movedCard)"
+          },
+          {
+            "type": "overcomeRemainingDilemmasInStack"
+          }
+        ]
+      }
+    }
+  ]
+}
