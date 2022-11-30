@@ -54,7 +54,6 @@ public class StackTextHighlightingSystem extends BaseEntitySystem {
                         checkForCardTextUpdate(entityOnStack, objectOnStack, abilityIndex, renderedCard);
                     } else if (objectType.equals("effect")) {
                         EffectComponent effect = entityOnStack.getComponent(EffectComponent.class);
-
                         String specialAction = effect.getSpecialAction();
                         if (specialAction == null) {
                             checkForEffectTextUpdate(objectOnStack, abilityIndex, renderedCard, effect);

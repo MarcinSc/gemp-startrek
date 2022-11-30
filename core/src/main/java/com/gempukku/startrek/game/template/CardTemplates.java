@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CardTemplates {
-    private static Pattern stepStartPattern = Pattern.compile("(\\[s [^]]+])");
+    private static final Pattern stepStartPattern = Pattern.compile("(\\[s [^]]+])");
 
     public static Entity createRenderedCard(CardDefinition cardDefinition, CardZone cardZone, SpawnSystem spawnSystem) {
         Entity renderedEntity = spawnSystem.spawnEntity(getTemplate(cardDefinition, cardZone));
