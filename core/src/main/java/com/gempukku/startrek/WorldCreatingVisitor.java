@@ -42,6 +42,7 @@ import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.common.*;
 import com.gempukku.startrek.game.*;
 import com.gempukku.startrek.game.ability.*;
+import com.gempukku.startrek.game.card.SpecialActionLookupSystem;
 import com.gempukku.startrek.game.config.ConfigureTextSystem;
 import com.gempukku.startrek.game.decision.*;
 import com.gempukku.startrek.game.render.*;
@@ -125,6 +126,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new IdProviderSystem(new ClientIdProvider()),
 
                 new CardLookupSystem(cardData),
+                new SpecialActionLookupSystem(),
                 new PlayerPositionSystem(),
                 new InitialGameStateCardsCreatorSystem(),
                 new GameStateCardsTrackingSystem(),

@@ -11,6 +11,7 @@ import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextBlock;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextComponent;
 import com.gempukku.startrek.card.*;
+import com.gempukku.startrek.game.card.SpecialActionLookupSystem;
 import com.gempukku.startrek.game.zone.CardZone;
 
 import java.util.regex.Matcher;
@@ -236,6 +237,18 @@ public class CardTemplates {
             return createUnaffiliatedEffect(cardDefinition, spawnSystem, cardType, abilityIndex);
         }
         throw new GdxRuntimeException("Unable to create a full card for card type: " + cardType);
+    }
+
+    public static Entity createSpecialAction(String specialAction, SpecialActionLookupSystem specialActionLookupSystem, SpawnSystem spawnSystem) {
+        Entity cardRepresentation = spawnSystem.spawnEntity("game/card/full-special-action.template");
+
+        TextComponent text = cardRepresentation.getComponent(TextComponent.class);
+        if (text != null) {
+            Array<TextBlock> textBlocks = text.getTextBlocks();
+            textBlocks.get(0).setText(specialActionLookupSystem.getTitle(specialAction));
+            textBlocks.get(2).setText(replaceSteps(specialActionLookupSystem.getText(specialAction), -1));
+        }
+        return cardRepresentation;
     }
 
     private static Entity createUnaffiliatedEffect(CardDefinition cardDefinition, SpawnSystem spawnSystem, CardType cardType,
@@ -548,7 +561,7 @@ public class CardTemplates {
         return result.toString();
     }
 
-    private static String replaceSteps(String text, int step) {
+    public static String replaceSteps(String text, int step) {
         text = text.replace("[/s]", "[/color]");
         Matcher matcher = stepStartPattern.matcher(text);
         StringBuilder sb = new StringBuilder();

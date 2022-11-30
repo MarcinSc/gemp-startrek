@@ -7,8 +7,8 @@
   },
   "com.gempukku.startrek.server.game.effect.EffectRevealedCardsComponent": {},
   "com.gempukku.startrek.game.mission.AttemptedMissionComponent": {},
-  "com.gempukku.startrek.game.zone.ObjectOnStackComponent": {
-    "type": "missionAttempt"
+  "com.gempukku.startrek.game.EffectComponent": {
+    "specialAction": "missionAttempt"
   },
   "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
     "type": "sequence",

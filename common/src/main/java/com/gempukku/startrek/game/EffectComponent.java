@@ -11,6 +11,8 @@ public class EffectComponent extends Component {
     private String sourceCardId;
     // Owner of the effect
     private String owner;
+    // Type of special action
+    private String specialAction;
 
     public String getSourceId() {
         return sourceId;
@@ -34,5 +36,13 @@ public class EffectComponent extends Component {
 
     public void setOwner(String owner) {
         this.owner = owner;
+    }
+
+    public String getSpecialAction() {
+        return specialAction;
+    }
+
+    public void setSpecialAction(String specialAction) {
+        this.specialAction = specialAction;
     }
 }

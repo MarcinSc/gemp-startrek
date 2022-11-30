@@ -15,6 +15,7 @@ import com.gempukku.startrek.common.IncomingUpdatesProcessor;
 import com.gempukku.startrek.common.OrderComponent;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.EffectComponent;
+import com.gempukku.startrek.game.card.SpecialActionLookupSystem;
 import com.gempukku.startrek.game.event.CardChangedZones;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.zone.MissionCards;
@@ -24,6 +25,7 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
     private static final float CARD_ON_STACK_PAUSE = 1f;
 
     private CardLookupSystem cardLookupSystem;
+    private SpecialActionLookupSystem specialActionLookupSystem;
     private SpawnSystem spawnSystem;
     private CardRenderingSystem cardRenderingSystem;
     private AnimationDirectorSystem animationDirectorSystem;
@@ -71,9 +73,16 @@ public class GameStateCardsTrackingSystem extends BaseSystem {
     private void effectInserted(int entityId) {
         Entity effectEntity = world.getEntity(entityId);
         EffectComponent effect = effectEntity.getComponent(EffectComponent.class);
-        CardZoneUtil.addEffectOnStack(effectEntity, effect, cardLookupSystem, spawnSystem, cardRenderingSystem,
-                orderComponentMapper);
-        animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(CARD_ON_STACK_PAUSE));
+        String specialAction = effect.getSpecialAction();
+        if (specialAction == null) {
+            CardZoneUtil.addEffectOnStack(effectEntity, effect, cardLookupSystem, spawnSystem, cardRenderingSystem,
+                    orderComponentMapper);
+            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(CARD_ON_STACK_PAUSE));
+        } else {
+            CardZoneUtil.addSpecialActionOnStack(effectEntity, specialAction, specialActionLookupSystem, spawnSystem,
+                    cardRenderingSystem, orderComponentMapper);
+            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(CARD_ON_STACK_PAUSE));
+        }
     }
 
     private void effectRemoved(int entityId) {

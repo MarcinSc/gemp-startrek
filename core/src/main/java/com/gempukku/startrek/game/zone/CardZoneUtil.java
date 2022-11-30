@@ -10,6 +10,7 @@ import com.gempukku.startrek.common.OrderComponent;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.EffectComponent;
 import com.gempukku.startrek.game.card.ServerCardReferenceComponent;
+import com.gempukku.startrek.game.card.SpecialActionLookupSystem;
 import com.gempukku.startrek.game.render.CardRenderingSystem;
 import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 import com.gempukku.startrek.game.template.CardTemplates;
@@ -110,6 +111,18 @@ public class CardZoneUtil {
         CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
         ObjectOnStackComponent objectOnStack = objectEntity.getComponent(ObjectOnStackComponent.class);
         Entity objectRepresentation = CardTemplates.createEffect(cardDefinition, objectOnStack.getAbilityIndex(), spawnSystem);
+        OrderComponent order = orderComponentMapper.create(objectRepresentation);
+        order.setValue(objectOnStack.getStackIndex());
+        objectRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(objectEntity.getId());
+        moveObjectToStack(objectEntity, objectRepresentation, cardRenderingSystem);
+    }
+
+    public static void addSpecialActionOnStack(Entity objectEntity, String specialAction,
+                                               SpecialActionLookupSystem specialActionLookupSystem, SpawnSystem spawnSystem,
+                                               CardRenderingSystem cardRenderingSystem,
+                                               ComponentMapper<OrderComponent> orderComponentMapper) {
+        ObjectOnStackComponent objectOnStack = objectEntity.getComponent(ObjectOnStackComponent.class);
+        Entity objectRepresentation = CardTemplates.createSpecialAction(specialAction, specialActionLookupSystem, spawnSystem);
         OrderComponent order = orderComponentMapper.create(objectRepresentation);
         order.setValue(objectOnStack.getStackIndex());
         objectRepresentation.getComponent(ServerCardReferenceComponent.class).setEntityId(objectEntity.getId());

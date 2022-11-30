@@ -15,11 +15,13 @@ import com.gempukku.startrek.card.CardLookupSystem;
 import com.gempukku.startrek.common.ServerStateChanged;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.EffectComponent;
+import com.gempukku.startrek.game.card.SpecialActionLookupSystem;
 import com.gempukku.startrek.game.template.CardTemplates;
 import com.gempukku.startrek.game.zone.ObjectOnStackComponent;
 
 public class StackTextHighlightingSystem extends BaseEntitySystem {
     private CardLookupSystem cardLookupSystem;
+    private SpecialActionLookupSystem specialActionLookupSystem;
     private CardRenderingSystem cardRenderingSystem;
     private TextSystem textSystem;
     private AnimationDirectorSystem animationDirectorSystem;
@@ -68,18 +70,34 @@ public class StackTextHighlightingSystem extends BaseEntitySystem {
                         EffectComponent effect = entityOnStack.getComponent(EffectComponent.class);
                         Entity renderedCard = cardRenderingSystem.getCommonZones().findRenderedCard(entityOnStack);
 
-                        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(effect.getSourceCardId());
-                        String cardText = CardTemplates.createStepEffectText(cardDefinition, abilityIndex, objectOnStack.getEffectStep());
+                        String specialAction = effect.getSpecialAction();
+                        if (specialAction == null) {
+                            CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(effect.getSourceCardId());
+                            String cardText = CardTemplates.createStepEffectText(cardDefinition, abilityIndex, objectOnStack.getEffectStep());
 
-                        int cardTextBlockIndex = 3;
+                            int cardTextBlockIndex = 3;
 
-                        // Text
-                        TextComponent text = renderedCard.getComponent(TextComponent.class);
-                        TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
-                        if (!cardText.equals(textBlock.getText())) {
-                            textBlock.setText(cardText);
-                            textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
-                            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+                            // Text
+                            TextComponent text = renderedCard.getComponent(TextComponent.class);
+                            TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
+                            if (!cardText.equals(textBlock.getText())) {
+                                textBlock.setText(cardText);
+                                textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
+                                animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+                            }
+                        } else {
+                            String cardText = CardTemplates.replaceSteps(specialActionLookupSystem.getText(specialAction), objectOnStack.getEffectStep());
+
+                            int cardTextBlockIndex = 2;
+
+                            // Text
+                            TextComponent text = renderedCard.getComponent(TextComponent.class);
+                            TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
+                            if (!cardText.equals(textBlock.getText())) {
+                                textBlock.setText(cardText);
+                                textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
+                                animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+                            }
                         }
                     }
                 }
