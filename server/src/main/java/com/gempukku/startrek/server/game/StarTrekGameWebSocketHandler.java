@@ -47,6 +47,10 @@ public class StarTrekGameWebSocketHandler extends TextWebSocketHandler implement
                 }
             });
 
+    public StarTrekGameHolder getGameHolder(String gameId) {
+        return games.get(gameId);
+    }
+
     @Override
     public String getPath() {
         return "/game";

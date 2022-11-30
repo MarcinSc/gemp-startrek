@@ -338,7 +338,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
         private void goOnMission() {
             Entity missionEntity = getServerEntity(selectionSystem.getSelectedEntities().iterator().next());
             CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(missionEntity);
-            if (cardDefinition.getMissionType() == MissionType.Planet) {
+            if (cardDefinition.getMissionType() == MissionType.Space) {
                 goToDecisionInterface(new ChooseShipsAttemptingMissionInterface(missionEntity));
             } else {
                 String missionId = missionEntity.getComponent(ServerEntityComponent.class).getEntityId();

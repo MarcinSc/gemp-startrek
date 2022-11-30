@@ -13,9 +13,6 @@ import com.gempukku.libgdx.network.id.ServerEntityIdComponent;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardData;
-import com.gempukku.startrek.card.CardDefinition;
-import com.gempukku.startrek.card.CardLookupSystem;
-import com.gempukku.startrek.card.CardType;
 import com.gempukku.startrek.decision.DecisionMade;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
 import com.gempukku.startrek.game.CardComponent;
@@ -25,6 +22,7 @@ import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
+import com.gempukku.startrek.test.TestUtil;
 import org.junit.BeforeClass;
 
 import java.util.function.Consumer;
@@ -72,16 +70,7 @@ public abstract class AbstractGameTest {
     }
 
     protected Entity createCard(String username, String cardId) {
-        CardLookupSystem cardLookupSystem = world.getSystem(CardLookupSystem.class);
-        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
-        if (cardDefinition == null)
-            throw new RuntimeException("Unable to locate card with id: " + cardId);
-
-        Entity cardEntity = spawnSystem.spawnEntity("game/card.template");
-        CardComponent card = cardEntity.getComponent(CardComponent.class);
-        card.setOwner(username);
-        card.setCardId(cardId);
-        return cardEntity;
+        return TestUtil.createCard(world, username, cardId);
     }
 
     protected String getCardId(Entity cardEntity) {
@@ -89,26 +78,7 @@ public abstract class AbstractGameTest {
     }
 
     protected StarTrekDeck createDeckWithMissions(String... cardIds) {
-        StarTrekDeck deck = new StarTrekDeck();
-        for (String cardId : cardIds) {
-            CardDefinition cardDefinition = cardData.getCardDefinition(cardId);
-            CardType type = cardDefinition.getType();
-            if (type == CardType.Dilemma)
-                deck.getDillemas().add(cardId);
-            else if (type == CardType.Mission)
-                deck.getMissions().add(cardId);
-            else
-                deck.getDrawDeck().add(cardId);
-        }
-
-        // Missions
-        deck.getMissions().add("1_170");
-        deck.getMissions().add("1_187");
-        deck.getMissions().add("1_188");
-        deck.getMissions().add("1_198");
-        deck.getMissions().add("1_199");
-
-        return deck;
+        return TestUtil.createDeckWithMissions(cardData, cardIds);
     }
 
     protected void setupGame(StarTrekDeck deck) {

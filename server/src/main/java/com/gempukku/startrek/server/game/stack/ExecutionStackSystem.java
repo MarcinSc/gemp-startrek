@@ -58,12 +58,6 @@ public class ExecutionStackSystem extends BaseEntitySystem {
         return world.getEntity(removedId);
     }
 
-    public Entity peekTopStackEntity() {
-        Array<Integer> entityIds = executionStack.getEntityIds();
-        Integer entityId = entityIds.get(entityIds.size - 1);
-        return world.getEntity(entityId);
-    }
-
     @Override
     protected void processSystem() {
 
