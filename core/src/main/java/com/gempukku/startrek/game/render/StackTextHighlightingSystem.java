@@ -49,59 +49,70 @@ public class StackTextHighlightingSystem extends BaseEntitySystem {
                 int abilityIndex = objectOnStack.getAbilityIndex();
                 if (abilityIndex >= 0) {
                     String objectType = objectOnStack.getType();
+                    Entity renderedCard = cardRenderingSystem.getCommonZones().findRenderedCard(entityOnStack);
                     if (objectType.equals("card")) {
-                        CardComponent card = entityOnStack.getComponent(CardComponent.class);
-                        Entity renderedCard = cardRenderingSystem.getCommonZones().findRenderedCard(entityOnStack);
-
-                        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(card.getCardId());
-                        String cardText = CardTemplates.createStepCardText(cardDefinition, abilityIndex, objectOnStack.getEffectStep());
-
-                        int cardTextBlockIndex = 3;
-
-                        // Text
-                        TextComponent text = renderedCard.getComponent(TextComponent.class);
-                        TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
-                        if (!cardText.equals(textBlock.getText())) {
-                            textBlock.setText(cardText);
-                            textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
-                            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
-                        }
+                        checkForCardTextUpdate(entityOnStack, objectOnStack, abilityIndex, renderedCard);
                     } else if (objectType.equals("effect")) {
                         EffectComponent effect = entityOnStack.getComponent(EffectComponent.class);
-                        Entity renderedCard = cardRenderingSystem.getCommonZones().findRenderedCard(entityOnStack);
 
                         String specialAction = effect.getSpecialAction();
                         if (specialAction == null) {
-                            CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(effect.getSourceCardId());
-                            String cardText = CardTemplates.createStepEffectText(cardDefinition, abilityIndex, objectOnStack.getEffectStep());
-
-                            int cardTextBlockIndex = 3;
-
-                            // Text
-                            TextComponent text = renderedCard.getComponent(TextComponent.class);
-                            TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
-                            if (!cardText.equals(textBlock.getText())) {
-                                textBlock.setText(cardText);
-                                textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
-                                animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
-                            }
+                            checkForEffectTextUpdate(objectOnStack, abilityIndex, renderedCard, effect);
                         } else {
-                            String cardText = CardTemplates.replaceSteps(specialActionLookupSystem.getText(specialAction), objectOnStack.getEffectStep());
-
-                            int cardTextBlockIndex = 2;
-
-                            // Text
-                            TextComponent text = renderedCard.getComponent(TextComponent.class);
-                            TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
-                            if (!cardText.equals(textBlock.getText())) {
-                                textBlock.setText(cardText);
-                                textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
-                                animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
-                            }
+                            checkForSpecialActionTextUpdate(objectOnStack, renderedCard, specialAction);
                         }
                     }
                 }
             }
+        }
+    }
+
+    private void checkForSpecialActionTextUpdate(ObjectOnStackComponent objectOnStack, Entity renderedCard, String specialAction) {
+        String cardText = CardTemplates.replaceSteps(specialActionLookupSystem.getText(specialAction), objectOnStack.getEffectStep());
+
+        int cardTextBlockIndex = 2;
+
+        // Text
+        TextComponent text = renderedCard.getComponent(TextComponent.class);
+        TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
+        if (!cardText.equals(textBlock.getText())) {
+            textBlock.setText(cardText);
+            textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
+            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+        }
+    }
+
+    private void checkForEffectTextUpdate(ObjectOnStackComponent objectOnStack, int abilityIndex, Entity renderedCard, EffectComponent effect) {
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(effect.getSourceCardId());
+        String cardText = CardTemplates.createStepEffectText(cardDefinition, abilityIndex, objectOnStack.getEffectStep());
+
+        int cardTextBlockIndex = 3;
+
+        // Text
+        TextComponent text = renderedCard.getComponent(TextComponent.class);
+        TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
+        if (!cardText.equals(textBlock.getText())) {
+            textBlock.setText(cardText);
+            textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
+            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
+        }
+    }
+
+    private void checkForCardTextUpdate(Entity entityOnStack, ObjectOnStackComponent objectOnStack, int abilityIndex, Entity renderedCard) {
+        CardComponent card = entityOnStack.getComponent(CardComponent.class);
+
+        CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(card.getCardId());
+        String cardText = CardTemplates.createStepCardText(cardDefinition, abilityIndex, objectOnStack.getEffectStep());
+
+        int cardTextBlockIndex = 3;
+
+        // Text
+        TextComponent text = renderedCard.getComponent(TextComponent.class);
+        TextBlock textBlock = text.getTextBlocks().get(cardTextBlockIndex);
+        if (!cardText.equals(textBlock.getText())) {
+            textBlock.setText(cardText);
+            textSystem.updateText(renderedCard.getId(), cardTextBlockIndex);
+            animationDirectorSystem.enqueueAnimator("Server", new WaitAnimator(3f));
         }
     }
 }
