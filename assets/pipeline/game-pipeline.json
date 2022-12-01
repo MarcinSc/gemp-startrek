@@ -24,6 +24,22 @@
               "type": "Model_Shader",
               "nodes": [
                 {
+                  "id": "044430089ab94b2280202601f025bc61",
+                  "type": "Property",
+                  "x": 250.0,
+                  "y": 320.0,
+                  "data": {
+                    "name": "Alpha",
+                    "type": "Float"
+                  }
+                },
+                {
+                  "id": "4a57bbeeff0b4de997b8243dd41c1c93",
+                  "type": "Multiply",
+                  "x": 488.0,
+                  "y": 317.0
+                },
+                {
                   "id": "4de12c975d8c41bda06804d7e60ebac8",
                   "type": "Dither",
                   "x": 767.0,
@@ -96,6 +112,18 @@
               ],
               "connections": [
                 {
+                  "fromNode": "044430089ab94b2280202601f025bc61",
+                  "fromField": "value",
+                  "toNode": "4a57bbeeff0b4de997b8243dd41c1c93",
+                  "toField": "inputs"
+                },
+                {
+                  "fromNode": "4a57bbeeff0b4de997b8243dd41c1c93",
+                  "fromField": "output",
+                  "toNode": "4de12c975d8c41bda06804d7e60ebac8",
+                  "toField": "input"
+                },
+                {
                   "fromNode": "4de12c975d8c41bda06804d7e60ebac8",
                   "fromField": "output",
                   "toNode": "end",
@@ -104,8 +132,8 @@
                 {
                   "fromNode": "597712d083914f46b2a6c1eaff330ac5",
                   "fromField": "a",
-                  "toNode": "4de12c975d8c41bda06804d7e60ebac8",
-                  "toField": "input"
+                  "toNode": "4a57bbeeff0b4de997b8243dd41c1c93",
+                  "toField": "inputs"
                 },
                 {
                   "fromNode": "597712d083914f46b2a6c1eaff330ac5",
@@ -170,6 +198,14 @@
                   "data": {
                     "x": 0.0,
                     "y": 0.0
+                  }
+                },
+                {
+                  "name": "Alpha",
+                  "type": "Float",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 1.0
                   }
                 }
               ],
@@ -488,7 +524,7 @@
       "id": "6c8280c9b68246bdb43ccdfbeff3d4f1",
       "type": "Property",
       "x": 97.0,
-      "y": 941.0000610351562,
+      "y": 941.0,
       "data": {
         "name": "Main Camera",
         "type": "Camera"
@@ -498,7 +534,7 @@
       "id": "817575ba34274f639e10ea228e986544",
       "type": "RenderSize",
       "x": 195.0,
-      "y": 92.00006103515625
+      "y": 92.0
     },
     {
       "id": "8497da9e51cb40cda9d20a7290b24251",
@@ -529,6 +565,22 @@
                   "type": "Sampler2D",
                   "x": 263.0,
                   "y": 454.0
+                },
+                {
+                  "id": "61c86d9c40a54d7eab3afe98b06e4b73",
+                  "type": "Multiply",
+                  "x": 507.0,
+                  "y": 311.0
+                },
+                {
+                  "id": "65d56886768d4da7ab4066ebf0e4b1ae",
+                  "type": "Property",
+                  "x": 260.0,
+                  "y": 314.0000305175781,
+                  "data": {
+                    "name": "Alpha",
+                    "type": "Float"
+                  }
                 },
                 {
                   "id": "74cd53801c744b06905542c807061cc1",
@@ -596,14 +648,26 @@
                 {
                   "fromNode": "597712d083914f46b2a6c1eaff330ac5",
                   "fromField": "a",
-                  "toNode": "4de12c975d8c41bda06804d7e60ebac8",
-                  "toField": "input"
+                  "toNode": "61c86d9c40a54d7eab3afe98b06e4b73",
+                  "toField": "inputs"
                 },
                 {
                   "fromNode": "597712d083914f46b2a6c1eaff330ac5",
                   "fromField": "color",
                   "toNode": "end",
                   "toField": "color"
+                },
+                {
+                  "fromNode": "61c86d9c40a54d7eab3afe98b06e4b73",
+                  "fromField": "output",
+                  "toNode": "4de12c975d8c41bda06804d7e60ebac8",
+                  "toField": "input"
+                },
+                {
+                  "fromNode": "65d56886768d4da7ab4066ebf0e4b1ae",
+                  "fromField": "value",
+                  "toNode": "61c86d9c40a54d7eab3afe98b06e4b73",
+                  "toField": "inputs"
                 },
                 {
                   "fromNode": "74cd53801c744b06905542c807061cc1",
@@ -662,6 +726,14 @@
                   "data": {
                     "x": 0.0,
                     "y": 0.0
+                  }
+                },
+                {
+                  "name": "Alpha",
+                  "type": "Float",
+                  "location": "Attribute",
+                  "data": {
+                    "x": 1.0
                   }
                 }
               ],
@@ -955,7 +1027,7 @@
       "id": "e24ec51e09a44f568fd0390574e05876",
       "type": "UIRenderer",
       "x": 453.0,
-      "y": 138.00006103515625,
+      "y": 138.0,
       "data": {
         "id": "Main"
       }

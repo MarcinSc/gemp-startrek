@@ -28,6 +28,7 @@ public class CardBoxesLayout {
     private static final int FULL_STAT2_TYPE_INDEX = 6;
     private static final int FULL_STAT3_TYPE_INDEX = 7;
 
+    private static final int FULL_UNAFFILIATED_MISSION_TYPE_INDEX = 2;
     private static final int FULL_UNAFFILIATED_COST_INDEX = 1;
     private static final int FULL_UNAFFILIATED_TYPE_INDEX = 2;
     private static final int FULL_UNAFFILIATED_TEXT_INDEX = 3;
@@ -204,6 +205,17 @@ public class CardBoxesLayout {
         return -1;
     }
 
+    public static int getDilemmaTypeTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
+        if (isSmall(cardZone)) {
+            if (isDilemma(cardDefinition))
+                return SMALL_MISSION_TYPE_INDEX;
+        } else {
+            if (isDilemma(cardDefinition))
+                return FULL_UNAFFILIATED_MISSION_TYPE_INDEX;
+        }
+        return -1;
+    }
+
     public static int getAffiliationTextureIndex(CardDefinition cardDefinition, CardZone cardZone) {
         if (isSmall(cardZone) && isAffiliated(cardDefinition))
             return SMALL_AFFILIATION_INDEX;
@@ -229,13 +241,19 @@ public class CardBoxesLayout {
         return cardDefinition.getType() == CardType.Mission;
     }
 
+    private static boolean isDilemma(CardDefinition cardDefinition) {
+        return cardDefinition.getType() == CardType.Dilemma;
+    }
+
     private static boolean isAffiliated(CardDefinition cardDefinition) {
         return isPersonnel(cardDefinition) || isShip(cardDefinition);
     }
 
     private static boolean hasCost(CardDefinition cardDefinition) {
+        CardType cardType = cardDefinition.getType();
         return isPersonnel(cardDefinition) || isShip(cardDefinition)
-                || cardDefinition.getType() == CardType.Equipment || cardDefinition.getType() == CardType.Event;
+                || cardType == CardType.Equipment || cardType == CardType.Event
+                || cardType == CardType.Dilemma;
     }
 
     private static boolean isPersonnel(CardDefinition cardDefinition) {

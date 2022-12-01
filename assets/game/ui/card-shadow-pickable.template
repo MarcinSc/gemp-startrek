@@ -45,6 +45,7 @@
     "shape": "square",
     "positionDataType": "position",
     "pickingMask": [
+      "dropTarget"
     ]
   }
 }

@@ -24,8 +24,12 @@
   "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent": {
     "sprites": [
       {
-        "spriteBatchName": "ditherTexture",
+        "spriteBatchName": "uiDitherTexture",
         "properties": {
+          "Alpha": {
+            "class": "java.lang.Float",
+            "value": 0.6
+          },
           "UV": {
             "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
           },

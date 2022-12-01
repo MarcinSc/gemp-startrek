@@ -44,18 +44,16 @@ public class MissionAttemptTest extends AbstractGameTest {
 
     @Test
     public void processPlanetMissionAttempt() {
-        setupGame(createDeckWithMissions("1_8"));
+        setupGame(createDeckWithMissions("1_8", "1_4"));
 
         Entity personnel1 = createCard("test1", "1_207");
         Entity personnel2 = createCard("test1", "1_207");
-//        Entity dilemma = createCard("test2", "1_4");
 
         ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
         MissionOperations missionOperations = world.getSystem(MissionOperations.class);
         Entity planetMission = missionOperations.findMission("test1", 4);
         zoneOperations.moveFromCurrentZoneToMission(personnel1, planetMission, false);
         zoneOperations.moveFromCurrentZoneToMission(personnel2, planetMission, false);
-//        zoneOperations.setupCardToTopOfDilemmaPile(dilemma, false);
 
         // Pass the play or draw
         sendDecisionSuccessfully("test1",
@@ -67,7 +65,7 @@ public class MissionAttemptTest extends AbstractGameTest {
 
         sendDecisionSuccessfully("test2",
                 "dilemmaStack", "1_8",
-                "discardedDilemmas", "");
+                "discardedDilemmas", "1_4");
 
         assertTrue(personnel1.getComponent(CardInPlayComponent.class).isStopped());
         assertTrue(personnel2.getComponent(CardInPlayComponent.class).isStopped());

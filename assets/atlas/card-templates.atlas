@@ -13,7 +13,7 @@ bajoran-template
   index: -1
 cardback
   rotate: false
-  xy: 1478, 532
+  xy: 2216, 1563
   size: 357, 499
   orig: 357, 499
   offset: 0, 0
@@ -25,86 +25,93 @@ cardback-small
   orig: 736, 512
   offset: 0, 0
   index: -1
-equipment-template
+dilemma-template
   rotate: false
   xy: 2, 1547
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
-event-template
+equipment-template
   rotate: false
   xy: 740, 2578
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
-federation-template
+event-template
   rotate: false
   xy: 2, 516
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
-full-selected
+federation-template
   rotate: false
   xy: 740, 1547
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
-full-selection
+full-selected
   rotate: false
   xy: 1478, 2578
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
-interrupt-template
+full-selection
   rotate: false
   xy: 740, 516
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
-mission-template-small
-  rotate: false
-  xy: 2216, 3095
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-nonAligned-template
+interrupt-template
   rotate: false
   xy: 1478, 1547
   size: 736, 1029
   orig: 736, 1029
   offset: 0, 0
   index: -1
-noun-template-small
+mission-template-small
   rotate: false
   xy: 1478, 1033
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
+nonAligned-template
+  rotate: false
+  xy: 2216, 2578
+  size: 736, 1029
+  orig: 736, 1029
+  offset: 0, 0
+  index: -1
+noun-template-small
+  rotate: false
+  xy: 2216, 2064
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
 small-selected
   rotate: false
-  xy: 740, 2
+  xy: 2954, 3095
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 small-selection
   rotate: false
-  xy: 2216, 2581
+  xy: 740, 2
   size: 512, 512
   orig: 512, 512
   offset: 0, 0
   index: -1
 verb-template-small
   rotate: false
-  xy: 2730, 3095
+  xy: 1478, 519
   size: 512, 512
   orig: 512, 512
   offset: 0, 0

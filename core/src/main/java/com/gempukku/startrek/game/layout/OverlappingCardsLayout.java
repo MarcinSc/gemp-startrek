@@ -2,76 +2,43 @@ package com.gempukku.startrek.game.layout;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.utils.Array;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextHorizontalAlignment;
 import com.gempukku.libgdx.lib.graph.artemis.text.TextVerticalAlignment;
-import com.gempukku.libgdx.lib.graph.artemis.text.layout.GlyphOffsetLine;
-import com.gempukku.libgdx.lib.graph.artemis.text.layout.GlyphOffsetText;
-import com.gempukku.libgdx.lib.graph.artemis.text.layout.GlyphOffseter;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyle;
-import com.gempukku.libgdx.lib.graph.artemis.text.parser.TextStyleConstants;
 
 public class OverlappingCardsLayout {
 
     private static final Matrix4 tmpMatrix = new Matrix4();
 
-    public static void layoutCards(TransformSystem transformSystem, GlyphOffseter glyphOffseter,
-                                   Matrix4 startupTransform, CardZoneParsedText missionParsedText,
-                                   float maximumScale, float availableWidth, float availableHeight) {
-        GlyphOffsetText missionLayout = layoutMissionLines(glyphOffseter, missionParsedText,
-                maximumScale, availableWidth, availableHeight);
-        float scale = Math.min(maximumScale, calculateScale(missionLayout, availableWidth, availableHeight));
+    public static void layoutCards(TransformSystem transformSystem, Matrix4 startupTransform,
+                                   Array<Entity> cards, float cardWidth, float cardHeight, float scale,
+                                   float minCardOverlapPerc, float availableWidth, float availableHeight) {
 
-        // Scale the cards
-        startupTransform.scale(scale, 1f, scale);
+        int cardCount = cards.size;
 
-        float startY = TextVerticalAlignment.center.apply(missionLayout.getTextHeight(), availableHeight) - availableHeight / 2f;
-        for (int lineIndex = 0; lineIndex < missionLayout.getLineCount(); lineIndex++) {
-            GlyphOffsetLine line = missionLayout.getLine(lineIndex);
-            float lineWidth = line.getWidth();
-            float startX = TextHorizontalAlignment.center.apply(lineWidth, availableWidth) - availableWidth / 2f;
-            for (int glyphIndex = 0; glyphIndex < line.getGlyphCount(); glyphIndex++) {
-                int indexInText = line.getStartIndex() + glyphIndex;
-                if (!missionParsedText.isWhitespace(indexInText)) {
-                    float glyphScale = getScale(missionParsedText.getTextStyle(indexInText));
-                    float glyphWidth = missionParsedText.getCardWidth() * glyphScale;
-                    float translateX = startX + line.getGlyphXAdvance(glyphIndex) + glyphWidth / 2f;
-                    float translateY = 0;
-
-                    Entity cardEntity = missionParsedText.getEntity(indexInText);
-                    tmpMatrix.set(startupTransform);
-                    tmpMatrix.translate(translateX, translateY, startY);
-                    tmpMatrix.rotate(0, 0, 1, 2f);
-                    tmpMatrix.scl(glyphScale);
-
-                    transformSystem.setTransform(cardEntity, tmpMatrix);
-                }
-            }
-            startY += line.getHeight();
+        float cardShift = cardWidth * minCardOverlapPerc;
+        if (cardCount > 1) {
+            cardShift = Math.min(cardShift, (availableWidth - cardWidth) / (cardCount - 1));
         }
 
-        missionLayout.dispose();
-    }
+        float usedWidth = cardWidth + cardShift * (cards.size - 1);
 
-    private static float getScale(TextStyle textStyle) {
-        Float scale = (Float) textStyle.getAttribute(TextStyleConstants.GlyphScale);
-        return (scale != null) ? scale : 1f;
-    }
+        float startY = TextVerticalAlignment.center.apply(cardHeight, availableHeight) - availableHeight / 2f;
+        float startX = TextHorizontalAlignment.center.apply(usedWidth, availableWidth) - availableWidth / 2f;
 
-    private static GlyphOffsetText layoutMissionLines(GlyphOffseter glyphOffseter, CardZoneParsedText missionParsedText,
-                                                      float maximumScale, float availableWidth, float availableHeight) {
-        float scale = maximumScale;
-        while (true) {
-            float scaledWidth = availableWidth / scale;
+        startY += cardHeight / 2f;
+        startX += cardWidth / 2f;
 
-            GlyphOffsetText offsetText = glyphOffseter.offsetText(missionParsedText, scaledWidth, true);
-            if (offsetText.getTextWidth() * scale <= availableWidth && offsetText.getTextHeight() * scale <= availableHeight)
-                return offsetText;
-            scale /= 1.05f;
+        for (Entity card : cards) {
+            tmpMatrix.set(startupTransform);
+            tmpMatrix.translate(startX, 0, startY);
+            tmpMatrix.rotate(0, 0, 1, -4f);
+            tmpMatrix.scl(scale, 1, scale);
+
+            transformSystem.setTransform(card, tmpMatrix);
+
+            startX += cardShift;
         }
-    }
-
-    private static float calculateScale(GlyphOffsetText offsetText, float width, float height) {
-        return Math.min(width / offsetText.getTextWidth(), height / offsetText.getTextHeight());
     }
 }

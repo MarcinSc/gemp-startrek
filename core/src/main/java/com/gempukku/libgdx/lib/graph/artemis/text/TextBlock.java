@@ -27,6 +27,10 @@ public class TextBlock {
         return spriteBatchName;
     }
 
+    public void setSpriteBatchName(String spriteBatchName) {
+        this.spriteBatchName = spriteBatchName;
+    }
+
     public Matrix4 getTransform() {
         return transform;
     }

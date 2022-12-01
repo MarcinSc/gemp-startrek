@@ -160,6 +160,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new ClientExecuteOrdersDecisionHandler(),
                 new ClientMandatoryTriggerActionsDecisionHandler(),
                 new ClientOptionalTriggerActionsDecisionHandler(),
+                new ClientSetupDilemmasDecisionHandler(),
 
                 new UserInputSystem(1),
 

@@ -49,8 +49,6 @@ public class TestSetup {
         try {
             createTestUsers();
 
-            createGame(TestUtil.createDeckWithMissions(cardData));
-
             setupScenario();
 
             pairPlayers();
@@ -60,16 +58,16 @@ public class TestSetup {
     }
 
     private void setupScenario() {
-        Entity personnel = createCard("test1", "1_207");
-        Entity dilemma1 = createCard("test2", "1_4");
-        Entity dilemma2 = createCard("test2", "1_8");
+        setupGame(createDeckWithMissions("1_8", "1_4"));
+
+        Entity personnel1 = createCard("test1", "1_207");
+        Entity personnel2 = createCard("test1", "1_207");
 
         ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
         MissionOperations missionOperations = world.getSystem(MissionOperations.class);
         Entity planetMission = missionOperations.findMission("test1", 4);
-        zoneOperations.moveFromCurrentZoneToMission(personnel, planetMission, false);
-        zoneOperations.setupCardToTopOfDilemmaPile(dilemma2, false);
-        zoneOperations.setupCardToTopOfDilemmaPile(dilemma1, false);
+        zoneOperations.moveFromCurrentZoneToMission(personnel1, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(personnel2, planetMission, false);
 
         // Pass the play or draw
         sendDecisionSuccessfully("test1",
@@ -78,6 +76,10 @@ public class TestSetup {
         sendDecisionSuccessfully("test1",
                 "action", "attemptPlanetMission",
                 "missionId", getCardId(planetMission));
+    }
+
+    private StarTrekDeck createDeckWithMissions(String... cards) {
+        return TestUtil.createDeckWithMissions(cardData, cards);
     }
 
     private Entity createCard(String username, String cardId) {
@@ -106,11 +108,11 @@ public class TestSetup {
         }
     }
 
-    private void createGame(StarTrekDeck deck) {
-        createGame(deck, deck);
+    private void setupGame(StarTrekDeck deck) {
+        setupGame(deck, deck);
     }
 
-    private void createGame(StarTrekDeck deck1, StarTrekDeck deck2) {
+    private void setupGame(StarTrekDeck deck1, StarTrekDeck deck2) {
         Array<PlayerGameInfo> playersInfo = new Array<>();
         playersInfo.add(new PlayerGameInfo("test1", "test1", "red-shirt-male",
                 deck1));

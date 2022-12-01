@@ -48,6 +48,14 @@ public class CardTemplates {
                     setRegion(cardDefinition.getMissionType().name());
         }
 
+        int dilemmaTypeIndex = CardBoxesLayout.getDilemmaTypeTextureIndex(cardDefinition, cardZone);
+        if (dilemmaTypeIndex > -1) {
+            if (cardDefinition.getDilemmaType() != DilemmaType.Dual)
+                CardBoxesLayout.getTextureReference(renderedEntity, dilemmaTypeIndex).
+                        setRegion(cardDefinition.getDilemmaType().name());
+        }
+
+
         int affiliationTextureIndex = CardBoxesLayout.getAffiliationTextureIndex(cardDefinition, cardZone);
         if (affiliationTextureIndex > -1) {
             CardBoxesLayout.getTextureReference(renderedEntity, affiliationTextureIndex).
@@ -471,6 +479,8 @@ public class CardTemplates {
             return "event-template";
         else if (cardType == CardType.Interrupt)
             return "interrupt-template";
+        else if (cardType == CardType.Dilemma)
+            return "dilemma-template";
         throw new GdxRuntimeException("Unable to resolve unaffiliated template: " + cardType);
     }
 
