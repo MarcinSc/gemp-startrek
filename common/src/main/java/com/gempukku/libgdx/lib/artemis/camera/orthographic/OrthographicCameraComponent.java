@@ -1,21 +1,28 @@
 package com.gempukku.libgdx.lib.artemis.camera.orthographic;
 
 import com.artemis.Component;
+import com.badlogic.gdx.math.Vector3;
 
 public class OrthographicCameraComponent extends Component {
     private String name;
-    private boolean yDown;
     private float near;
     private float far;
+    private Vector3 position = new Vector3(0, 0, 0);
+    private Vector3 direction = new Vector3(0, 0, -1);
+    private Vector3 up = new Vector3(0, 1, 0);
 
     private float height;
 
-    public boolean isYDown() {
-        return yDown;
+    public Vector3 getPosition() {
+        return position;
     }
 
-    public void setYDown(boolean yDown) {
-        this.yDown = yDown;
+    public Vector3 getDirection() {
+        return direction;
+    }
+
+    public Vector3 getUp() {
+        return up;
     }
 
     public String getName() {

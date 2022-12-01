@@ -68,14 +68,9 @@ public class OrthographicCameraController implements CameraController {
             float viewportWidth = aspectRatio * orthographicCamera.getHeight();
             float viewportHeight = orthographicCamera.getHeight();
 
-            if (orthographicCamera.isYDown()) {
-                camera.up.set(0, -1, 0);
-                camera.direction.set(0, 0, 1);
-            } else {
-                camera.up.set(0, 1, 0);
-                camera.direction.set(0, 0, -1);
-            }
-            camera.position.set(0, 0, 0);
+            camera.position.set(orthographicCamera.getPosition());
+            camera.up.set(orthographicCamera.getUp());
+            camera.direction.set(orthographicCamera.getDirection());
 
             camera.viewportWidth = viewportWidth;
             camera.viewportHeight = viewportHeight;

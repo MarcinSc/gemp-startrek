@@ -82,15 +82,13 @@ public class PlayerInfoRenderingSystem extends BaseEntitySystem {
             PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(player.getName());
 
             float scale = 0.2f;
-            float yDistance = 0.2f;
-            float yTranslate = playerPosition == PlayerPosition.Lower ? yDistance : -yDistance;
+            float zDistance = 0.2f;
+            float zTranslate = playerPosition == PlayerPosition.Lower ? zDistance : -zDistance;
 
             transformSystem.setTransform(nameplateEntity,
                     new Matrix4()
-                            .translate(-0.8f, yTranslate, -5f)
-                            .scl(scale, -scale, 1));
-            //.translate(-6.2f, -0.5f, zTranslate)
-//                            .scl(100f));
+                            .translate(-0.8f, 99f, zTranslate)
+                            .scl(scale, 1, scale));
 
             addedPlayers++;
         }
