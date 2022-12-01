@@ -29,8 +29,8 @@ public class PlayerInfoRenderingSystem extends BaseEntitySystem {
     private TextSystem textSystem;
 
     private int addedPlayers = 0;
-    private ObjectMap<String, Integer> displayedPoints = new ObjectMap<>();
-    private ObjectMap<String, Entity> nameplates = new ObjectMap<>();
+    private final ObjectMap<String, Integer> displayedPoints = new ObjectMap<>();
+    private final ObjectMap<String, Entity> nameplates = new ObjectMap<>();
 
     public PlayerInfoRenderingSystem() {
         super(Aspect.all(GamePlayerComponent.class));
@@ -61,7 +61,7 @@ public class PlayerInfoRenderingSystem extends BaseEntitySystem {
     }
 
     private void createPlayerNameplates() {
-        Camera camera = cameraSystem.getCamera();
+        Camera camera = cameraSystem.getCamera("main");
 
         IntBag playerIds = getSubscription().getEntities();
         for (int i = 0; i < playerIds.size(); i++) {

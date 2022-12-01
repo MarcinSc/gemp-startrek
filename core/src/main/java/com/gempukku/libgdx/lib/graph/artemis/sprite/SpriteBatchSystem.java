@@ -5,6 +5,7 @@ import com.artemis.BaseEntitySystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.annotations.Wire;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.graph.pipeline.producer.rendering.producer.WritablePropertyContainer;
@@ -36,6 +37,8 @@ public class SpriteBatchSystem extends BaseEntitySystem {
 
     private final ObjectMap<String, SpriteBatchModel> spriteBatchMap = new ObjectMap<>();
 
+    private Array<Entity> newSpriteBatchEntities = new Array<>();
+
     public SpriteBatchSystem() {
         super(Aspect.all(SpriteBatchComponent.class));
     }
@@ -50,19 +53,7 @@ public class SpriteBatchSystem extends BaseEntitySystem {
 
     @Override
     protected void inserted(int entityId) {
-        SpriteBatchComponent spriteSystem = spriteBatchComponentMapper.get(entityId);
-        GraphModels graphModels = pipelineRendererSystem.getPluginData(GraphModels.class);
-
-        String tag = spriteSystem.getRenderTag();
-        SpriteBatchModel spriteModel = createSpriteBatchModel(spriteSystem, graphModels, tag);
-
-        Entity entity = world.getEntity(entityId);
-        WritablePropertyContainer propertyContainer = spriteModel.getPropertyContainer();
-        for (ObjectMap.Entry<String, Object> property : spriteSystem.getProperties()) {
-            propertyContainer.setValue(property.key, evaluatePropertySystem.evaluateProperty(entity, property.value, Object.class));
-        }
-
-        spriteBatchMap.put(spriteSystem.getName(), spriteModel);
+        newSpriteBatchEntities.add(world.getEntity(entityId));
     }
 
     private SpriteBatchModel createSpriteBatchModel(SpriteBatchComponent spriteBatch, GraphModels graphModels, String tag) {
@@ -112,7 +103,21 @@ public class SpriteBatchSystem extends BaseEntitySystem {
 
     @Override
     protected void processSystem() {
+        for (Entity newSpriteEntity : newSpriteBatchEntities) {
+            SpriteBatchComponent spriteSystem = spriteBatchComponentMapper.get(newSpriteEntity);
+            GraphModels graphModels = pipelineRendererSystem.getPluginData(GraphModels.class);
 
+            String tag = spriteSystem.getRenderTag();
+            SpriteBatchModel spriteModel = createSpriteBatchModel(spriteSystem, graphModels, tag);
+
+            WritablePropertyContainer propertyContainer = spriteModel.getPropertyContainer();
+            for (ObjectMap.Entry<String, Object> property : spriteSystem.getProperties()) {
+                propertyContainer.setValue(property.key, evaluatePropertySystem.evaluateProperty(newSpriteEntity, property.value, Object.class));
+            }
+
+            spriteBatchMap.put(spriteSystem.getName(), spriteModel);
+        }
+        newSpriteBatchEntities.clear();
     }
 
     @Override

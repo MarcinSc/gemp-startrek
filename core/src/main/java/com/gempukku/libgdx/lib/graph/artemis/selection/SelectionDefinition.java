@@ -15,5 +15,7 @@ public interface SelectionDefinition {
 
     String getMask();
 
+    String getCameraName();
+
     Predicate<Entity> getEntityPredicate();
 }

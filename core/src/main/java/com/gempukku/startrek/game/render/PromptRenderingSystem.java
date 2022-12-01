@@ -24,7 +24,7 @@ public class PromptRenderingSystem extends BaseSystem {
             TextComponent text = promptEntity.getComponent(TextComponent.class);
             text.getTextBlocks().get(0).setText(prompt);
 
-            Camera camera = cameraSystem.getCamera();
+            Camera camera = cameraSystem.getCamera("main");
 
             transformSystem.setTransform(promptEntity,
                     new Matrix4()

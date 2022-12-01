@@ -32,6 +32,8 @@ public class SelectionState implements SelectionDefinition {
     private final ObjectSet<Entity> markedEntities = new ObjectSet<>();
     private final String selectionMask = "Selection";
 
+    private String cameraName = "main";
+
     public SelectionState(World world, Entity userInputStateEntity, CardFilter cardFilter,
                           SelectionCallback selectionCallback) {
         this(world, userInputStateEntity, cardFilter, selectionCallback, 1);
@@ -58,6 +60,15 @@ public class SelectionState implements SelectionDefinition {
         this.memory = memory;
         this.selectionCallback = selectionCallback;
         this.maxSelected = maxSelected;
+    }
+
+    @Override
+    public String getCameraName() {
+        return cameraName;
+    }
+
+    public void setCameraName(String cameraName) {
+        this.cameraName = cameraName;
     }
 
     @Override

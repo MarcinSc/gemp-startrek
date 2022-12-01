@@ -5,6 +5,7 @@ import com.artemis.BaseEntitySystem;
 import com.artemis.Entity;
 import com.artemis.annotations.Wire;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.gempukku.libgdx.graph.pipeline.PipelineLoader;
 import com.gempukku.libgdx.graph.pipeline.PipelineRenderer;
 import com.gempukku.libgdx.graph.pipeline.RenderOutputs;
@@ -24,6 +25,8 @@ public class PipelineRendererSystem extends BaseEntitySystem {
 
     private Entity renderingEntity;
 
+    private boolean initializedRenderer;
+
     public PipelineRendererSystem() {
         super(Aspect.all(PipelineRendererComponent.class));
     }
@@ -31,21 +34,28 @@ public class PipelineRendererSystem extends BaseEntitySystem {
     @Override
     protected void inserted(int entityId) {
         renderingEntity = world.getEntity(entityId);
-
-        PipelineRendererComponent pipelineRendererComponent = renderingEntity.getComponent(PipelineRendererComponent.class);
-        pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.internal(pipelineRendererComponent.getPipelinePath()), simpleTimeProvider);
-        String cameraProperty = pipelineRendererComponent.getCameraProperty();
-        if (cameraProperty != null) {
-            pipelineRenderer.setPipelineProperty(cameraProperty, cameraSystem.getCamera());
-        }
     }
 
     public void setPipelineProperty(String name, Object value) {
+        if (!initializedRenderer)
+            throw new GdxRuntimeException("Renderer not yet initialized");
+
         pipelineRenderer.setPipelineProperty(name, value);
     }
 
     @Override
     protected void processSystem() {
+        if (!initializedRenderer) {
+            PipelineRendererComponent pipelineRendererComponent = renderingEntity.getComponent(PipelineRendererComponent.class);
+            pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.internal(pipelineRendererComponent.getPipelinePath()), simpleTimeProvider);
+            String cameraProperty = pipelineRendererComponent.getCameraProperty();
+            if (cameraProperty != null) {
+                pipelineRenderer.setPipelineProperty(cameraProperty, cameraSystem.getCamera(pipelineRendererComponent.getCameraName()));
+            }
+
+            initializedRenderer = true;
+        }
+
         TimeProvider timeProvider = timeKeepingSystem.getTimeProvider(renderingEntity);
         simpleTimeProvider.setDelta(timeProvider.getDelta());
         simpleTimeProvider.setTime(timeProvider.getTime());
@@ -53,6 +63,8 @@ public class PipelineRendererSystem extends BaseEntitySystem {
     }
 
     public <T> T getPluginData(Class<T> clazz) {
+        if (!initializedRenderer)
+            throw new GdxRuntimeException("Renderer not yet initialized");
         return pipelineRenderer.getPluginData(clazz);
     }
 

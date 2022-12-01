@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.*;
-import com.gempukku.startrek.game.config.ImageLoadNotifier;
 
 public class SlotLoadingTextureHandler implements TextureHandler, Disposable {
     private int pageWidth;

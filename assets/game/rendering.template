@@ -1,7 +1,8 @@
 {
   "com.gempukku.libgdx.lib.graph.artemis.renderer.PipelineRendererComponent": {
     "pipelinePath": "pipeline/game-pipeline.json",
-    "cameraProperty": "Main Camera"
+    "cameraProperty": "Main Camera",
+    "cameraName": "main"
   },
   "com.gempukku.libgdx.lib.graph.artemis.ui.StageComponent": {
     "skinPath": "skin/startrek/startrek.json",

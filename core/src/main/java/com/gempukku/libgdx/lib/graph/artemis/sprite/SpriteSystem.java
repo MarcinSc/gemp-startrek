@@ -34,6 +34,8 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
 
     private final Matrix4 tempMatrix = new Matrix4();
 
+    private Array<Entity> newSpriteEntities = new Array<>();
+
     public SpriteSystem() {
         super(Aspect.all(SpriteComponent.class));
     }
@@ -96,9 +98,7 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
     @Override
     protected void inserted(int entityId) {
         Entity spriteEntity = world.getEntity(entityId);
-        SpriteComponent sprite = spriteComponentMapper.get(entityId);
-
-        addSprites(entityId, spriteEntity, sprite);
+        newSpriteEntities.add(spriteEntity);
     }
 
     private void addSprites(int entityId, Entity spriteEntity, SpriteComponent sprite) {
@@ -130,7 +130,6 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
         }
     }
 
-
     @Override
     protected void removed(int entityId) {
         Array<SpriteDefinitionAdapter> sprites = spriteMap.remove(entityId);
@@ -141,7 +140,12 @@ public class SpriteSystem extends BaseEntitySystem implements PropertyEvaluator 
 
     @Override
     protected void processSystem() {
-
+        for (Entity newSpriteEntity : newSpriteEntities) {
+            SpriteComponent sprite = spriteComponentMapper.get(newSpriteEntity);
+            if (sprite != null)
+                addSprites(newSpriteEntity.getId(), newSpriteEntity, sprite);
+        }
+        newSpriteEntities.clear();
     }
 
     @Override

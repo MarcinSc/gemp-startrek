@@ -125,7 +125,7 @@ public class CardRenderingSystem extends BaseSystem {
         if (stateChanged) {
             stateChanged = false;
 
-            Camera camera = cameraSystem.getCamera();
+            Camera camera = cameraSystem.getCamera("main");
 
             if (commonZones.isStackDirty()) {
                 StackLayout.layoutStack(commonZones, camera, transformSystem);

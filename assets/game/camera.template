@@ -1,5 +1,6 @@
 {
   "com.gempukku.libgdx.lib.artemis.camera.TopDownCameraComponent": {
+    "name": "main",
     "near": 2,
     "far": 50,
     "fieldOfView": 30,

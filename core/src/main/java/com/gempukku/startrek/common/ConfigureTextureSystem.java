@@ -9,14 +9,10 @@ import com.badlogic.gdx.assets.loaders.resolvers.LocalFileHandleResolver;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
-import com.gempukku.libgdx.lib.artemis.texture.RuntimeTextureHandler;
-import com.gempukku.libgdx.lib.artemis.texture.SlotLoadingTextureHandler;
-import com.gempukku.libgdx.lib.artemis.texture.TextureReference;
-import com.gempukku.libgdx.lib.artemis.texture.TextureSystem;
+import com.gempukku.libgdx.lib.artemis.texture.*;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteDefinition;
 import com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteSystem;
-import com.gempukku.startrek.game.config.ImageLoadNotifier;
 
 @Wire(failOnNull = false)
 public class ConfigureTextureSystem extends BaseEntitySystem {

@@ -9,7 +9,7 @@ dependencies {
 	api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
 	api "com.github.MarcinSc.gdx-graph:gdx-graph:$gdxGraphVersion"
 	api "com.github.MarcinSc.gdx-graph:gdx-graph-util:$gdxGraphVersion"
-	implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"
+//	implementation "com.github.MarcinSc.gdx-gemp-lib:gdx-gemp-lib-artemis:$gdxGempLibVersion"
 }
 
 import com.badlogic.gdx.graphics.Texture

@@ -50,7 +50,7 @@ public class SelectionSystem extends BaseSystem {
     @Override
     protected void processSystem() {
         if (selecting && selectionDefinition.isSelectionTriggered()) {
-            Ray pickRay = cameraSystem.getCamera().getPickRay(Gdx.input.getX(), Gdx.input.getY());
+            Ray pickRay = cameraSystem.getCamera(selectionDefinition.getCameraName()).getPickRay(Gdx.input.getX(), Gdx.input.getY());
             Entity pickedEntity = shapePickingSystem.pickEntity(pickRay,
                     selectionDefinition.getMask(), selectionDefinition.getEntityPredicate());
             if (pickedEntity != null) {

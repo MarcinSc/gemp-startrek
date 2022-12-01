@@ -60,6 +60,12 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
     private WorldConfigurationBuilder worldConfigurationBuilder;
     private CardData cardData;
 
+    private static final int INDEPENDENT_SYSTEMS = 5;
+    private static final int DEPEND_ON_CAMERA_SYSTEMS = 4;
+    private static final int DEPEND_ON_RENDERER_SYSTEMS = 3;
+    private static final int DEPEND_ON_STAGE_SYSTEMS = 2;
+    private static final int DEPEND_ON_SPRITE_SYSTEMS = 1;
+
     public WorldCreatingVisitor(WorldConfigurationBuilder worldConfigurationBuilder) {
         this.worldConfigurationBuilder = worldConfigurationBuilder;
         cardData = new CardData();
@@ -69,7 +75,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
     @Override
     public World visitLoginScene() {
         createCommonClientSystems();
-        worldConfigurationBuilder.with(new LoginScreenRenderer());
+        worldConfigurationBuilder.with(DEPEND_ON_STAGE_SYSTEMS, new LoginScreenRenderer());
 
         World world = new World(worldConfigurationBuilder.build());
 
@@ -81,7 +87,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
     @Override
     public World visitHallScene() {
         createCommonClientSystems();
-        worldConfigurationBuilder.with(
+        worldConfigurationBuilder.with(INDEPENDENT_SYSTEMS,
                 new DeckBoxRenderingSystem(),
                 new GameHallConnectionInitializer(),
                 new GameHallPlayerProviderSystem(),
@@ -105,7 +111,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
     public World visitPlayingGameScene(String gameId) {
         CommonGameWorldBuilder.createCommonSystems(worldConfigurationBuilder);
         createCommonClientSystems();
-        worldConfigurationBuilder.with(
+        worldConfigurationBuilder.with(INDEPENDENT_SYSTEMS,
                 new GameConnectionInitializer(),
                 new GameConnectionLostHandling(),
                 new WebsocketRemoteClientConnector<>(
@@ -119,7 +125,6 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new AudioSystem(),
 
                 new AnimationDirectorSystem(),
-                new SpriteBatchSystem(),
                 new SpriteSystem(),
                 new CameraSystem(new TopDownCameraController()),
                 new IncomingUpdatesProcessor(),
@@ -161,6 +166,9 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new PromptRenderingSystem(),
                 new TurnSegmentRenderingSystem());
 
+        worldConfigurationBuilder.with(DEPEND_ON_RENDERER_SYSTEMS,
+                new SpriteBatchSystem());
+
         World world = new World(worldConfigurationBuilder.build());
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
 
@@ -185,7 +193,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
         } catch (IOException exp) {
             throw new GdxRuntimeException(exp);
         }
-        worldConfigurationBuilder.with(
+        worldConfigurationBuilder.with(INDEPENDENT_SYSTEMS,
                 new EventSystem(new RuntimeEntityEventDispatcher()),
                 new TimeKeepingSystem(),
                 new SpawnSystem(),
@@ -196,8 +204,10 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new TextureSystem(),
                 new ConfigureTextureSystem(),
                 new PropertySystem(properties),
-                new PipelineRendererSystem(),
-                new ConnectionParamSystem(),
-                new StageSystem(1));
+                new ConnectionParamSystem());
+        worldConfigurationBuilder.with(DEPEND_ON_CAMERA_SYSTEMS,
+                new PipelineRendererSystem());
+        worldConfigurationBuilder.with(DEPEND_ON_RENDERER_SYSTEMS,
+                new StageSystem(2));
     }
 }
