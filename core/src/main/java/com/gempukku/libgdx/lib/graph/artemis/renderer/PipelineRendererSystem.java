@@ -48,9 +48,8 @@ public class PipelineRendererSystem extends BaseEntitySystem {
         if (!initializedRenderer) {
             PipelineRendererComponent pipelineRendererComponent = renderingEntity.getComponent(PipelineRendererComponent.class);
             pipelineRenderer = PipelineLoader.loadPipelineRenderer(Gdx.files.internal(pipelineRendererComponent.getPipelinePath()), simpleTimeProvider);
-            String cameraProperty = pipelineRendererComponent.getCameraProperty();
-            if (cameraProperty != null) {
-                pipelineRenderer.setPipelineProperty(cameraProperty, cameraSystem.getCamera(pipelineRendererComponent.getCameraName()));
+            for (CameraDefinition cameraDefinition : pipelineRendererComponent.getCameraDefinitions()) {
+                pipelineRenderer.setPipelineProperty(cameraDefinition.getCameraProperty(), cameraSystem.getCamera(cameraDefinition.getCameraName()));
             }
 
             initializedRenderer = true;

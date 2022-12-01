@@ -7,6 +7,9 @@
       "tpl:extends": "game/camera.template"
     },
     {
+      "tpl:extends": "game/uiCamera.template"
+    },
+    {
       "tpl:extends": "game/rendering.template"
     },
     {
