@@ -20,7 +20,6 @@ import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 
 public class PlayerInfoRenderingSystem extends BaseEntitySystem {
     private PlayerPositionSystem playerPositionSystem;
-    //    private CameraSystem cameraSystem;
     private SpawnSystem spawnSystem;
     private TransformSystem transformSystem;
     private TextSystem textSystem;
@@ -82,13 +81,16 @@ public class PlayerInfoRenderingSystem extends BaseEntitySystem {
 
             PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(player.getName());
 
-            float zDistance = 2f;
-            float zTranslate = playerPosition == PlayerPosition.Lower ? zDistance : -zDistance;
+            float scale = 0.2f;
+            float yDistance = 0.2f;
+            float yTranslate = playerPosition == PlayerPosition.Lower ? yDistance : -yDistance;
 
             transformSystem.setTransform(nameplateEntity,
                     new Matrix4()
-                            .translate(-6.2f, 0.5f, zTranslate)
-                            .scl(1.5f));
+                            .translate(-0.8f, yTranslate, -5f)
+                            .scl(scale, -scale, 1));
+            //.translate(-6.2f, -0.5f, zTranslate)
+//                            .scl(100f));
 
             addedPlayers++;
         }

@@ -74,10 +74,18 @@ public class TestSetup {
         // Pass the play or draw
         sendDecisionSuccessfully("test1",
                 "action", "pass");
+
+        sendDecisionSuccessfully("test1",
+                "action", "attemptPlanetMission",
+                "missionId", getCardId(planetMission));
     }
 
     private Entity createCard(String username, String cardId) {
         return TestUtil.createCard(world, username, cardId);
+    }
+
+    private String getCardId(Entity entity) {
+        return TestUtil.getCardId(world, entity);
     }
 
     private void sendDecisionSuccessfully(String username, String... decisionKeysAndValues) {

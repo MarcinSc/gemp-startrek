@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.lib.artemis.camera;
+package com.gempukku.libgdx.lib.artemis.camera.topdown;
 
 import com.artemis.*;
 import com.artemis.utils.IntBag;
@@ -9,6 +9,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.gempukku.libgdx.lib.artemis.camera.CameraController;
+import com.gempukku.libgdx.lib.artemis.camera.ZAxisTiltCameraController;
+import com.gempukku.libgdx.lib.artemis.camera.ZoomCameraController;
 
 public class TopDownCameraController implements CameraController, ZoomCameraController, ZAxisTiltCameraController {
     private ComponentMapper<TopDownCameraComponent> topDownCameraComponentMapper;
@@ -106,6 +109,11 @@ public class TopDownCameraController implements CameraController, ZoomCameraCont
     @Override
     public Entity getCameraEntity(String cameraName) {
         return cameraEntities.get(cameraName);
+    }
+
+    @Override
+    public CameraController getCameraController(String cameraName) {
+        return this;
     }
 
     @Override

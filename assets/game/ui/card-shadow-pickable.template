@@ -1,5 +1,4 @@
 {
-  "com.gempukku.startrek.game.card.ServerCardReferenceComponent": {},
   "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
     "localTransform": {
       "val": [
@@ -25,7 +24,7 @@
   "com.gempukku.libgdx.lib.artemis.picking.ShapePickableComponent": {
     "transform": {
       "val": [
-        0.497570,
+        0.715257,
         0,
         0,
         0,
@@ -35,7 +34,7 @@
         0,
         0,
         0,
-        0.497570,
+        1,
         0,
         0,
         0,

@@ -26,7 +26,7 @@ public class ScrollToZoomSystem extends BaseSystem implements InputProcessorProv
     }
 
     private boolean mouseWheelScrolled(float amount) {
-        CameraController cameraController = cameraSystem.getCameraController();
+        CameraController cameraController = cameraSystem.getCameraController(cameraName);
         if (cameraController instanceof ZoomCameraController) {
             ((ZoomCameraController) cameraController).zoom(cameraName, amount * distanceMultiplier);
             return true;

@@ -3,6 +3,7 @@ package com.gempukku.startrek.test;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
+import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.card.CardData;
 import com.gempukku.startrek.card.CardDefinition;
 import com.gempukku.startrek.card.CardLookupSystem;
@@ -47,5 +48,9 @@ public class TestUtil {
         card.setOwner(owner);
         card.setCardId(cardId);
         return cardEntity;
+    }
+
+    public static String getCardId(World world, Entity cardEntity) {
+        return world.getSystem(ServerEntityIdSystem.class).getEntityId(cardEntity);
     }
 }

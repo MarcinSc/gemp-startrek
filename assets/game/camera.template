@@ -1,5 +1,5 @@
 {
-  "com.gempukku.libgdx.lib.artemis.camera.TopDownCameraComponent": {
+  "com.gempukku.libgdx.lib.artemis.camera.topdown.TopDownCameraComponent": {
     "name": "main",
     "near": 2,
     "far": 50,

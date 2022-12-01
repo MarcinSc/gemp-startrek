@@ -10,7 +10,9 @@ import com.badlogic.gdx.utils.PropertiesUtils;
 import com.gempukku.libgdx.lib.artemis.animation.AnimationDirectorSystem;
 import com.gempukku.libgdx.lib.artemis.audio.AudioSystem;
 import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
-import com.gempukku.libgdx.lib.artemis.camera.TopDownCameraController;
+import com.gempukku.libgdx.lib.artemis.camera.MultipleCameraTypeController;
+import com.gempukku.libgdx.lib.artemis.camera.orthographic.OrthographicCameraController;
+import com.gempukku.libgdx.lib.artemis.camera.topdown.TopDownCameraController;
 import com.gempukku.libgdx.lib.artemis.evaluate.EvaluatePropertySystem;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.event.RuntimeEntityEventDispatcher;
@@ -126,7 +128,10 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
 
                 new AnimationDirectorSystem(),
                 new SpriteSystem(),
-                new CameraSystem(new TopDownCameraController()),
+                new CameraSystem(
+                        new MultipleCameraTypeController(
+                                new TopDownCameraController(),
+                                new OrthographicCameraController())),
                 new IncomingUpdatesProcessor(),
                 new IdProviderSystem(new ClientIdProvider()),
 

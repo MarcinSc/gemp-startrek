@@ -1,34 +1,9 @@
 {
-  "com.gempukku.libgdx.lib.artemis.camera.TopDownCameraComponent": {
+  "com.gempukku.libgdx.lib.artemis.camera.orthographic.OrthographicCameraComponent": {
     "name": "ui",
-    "near": 2,
-    "far": 50,
-    "fieldOfView": 30,
-    "center": {
-      "x": 0,
-      "y": 0,
-      "z": 0
-    },
-    "distance": 15,
-    "yAxisAngle": 90,
-    "zAxisAngle": 0,
-    "bounds": {
-      "x": -5,
-      "y": -5,
-      "width": 10,
-      "height": 10
-    },
-    "distanceRange": {
-      "x": 8,
-      "y": 25
-    },
-    "yAxisAngleRange": {
-      "x": 90,
-      "y": 90
-    },
-    "zAxisAngleRange": {
-      "x": 0,
-      "y": 20
-    }
+    "yDown": false,
+    "height": 1,
+    "near": 1,
+    "far": 100
   }
 }

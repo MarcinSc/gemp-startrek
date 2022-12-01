@@ -1,4 +1,4 @@
-package com.gempukku.libgdx.lib.artemis.camera;
+package com.gempukku.libgdx.lib.artemis.camera.topdown;
 
 import com.artemis.Component;
 import com.badlogic.gdx.math.Rectangle;

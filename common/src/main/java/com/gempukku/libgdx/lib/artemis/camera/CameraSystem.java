@@ -35,7 +35,7 @@ public class CameraSystem extends BaseSystem {
         return cameraController.getCameraEntity(cameraName);
     }
 
-    public CameraController getCameraController() {
-        return cameraController;
+    public CameraController getCameraController(String cameraName) {
+        return cameraController.getCameraController(cameraName);
     }
 }

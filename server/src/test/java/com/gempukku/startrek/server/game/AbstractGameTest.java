@@ -10,7 +10,6 @@ import com.gempukku.libgdx.DummyApplication;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.id.ServerEntityIdComponent;
-import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardData;
 import com.gempukku.startrek.decision.DecisionMade;
@@ -74,7 +73,7 @@ public abstract class AbstractGameTest {
     }
 
     protected String getCardId(Entity cardEntity) {
-        return world.getSystem(ServerEntityIdSystem.class).getEntityId(cardEntity);
+        return TestUtil.getCardId(world, cardEntity);
     }
 
     protected StarTrekDeck createDeckWithMissions(String... cardIds) {
