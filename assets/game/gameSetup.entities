@@ -19,6 +19,12 @@
       "tpl:extends": "game/sdfText.template"
     },
     {
+      "tpl:extends": "game/uiTextureDither.template"
+    },
+    {
+      "tpl:extends": "game/uiSdfText.template"
+    },
+    {
       "tpl:extends": "game/userInput.template"
     },
     {
