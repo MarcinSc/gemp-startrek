@@ -71,8 +71,8 @@ public class CardManipulation implements Disposable {
         }
     }
 
-    private void createShadowCard() {
-        spawnSystem.spawnEntity("game/card/card-full-selection.template");
+    public Array<Entity> getContainerCards(int containerIndex) {
+        return cardContainers.get(containerIndex).getCards();
     }
 
     public void update() {

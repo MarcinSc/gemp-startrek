@@ -1,6 +1,7 @@
 package com.gempukku.startrek.game.decision;
 
 import com.artemis.BaseSystem;
+import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -30,6 +31,7 @@ import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.common.UISettings;
 import com.gempukku.startrek.game.decision.ui.CardContainerSettings;
 import com.gempukku.startrek.game.decision.ui.CardManipulation;
+import com.gempukku.startrek.game.decision.ui.ManipulatedCardComponent;
 import com.gempukku.startrek.game.template.CardTemplates;
 import com.gempukku.startrek.game.zone.CardZone;
 
@@ -43,6 +45,8 @@ public class ClientSetupDilemmasDecisionHandler extends BaseSystem implements De
     private HierarchySystem hierarchySystem;
     private CardLookupSystem cardLookupSystem;
 
+    private ComponentMapper<ManipulatedCardComponent> manipulatedCardComponentMapper;
+
     private Table table;
     private TextButton finishedButton;
 
@@ -50,6 +54,7 @@ public class ClientSetupDilemmasDecisionHandler extends BaseSystem implements De
     private Entity userInputStateEntity;
 
     private static final float cardScale = 0.3f;
+    private Entity uiEntity;
 
     @Override
     protected void initialize() {
@@ -101,6 +106,10 @@ public class ClientSetupDilemmasDecisionHandler extends BaseSystem implements De
         for (String cardId : cardIds) {
             CardDefinition cardDefinition = cardLookupSystem.getCardDefinition(cardId);
             Entity renderedCard = CardTemplates.createRenderedCard(cardDefinition, CardZone.Hand, spawnSystem);
+
+            ManipulatedCardComponent manipulatedCardComponent = manipulatedCardComponentMapper.create(renderedCard);
+            manipulatedCardComponent.setCardId(cardId);
+
             TextComponent text = renderedCard.getComponent(TextComponent.class);
             for (TextBlock textBlock : text.getTextBlocks()) {
                 textBlock.setSpriteBatchName("uiDitherText");
@@ -113,31 +122,44 @@ public class ClientSetupDilemmasDecisionHandler extends BaseSystem implements De
             cards.add(renderedCard);
         }
 
-        spawnSystem.spawnEntity("game/ui/setupDilemmasUI.template");
+        uiEntity = spawnSystem.spawnEntity("game/ui/setupDilemmasUI.template");
 
         cardManipulation.addCardContainer(
                 new CardContainerSettings(0.715257f, 1f, cardScale, 0.3f, 0.65f,
-                        0.10f,
-                        new Vector2(-0.4f, 0.05f), true), new Array<>());
+                        0.10f, new Vector2(-0.4f, 0.05f), true), new Array<>());
         cardManipulation.addCardContainer(
                 new CardContainerSettings(0.715257f, 1f, cardScale, 1.1f, 0.65f,
-                        0.15f,
-                        new Vector2(0.175f, 0.05f), false), cards);
+                        0.15f, new Vector2(0.175f, 0.05f), false), cards);
 
         stage.addActor(table);
     }
 
     private void finishedSetup() {
+        Array<Entity> discardedCards = cardManipulation.getContainerCards(0);
+        Array<Entity> dilemmaStackCards = cardManipulation.getContainerCards(1);
+
         ObjectMap<String, String> parameters = new ObjectMap<>();
-        parameters.put("action", "pass");
+        parameters.put("discardedDilemmas", getCardIds(discardedCards));
+        parameters.put("dilemmaStack", getCardIds(dilemmaStackCards));
         executeCleanup();
         clientDecisionSystem.executeDecision(parameters);
-        cardManipulation.dispose();
-        cardManipulation = null;
+    }
+
+    private String getCardIds(Array<Entity> cards) {
+        Array<String> cardIds = new Array<>();
+        for (Entity card : cards) {
+            ManipulatedCardComponent cardId = manipulatedCardComponentMapper.get(card);
+            if (cardId != null)
+                cardIds.add(cardId.getCardId());
+        }
+        return StringUtils.merge(cardIds);
     }
 
     private void executeCleanup() {
         table.remove();
+        world.deleteEntity(uiEntity);
+        cardManipulation.dispose();
+        cardManipulation = null;
     }
 
     @Override
