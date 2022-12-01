@@ -64,6 +64,10 @@
           "trueEffect": {
             "type": "completeMission",
             "missionMemory": "missionId"
+          },
+          "falseEffect": {
+            "type": "stop",
+            "filter": "attemptingPersonnel"
           }
         },
         {

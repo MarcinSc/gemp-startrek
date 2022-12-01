@@ -2,6 +2,7 @@ package com.gempukku.startrek.server.game;
 
 import com.artemis.Entity;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
+import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 import com.gempukku.startrek.game.mission.MissionComponent;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.zone.CardInPlayComponent;
@@ -73,6 +74,88 @@ public class MissionAttemptTest extends AbstractGameTest {
     }
 
     @Test
+    public void processPlanetMissionAttemptSuccess() {
+        setupGame(createDeckWithMissions());
+
+        Entity shandor1 = createCard("test1", "1_225");
+        Entity shandor2 = createCard("test1", "1_225");
+        Entity mills1 = createCard("test1", "1_278");
+        Entity mills2 = createCard("test1", "1_278");
+        Entity jabara1 = createCard("test1", "1_214");
+        Entity jabara2 = createCard("test1", "1_214");
+        Entity jabara3 = createCard("test1", "1_214");
+
+        ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
+        MissionOperations missionOperations = world.getSystem(MissionOperations.class);
+        Entity planetMission = missionOperations.findMission("test1", 4);
+        zoneOperations.moveFromCurrentZoneToMission(shandor1, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(shandor2, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(mills1, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(mills2, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(jabara1, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(jabara2, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(jabara3, planetMission, false);
+
+        // Pass the play or draw
+        sendDecisionSuccessfully("test1",
+                "action", "pass");
+
+        sendDecisionSuccessfully("test1",
+                "action", "attemptPlanetMission",
+                "missionId", getCardId(planetMission));
+
+        sendDecisionSuccessfully("test2",
+                "dilemmaStack", "",
+                "discardedDilemmas", "");
+
+        assertEquals(35, getPlayer("test1").getComponent(PlayerPublicStatsComponent.class).getPointCount());
+        assertTrue(planetMission.getComponent(MissionComponent.class).isCompleted());
+    }
+
+    @Test
+    public void processPlanetMissionAttemptNotMatchingRequirements() {
+        setupGame(createDeckWithMissions());
+
+        Entity shandor1 = createCard("test1", "1_225");
+        Entity shandor2 = createCard("test1", "1_225");
+        Entity mills1 = createCard("test1", "1_278");
+        Entity mills2 = createCard("test1", "1_278");
+        Entity jabara1 = createCard("test1", "1_214");
+        Entity jabara2 = createCard("test1", "1_214");
+
+        ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
+        MissionOperations missionOperations = world.getSystem(MissionOperations.class);
+        Entity planetMission = missionOperations.findMission("test1", 4);
+        zoneOperations.moveFromCurrentZoneToMission(shandor1, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(shandor2, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(mills1, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(mills2, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(jabara1, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(jabara2, planetMission, false);
+
+        // Pass the play or draw
+        sendDecisionSuccessfully("test1",
+                "action", "pass");
+
+        sendDecisionSuccessfully("test1",
+                "action", "attemptPlanetMission",
+                "missionId", getCardId(planetMission));
+
+        sendDecisionSuccessfully("test2",
+                "dilemmaStack", "",
+                "discardedDilemmas", "");
+
+        assertTrue(shandor1.getComponent(CardInPlayComponent.class).isStopped());
+        assertTrue(shandor2.getComponent(CardInPlayComponent.class).isStopped());
+        assertTrue(mills1.getComponent(CardInPlayComponent.class).isStopped());
+        assertTrue(mills2.getComponent(CardInPlayComponent.class).isStopped());
+        assertTrue(jabara1.getComponent(CardInPlayComponent.class).isStopped());
+        assertTrue(jabara2.getComponent(CardInPlayComponent.class).isStopped());
+        assertEquals(0, getPlayer("test1").getComponent(PlayerPublicStatsComponent.class).getPointCount());
+        assertFalse(planetMission.getComponent(MissionComponent.class).isCompleted());
+    }
+
+    @Test
     public void processPlanetMissionAttemptTooExpensive() {
         setupGame(createDeckWithMissions());
 
@@ -101,8 +184,6 @@ public class MissionAttemptTest extends AbstractGameTest {
                 "dilemmaStack", "1_8,1_4",
                 "discardedDilemmas", "");
 
-        assertFalse(personnel1.getComponent(CardInPlayComponent.class).isStopped());
-        assertFalse(personnel2.getComponent(CardInPlayComponent.class).isStopped());
         assertEquals(getCardId(planetMission), dilemmaCard1.getComponent(CardInPlayComponent.class).getAttachedToId());
         assertEquals(getCardId(planetMission), dilemmaCard2.getComponent(CardInPlayComponent.class).getAttachedToId());
         assertFalse(planetMission.getComponent(MissionComponent.class).isCompleted());

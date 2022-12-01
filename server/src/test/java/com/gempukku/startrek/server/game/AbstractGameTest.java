@@ -16,6 +16,7 @@ import com.gempukku.startrek.decision.DecisionMade;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
+import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.game.zone.CardInHandComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
@@ -153,5 +154,9 @@ public abstract class AbstractGameTest {
 
     protected Entity findEntity(String filter) {
         return world.getSystem(CardFilteringSystem.class).findFirstCard(null, null, filter);
+    }
+
+    protected Entity getPlayer(String username) {
+        return world.getSystem(PlayerResolverSystem.class).findPlayerEntity(username);
     }
 }

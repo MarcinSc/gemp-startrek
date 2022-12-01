@@ -46,6 +46,7 @@ import com.gempukku.startrek.server.game.effect.deck.PlaceCardInHandOnBottomOfDe
 import com.gempukku.startrek.server.game.effect.deck.ShuffleDeckEffect;
 import com.gempukku.startrek.server.game.effect.memory.*;
 import com.gempukku.startrek.server.game.effect.mission.AssignAttemptingPersonnelEffect;
+import com.gempukku.startrek.server.game.effect.mission.CompleteMissionEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutDilemmaEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutEventEffect;
 import com.gempukku.startrek.server.game.effect.play.PlayoutTriggerEffect;
@@ -171,6 +172,7 @@ public class StarTrekGameHolder implements Disposable {
 
                 new AssignAttemptingPersonnelEffect(),
                 new CreateDilemmaStackEffect(),
+                new CompleteMissionEffect(),
 
                 // Ability handlers
                 new DilemmaEffectHandler(),
