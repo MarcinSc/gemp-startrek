@@ -1,0 +1,174 @@
+{
+  "com.gempukku.libgdx.lib.artemis.transform.TransformComponent": {
+    "localTransform": {
+      "val": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent": {
+    "sprites": [
+      {
+        "spriteBatchName": "uiDitherTexture",
+        "properties": {
+          "UV": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
+          },
+          "Position": {
+            "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpritePositionProperty",
+            "transform": {
+              "val": [
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                0,
+                0,
+                1,
+                0,
+                0,
+                90,
+                0,
+                1
+              ]
+            },
+            "rightVector": {
+              "x": 1.2,
+              "y": 0,
+              "z": 0
+            },
+            "upVector": {
+              "x": 0,
+              "y": 0,
+              "z": 0.8
+            }
+          },
+          "Texture": {
+            "class": "com.gempukku.libgdx.lib.artemis.texture.TextureReference",
+            "atlas": "atlas/icons.atlas",
+            "region": "Black"
+          }
+        }
+      }
+    ]
+  },
+  "com.gempukku.libgdx.lib.graph.artemis.text.TextComponent": {
+    "textBlocks": [
+      {
+        "transform": {
+          "val": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            -0.400,
+            91,
+            -0.30,
+            1
+          ]
+        },
+        "rightVector": {
+          "x": 0.3,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 0,
+          "z": 0.1
+        },
+        "width": 0.5,
+        "edge": 0.03,
+        "color": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "targetWidth": 200,
+        "kerning": true,
+        "scaleDownToFit": true,
+        "verticalAlignment": "center",
+        "horizontalAlignment": "center",
+        "bitmapFontPath": "font/arial.fnt",
+        "spriteBatchName": "uiDitherText",
+        "text": "Discarded cards"
+      },
+      {
+        "transform": {
+          "val": [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0.175,
+            91,
+            -0.300,
+            1
+          ]
+        },
+        "rightVector": {
+          "x": 0.75,
+          "y": 0,
+          "z": 0
+        },
+        "upVector": {
+          "x": 0,
+          "y": 0,
+          "z": 0.1
+        },
+        "width": 0.5,
+        "edge": 0.03,
+        "color": {
+          "r": 1,
+          "g": 1,
+          "b": 1,
+          "a": 1
+        },
+        "targetWidth": 200,
+        "kerning": true,
+        "scaleDownToFit": true,
+        "verticalAlignment": "center",
+        "horizontalAlignment": "center",
+        "bitmapFontPath": "font/arial.fnt",
+        "spriteBatchName": "uiDitherText",
+        "text": "Dilemma stack\n[scale 0.8](right is top)[/scale]"
+      }
+    ]
+  }
+}

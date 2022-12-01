@@ -6,7 +6,7 @@ filter: Linear, Linear
 repeat: none
 Baj
   rotate: false
-  xy: 218, 120
+  xy: 218, 84
   size: 30, 29
   orig: 30, 29
   offset: 0, 0
@@ -14,132 +14,132 @@ Baj
 Black
   rotate: false
   xy: 2, 2
-  size: 4, 4
-  orig: 4, 4
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
 Blank
   rotate: false
-  xy: 132, 139
+  xy: 36, 4
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Borg
   rotate: false
-  xy: 218, 89
+  xy: 218, 53
   size: 30, 29
   orig: 30, 29
   offset: 0, 0
   index: -1
 Car
   rotate: false
-  xy: 2, 8
+  xy: 207, 211
   size: 32, 30
   orig: 32, 30
   offset: 0, 0
   index: -1
 Cmd
   rotate: false
-  xy: 36, 8
+  xy: 207, 179
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 DS9
   rotate: false
-  xy: 186, 107
+  xy: 186, 103
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 Dom
   rotate: false
-  xy: 207, 215
+  xy: 132, 135
   size: 32, 30
   orig: 32, 30
   offset: 0, 0
   index: -1
 Dot
   rotate: false
-  xy: 2, 117
+  xy: 2, 113
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 E
   rotate: false
-  xy: 207, 183
+  xy: 166, 135
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Fed
   rotate: false
-  xy: 165, 139
+  xy: 207, 147
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Fer
   rotate: false
-  xy: 186, 75
+  xy: 186, 71
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 Headquarters
   rotate: false
-  xy: 78, 42
+  xy: 78, 38
   size: 73, 73
   orig: 73, 73
   offset: 0, 0
   index: -1
 Kli
   rotate: false
-  xy: 186, 43
+  xy: 186, 39
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 NA
   rotate: false
-  xy: 207, 151
+  xy: 153, 103
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Planet
   rotate: false
-  xy: 2, 40
+  xy: 2, 36
   size: 74, 75
   orig: 74, 75
   offset: 0, 0
   index: -1
 Rom
   rotate: false
-  xy: 153, 107
+  xy: 153, 71
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Space
   rotate: false
-  xy: 132, 171
+  xy: 132, 167
   size: 73, 74
   orig: 73, 74
   offset: 0, 0
   index: -1
 Sta
   rotate: false
-  xy: 153, 75
+  xy: 153, 39
   size: 31, 30
   orig: 31, 30
   offset: 0, 0
   index: -1
 Stf
   rotate: false
-  xy: 153, 43
+  xy: 218, 115
   size: 31, 30
   orig: 31, 30
   offset: 0, 0

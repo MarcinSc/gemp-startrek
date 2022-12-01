@@ -111,8 +111,9 @@ public class CardManipulation implements Disposable {
 
                 float scale = settings.getScale();
                 OverlappingCardsLayout.layoutCards(transformSystem, settings.getStartupTransform(), cards,
-                        scale * settings.getCardWidth(), scale * settings.getCardHeight(), scale, 0.25f,
-                        settings.getContainerWidth(), settings.getContainerHeight());
+                        scale * settings.getCardWidth(), scale * settings.getCardHeight(), scale,
+                        settings.getContainerWidth(), settings.getContainerHeight(), settings.getMinOverlapPerc(),
+                        settings.isVertical());
             }
         }
     }
@@ -121,11 +122,12 @@ public class CardManipulation implements Disposable {
         if (draggedEntity != null) {
             for (CardContainer cardContainer : cardContainers) {
                 cardContainer.insertCardAfter(draggedEntity, highlightedEntity);
-                world.deleteEntity(highlightEntity);
-                draggedEntity = null;
-                highlightedEntity = null;
-                highlightEntity = null;
             }
+            world.deleteEntity(highlightEntity);
+            draggedEntity = null;
+            highlightedEntity = null;
+            highlightEntity = null;
+
             layoutDirty = true;
         }
     }

@@ -185,7 +185,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
 
         world.process();
         // Create game entities
-        spawnSystem.spawnEntity("game/playArea.template");
+        spawnSystem.spawnEntity("game/ui/playArea.template");
 
         return world;
     }

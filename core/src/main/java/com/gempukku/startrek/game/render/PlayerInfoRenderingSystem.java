@@ -64,7 +64,7 @@ public class PlayerInfoRenderingSystem extends BaseEntitySystem {
             Entity playerEntity = world.getEntity(playerIds.get(i));
             GamePlayerComponent player = playerEntity.getComponent(GamePlayerComponent.class);
 
-            Entity nameplateEntity = spawnSystem.spawnEntity("game/playerNameplate.template");
+            Entity nameplateEntity = spawnSystem.spawnEntity("game/ui/playerNameplate.template");
             nameplates.put(player.getName(), nameplateEntity);
 
             SpriteComponent sprites = nameplateEntity.getComponent(SpriteComponent.class);

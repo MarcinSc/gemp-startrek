@@ -113,10 +113,16 @@ public class ClientSetupDilemmasDecisionHandler extends BaseSystem implements De
             cards.add(renderedCard);
         }
 
+        spawnSystem.spawnEntity("game/ui/setupDilemmasUI.template");
+
         cardManipulation.addCardContainer(
-                new CardContainerSettings(0.715257f, 1f, cardScale, 1f, 0.7f,
-                        new Vector2(0, 0)),
-                cards);
+                new CardContainerSettings(0.715257f, 1f, cardScale, 0.3f, 0.65f,
+                        0.10f,
+                        new Vector2(-0.4f, 0.05f), true), new Array<>());
+        cardManipulation.addCardContainer(
+                new CardContainerSettings(0.715257f, 1f, cardScale, 1.1f, 0.65f,
+                        0.15f,
+                        new Vector2(0.175f, 0.05f), false), cards);
 
         stage.addActor(table);
     }
