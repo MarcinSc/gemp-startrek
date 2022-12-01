@@ -15,7 +15,7 @@
         1,
         0,
         0,
-        0,
+        1.0,
         0,
         1
       ]
@@ -24,7 +24,7 @@
   "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteComponent": {
     "sprites": [
       {
-        "spriteBatchName": "ditherTexture",
+        "spriteBatchName": "uiDitherTexture",
         "properties": {
           "UV": {
             "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
@@ -70,7 +70,7 @@
         }
       },
       {
-        "spriteBatchName": "ditherTexture",
+        "spriteBatchName": "uiDitherTexture",
         "properties": {
           "UV": {
             "class": "com.gempukku.libgdx.lib.graph.artemis.sprite.SpriteUVProperty"
@@ -164,6 +164,7 @@
         "verticalAlignment": "center",
         "horizontalAlignment": "center",
         "bitmapFontPath": "font/arial.fnt",
+        "spriteBatchName": "uiDitherText",
         "text": "[username]"
       },
       {
@@ -211,6 +212,7 @@
         "verticalAlignment": "center",
         "horizontalAlignment": "center",
         "bitmapFontPath": "font/arial.fnt",
+        "spriteBatchName": "uiDitherText",
         "text": "[points]"
       }
     ]

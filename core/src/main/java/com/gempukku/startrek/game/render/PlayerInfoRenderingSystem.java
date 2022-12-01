@@ -4,11 +4,8 @@ import com.artemis.Aspect;
 import com.artemis.BaseEntitySystem;
 import com.artemis.Entity;
 import com.artemis.utils.IntBag;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.gempukku.libgdx.lib.artemis.camera.CameraSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.lib.artemis.texture.TextureReference;
 import com.gempukku.libgdx.lib.artemis.transform.TransformSystem;
@@ -23,7 +20,7 @@ import com.gempukku.startrek.game.PlayerPublicStatsComponent;
 
 public class PlayerInfoRenderingSystem extends BaseEntitySystem {
     private PlayerPositionSystem playerPositionSystem;
-    private CameraSystem cameraSystem;
+    //    private CameraSystem cameraSystem;
     private SpawnSystem spawnSystem;
     private TransformSystem transformSystem;
     private TextSystem textSystem;
@@ -61,7 +58,7 @@ public class PlayerInfoRenderingSystem extends BaseEntitySystem {
     }
 
     private void createPlayerNameplates() {
-        Camera camera = cameraSystem.getCamera("main");
+        //Camera camera = cameraSystem.getCamera("main");
 
         IntBag playerIds = getSubscription().getEntities();
         for (int i = 0; i < playerIds.size(); i++) {
@@ -85,18 +82,13 @@ public class PlayerInfoRenderingSystem extends BaseEntitySystem {
 
             PlayerPosition playerPosition = playerPositionSystem.getPlayerPosition(player.getName());
 
-            float zTranslate = playerPosition == PlayerPosition.Lower ? 0.65f : -0.65f;
-
-            Vector3 cameraRight = new Vector3(camera.direction).crs(camera.up);
+            float zDistance = 2f;
+            float zTranslate = playerPosition == PlayerPosition.Lower ? zDistance : -zDistance;
 
             transformSystem.setTransform(nameplateEntity,
                     new Matrix4()
-                            .translate(new Vector3(camera.position))
-                            .translate(new Vector3(camera.direction).scl(3f))
-                            .translate(new Vector3(cameraRight).scl(-1.2f))
-                            .translate(new Vector3(camera.up).scl(-zTranslate))
-                            .scl(0.2f)
-                            .rotate(1, 0, 0, 10f));
+                            .translate(-6.2f, 0.5f, zTranslate)
+                            .scl(1.5f));
 
             addedPlayers++;
         }
