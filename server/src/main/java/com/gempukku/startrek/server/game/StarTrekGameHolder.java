@@ -142,6 +142,7 @@ public class StarTrekGameHolder implements Disposable {
                 new MoveCardToCoreEffect(),
                 new MoveCardToDilemmaPileEffect(),
                 new OvercomeDilemmaEffect(),
+                new OvercomeRemainingDilemmasInStackEffect(),
                 new MoveCardToDiscardPileEffect(),
                 new MoveCardToMissionEffect(),
                 new MoveCardToStackEffect(),

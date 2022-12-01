@@ -185,7 +185,7 @@ public class ZoneOperations extends BaseSystem {
         FaceUpCardInMissionComponent faceUpInMission = faceUpCardInMissionComponentMapper.create(cardEntity);
 
         String missionId = serverEntityIdSystem.getEntityId(missionEntity);
-        CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+        CardInPlayComponent cardInPlay = cardInPlayComponentMapper.create(cardEntity);
         cardInPlay.setAttachedToId(missionId);
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
     }
@@ -520,7 +520,7 @@ public class ZoneOperations extends BaseSystem {
 
         HiddenDilemmaStackComponent hiddenDilemmaStack = gameEntity.getComponent(HiddenDilemmaStackComponent.class);
         Array<Integer> cards = hiddenDilemmaStack.getCards();
-        cards.insert(0, cardEntity.getId());
+        cards.add(cardEntity.getId());
 
         eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
         eventSystem.fireEvent(EntityUpdated.instance, gameEntity);
@@ -561,7 +561,7 @@ public class ZoneOperations extends BaseSystem {
         return cardEntity;
     }
 
-    private Entity removeTopCardFromDilemmaStack() {
+    public Entity removeTopCardFromDilemmaStack() {
         Entity gameEntity = gameEntityProvider.getGameEntity();
         HiddenDilemmaStackComponent hiddenDilemmaStack = gameEntity.getComponent(HiddenDilemmaStackComponent.class);
         DilemmaStackComponent dilemmaStack = gameEntity.getComponent(DilemmaStackComponent.class);

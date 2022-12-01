@@ -73,6 +73,42 @@ public class MissionAttemptTest extends AbstractGameTest {
     }
 
     @Test
+    public void processPlanetMissionAttemptTooExpensive() {
+        setupGame(createDeckWithMissions());
+
+        Entity personnel1 = createCard("test1", "1_207");
+        Entity personnel2 = createCard("test1", "1_207");
+        Entity dilemmaCard1 = createCard("test2", "1_8");
+        Entity dilemmaCard2 = createCard("test2", "1_4");
+
+        ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
+        MissionOperations missionOperations = world.getSystem(MissionOperations.class);
+        Entity planetMission = missionOperations.findMission("test1", 4);
+        zoneOperations.moveFromCurrentZoneToMission(personnel1, planetMission, false);
+        zoneOperations.moveFromCurrentZoneToMission(personnel2, planetMission, false);
+        zoneOperations.setupCardToTopOfDilemmaPile(dilemmaCard1, false);
+        zoneOperations.setupCardToTopOfDilemmaPile(dilemmaCard2, false);
+
+        // Pass the play or draw
+        sendDecisionSuccessfully("test1",
+                "action", "pass");
+
+        sendDecisionSuccessfully("test1",
+                "action", "attemptPlanetMission",
+                "missionId", getCardId(planetMission));
+
+        sendDecisionSuccessfully("test2",
+                "dilemmaStack", "1_8,1_4",
+                "discardedDilemmas", "");
+
+        assertFalse(personnel1.getComponent(CardInPlayComponent.class).isStopped());
+        assertFalse(personnel2.getComponent(CardInPlayComponent.class).isStopped());
+        assertEquals(getCardId(planetMission), dilemmaCard1.getComponent(CardInPlayComponent.class).getAttachedToId());
+        assertEquals(getCardId(planetMission), dilemmaCard2.getComponent(CardInPlayComponent.class).getAttachedToId());
+        assertFalse(planetMission.getComponent(MissionComponent.class).isCompleted());
+    }
+
+    @Test
     public void attemptPlanetMissionInvalidAffiliation() {
         setupGame(createDeckWithMissions());
 

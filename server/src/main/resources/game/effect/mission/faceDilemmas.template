@@ -16,7 +16,7 @@
         },
         "falseEffect": {
           "type": "overcomeDilemma",
-          "cardMemory": "dilemmaCard"
+          "memoryCard": "dilemmaCard"
         }
       },
       "falseEffect": {
@@ -24,7 +24,7 @@
         "actions": [
           {
             "type": "overcomeDilemma",
-            "cardMemory": "dilemmaCard"
+            "memoryCard": "dilemmaCard"
           },
           {
             "type": "overcomeRemainingDilemmasInStack"
