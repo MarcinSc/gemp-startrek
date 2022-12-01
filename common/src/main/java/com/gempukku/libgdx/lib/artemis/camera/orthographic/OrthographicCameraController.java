@@ -106,11 +106,6 @@ public class OrthographicCameraController implements CameraController {
     }
 
     @Override
-    public CameraController getCameraController(String cameraName) {
-        return this;
-    }
-
-    @Override
     public void screenResized(int width, int height) {
     }
 }

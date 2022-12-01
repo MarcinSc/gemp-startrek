@@ -112,11 +112,6 @@ public class TopDownCameraController implements CameraController, ZoomCameraCont
     }
 
     @Override
-    public CameraController getCameraController(String cameraName) {
-        return this;
-    }
-
-    @Override
     public void screenResized(int width, int height) {
         for (PerspectiveCamera perspectiveCamera : perspectiveCameras.values()) {
             perspectiveCamera.viewportWidth = width;

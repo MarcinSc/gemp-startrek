@@ -13,7 +13,5 @@ public interface CameraController {
 
     Entity getCameraEntity(String cameraName);
 
-    CameraController getCameraController(String cameraName);
-
     void screenResized(int width, int height);
 }
