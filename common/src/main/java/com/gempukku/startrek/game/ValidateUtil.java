@@ -6,6 +6,20 @@ import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectSet;
 
 public class ValidateUtil {
+    private static ObjectSet<String> effectNotMentionedFields = new ObjectSet<>();
+    private static ObjectSet<String> abilityNotMentionedFields = new ObjectSet<>();
+
+    private static ObjectSet<String> otherIgnoredFields = new ObjectSet<>();
+
+    static {
+        effectNotMentionedFields.add("type");
+
+        abilityNotMentionedFields.add("type");
+        abilityNotMentionedFields.add("text");
+
+        otherIgnoredFields.add("comment");
+    }
+
     public static void exactly(Array<String> parameters, int count) {
         if (count == 0 && parameters == null)
             return;
@@ -36,43 +50,26 @@ public class ValidateUtil {
     }
 
     public static void effectExpectedFields(JsonValue effect, String[] requiredFields, String[] optionalFields) {
-        if (effect.type() != JsonValue.ValueType.object)
-            throw new GdxRuntimeException("Ability should be a JSON of type object");
-        String type = effect.getString("type");
-        if (type == null)
-            throw new GdxRuntimeException("Type is required field for abilities");
-        ObjectSet<String> childNames = new ObjectSet<>();
-        for (JsonValue child : effect) {
-            String childName = child.name();
-            if (!childName.equals("type"))
-                childNames.add(childName);
-        }
-
-        for (String required : requiredFields) {
-            if (!childNames.contains(required))
-                throw new GdxRuntimeException("Should contain field: " + required);
-        }
-
-        for (String childName : childNames) {
-            if (!contains(requiredFields, childName) && !contains(optionalFields, childName))
-                throw new GdxRuntimeException("Unrecognized field: " + childName);
-        }
-
+        validateEffectOrAbility(effect, requiredFields, optionalFields, "effect", effectNotMentionedFields);
     }
 
     public static void abilityExpectedFields(JsonValue ability, String[] requiredFields, String[] optionalFields) {
-        if (ability.type() != JsonValue.ValueType.object)
-            throw new GdxRuntimeException("Ability should be a JSON of type object");
-        String type = ability.getString("type");
-        if (type == null)
-            throw new GdxRuntimeException("Type is required field for abilities");
-        String text = ability.getString("text");
-        if (text == null)
-            throw new GdxRuntimeException("Text is required field for abilities");
+        validateEffectOrAbility(ability, requiredFields, optionalFields, "ability", abilityNotMentionedFields);
+    }
+
+    private static void validateEffectOrAbility(JsonValue effect, String[] requiredFields, String[] optionalFields,
+                                                String type, ObjectSet<String> notMentionedFields) {
+        if (effect.type() != JsonValue.ValueType.object)
+            throw new GdxRuntimeException("The " + type + " should be a JSON of type object");
+        for (String notMentionedField : notMentionedFields) {
+            if (effect.getString(notMentionedField, null) == null)
+                throw new GdxRuntimeException("Field required for " + type + " - " + notMentionedField);
+        }
+
         ObjectSet<String> childNames = new ObjectSet<>();
-        for (JsonValue child : ability) {
+        for (JsonValue child : effect) {
             String childName = child.name();
-            if (!childName.equals("text") && !childName.equals("type"))
+            if (!notMentionedFields.contains(childName) && !otherIgnoredFields.contains(childName))
                 childNames.add(childName);
         }
 
@@ -85,6 +82,7 @@ public class ValidateUtil {
             if (!contains(requiredFields, childName) && !contains(optionalFields, childName))
                 throw new GdxRuntimeException("Unrecognized field: " + childName);
         }
+
     }
 
     private static boolean contains(String[] fields, String name) {
