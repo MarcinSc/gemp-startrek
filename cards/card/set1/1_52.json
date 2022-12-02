@@ -23,7 +23,7 @@
                 "filter": "attemptingPersonnel,type(Personnel)"
               },
               {
-                "type": "putInDilemmaPile",
+                "type": "moveCardToDilemmaPile",
                 "filter": "self"
               }
             ]
