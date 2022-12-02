@@ -1,0 +1,37 @@
+{
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "sequence",
+    "data": {
+      "actions": [
+        {
+          "type": "memorizeCards",
+          "filterMemory": "internal.stopFilter",
+          "memory": "internal.stopMemory"
+        },
+        {
+          "type": "revealCards",
+          "filter": "memory(internal.stopMemory)"
+        },
+        {
+          "type": "processDecision",
+          "player": "memory(internal.player)",
+          "decisionType": "select",
+          "memoryData": {
+            "prompt": "internal.prompt",
+            "cardIds": "internal.stopMemory",
+            "min": "internal.stopMin",
+            "max": "internal.stopMax"
+          }
+        },
+        {
+          "type": "executeStop",
+          "memory": "internal.selected"
+        },
+        {
+          "type": "clearMemory",
+          "memory": "internal.prompt,internal.player,internal.stopFilter,internal.stopMemory,internal.stopMin,internal.stopMax,internal.selected"
+        }
+      ]
+    }
+  }
+}

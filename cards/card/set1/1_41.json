@@ -15,25 +15,28 @@
         },
         {
           "type": "condition",
-          "condition": "or(and(countSkillAtLeast(attemptingPersonnel,Diplomacy,1),countSkillAtLeast(attemptingPersonnel,Medical,1)),countSkillAtLeast(facingDilemma,Security,2))",
+          "condition": "or(and(countSkillAtLeast(attemptingPersonnel,Diplomacy,1),countSkillAtLeast(attemptingPersonnel,Medical,1)),countSkillAtLeast(attemptingPersonnel,Security,2))",
           "trueEffect": {
             "type": "stop",
             "filter": "memory(selectedPersonnel)"
           },
-          "falseEffect": [
-            {
-              "type": "kill",
-              "filter": "memory(selectedPersonnel)"
-            },
-            {
-              "type": "stop",
-              "filter": "attemptingPersonnel,not(memory(selectedPersonnel))"
-            },
-            {
-              "type": "putInDilemmaPile",
-              "filter": "self"
-            }
-          ]
+          "falseEffect": {
+            "type": "sequence",
+            "actions": [
+              {
+                "type": "kill",
+                "filter": "memory(selectedPersonnel)"
+              },
+              {
+                "type": "stop",
+                "filter": "attemptingPersonnel,not(memory(selectedPersonnel))"
+              },
+              {
+                "type": "putInDilemmaPile",
+                "filter": "self"
+              }
+            ]
+          }
         }
       ]
     }

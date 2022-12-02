@@ -49,6 +49,13 @@ public class ValidateUtil {
             throw new GdxRuntimeException("Was expecting 1 field, found " + count);
     }
 
+    public static void ifPresentCheckFor(JsonValue value, String conditionField, String validatingField) {
+        if (value.has(conditionField) && !value.has(validatingField))
+            throw new GdxRuntimeException("Was expecting to see " + validatingField);
+        if (!value.has(conditionField) && value.has(validatingField))
+            throw new GdxRuntimeException("Was not expecting to see " + validatingField);
+    }
+
     public static void effectExpectedFields(JsonValue effect, String[] requiredFields, String[] optionalFields) {
         validateEffectOrAbility(effect, requiredFields, optionalFields, "effect", effectNotMentionedFields);
     }

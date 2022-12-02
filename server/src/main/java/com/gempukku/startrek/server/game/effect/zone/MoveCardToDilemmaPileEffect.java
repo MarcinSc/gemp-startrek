@@ -47,8 +47,7 @@ public class MoveCardToDilemmaPileEffect extends OneTimeEffectSystem {
                 new String[]{"filter"},
                 new String[]{"fromZone"});
         cardFilteringSystem.validateFilter(effect.getString("filter"));
-        CardZone.valueOf(effect.getString("zone"));
-        String fromZone = effect.getString("fromZone");
+        String fromZone = effect.getString("fromZone", null);
         if (fromZone != null)
             CardZone.valueOf(fromZone);
     }

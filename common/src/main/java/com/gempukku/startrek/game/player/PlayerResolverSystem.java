@@ -61,6 +61,8 @@ public class PlayerResolverSystem extends BaseSystem {
         Expression expression = expressions.get(0);
         if (expression.getType().equals("currentPlayer")) {
             return;
+        } else if (expression.getType().equals("nextPlayer")) {
+            return;
         } else if (expression.getType().equals("username")) {
             return;
         } else if (expression.getType().equals("owner")) {
