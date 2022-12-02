@@ -12,11 +12,11 @@
           "type": "randomlySelect",
           "amount": "9",
           "memory": "selectedPersonnel",
-          "filter": "type(Personnel),attemptingPersonnel"
+          "filter": "attemptingPersonnel,type(Personnel)"
         },
         {
           "type": "stop",
-          "filter": "type(Personnel),attemptingPersonnel,not(memory(selectedPersonnel))"
+          "filter": "attemptingPersonnel,type(Personnel),not(memory(selectedPersonnel))"
         },
         {
           "type": "placeOnMission",

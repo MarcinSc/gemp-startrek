@@ -13,8 +13,8 @@
           "actions": [
             {
               "type": "randomlySelect",
-              "memory": "selectedPersonnel1",
-              "filter": "attemptingPersonnel,type(Personnel)"
+              "filter": "attemptingPersonnel,type(Personnel)",
+              "memory": "selectedPersonnel1"
             },
             {
               "type": "stop",
@@ -28,8 +28,8 @@
                 "actions": [
                   {
                     "type": "randomlySelect",
-                    "memory": "selectedPersonnel2",
-                    "filter": "attemptingPersonnel,type(Personnel)"
+                    "filter": "attemptingPersonnel,type(Personnel)",
+                    "memory": "selectedPersonnel2"
                   },
                   {
                     "type": "stop",
@@ -43,8 +43,8 @@
                       "actions": [
                         {
                           "type": "randomlySelect",
-                          "memory": "selectedPersonnel3",
-                          "filter": "attemptingPersonnel,type(Personnel)"
+                          "filter": "attemptingPersonnel,type(Personnel)",
+                          "memory": "selectedPersonnel3"
                         },
                         {
                           "type": "stop",

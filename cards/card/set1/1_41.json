@@ -11,7 +11,7 @@
         {
           "type": "randomlySelect",
           "memory": "selectedPersonnel",
-          "filter": "type(Personnel),attemptingPersonnel"
+          "filter": "attemptingPersonnel,type(Personnel)"
         },
         {
           "type": "condition",

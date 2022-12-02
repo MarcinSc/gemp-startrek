@@ -68,7 +68,7 @@ public class CommonGameWorldBuilder {
                 new UnstoppedFilterHandler(),
                 new InMissionFilterHandler(),
                 new InPlayFilterHandler(),
-                new HasInSameMissionFilterHandler(),
+                new PresentWithFilter(),
                 new NotAboardShipFilterHandler(),
                 new TitleFilterHandler(),
                 new UniquenessPreservedFilterHandler(),

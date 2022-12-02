@@ -13,7 +13,7 @@
           "decisionType": "select",
           "data": {
             "prompt": "Choose your living personnel",
-            "filter": "your,affiliation(Bajoran),type(Personnel),attemptingPersonnel",
+            "filter": "attemptingPersonnel,your,affiliation(Bajoran),type(Personnel)",
             "memory": "livingCharacter"
           }
         },

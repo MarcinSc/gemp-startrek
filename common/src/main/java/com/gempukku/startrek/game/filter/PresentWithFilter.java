@@ -6,11 +6,11 @@ import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
-public class HasInSameMissionFilterHandler extends CardFilterSystem {
+public class PresentWithFilter extends CardFilterSystem {
     private CardFilteringSystem cardFilteringSystem;
 
-    public HasInSameMissionFilterHandler() {
-        super("hasInSameMission");
+    public PresentWithFilter() {
+        super("presentWith");
     }
 
     @Override

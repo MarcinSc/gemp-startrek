@@ -13,7 +13,7 @@
         {
           "type": "select",
           "memory": "chosenShip",
-          "filter": "type(Ship),sameMissionAs(shipInvolvedInEngagement)"
+          "filter": "zone(Mission),type(Ship),sameMissionAs(shipInvolvedInEngagement)"
         },
         {
           "type": "joinEngagement",

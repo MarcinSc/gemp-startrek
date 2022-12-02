@@ -19,7 +19,7 @@ public class OrderRequirements {
             CardFilteringSystem cardFilteringSystem) {
         String filter = "type(Mission),owner(username(" + username + "))," +
                 "not(missionType(Headquarters)),not(completedMission)," +
-                "hasInSameMission(type(Personnel),unstopped,matchesMissionAffiliations)";
+                "presentWith(type(Personnel),unstopped,matchesMissionAffiliations)";
         return cardFilteringSystem.resolveCardFilter(filter);
     }
 

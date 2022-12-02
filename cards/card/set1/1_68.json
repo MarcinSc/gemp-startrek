@@ -6,7 +6,7 @@
     {
       "text": "Each of your Medical personnel present gains Exobiology.",
       "type": "grantSkill",
-      "filter": "your,type(Personnel),skill(Medical)",
+      "filter": "inPlay,your,type(Personnel),skill(Medical),presentWith(self)",
       "skill": "Exobiology"
     }
   ],
