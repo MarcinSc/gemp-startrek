@@ -2,7 +2,6 @@ package com.gempukku.startrek.server.game.effect.card;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.game.Memory;
@@ -11,13 +10,12 @@ import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.effect.OneTimeEffectSystem;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 
-public class ExecuteKillEffect extends OneTimeEffectSystem {
+public class ExecuteDiscardEffect extends OneTimeEffectSystem {
     private IdProviderSystem idProviderSystem;
     private ZoneOperations zoneOperations;
-    private EventSystem eventSystem;
 
-    public ExecuteKillEffect() {
-        super("executeKill");
+    public ExecuteDiscardEffect() {
+        super("executeDiscard");
     }
 
     @Override

@@ -1,0 +1,28 @@
+{
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "sequence",
+    "data": {
+      "actions": [
+        {
+          "type": "processDecision",
+          "playerMemory": "internal.player",
+          "decisionType": "select",
+          "memoryData": {
+            "prompt": "internal.prompt",
+            "filter": "internal.discardFilter",
+            "min": "internal.discardMin",
+            "max": "internal.discardMax"
+          }
+        },
+        {
+          "type": "executeDiscard",
+          "memory": "internal.selected"
+        },
+        {
+          "type": "clearMemory",
+          "memory": "internal.prompt,internal.player,internal.discardFilter,internal.discardMin,internal.discardMax,internal.selected"
+        }
+      ]
+    }
+  }
+}

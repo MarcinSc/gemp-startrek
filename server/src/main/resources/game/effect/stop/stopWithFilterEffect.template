@@ -10,7 +10,7 @@
         },
         {
           "type": "executeStop",
-          "filter": "memory(internal.stopMemory)"
+          "memory": "internal.stopMemory"
         },
         {
           "type": "clearMemory",
