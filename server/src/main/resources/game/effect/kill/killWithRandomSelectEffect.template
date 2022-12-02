@@ -1,0 +1,22 @@
+{
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "sequence",
+    "data": {
+      "actions": [
+        {
+          "type": "randomlySelect",
+          "filterMemory": "internal.killFilter",
+          "memory": "internal.killMemory"
+        },
+        {
+          "type": "executeKill",
+          "filter": "memory(internal.killMemory)"
+        },
+        {
+          "type": "clearMemory",
+          "memory": "internal.killFilter,internal.killMemory"
+        }
+      ]
+    }
+  }
+}

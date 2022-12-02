@@ -24,17 +24,10 @@
         {
           "type": "beginEngagement",
           "involving": "your,skill(Leadership),type(Personnel)",
-          "winEffect": [
-            {
-              "type": "randomlySelect",
-              "filter": "not(your),type(Personnel)",
-              "memory": "selectedPersonnel"
-            },
-            {
-              "type": "kill",
-              "filter": "memory(selectedPersonnel)"
-            }
-          ]
+          "winEffect": {
+            "type": "kill",
+            "randomSelect": "not(your),type(Personnel),inEngagement"
+          }
         }
       ]
     }

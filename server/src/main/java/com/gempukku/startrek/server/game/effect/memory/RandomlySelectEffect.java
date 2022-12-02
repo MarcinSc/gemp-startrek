@@ -23,16 +23,20 @@ public class RandomlySelectEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
-        String filter = gameEffect.getDataString("filter");
+        String filter = gameEffect.getDataString("filter", null);
+        String filterMemory = gameEffect.getDataString("filterMemory", null);
         String amount = gameEffect.getDataString("amount", "1");
         String memoryName = gameEffect.getDataString("memory");
+
+        if (filter == null)
+            filter = memory.getValue(filterMemory);
 
         int count = amountResolverSystem.resolveAmount(sourceEntity, memory, amount);
 
         Array<Entity> matchingEntities = new Array<>();
         cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
-            @Override
-            public void accept(Entity entity) {
+                    @Override
+                    public void accept(Entity entity) {
                         matchingEntities.add(entity);
                     }
                 }, filter
@@ -52,9 +56,10 @@ public class RandomlySelectEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"memory", "filter"},
-                new String[]{"amount"});
-        cardFilteringSystem.validateFilter(effect.getString("filter"));
+                new String[]{"memory"},
+                new String[]{"amount", "filter", "filterMemory"});
+        ValidateUtil.hasExactlyOneOf(effect, "filter", "filterMemory");
+        cardFilteringSystem.validateFilter(effect.getString("filter", "any"));
         amountResolverSystem.validateAmount(effect.getString("amount", "1"));
     }
 }
