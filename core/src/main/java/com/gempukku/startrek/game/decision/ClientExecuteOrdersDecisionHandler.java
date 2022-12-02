@@ -125,7 +125,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             CardFilter playRequirementsFilter = OrderRequirements.createOrderRequirements(
                     authenticationHolderSystem.getUsername(), cardFilteringSystem);
 
-            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+            selectionState = new SelectionState(world, userInputStateEntity,
+                    "any", playRequirementsFilter,
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -289,7 +290,8 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             CardFilter playRequirementsFilter = OrderRequirements.createAttemptMissionRequirements(
                     authenticationHolderSystem.getUsername(), cardFilteringSystem);
 
-            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+            selectionState = new SelectionState(world, userInputStateEntity,
+                    "any", playRequirementsFilter,
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -395,7 +397,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
                     missionEntity, cardFilteringSystem);
             CardFilter shipMissionAffiliationsRequirement = OrderRequirements.createMissionAffiliationsShipRequirements(cardFilteringSystem);
 
-            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+            selectionState = new SelectionState(world, userInputStateEntity, "any", playRequirementsFilter,
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -505,7 +507,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             CardFilter playRequirementsFilter = OrderMoveRequirements.createMoveShipRequirements(
                     authenticationHolderSystem.getUsername(), cardFilteringSystem);
 
-            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+            selectionState = new SelectionState(world, userInputStateEntity, "any", playRequirementsFilter,
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -601,7 +603,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             CardFilter playRequirementsFilter = OrderMoveRequirements.createMoveShipMissionRequirements(
                     authenticationHolderSystem.getUsername(), shipEntity, cardFilteringSystem);
 
-            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+            selectionState = new SelectionState(world, userInputStateEntity, "any", playRequirementsFilter,
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -809,7 +811,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             CardFilter playRequirementsFilter = OrderMoveRequirements.createBeamFromMissionShipRequirements(
                     authenticationHolderSystem.getUsername(), cardFilteringSystem);
 
-            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+            selectionState = new SelectionState(world, userInputStateEntity, "any", playRequirementsFilter,
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -905,7 +907,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             CardFilter playRequirementsFilter = OrderMoveRequirements.createBeamSelectAnotherShipRequirements(
                     authenticationHolderSystem.getUsername(), firstShipEntity, cardFilteringSystem);
 
-            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+            selectionState = new SelectionState(world, userInputStateEntity, "any", playRequirementsFilter,
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -1016,7 +1018,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
                 }
             };
 
-            selectionState = new SelectionState(world, userInputStateEntity, new AndCardFilter(onShip, playRequirementsFilter),
+            selectionState = new SelectionState(world, userInputStateEntity, "any", new AndCardFilter(onShip, playRequirementsFilter),
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -1121,7 +1123,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             CardFilter playRequirementsFilter = OrderMoveRequirements.createBeamFromMissionShipRequirements(
                     authenticationHolderSystem.getUsername(), cardFilteringSystem);
 
-            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+            selectionState = new SelectionState(world, userInputStateEntity, "any", playRequirementsFilter,
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -1213,7 +1215,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
             CardFilter playRequirementsFilter = OrderMoveRequirements.createBeamToMissionShipRequirements(
                     authenticationHolderSystem.getUsername(), cardFilteringSystem);
 
-            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+            selectionState = new SelectionState(world, userInputStateEntity, "any", playRequirementsFilter,
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -1310,7 +1312,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
                     authenticationHolderSystem.getUsername(),
                     shipEntity, cardFilteringSystem);
 
-            selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+            selectionState = new SelectionState(world, userInputStateEntity, "any", playRequirementsFilter,
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {
@@ -1430,7 +1432,7 @@ public class ClientExecuteOrdersDecisionHandler extends BaseSystem implements De
                 }
             };
 
-            selectionState = new SelectionState(world, userInputStateEntity, new AndCardFilter(onShip, playRequirementsFilter),
+            selectionState = new SelectionState(world, userInputStateEntity, "any", new AndCardFilter(onShip, playRequirementsFilter),
                     new SelectionCallback() {
                         @Override
                         public void selectionChanged(ObjectSet<Entity> selected) {

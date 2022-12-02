@@ -32,13 +32,13 @@ public class BeamBetweenShipsEffect extends OneTimeEffectSystem {
         String fromShipFilter = gameEffect.getDataString("fromShip");
         String toShipFilter = gameEffect.getDataString("toShip");
         String cardFilter = gameEffect.getDataString("filter");
-        Entity fromShipEntity = cardFilteringSystem.findFirstCardInPlay(sourceEntity, memory, fromShipFilter);
-        Entity toShipEntity = cardFilteringSystem.findFirstCardInPlay(sourceEntity, memory, toShipFilter);
+        Entity fromShipEntity = cardFilteringSystem.findFirstCard(sourceEntity, memory, "inPlay", fromShipFilter);
+        Entity toShipEntity = cardFilteringSystem.findFirstCard(sourceEntity, memory, "inPlay", toShipFilter);
         Array<String> cardIds = new Array<>();
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
-            @Override
-            public void accept(Entity entity) {
-                zoneOperations.attachFromShipToShip(fromShipEntity, toShipEntity, entity);
+        cardFilteringSystem.forEachCard(sourceEntity, memory, "inPlay", new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity entity) {
+                        zoneOperations.attachFromShipToShip(fromShipEntity, toShipEntity, entity);
                         cardIds.add(serverEntityIdSystem.getEntityId(entity));
                     }
                 }, cardFilter

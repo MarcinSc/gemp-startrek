@@ -21,9 +21,10 @@ public class TitleInMemoryHandler extends ConditionSystem {
     @Override
     public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
         String[] titles = StringUtils.split(memory.getValue(parameters.get(0), ""));
-        CardFilter filter = cardFilteringSystem.createAndFilter(parameters, 1);
+        String source = parameters.get(1);
+        CardFilter filter = cardFilteringSystem.createAndFilter(parameters, 2);
 
-        return cardFilteringSystem.hasCard(sourceEntity, memory, filter,
+        return cardFilteringSystem.hasCard(sourceEntity, memory, source, filter,
                 new CardFilter() {
                     @Override
                     public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
@@ -40,7 +41,8 @@ public class TitleInMemoryHandler extends ConditionSystem {
     @Override
     public void validate(Array<String> parameters) {
         ValidateUtil.atLeast(parameters, 2);
-        for (int i = 1; i < parameters.size; i++) {
+        cardFilteringSystem.validateSource(parameters.get(1));
+        for (int i = 2; i < parameters.size; i++) {
             cardFilteringSystem.validateFilter(parameters.get(i));
         }
     }

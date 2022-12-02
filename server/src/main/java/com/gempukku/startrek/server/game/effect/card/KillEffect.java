@@ -28,6 +28,7 @@ public class KillEffect extends EffectSystem {
         if (!killStacked) {
             String filter = gameEffect.getDataString("filter", null);
             String randomSelect = gameEffect.getDataString("randomSelect", null);
+            memory.setValue("internal.from", gameEffect.getDataString("from"));
             Entity killEffectEntity;
             if (filter != null) {
                 memory.setValue("internal.killFilter", filter);
@@ -51,10 +52,11 @@ public class KillEffect extends EffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{},
+                new String[]{"from"},
                 new String[]{"filter", "randomSelect"});
         ValidateUtil.hasExactlyOneOf(effect, "filter", "randomSelect");
 
+        cardFilteringSystem.validateSource(effect.getString("from"));
         cardFilteringSystem.validateFilter(effect.getString("filter", "any"));
         cardFilteringSystem.validateFilter(effect.getString("randomSelect", "any"));
     }

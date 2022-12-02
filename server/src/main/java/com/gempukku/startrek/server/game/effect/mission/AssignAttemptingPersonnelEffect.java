@@ -35,7 +35,7 @@ public class AssignAttemptingPersonnelEffect extends OneTimeEffectSystem {
         String memoryName = gameEffect.getDataString("memory");
         String filter = gameEffect.getDataString("filter");
         Array<String> personnelIds = new Array<>();
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, "inPlay", new Consumer<Entity>() {
             @Override
             public void accept(Entity entity) {
                 personnelIds.add(idProviderSystem.getEntityId(entity));

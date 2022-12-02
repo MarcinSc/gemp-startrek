@@ -17,14 +17,17 @@ public class CountAtLeastConditionHandler extends ConditionSystem {
 
     @Override
     public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
-        int amount = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(1));
-        return cardFilteringSystem.hasCardCountInPlay(sourceEntity, memory, amount, parameters.get(0));
+        String from = parameters.get(0);
+        String filter = parameters.get(1);
+        int amount = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(2));
+        return cardFilteringSystem.hasCardCount(sourceEntity, memory, from, amount, filter);
     }
 
     @Override
     public void validate(Array<String> parameters) {
-        ValidateUtil.exactly(parameters, 2);
-        cardFilteringSystem.validateFilter(parameters.get(0));
-        amountResolverSystem.validateAmount(parameters.get(1));
+        ValidateUtil.exactly(parameters, 3);
+        cardFilteringSystem.validateSource(parameters.get(0));
+        cardFilteringSystem.validateFilter(parameters.get(1));
+        amountResolverSystem.validateAmount(parameters.get(2));
     }
 }

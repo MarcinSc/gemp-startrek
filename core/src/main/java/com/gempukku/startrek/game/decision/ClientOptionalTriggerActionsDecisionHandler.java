@@ -129,7 +129,7 @@ public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem impl
         CardFilter triggerFilter = TriggerRequirements.createOptionalTriggerRequirements(
                 authenticationHolderSystem.getUsername(), triggerType, usedIds,
                 cardFilteringSystem);
-        selectionState = new SelectionState(world, userInputStateEntity, triggerFilter,
+        selectionState = new SelectionState(world, userInputStateEntity, "inPlay", triggerFilter,
                 sourceEntity, memory,
                 new SelectionCallback() {
                     @Override

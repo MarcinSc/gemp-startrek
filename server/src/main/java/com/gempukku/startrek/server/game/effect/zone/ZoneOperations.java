@@ -322,7 +322,7 @@ public class ZoneOperations extends BaseSystem {
         shipInMission.setMissionIndex(missionIndex);
         eventSystem.fireEvent(EntityUpdated.instance, shipEntity);
 
-        cardFilteringSystem.forEachCardInPlay(shipEntity, null, new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(shipEntity, null, "inPlay", new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
                         CardInMissionComponent cardInMission = entity.getComponent(CardInMissionComponent.class);

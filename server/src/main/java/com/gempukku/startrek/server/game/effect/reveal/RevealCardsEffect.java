@@ -36,7 +36,7 @@ public class RevealCardsEffect extends OneTimeEffectSystem {
     protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         EffectRevealedCardsComponent revealedCards = executionStackSystem.getTopMostStackEntityWithComponent(EffectRevealedCardsComponent.class).getComponent(EffectRevealedCardsComponent.class);
         String filter = gameEffect.getDataString("filter");
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory,
+        cardFilteringSystem.forEachCard(sourceEntity, memory, gameEffect.getDataString("from"),
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
@@ -56,7 +56,9 @@ public class RevealCardsEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter"},
+                new String[]{"from", "filter"},
                 new String[]{});
+        cardFilteringSystem.validateSource(effect.getString("from"));
+        cardFilteringSystem.validateFilter(effect.getString("filter"));
     }
 }

@@ -22,7 +22,7 @@ public class ReturnToHandEffect extends OneTimeEffectSystem {
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         cardFilteringSystem.forEachCard(
-                sourceEntity, memory,
+                sourceEntity, memory, gameEffect.getDataString("from"),
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
@@ -34,7 +34,9 @@ public class ReturnToHandEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter"},
+                new String[]{"from", "filter"},
                 new String[]{});
+        cardFilteringSystem.validateSource(effect.getString("from"));
+        cardFilteringSystem.validateFilter(effect.getString("filter"));
     }
 }

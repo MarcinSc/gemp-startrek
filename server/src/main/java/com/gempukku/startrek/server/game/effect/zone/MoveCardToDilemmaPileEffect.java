@@ -28,7 +28,8 @@ public class MoveCardToDilemmaPileEffect extends OneTimeEffectSystem {
         String fromZoneStr = gameEffect.getDataString("fromZone", null);
         CardZone fromZone = (fromZoneStr != null) ? CardZone.valueOf(fromZoneStr) : null;
 
-        cardFilteringSystem.forEachCard(sourceEntity, memory, new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, gameEffect.getDataString("from"),
+                new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
                         CardComponent card = cardEntity.getComponent(CardComponent.class);
@@ -44,8 +45,9 @@ public class MoveCardToDilemmaPileEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter"},
+                new String[]{"from", "filter"},
                 new String[]{"fromZone"});
+        cardFilteringSystem.validateSource(effect.getString("from"));
         cardFilteringSystem.validateFilter(effect.getString("filter"));
         String fromZone = effect.getString("fromZone", null);
         if (fromZone != null)

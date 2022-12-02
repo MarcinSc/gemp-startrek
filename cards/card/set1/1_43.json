@@ -13,42 +13,48 @@
           "actions": [
             {
               "type": "randomlySelect",
-              "filter": "attemptingPersonnel,type(Personnel)",
+              "from": "attemptingPersonnel",
+              "filter": "type(Personnel)",
               "memory": "selectedPersonnel1"
             },
             {
               "type": "stop",
-              "filter": "memory(selectedPersonnel1)"
+              "from": "memory(selectedPersonnel1)",
+              "filter": "any"
             },
             {
               "type": "condition",
-              "condition": "countAtLeast(and(attemptingPersonnel,type(Personnel)),9)",
+              "condition": "countAtLeast(attemptingPersonnel,type(Personnel),9)",
               "trueEffect": {
                 "type": "sequence",
                 "actions": [
                   {
                     "type": "randomlySelect",
-                    "filter": "attemptingPersonnel,type(Personnel)",
+                    "from": "attemptingPersonnel",
+                    "filter": "type(Personnel)",
                     "memory": "selectedPersonnel2"
                   },
                   {
                     "type": "stop",
-                    "filter": "memory(selectedPersonnel2)"
+                    "from": "memory(selectedPersonnel2)",
+                    "filter": "any"
                   },
                   {
                     "type": "condition",
-                    "condition": "countAtLeast(and(attemptingPersonnel,type(Personnel)),10)",
+                    "condition": "countAtLeast(attemptingPersonnel,type(Personnel),10)",
                     "trueEffect": {
                       "type": "sequence",
                       "actions": [
                         {
                           "type": "randomlySelect",
-                          "filter": "attemptingPersonnel,type(Personnel)",
+                          "from": "attemptingPersonnel",
+                          "filter": "type(Personnel)",
                           "memory": "selectedPersonnel3"
                         },
                         {
                           "type": "stop",
-                          "filter": "memory(selectedPersonnel3)"
+                          "from": "memory(selectedPersonnel3)",
+                          "filter": "any"
                         }
                       ]
                     }

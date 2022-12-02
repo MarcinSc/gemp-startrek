@@ -16,13 +16,15 @@
         },
         {
           "type": "condition",
-          "condition": "countAtLeast(memory(personnelToBeStopped),1)",
+          "condition": "countAtLeast(memory(personnelToBeStopped),any,1)",
           "trueEffect": {
             "type": "stop",
-            "filter": "memory(personnelToBeStopped)"
+            "from": "memory(personnelToBeStopped)",
+            "filter": "any"
           },
           "falseEffect": {
             "type": "kill",
+            "from": "attemptingPersonnel",
             "filter": "random(onMission(self))"
           }
         }

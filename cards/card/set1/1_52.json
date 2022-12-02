@@ -13,18 +13,21 @@
           "condition": "or(countSkillAtLeast(attemptingPersonnel,Engineer,1),countSkillAtLeast(attemptingPersonnel,Programming,1))",
           "tryEffect": {
             "type": "stop",
-            "select": "attemptingPersonnel,type(Personnel),or(skill(Engineer),skill(Programming))"
+            "from": "attemptingPersonnel",
+            "select": "type(Personnel),or(skill(Engineer),skill(Programming))"
           },
           "failEffect": {
             "type": "sequence",
             "actions": [
               {
                 "type": "stop",
-                "filter": "attemptingPersonnel,type(Personnel)"
+                "from": "attemptingPersonnel",
+                "filter": "type(Personnel)"
               },
               {
                 "type": "moveCardToDilemmaPile",
-                "filter": "self"
+                "from": "self",
+                "filter": "any"
               }
             ]
           }

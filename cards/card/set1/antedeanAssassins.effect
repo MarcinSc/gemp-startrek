@@ -10,7 +10,8 @@
     "condition": "hasCard(attemptingPersonnel,or(memorySkill(firstSkill),memorySkill(secondSkill)))",
     "tryEffect": {
       "type": "stop",
-      "opponentSelect": "attemptingPersonnel,or(memorySkill(firstSkill),memorySkill(secondSkill))",
+      "from": "attemptingPersonnel",
+      "opponentSelect": "or(memorySkill(firstSkill),memorySkill(secondSkill))",
       "player": "nextPlayer"
     },
     "failEffect": {
@@ -18,11 +19,13 @@
       "actions": [
         {
           "type": "stop",
-          "filter": "type(personnel),attemptingPersonnel"
+          "from": "attemptingPersonnel",
+          "filter": "type(personnel)"
         },
         {
           "type": "moveCardToDilemmaPile",
-          "filter": "self"
+          "from": "self",
+          "filter": "any"
         }
       ]
     }

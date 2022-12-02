@@ -13,6 +13,8 @@ import com.gempukku.startrek.game.amount.AmountResolverSystem;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.zone.CardInMissionComponent;
 
+import java.util.function.Consumer;
+
 public class InRangeFilterHandler extends CardFilterSystem {
     private CardFilteringSystem cardFilteringSystem;
     private CardAbilitySystem cardAbilitySystem;
@@ -50,22 +52,28 @@ public class InRangeFilterHandler extends CardFilterSystem {
         Quadrant toQuadrant = toMission.getQuadrant();
         int toSpan = toMission.getSpan();
 
-        int moveCost = fromSpan + toSpan;
+        int[] moveCost = new int[1];
+        moveCost[0] = fromSpan + toSpan;
         if (fromQuadrant != toQuadrant)
-            moveCost += 2;
+            moveCost[0] += 2;
 
-        for (Entity modifierCardEntity : cardFilteringSystem.getAllCardsInPlay(shipEntity, null, "hasAbility(MoveCostModifier)")) {
-            for (MoveCostModifier modifierAbility : cardAbilitySystem.getCardAbilities(modifierCardEntity, MoveCostModifier.class)) {
-                CardFilter shipFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getShipFilter());
-                CardFilter fromFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getFromFilter());
-                CardFilter toFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getToFilter());
-                if (shipFilter.accepts(modifierCardEntity, null, shipEntity)
-                        && fromFilter.accepts(modifierCardEntity, null, fromMissionEntity)
-                        && toFilter.accepts(modifierCardEntity, null, toMissionEntity))
-                    moveCost += amountResolverSystem.resolveAmount(modifierCardEntity, null, modifierAbility.getAmount());
-            }
-        }
-        return moveCost;
+        cardFilteringSystem.forEachCard(shipEntity, null, "inPlay",
+                new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity entity) {
+                        for (MoveCostModifier modifierAbility : cardAbilitySystem.getCardAbilities(entity, MoveCostModifier.class)) {
+                            CardFilter shipFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getShipFilter());
+                            CardFilter fromFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getFromFilter());
+                            CardFilter toFilter = cardFilteringSystem.resolveCardFilter(modifierAbility.getToFilter());
+                            if (shipFilter.accepts(entity, null, shipEntity)
+                                    && fromFilter.accepts(entity, null, fromMissionEntity)
+                                    && toFilter.accepts(entity, null, toMissionEntity))
+                                moveCost[0] += amountResolverSystem.resolveAmount(entity, null, modifierAbility.getAmount());
+                        }
+                    }
+                }, "hasAbility(MoveCostModifier)");
+
+        return moveCost[0];
     }
 
     @Override

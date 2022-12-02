@@ -36,7 +36,7 @@ public class PlayRequirements {
             String username,
             CardFilteringSystem cardFilteringSystem,
             CardAbilitySystem cardAbilitySystem) {
-        Entity playerHeadquarter = cardFilteringSystem.findFirstCardInPlay(null, null, "missionType(Headquarters),owner(username(" + username + "))");
+        Entity playerHeadquarter = cardFilteringSystem.findFirstCard(null, null, "inPlay", "missionType(Headquarters),owner(username(" + username + "))");
         CardFilter headquarterRequirements = cardAbilitySystem.getCardAbilities(playerHeadquarter, HeadquarterRequirements.class).get(0).getCardFilter();
         CardFilter nonEventCards = cardFilteringSystem.resolveCardFilter(
                 "or(type(Personnel),type(Ship),type(Equipment)),"

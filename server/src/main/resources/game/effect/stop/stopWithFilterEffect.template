@@ -5,12 +5,14 @@
       "actions": [
         {
           "type": "memorizeCards",
+          "fromMemory": "internal.from",
           "filterMemory": "internal.stopFilter",
           "memory": "internal.stopMemory"
         },
         {
           "type": "executeStop",
-          "memory": "internal.stopMemory"
+          "from": "memory(internal.stopMemory)",
+          "filter": "any"
         },
         {
           "type": "clearMemory",

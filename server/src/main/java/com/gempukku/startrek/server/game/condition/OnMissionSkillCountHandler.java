@@ -26,7 +26,7 @@ public class OnMissionSkillCountHandler extends ConditionSystem {
         if (parameters.size > 1)
             countRequired = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(1));
         int[] result = new int[1];
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, "attemptingPersonnel", new Consumer<Entity>() {
             @Override
             public void accept(Entity entity) {
                 result[0] += amountResolverSystem.resolveAmount(entity, memory, "skillCount(" + skill.name() + ")");

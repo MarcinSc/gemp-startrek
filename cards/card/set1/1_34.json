@@ -12,14 +12,17 @@
           "type": "randomlySelect",
           "amount": "9",
           "memory": "selectedPersonnel",
-          "filter": "attemptingPersonnel,type(Personnel)"
+          "from": "attemptingPersonnel",
+          "filter": "type(Personnel)"
         },
         {
           "type": "stop",
-          "filter": "attemptingPersonnel,type(Personnel),not(memory(selectedPersonnel))"
+          "from": "attemptingPersonnel",
+          "filter": "type(Personnel),not(memory(selectedPersonnel))"
         },
         {
           "type": "placeOnMission",
+          "from": "self",
           "filter": "self"
         }
       ]
@@ -34,6 +37,7 @@
       "effects": [
         {
           "type": "putIntoHand",
+          "from": "self",
           "filter": "self"
         }
       ]

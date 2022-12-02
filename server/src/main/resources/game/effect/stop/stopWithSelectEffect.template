@@ -9,6 +9,7 @@
           "decisionType": "select",
           "memoryData": {
             "prompt": "internal.prompt",
+            "from": "internal.from",
             "filter": "internal.stopFilter",
             "min": "internal.stopMin",
             "max": "internal.stopMax"
@@ -16,7 +17,8 @@
         },
         {
           "type": "executeStop",
-          "memory": "internal.selected"
+          "from": "memory(internal.selected)",
+          "filter": "any"
         },
         {
           "type": "clearMemory",

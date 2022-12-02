@@ -17,7 +17,8 @@
       "costs": [
         {
           "type": "destroy",
-          "filter": "self"
+          "from": "self",
+          "filter": "any"
         }
       ],
       "effects": [
@@ -26,7 +27,8 @@
           "involving": "your,skill(Leadership),type(Personnel)",
           "winEffect": {
             "type": "kill",
-            "randomSelect": "not(your),type(Personnel),inEngagement"
+            "from": "inEngagement",
+            "randomSelect": "not(your),type(Personnel)"
           }
         }
       ]

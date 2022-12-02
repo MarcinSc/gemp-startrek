@@ -21,6 +21,7 @@ import java.util.function.Consumer;
 public class SelectionState implements SelectionDefinition {
     private final World world;
     private final Entity userInputStateEntity;
+    private String source;
     private final CardFilter cardFilter;
     private final Entity sourceEntity;
     private final Memory memory;
@@ -34,27 +35,32 @@ public class SelectionState implements SelectionDefinition {
 
     private String cameraName = "main";
 
-    public SelectionState(World world, Entity userInputStateEntity, CardFilter cardFilter,
+    public SelectionState(World world, Entity userInputStateEntity,
+                          String source, CardFilter cardFilter,
                           SelectionCallback selectionCallback) {
-        this(world, userInputStateEntity, cardFilter, selectionCallback, 1);
+        this(world, userInputStateEntity, source, cardFilter, selectionCallback, 1);
     }
 
-    public SelectionState(World world, Entity userInputStateEntity, CardFilter cardFilter,
+    public SelectionState(World world, Entity userInputStateEntity,
+                          String source, CardFilter cardFilter,
                           SelectionCallback selectionCallback, int maxSelected) {
-        this(world, userInputStateEntity, cardFilter, null, null, selectionCallback, maxSelected);
+        this(world, userInputStateEntity, source, cardFilter, null, null, selectionCallback, maxSelected);
     }
 
-    public SelectionState(World world, Entity userInputStateEntity, CardFilter cardFilter,
+    public SelectionState(World world, Entity userInputStateEntity,
+                          String source, CardFilter cardFilter,
                           Entity sourceEntity, Memory memory,
                           SelectionCallback selectionCallback) {
-        this(world, userInputStateEntity, cardFilter, sourceEntity, memory, selectionCallback, 1);
+        this(world, userInputStateEntity, source, cardFilter, sourceEntity, memory, selectionCallback, 1);
     }
 
-    public SelectionState(World world, Entity userInputStateEntity, CardFilter cardFilter,
+    public SelectionState(World world, Entity userInputStateEntity,
+                          String source, CardFilter cardFilter,
                           Entity sourceEntity, Memory memory,
                           SelectionCallback selectionCallback, int maxSelected) {
         this.world = world;
         this.userInputStateEntity = userInputStateEntity;
+        this.source = source;
         this.cardFilter = cardFilter;
         this.sourceEntity = sourceEntity;
         this.memory = memory;
@@ -156,7 +162,7 @@ public class SelectionState implements SelectionDefinition {
         CardRenderingSystem cardRenderingSystem = world.getSystem(CardRenderingSystem.class);
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);
         HierarchySystem hierarchySystem = world.getSystem(HierarchySystem.class);
-        cardFilteringSystem.forEachCard(sourceEntity, memory, new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, source, new Consumer<Entity>() {
             @Override
             public void accept(Entity cardEntity) {
                 Entity renderedCardEntity = cardRenderingSystem.findRenderedCard(cardEntity);

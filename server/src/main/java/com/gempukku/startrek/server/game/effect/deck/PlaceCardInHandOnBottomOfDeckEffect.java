@@ -28,7 +28,7 @@ public class PlaceCardInHandOnBottomOfDeckEffect extends OneTimeEffectSystem {
         CardFilter filter = cardFilteringSystem.resolveCardFilter(gameEffect.getDataString("filter"));
 
         Array<Entity> cardsToMove = new Array<>();
-        cardFilteringSystem.forEachCardInHand(sourceEntity, memory,
+        cardFilteringSystem.forEachCard(sourceEntity, memory, "hand",
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {

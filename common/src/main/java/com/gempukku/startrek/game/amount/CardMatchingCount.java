@@ -16,15 +16,14 @@ public class CardMatchingCount extends AmountSystem {
 
     @Override
     public int resolveAmount(Entity sourceEntity, Memory memory, Array<String> parameters) {
-        CardFilter filter = cardFilteringSystem.createAndFilter(parameters);
-        return cardFilteringSystem.countMatchingCards(sourceEntity, memory, filter);
+        CardFilter filter = cardFilteringSystem.createAndFilter(parameters, 1);
+        return cardFilteringSystem.countMatchingCards(sourceEntity, memory, parameters.get(0), filter);
     }
 
     @Override
     public void validate(Array<String> parameters) {
-        ValidateUtil.atLeast(parameters, 1);
-        for (String parameter : parameters) {
-            cardFilteringSystem.validateFilter(parameter);
-        }
+        ValidateUtil.atLeast(parameters, 2);
+        cardFilteringSystem.validateSource(parameters.get(0));
+        cardFilteringSystem.validateFilter(parameters, 1);
     }
 }

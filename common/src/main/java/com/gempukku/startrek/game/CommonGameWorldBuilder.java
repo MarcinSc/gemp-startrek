@@ -6,6 +6,7 @@ import com.gempukku.startrek.game.ability.*;
 import com.gempukku.startrek.game.amount.*;
 import com.gempukku.startrek.game.condition.*;
 import com.gempukku.startrek.game.filter.*;
+import com.gempukku.startrek.game.filter.source.*;
 import com.gempukku.startrek.game.mission.MissionOperations;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 
@@ -48,7 +49,7 @@ public class CommonGameWorldBuilder {
                 new HasCardConditionHandler(),
                 new CanBeginEngagementInvolvingPersonnelConditionHandler(),
 
-                // Card filter resovlers
+                // Card filter handlers
                 new MemoryFilterHandler(),
                 new IdInFilterHandler(),
                 new AttachedToFilterHandler(),
@@ -67,7 +68,6 @@ public class CommonGameWorldBuilder {
                 new YourFilterHandler(),
                 new UnstoppedFilterHandler(),
                 new InMissionFilterHandler(),
-                new InPlayFilterHandler(),
                 new PresentWithFilter(),
                 new NotAboardShipFilterHandler(),
                 new TitleFilterHandler(),
@@ -82,6 +82,15 @@ public class CommonGameWorldBuilder {
                 new IsInMissionFilterHandler(),
                 new CompletedMissionFilterHandler(),
                 new AttemptingPersonnelFilter(),
+
+                // Card source handlers
+                new AnySource(),
+                new SelfSource(),
+                new MissionSource(),
+                new InPlaySource(),
+                new HandSource(),
+                new MemorySource(),
+                new AttemptingPersonnelSource(),
 
                 // Card abilities
                 new CardAbilitySystem(),

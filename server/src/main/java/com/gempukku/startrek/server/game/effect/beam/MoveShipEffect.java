@@ -21,8 +21,8 @@ public class MoveShipEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
-        Entity missionCardEntity = cardFilteringSystem.findFirstCardInPlay(sourceEntity, memory, gameEffect.getDataString("mission"));
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
+        Entity missionCardEntity = cardFilteringSystem.findFirstCard(sourceEntity, memory, "inPlay", gameEffect.getDataString("mission"));
+        cardFilteringSystem.forEachCard(sourceEntity, memory, "inPlay", new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
                         zoneOperations.moveShip(entity, missionCardEntity);

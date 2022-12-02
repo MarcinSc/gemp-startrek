@@ -41,7 +41,8 @@
         },
         {
           "type": "destroy",
-          "filter": "self"
+          "from": "self",
+          "filter": "any"
         }
       ]
     }

@@ -21,7 +21,8 @@ public class DestroyEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, gameEffect.getDataString("from"),
+                new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
                         zoneOperations.moveFromCurrentZoneToDiscardPile(cardEntity);
@@ -33,8 +34,9 @@ public class DestroyEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter"},
+                new String[]{"from", "filter"},
                 new String[]{});
+        cardFilteringSystem.validateSource(effect.getString("from"));
         cardFilteringSystem.validateFilter(effect.getString("filter"));
     }
 }

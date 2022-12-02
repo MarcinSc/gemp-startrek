@@ -16,18 +16,13 @@ public class HasOnBoardFilterHandler extends CardFilterSystem {
 
     @Override
     public CardFilter resolveFilter(Array<String> parameters) {
-        CardFilter filter = cardFilteringSystem.createAndFilter(parameters);
+        CardFilter filter = cardFilteringSystem.createAndFilter(parameters, 1);
 
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                Array<Entity> onBoard = cardFilteringSystem.getAllCardsInPlay(sourceEntity, memory, "attachedTo(idIn(" + idProviderSystem.getEntityId(cardEntity) + "))");
-                for (Entity entity : onBoard) {
-                    if (filter.accepts(sourceEntity, memory, entity))
-                        return true;
-                }
-
-                return false;
+                CardFilter attachedFilter = cardFilteringSystem.resolveCardFilter("attachedTo(idIn(" + idProviderSystem.getEntityId(cardEntity) + "))");
+                return cardFilteringSystem.hasCard(sourceEntity, memory, parameters.get(0), attachedFilter, filter);
             }
         };
     }
@@ -35,8 +30,7 @@ public class HasOnBoardFilterHandler extends CardFilterSystem {
     @Override
     public void validate(Array<String> parameters) {
         ValidateUtil.atLeast(parameters, 1);
-        for (String parameter : parameters) {
-            cardFilteringSystem.validateFilter(parameter);
-        }
+        cardFilteringSystem.validateSource(parameters.get(0));
+        cardFilteringSystem.validateFilter(parameters, 1);
     }
 }

@@ -3,7 +3,8 @@
   "actions": [
     {
       "type": "moveCardToStack",
-      "filter": "memory(playedCardId)",
+      "from": "memory(playedCardId)",
+      "filter": "any",
       "abilityIndex": "-1"
     },
     {
@@ -12,7 +13,8 @@
     },
     {
       "type": "moveCardToCore",
-      "filter": "memory(playedCardId)"
+      "from": "memory(playedCardId)",
+      "filter": "any"
     },
     {
       "tpl:extends": "game/effect/trigger/playMandatoryTriggers.template"

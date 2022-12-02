@@ -28,12 +28,12 @@ public class MoveCardToCoreEffect extends OneTimeEffectSystem {
         String fromZoneStr = gameEffect.getDataString("fromZone", null);
         CardZone fromZone = (fromZoneStr != null) ? CardZone.valueOf(fromZoneStr) : null;
 
-        cardFilteringSystem.forEachCard(sourceEntity, memory, new Consumer<Entity>() {
-            @Override
-            public void accept(Entity cardEntity) {
-                CardComponent card = cardEntity.getComponent(CardComponent.class);
-                CardZone oldZone = card.getCardZone();
-                if (fromZone == null || oldZone == fromZone) {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, gameEffect.getDataString("from"), new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity cardEntity) {
+                        CardComponent card = cardEntity.getComponent(CardComponent.class);
+                        CardZone oldZone = card.getCardZone();
+                        if (fromZone == null || oldZone == fromZone) {
                             zoneOperations.moveFromCurrentZoneToCore(cardEntity);
                         }
                     }
@@ -44,8 +44,9 @@ public class MoveCardToCoreEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter"},
+                new String[]{"from", "filter"},
                 new String[]{"fromZone"});
+        cardFilteringSystem.validateSource(effect.getString("from"));
         cardFilteringSystem.validateFilter(effect.getString("filter"));
         CardZone.valueOf(effect.getString("zone"));
         String fromZone = effect.getString("fromZone");

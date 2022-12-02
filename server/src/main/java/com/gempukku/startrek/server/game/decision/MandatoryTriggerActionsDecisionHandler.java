@@ -80,7 +80,7 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
         CardFilter triggerFilter = TriggerRequirements.createMandatoryTriggerRequirements(
                 username, decisionData.get("triggerType"), usedIds,
                 cardFilteringSystem);
-        return !cardFilteringSystem.hasCard(sourceEntity, new Memory(decisionData), triggerFilter);
+        return !cardFilteringSystem.hasCard(sourceEntity, new Memory(decisionData), "inPlay", triggerFilter);
     }
 
     @Override

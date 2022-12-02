@@ -129,7 +129,7 @@ public class ClientMandatoryTriggerActionsDecisionHandler extends BaseSystem imp
         CardFilter triggerFilter = TriggerRequirements.createMandatoryTriggerRequirements(
                 authenticationHolderSystem.getUsername(), triggerType, usedIds,
                 cardFilteringSystem);
-        selectionState = new SelectionState(world, userInputStateEntity, triggerFilter,
+        selectionState = new SelectionState(world, userInputStateEntity, "inPlay", triggerFilter,
                 sourceEntity, memory,
                 new SelectionCallback() {
                     @Override

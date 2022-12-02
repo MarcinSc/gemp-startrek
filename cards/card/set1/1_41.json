@@ -10,30 +10,35 @@
       "effects": [
         {
           "type": "randomlySelect",
-          "memory": "selectedPersonnel",
-          "filter": "attemptingPersonnel,type(Personnel)"
+          "from": "attemptingPersonnel",
+          "filter": "type(Personnel)",
+          "memory": "selectedPersonnel"
         },
         {
           "type": "condition",
           "condition": "or(and(countSkillAtLeast(attemptingPersonnel,Diplomacy,1),countSkillAtLeast(attemptingPersonnel,Medical,1)),countSkillAtLeast(attemptingPersonnel,Security,2))",
           "trueEffect": {
             "type": "stop",
-            "filter": "memory(selectedPersonnel)"
+            "from": "memory(selectedPersonnel)",
+            "filter": "any"
           },
           "falseEffect": {
             "type": "sequence",
             "actions": [
               {
                 "type": "kill",
-                "filter": "memory(selectedPersonnel)"
+                "from": "memory(selectedPersonnel)",
+                "filter": "any"
               },
               {
                 "type": "stop",
-                "filter": "attemptingPersonnel,not(memory(selectedPersonnel))"
+                "from": "attemptingPersonnel",
+                "filter": "not(memory(selectedPersonnel))"
               },
               {
                 "type": "moveCardToDilemmaPile",
-                "filter": "self"
+                "from": "self",
+                "filter": "any"
               }
             ]
           }

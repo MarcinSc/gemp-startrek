@@ -7,10 +7,12 @@
   "condition": "or(countMemorySkillAtLeast(attemptingPersonnel,firstSkill,1),countMemorySkillAtLeast(attemptingPersonnel,secondSkill,1))",
   "tryEffect": {
     "type": "stop",
-    "select": "type(Personnel),attemptingPersonnel,or(memorySkill(firstSkill),memorySkill(secondSkill))"
+    "from": "attemptingPersonnel",
+    "select": "type(Personnel),or(memorySkill(firstSkill),memorySkill(secondSkill))"
   },
   "failEffect": {
     "type": "kill",
-    "randomSelect": "type(Personnel),attemptingPersonnel"
+    "from": "attemptingPersonnel",
+    "randomSelect": "type(Personnel)"
   }
 }

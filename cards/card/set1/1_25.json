@@ -10,7 +10,8 @@
       "effects": [
         {
           "type": "returnToHand",
-          "filter": "inPlay,your,type(Equipment)"
+          "from": "inPlay",
+          "filter": "your,type(Equipment)"
         }
       ]
     }

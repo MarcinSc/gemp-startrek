@@ -13,7 +13,8 @@
       "actions": [
         {
           "type": "revealCards",
-          "filter": "memory(usedCardId)"
+          "from": "memory(usedCardId)",
+          "filter": "any"
         },
         {
           "type": "createEffectOnStack",

@@ -4,7 +4,8 @@
     {
       "type": "addTitleToMemory",
       "memory": "facedDilemmas",
-      "filter": "memory(dilemmaCard)"
+      "from": "memory(dilemmaCard)",
+      "filter": "any"
     },
     {
       "type": "memorizeAmount",

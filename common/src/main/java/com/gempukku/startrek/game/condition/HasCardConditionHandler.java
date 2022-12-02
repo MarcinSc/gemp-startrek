@@ -16,16 +16,14 @@ public class HasCardConditionHandler extends ConditionSystem {
 
     @Override
     public boolean resolveCondition(Entity sourceEntity, Memory memory, Array<String> parameters) {
-        CardFilter cardFilter = cardFilteringSystem.createAndFilter(parameters);
-        Entity card = cardFilteringSystem.findFirstCardInPlay(sourceEntity, memory, cardFilter);
-        return card != null;
+        CardFilter cardFilter = cardFilteringSystem.createAndFilter(parameters, 1);
+        return cardFilteringSystem.hasCard(sourceEntity, memory, parameters.get(0), cardFilter);
     }
 
     @Override
     public void validate(Array<String> parameters) {
         ValidateUtil.atLeast(parameters, 1);
-        for (String parameter : parameters) {
-            cardFilteringSystem.validateFilter(parameter);
-        }
+        cardFilteringSystem.validateSource(parameters.get(0));
+        cardFilteringSystem.validateFilter(parameters, 1);
     }
 }

@@ -30,6 +30,7 @@ public class StopEffect extends EffectSystem {
             String select = gameEffect.getDataString("select", null);
             String opponentSelect = gameEffect.getDataString("opponentSelect", null);
             Entity stopEffectEntity;
+            memory.setValue("internal.from", gameEffect.getDataString("from"));
             if (filter != null) {
                 memory.setValue("internal.stopFilter", filter);
                 memory.setValue("internal.stopMemory", "cardsToStop");
@@ -63,11 +64,12 @@ public class StopEffect extends EffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{},
+                new String[]{"from"},
                 new String[]{"filter", "select", "opponentSelect", "player"});
         ValidateUtil.hasExactlyOneOf(effect, "filter", "select", "opponentSelect");
         ValidateUtil.ifPresentCheckFor(effect, "opponentSelect", "player");
 
+        cardFilteringSystem.validateSource(effect.getString("from"));
         cardFilteringSystem.validateFilter(effect.getString("filter", "any"));
         cardFilteringSystem.validateFilter(effect.getString("select", "any"));
         cardFilteringSystem.validateFilter(effect.getString("opponentSelect", "any"));

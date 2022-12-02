@@ -36,7 +36,7 @@ public class DecisionSystem extends EffectSystem {
         ValidateUtil.effectExpectedFields(effect,
                 new String[]{"player", "decisionType"},
                 new String[]{"data", "memoryData"});
-        String player = effect.getString("decisionType");
+        String player = effect.getString("player");
         playerResolverSystem.validatePlayer(player);
     }
 

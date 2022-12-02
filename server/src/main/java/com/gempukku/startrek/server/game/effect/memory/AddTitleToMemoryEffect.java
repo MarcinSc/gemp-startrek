@@ -22,7 +22,7 @@ public class AddTitleToMemoryEffect extends OneTimeEffectSystem {
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
         String memoryName = gameEffect.getDataString("memory");
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory,
+        cardFilteringSystem.forEachCard(sourceEntity, memory, gameEffect.getDataString("from"),
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
@@ -35,7 +35,9 @@ public class AddTitleToMemoryEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"memory", "filter"},
+                new String[]{"from", "memory", "filter"},
                 new String[]{});
+        cardFilteringSystem.validateSource(effect.getString("from"));
+        cardFilteringSystem.validateFilter(effect.getString("filter"));
     }
 }

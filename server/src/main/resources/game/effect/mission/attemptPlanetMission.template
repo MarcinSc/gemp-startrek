@@ -32,7 +32,7 @@
         {
           "type": "memorizeAmount",
           "memory": "dilemmaDifference",
-          "amount": "minus(memory(attemptingPersonnelCount),cardMatchingCount(type(Dilemma),attachedTo(memory(missionId))))"
+          "amount": "minus(memory(attemptingPersonnelCount),cardMatchingCount(inPlay,type(Dilemma),attachedTo(memory(missionId))))"
         },
         {
           "type": "createDilemmaStack",
@@ -67,7 +67,8 @@
           },
           "falseEffect": {
             "type": "stop",
-            "filter": "attemptingPersonnel"
+            "from": "attemptingPersonnel",
+            "filter": "any"
           }
         },
         {

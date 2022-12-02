@@ -21,7 +21,7 @@ public class CanBeginEngagementInvolvingPersonnelConditionHandler extends Condit
                 "staffed," +
                 "hasOnBoard(" + StringUtils.merge(parameters) + ")," +
                 "presentWith(type(Ship),not(owner(self)))";
-        return cardFilteringSystem.findFirstCardInPlay(sourceEntity, memory, yourShip) != null;
+        return cardFilteringSystem.hasCard(sourceEntity, memory, "inPlay", yourShip);
     }
 
     @Override

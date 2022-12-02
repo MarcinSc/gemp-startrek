@@ -27,7 +27,7 @@ public class PresentWithFilter extends CardFilterSystem {
 
                 AndCardFilter resultFilter = new AndCardFilter(sameMissionFilter, filter);
 
-                return cardFilteringSystem.hasCard(sourceEntity, memory, resultFilter);
+                return cardFilteringSystem.hasCard(sourceEntity, memory, "inPlay", resultFilter);
             }
         };
     }

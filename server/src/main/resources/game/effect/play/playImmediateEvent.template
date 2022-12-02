@@ -3,7 +3,8 @@
   "actions": [
     {
       "type": "moveCardToStack",
-      "filter": "memory(playedCardId)",
+      "from": "memory(playedCardId)",
+      "filter": "any",
       "abilityIndex": "0"
     },
     {
@@ -16,7 +17,8 @@
     },
     {
       "type": "moveCardToDiscardPile",
-      "filter": "memory(playedCardId)",
+      "from": "memory(playedCardId)",
+      "filter": "any",
       "fromZone": "Stack"
     },
     {

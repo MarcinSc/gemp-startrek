@@ -20,21 +20,20 @@ public class CostToPlayAmountHandler extends AmountSystem {
     @Override
     public int resolveAmount(Entity sourceEntity, Memory memory, Array<String> parameters) {
         int[] total = new int[1];
-        cardFilteringSystem.forEachCard(sourceEntity, memory,
+        cardFilteringSystem.forEachCard(sourceEntity, memory, parameters.get(0),
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
                         total[0] += cardLookupSystem.getCardDefinition(entity).getCost();
                     }
-                }, cardFilteringSystem.createAndFilter(parameters));
+                }, cardFilteringSystem.createAndFilter(parameters, 1));
         return total[0];
     }
 
     @Override
     public void validate(Array<String> parameters) {
         ValidateUtil.atLeast(parameters, 1);
-        for (String parameter : parameters) {
-            cardFilteringSystem.validateFilter(parameter);
-        }
+        cardFilteringSystem.validateSource(parameters.get(0));
+        cardFilteringSystem.validateFilter(parameters, 1);
     }
 }

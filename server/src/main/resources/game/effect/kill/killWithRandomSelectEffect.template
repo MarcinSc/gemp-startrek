@@ -5,12 +5,14 @@
       "actions": [
         {
           "type": "randomlySelect",
+          "from": "internal.from",
           "filterMemory": "internal.killFilter",
           "memory": "internal.killMemory"
         },
         {
           "type": "executeKill",
-          "filter": "memory(internal.killMemory)"
+          "from": "memory(internal.killMemory)",
+          "filter": "any"
         },
         {
           "type": "clearMemory",

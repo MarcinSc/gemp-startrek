@@ -24,7 +24,7 @@ public class OnMissionAttributeMoreThanHandler extends ConditionSystem {
         CardAttribute attribute = CardAttribute.valueOf(parameters.get(0));
         int countRequired = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(1));
         int[] result = new int[1];
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, "attemptingPersonnel", new Consumer<Entity>() {
             @Override
             public void accept(Entity entity) {
                 result[0] += amountResolverSystem.resolveAmount(entity, memory, "attribute(" + attribute.name() + ")");

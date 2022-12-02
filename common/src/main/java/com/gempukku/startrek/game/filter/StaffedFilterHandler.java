@@ -22,7 +22,7 @@ public class StaffedFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                Array<Entity> unstoppedPersonnelOnBoard = cardFilteringSystem.getAllCardsInPlay(cardEntity, memory,
+                Array<Entity> unstoppedPersonnelOnBoard = cardFilteringSystem.getAll(cardEntity, memory, "inPlay",
                         "type(Personnel),unstopped,attachedTo(self)");
                 int cmdCount = 0;
                 int stfCount = 0;

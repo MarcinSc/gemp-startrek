@@ -62,7 +62,7 @@ public class ClientPlayOrDrawDecisionHandler extends BaseSystem implements Decis
         CardFilter playRequirementsFilter = PlayRequirements.createPlayRequirements(authenticationHolderSystem.getUsername(),
                 cardFilteringSystem, cardAbilitySystem);
 
-        selectionState = new SelectionState(world, userInputStateEntity, playRequirementsFilter,
+        selectionState = new SelectionState(world, userInputStateEntity, "hand", playRequirementsFilter,
                 new SelectionCallback() {
                     @Override
                     public void selectionChanged(ObjectSet<Entity> selected) {

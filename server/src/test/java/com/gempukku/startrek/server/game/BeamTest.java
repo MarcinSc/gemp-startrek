@@ -138,7 +138,7 @@ public class BeamTest extends AbstractGameTest {
         sendDecisionSuccessfully("test1",
                 "action", "moveShip",
                 "shipId", getCardId(ship),
-                "missionId", getCardId(findEntity("type(Mission),inMission(username(test1),0)")));
+                "missionId", getCardId(findEntity("missions", "inMission(username(test1),0)")));
 
         assertEquals(0, ship.getComponent(CardInMissionComponent.class).getMissionIndex());
         assertEquals(0, personnel1.getComponent(CardInMissionComponent.class).getMissionIndex());

@@ -21,22 +21,24 @@ public class MemorizeCardsEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
+        String from = memory.getValue(gameEffect.getDataString("fromMemory"));
+        String filter = memory.getValue(gameEffect.getDataString("filterMemory"));
         String memoryName = gameEffect.getDataString("memory");
 
         memory.removeValue(memoryName);
-        cardFilteringSystem.forEachCard(sourceEntity, memory,
+        cardFilteringSystem.forEachCard(sourceEntity, memory, from,
                 new Consumer<Entity>() {
                     @Override
                     public void accept(Entity entity) {
                         memory.appendValue(memoryName, idProviderSystem.getEntityId(entity));
                     }
-                }, memory.getValue(gameEffect.getDataString("filterMemory")));
+                }, filter);
     }
 
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"memory", "filterMemory"},
+                new String[]{"fromMemory", "memory", "filterMemory"},
                 new String[]{});
     }
 }

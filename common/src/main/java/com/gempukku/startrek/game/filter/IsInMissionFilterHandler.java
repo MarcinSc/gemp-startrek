@@ -19,16 +19,15 @@ public class IsInMissionFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                Array<Entity> missionEntities = cardFilteringSystem.getAllCardsInPlay(sourceEntity, memory, missionFilter);
                 CardInMissionComponent cardInMission = cardEntity.getComponent(CardInMissionComponent.class);
                 if (cardInMission == null)
                     return false;
-                for (Entity missionEntity : missionEntities) {
-                    CardInMissionComponent mission = missionEntity.getComponent(CardInMissionComponent.class);
-                    if (!mission.getMissionOwner().equals(cardInMission.getMissionOwner()) ||
-                            mission.getMissionIndex() != cardInMission.getMissionIndex())
-                        return false;
-                }
+
+                Entity missionEntity = cardFilteringSystem.findFirstCard(sourceEntity, memory, parameters.get(0), "any");
+                CardInMissionComponent mission = missionEntity.getComponent(CardInMissionComponent.class);
+                if (!mission.getMissionOwner().equals(cardInMission.getMissionOwner()) ||
+                        mission.getMissionIndex() != cardInMission.getMissionIndex())
+                    return false;
 
                 return true;
             }
@@ -37,9 +36,7 @@ public class IsInMissionFilterHandler extends CardFilterSystem {
 
     @Override
     public void validate(Array<String> parameters) {
-        ValidateUtil.atLeast(parameters, 1);
-        for (String parameter : parameters) {
-            cardFilteringSystem.validateFilter(parameter);
-        }
+        ValidateUtil.exactly(parameters, 1);
+        cardFilteringSystem.validateSource(parameters.get(0));
     }
 }

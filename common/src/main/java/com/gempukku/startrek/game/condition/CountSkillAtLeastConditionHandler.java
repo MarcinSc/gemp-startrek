@@ -25,19 +25,19 @@ public class CountSkillAtLeastConditionHandler extends ConditionSystem {
         PersonnelSkill skill = PersonnelSkill.valueOf(parameters.get(1));
         int amount = amountResolverSystem.resolveAmount(sourceEntity, memory, parameters.get(2));
         int[] result = new int[1];
-        cardFilteringSystem.forEachCardInPlay(sourceEntity, memory, new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, parameters.get(0), new Consumer<Entity>() {
             @Override
             public void accept(Entity entity) {
                 result[0] += amountResolverSystem.resolveAmount(entity, memory, "skillCount(" + skill.name() + ")");
             }
-        }, parameters.get(0));
+        }, "any");
         return result[0] >= amount;
     }
 
     @Override
     public void validate(Array<String> parameters) {
         ValidateUtil.exactly(parameters, 3);
-        cardFilteringSystem.validateFilter(parameters.get(0));
+        cardFilteringSystem.validateSource(parameters.get(0));
         PersonnelSkill.valueOf(parameters.get(1));
         amountResolverSystem.validateAmount(parameters.get(2));
     }

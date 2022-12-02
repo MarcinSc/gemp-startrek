@@ -25,7 +25,7 @@ public class MoveCardToStackEffect extends OneTimeEffectSystem {
         String filter = gameEffect.getDataString("filter");
         int abilityIndex = amountResolverSystem.resolveAmount(sourceEntity, memory, gameEffect.getDataString("abilityIndex", "-1"));
 
-        cardFilteringSystem.forEachCard(sourceEntity, memory, new Consumer<Entity>() {
+        cardFilteringSystem.forEachCard(sourceEntity, memory, gameEffect.getDataString("from"), new Consumer<Entity>() {
                     @Override
                     public void accept(Entity cardEntity) {
                         zoneOperations.moveFromCurrentZoneToStack(cardEntity, abilityIndex);
@@ -37,8 +37,9 @@ public class MoveCardToStackEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter"},
+                new String[]{"from", "filter"},
                 new String[]{"abilityIndex"});
+        cardFilteringSystem.validateSource(effect.getString("from"));
         cardFilteringSystem.validateFilter(effect.getString("filter"));
         String abilityIndex = effect.getString("abilityIndex");
         if (abilityIndex != null)

@@ -152,8 +152,8 @@ public abstract class AbstractGameTest {
                 "triggerIndex", String.valueOf(triggerIndex)));
     }
 
-    protected Entity findEntity(String filter) {
-        return world.getSystem(CardFilteringSystem.class).findFirstCard(null, null, filter);
+    protected Entity findEntity(String source, String filter) {
+        return world.getSystem(CardFilteringSystem.class).findFirstCard(null, null, source, filter);
     }
 
     protected Entity getPlayer(String username) {

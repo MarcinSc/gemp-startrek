@@ -31,11 +31,11 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
         boolean faceUp = conditionResolverSystem.resolveBoolean(sourceEntity, memory, gameEffect.getDataString("faceUp"));
         Entity missionEntity = serverEntityIdSystem.findfromId(missionId);
 
-        cardFilteringSystem.forEachCard(sourceEntity, memory, new Consumer<Entity>() {
-            @Override
-            public void accept(Entity cardEntity) {
-                zoneOperations.moveFromCurrentZoneToMission(cardEntity, missionEntity, faceUp);
-            }
+        cardFilteringSystem.forEachCard(sourceEntity, memory, gameEffect.getDataString("from"), new Consumer<Entity>() {
+                    @Override
+                    public void accept(Entity cardEntity) {
+                        zoneOperations.moveFromCurrentZoneToMission(cardEntity, missionEntity, faceUp);
+                    }
                 }, filter
         );
     }
@@ -43,8 +43,9 @@ public class MoveCardToMissionEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"filter", "missionMemory", "faceUp"},
+                new String[]{"from", "filter", "missionMemory", "faceUp"},
                 new String[]{});
+        cardFilteringSystem.validateSource("from");
         cardFilteringSystem.validateFilter(effect.getString("filter"));
         conditionResolverSystem.validateCondition(effect.getString("faceUp"));
     }

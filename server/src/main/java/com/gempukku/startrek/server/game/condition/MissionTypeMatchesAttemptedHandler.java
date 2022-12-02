@@ -31,7 +31,7 @@ public class MissionTypeMatchesAttemptedHandler extends ConditionSystem {
         Entity missionEntity = idProviderSystem.getEntityById(attemptedMission.getMissionId());
         final MissionType missionType = cardLookupSystem.getCardDefinition(missionEntity).getMissionType();
 
-        return cardFilteringSystem.hasCard(sourceEntity, memory, cardFilteringSystem.createAndFilter(parameters),
+        return cardFilteringSystem.hasCard(sourceEntity, memory, "missions", cardFilteringSystem.createAndFilter(parameters),
                 new CardFilter() {
                     @Override
                     public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
