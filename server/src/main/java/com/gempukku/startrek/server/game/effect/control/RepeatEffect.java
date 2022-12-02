@@ -28,11 +28,11 @@ public class RepeatEffect extends EffectSystem {
     public void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         String type = gameEffect.getType();
         if (type.equals("repeatTimes")) {
-            repeat(sourceEntity, gameEffect, memory);
+            repeat(sourceEntity, memory, effectEntity, gameEffect);
         } else if (type.equals("repeatUntil")) {
-            repeatUntil(sourceEntity, gameEffect, memory);
+            repeatUntil(sourceEntity, memory, effectEntity, gameEffect);
         } else if (type.equals("repeatUntilInTurnOrder")) {
-            repeatUntilInTurnOrder(sourceEntity, gameEffect, memory);
+            repeatUntilInTurnOrder(sourceEntity, memory, effectEntity, gameEffect);
         }
     }
 
@@ -44,28 +44,30 @@ public class RepeatEffect extends EffectSystem {
                     new String[]{"times", "action"},
                     new String[]{});
             amountResolverSystem.validateAmount(effect.getString("times"));
-            validate(effect.get("action"));
+            validateOneEffect(effect.get("action"));
         } else if (type.equals("repeatUntil")) {
             ValidateUtil.effectExpectedFields(effect,
                     new String[]{"condition", "action"},
                     new String[]{});
             conditionResolverSystem.validateCondition(effect.getString("condition"));
-            validate(effect.get("action"));
+            validateOneEffect(effect.get("action"));
         } else if (type.equals("repeatUntilInTurnOrder")) {
             ValidateUtil.effectExpectedFields(effect,
                     new String[]{"condition", "playerMemory", "action"},
                     new String[]{});
             conditionResolverSystem.validateCondition(effect.getString("condition"));
-            validate(effect.get("action"));
+            validateOneEffect(effect.get("action"));
         }
     }
 
-    private void repeat(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void repeat(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         int times = amountResolverSystem.resolveAmount(sourceEntity, memory,
                 gameEffect.getDataString("times"));
 
+        String memoryName = getMemoryName(effectEntity, "repeatedTimes");
+
         int executedTimes = 0;
-        String executed = memory.getValue("times");
+        String executed = memory.getValue(memoryName);
         if (executed != null) {
             executedTimes = Integer.parseInt(executed);
         }
@@ -74,17 +76,16 @@ public class RepeatEffect extends EffectSystem {
             JsonValue action = gameEffect.getClonedDataObject("action");
             Entity actionToStack = createActionFromJson(action, sourceEntity);
             executedTimes++;
-            memory.setValue("times", String.valueOf(executedTimes));
+            memory.setValue(memoryName, String.valueOf(executedTimes));
 
             stackEffect(actionToStack);
         } else {
-            memory.removeValue("times");
+            memory.removeValue(memoryName);
             removeTopEffectFromStack();
         }
     }
 
-
-    private void repeatUntil(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void repeatUntil(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         String condition = gameEffect.getDataString("condition");
         boolean result = conditionResolverSystem.resolveBoolean(sourceEntity, memory, condition);
         if (!result) {
@@ -96,16 +97,19 @@ public class RepeatEffect extends EffectSystem {
         }
     }
 
-    private void repeatUntilInTurnOrder(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void repeatUntilInTurnOrder(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         boolean condition = conditionResolverSystem.resolveBoolean(sourceEntity, memory,
                 gameEffect.getDataString("condition"));
+        String memoryName = getMemoryName(effectEntity, "lastPlayerIndex");
         String playerMemoryName = gameEffect.getDataString("playerMemory");
+
         if (!condition) {
             TurnSequenceComponent turnSequence = LazyEntityUtil.findEntityWithComponent(world, TurnSequenceComponent.class).
                     getComponent(TurnSequenceComponent.class);
             Array<String> players = turnSequence.getPlayers();
 
-            String playerIndex = memory.getValue("playerIndex");
+
+            String playerIndex = memory.getValue(memoryName);
             int nextPlayerIndex = 0;
             if (playerIndex != null) {
                 nextPlayerIndex = Integer.parseInt(playerIndex) + 1;
@@ -117,14 +121,14 @@ public class RepeatEffect extends EffectSystem {
             String player = players.get(nextPlayerIndex);
             memory.setValue(playerMemoryName, player);
             JsonValue action = gameEffect.getClonedDataObject("action");
-            memory.setValue("playerIndex", String.valueOf(nextPlayerIndex));
+            memory.setValue(memoryName, String.valueOf(nextPlayerIndex));
 
             Entity actionToStack = createActionFromJson(action, sourceEntity);
 
             stackEffect(actionToStack);
         } else {
             memory.removeValue(playerMemoryName);
-            memory.removeValue("playerIndex");
+            memory.removeValue(memoryName);
             removeTopEffectFromStack();
         }
     }

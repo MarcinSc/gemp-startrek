@@ -9,23 +9,17 @@
       "type": "dilemmaEffect",
       "effects": [
         {
-          "type": "condition",
-          "condition": "or(countSkillAtLeast(attemptingPersonnel,Leadership,1),countSkillAtLeast(attemptingPersonnel,Officer,1))",
-          "trueEffect": {
-            "type": "stop",
-            "select": "type(Personnel),attemptingPersonnel,or(skill(Leadership),skill(Officer))"
-          },
-          "falseEffect": [
-            {
-              "type": "randomlySelect",
-              "filter": "type(Personnel),attemptingPersonnel",
-              "memory": "randomPersonnel"
-            },
-            {
-              "type": "kill",
-              "filter": "memory(randomPersonnel)"
-            }
-          ]
+          "type": "memorizeString",
+          "memory": "firstSkill",
+          "value": "Leadership"
+        },
+        {
+          "type": "memorizeString",
+          "memory": "secondSkill",
+          "value": "Officer"
+        },
+        {
+          "tpl:extends": "card/set1/commandDecisions.effect"
         }
       ]
     }

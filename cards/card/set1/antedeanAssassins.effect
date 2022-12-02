@@ -2,23 +2,18 @@
   "type": "condition",
   "condition": "or(countMemorySkillAtLeast(attemptingPersonnel,firstSkill,2),countMemorySkillAtLeast(attemptingPersonnel,secondSkill,2))",
   "falseEffect": {
-    "type": "condition",
+    "type": "tryOrFail",
+    "comment": [
+      "your opponent chooses an [firstSkill] or [secondSkill] personnel to be stopped.",
+      "If your opponent cannot, all your personnel are stopped and this dilemma returns to its owner's dilemma pile."
+    ],
     "condition": "hasCard(attemptingPersonnel,or(memorySkill(firstSkill),memorySkill(secondSkill)))",
-    "trueEffect": {
-      "type": "sequence",
-      "actions": [
-        {
-          "type": "opponentSelect",
-          "filter": "attemptingPersonnel,or(memorySkill(firstSkill),memorySkill(secondSkill))",
-          "memorize": "selectedCharacter"
-        },
-        {
-          "type": "stop",
-          "filter": "memory(selectedCharacter)"
-        }
-      ]
+    "tryEffect": {
+      "type": "stop",
+      "opponentSelect": "attemptingPersonnel,or(memorySkill(firstSkill),memorySkill(secondSkill))",
+      "player": "nextPlayer"
     },
-    "falseEffect": {
+    "failEffect": {
       "type": "sequence",
       "actions": [
         {

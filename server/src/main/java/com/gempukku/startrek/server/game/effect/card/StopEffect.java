@@ -1,6 +1,7 @@
 package com.gempukku.startrek.server.game.effect.card;
 
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
@@ -30,12 +31,14 @@ public class StopEffect extends EffectSystem {
                 memory.setValue("internal.stopFilter", filter);
                 memory.setValue("internal.stopMemory", "cardsToStop");
                 stopEffectEntity = spawnSystem.spawnEntity("game/effect/stop/stopWithFilterEffect.template");
-            } else {
+            } else if (select != null) {
                 memory.setValue("internal.prompt", "Choose cards to stop");
                 memory.setValue("internal.stopFilter", select);
                 memory.setValue("internal.stopMin", "1");
                 memory.setValue("internal.stopMax", "1");
                 stopEffectEntity = spawnSystem.spawnEntity("game/effect/stop/stopWithSelectEffect.template");
+            } else {
+                throw new GdxRuntimeException("Unable to resolve a stop effect");
             }
             memory.setValue("internal.stopStacked", "true");
             stackEffect(stopEffectEntity);

@@ -2,7 +2,6 @@ package com.gempukku.startrek.server.game.effect.control;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.condition.ConditionResolverSystem;
@@ -13,7 +12,6 @@ import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 public class ConditionEffect extends EffectSystem {
     private GameEffectSystem gameEffectSystem;
     private ConditionResolverSystem conditionResolverSystem;
-    private IdProviderSystem idProviderSystem;
 
     public ConditionEffect() {
         super("condition");
@@ -21,7 +19,7 @@ public class ConditionEffect extends EffectSystem {
 
     @Override
     protected void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
-        String conditionMemory = "effectStacked." + idProviderSystem.getEntityId(effectEntity);
+        String conditionMemory = getMemoryName(effectEntity, "effectStacked");
         String effectStacked = memory.getValue(conditionMemory);
         if (effectStacked != null && effectStacked.equals("true")) {
             memory.removeValue(conditionMemory);
@@ -50,9 +48,9 @@ public class ConditionEffect extends EffectSystem {
         conditionResolverSystem.validateCondition(effect.getString("condition"));
         JsonValue trueEffect = effect.get("trueEffect");
         if (trueEffect != null)
-            validateEffects(trueEffect);
+            validateOneEffect(trueEffect);
         JsonValue falseEffect = effect.get("falseEffect");
         if (falseEffect != null)
-            validateEffects(falseEffect);
+            validateOneEffect(falseEffect);
     }
 }

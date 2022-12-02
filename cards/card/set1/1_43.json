@@ -9,41 +9,52 @@
       "type": "dilemmaEffect",
       "effects": [
         {
-          "type": "randomlySelect",
-          "memory": "selectedPersonnel1",
-          "filter": "attemptingPersonnel,type(Personnel)"
-        },
-        {
-          "type": "stop",
-          "filter": "memory(selectedPersonnel1)"
-        },
-        {
-          "type": "condition",
-          "condition": "countAtLeast(and(attemptingPersonnel,type(Personnel)),9)",
-          "trueEffect": [
+          "type": "sequence",
+          "actions": [
             {
               "type": "randomlySelect",
-              "memory": "selectedPersonnel2",
+              "memory": "selectedPersonnel1",
               "filter": "attemptingPersonnel,type(Personnel)"
             },
             {
               "type": "stop",
-              "filter": "memory(selectedPersonnel2)"
+              "filter": "memory(selectedPersonnel1)"
             },
             {
               "type": "condition",
-              "condition": "countAtLeast(and(attemptingPersonnel,type(Personnel)),10)",
-              "trueEffect": [
-                {
-                  "type": "randomlySelect",
-                  "memory": "selectedPersonnel3",
-                  "filter": "attemptingPersonnel,type(Personnel)"
-                },
-                {
-                  "type": "stop",
-                  "filter": "memory(selectedPersonnel3)"
-                }
-              ]
+              "condition": "countAtLeast(and(attemptingPersonnel,type(Personnel)),9)",
+              "trueEffect": {
+                "type": "sequence",
+                "actions": [
+                  {
+                    "type": "randomlySelect",
+                    "memory": "selectedPersonnel2",
+                    "filter": "attemptingPersonnel,type(Personnel)"
+                  },
+                  {
+                    "type": "stop",
+                    "filter": "memory(selectedPersonnel2)"
+                  },
+                  {
+                    "type": "condition",
+                    "condition": "countAtLeast(and(attemptingPersonnel,type(Personnel)),10)",
+                    "trueEffect": {
+                      "type": "sequence",
+                      "actions": [
+                        {
+                          "type": "randomlySelect",
+                          "memory": "selectedPersonnel3",
+                          "filter": "attemptingPersonnel,type(Personnel)"
+                        },
+                        {
+                          "type": "stop",
+                          "filter": "memory(selectedPersonnel3)"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
             }
           ]
         }

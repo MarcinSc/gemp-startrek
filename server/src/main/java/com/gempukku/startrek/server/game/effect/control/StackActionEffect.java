@@ -30,9 +30,9 @@ public class StackActionEffect extends EffectSystem {
     public void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         String effectType = gameEffect.getType();
         if (effectType.equals("stackForEachPlayer")) {
-            stackForEachPlayerEffect(sourceEntity, gameEffect, memory);
+            stackForEachPlayerEffect(sourceEntity, memory, effectEntity, gameEffect);
         } else if (effectType.equals("stackActionTemplate")) {
-            stackActionTemplate(sourceEntity, gameEffect, memory);
+            stackActionTemplate(sourceEntity, memory, effectEntity, gameEffect);
         }
     }
 
@@ -43,7 +43,7 @@ public class StackActionEffect extends EffectSystem {
             ValidateUtil.effectExpectedFields(effect,
                     new String[]{"playerMemory", "action"},
                     new String[]{});
-            validate(effect.get("action"));
+            validateOneEffect(effect.get("action"));
         } else if (type.equals("stackActionTemplate")) {
             ValidateUtil.effectExpectedFields(effect,
                     new String[]{"template"},
@@ -51,11 +51,12 @@ public class StackActionEffect extends EffectSystem {
         }
     }
 
-    private void stackForEachPlayerEffect(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void stackForEachPlayerEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         GameComponent game = gameEntityProvider.getGameEntity().getComponent(GameComponent.class);
         Array<String> players = game.getPlayers();
 
-        String playerIndex = memory.getValue("playerIndex");
+        String memoryName = getMemoryName(effectEntity, "lastPlayerIndex");
+        String playerIndex = memory.getValue(memoryName);
         int nextPlayerIndex = 0;
         if (playerIndex != null) {
             nextPlayerIndex = Integer.parseInt(playerIndex) + 1;
@@ -64,7 +65,7 @@ public class StackActionEffect extends EffectSystem {
         String playerMemoryName = gameEffect.getDataString("playerMemory");
         if (nextPlayerIndex == players.size) {
             memory.removeValue(playerMemoryName);
-            memory.removeValue("playerIndex");
+            memory.removeValue(memoryName);
             // Finished all players - remove from stack
             removeTopEffectFromStack();
         } else {
@@ -72,13 +73,13 @@ public class StackActionEffect extends EffectSystem {
             memory.setValue(playerMemoryName, player);
             JsonValue action = gameEffect.getClonedDataObject("action");
             Entity actionToStack = createActionFromJson(action, sourceEntity);
-            memory.setValue("playerIndex", String.valueOf(nextPlayerIndex));
+            memory.setValue(memoryName, String.valueOf(nextPlayerIndex));
 
             stackEffect(actionToStack);
         }
     }
 
-    private void stackActionTemplate(Entity sourceEntity, GameEffectComponent gameEffect, Memory memory) {
+    private void stackActionTemplate(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         String template = gameEffect.getDataString("template");
 
         Entity spawnedAction = spawnSystem.spawnEntity(template);

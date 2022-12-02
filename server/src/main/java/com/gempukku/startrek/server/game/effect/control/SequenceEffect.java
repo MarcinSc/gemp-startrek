@@ -3,7 +3,6 @@ package com.gempukku.startrek.server.game.effect.control;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.JsonValue;
-import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
@@ -13,7 +12,6 @@ import com.gempukku.startrek.server.game.effect.GameEffectSystem;
 
 public class SequenceEffect extends EffectSystem {
     private GameEffectSystem gameEffectSystem;
-    private IdProviderSystem idProviderSystem;
 
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
     private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;
@@ -25,7 +23,7 @@ public class SequenceEffect extends EffectSystem {
     @Override
     protected void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         JsonValue action = gameEffect.getClonedDataObject("actions");
-        String indexMemoryName = "sequenceIndex." + idProviderSystem.getEntityId(effectEntity);
+        String indexMemoryName = getMemoryName(effectEntity, "sequenceIndex");
         String stackedIndex = memory.getValue(indexMemoryName);
         int nextActionIndex = 0;
         if (stackedIndex != null) {

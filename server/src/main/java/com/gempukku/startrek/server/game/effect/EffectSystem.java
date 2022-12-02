@@ -3,8 +3,10 @@ package com.gempukku.startrek.server.game.effect;
 import com.artemis.BaseSystem;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
+import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 
@@ -12,6 +14,8 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
     private GameEffectSystem gameEffectSystem;
     private ExecutionStackSystem stackSystem;
     private ServerEntityIdSystem serverEntityIdSystem;
+    private IdProviderSystem idProviderSystem;
+
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
     private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;
 
@@ -59,6 +63,12 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
 
     protected abstract void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect);
 
+    protected void validateOneEffect(JsonValue effect) {
+        if (effect.type() != JsonValue.ValueType.object)
+            throw new GdxRuntimeException("Expected one effect only");
+        gameEffectSystem.validate(effect);
+    }
+
     protected void validateEffects(JsonValue effects) {
         if (effects.type() == JsonValue.ValueType.object)
             gameEffectSystem.validate(effects);
@@ -67,6 +77,10 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
                 gameEffectSystem.validate(effect);
             }
         }
+    }
+
+    protected String getMemoryName(Entity effectEntity, String prefix) {
+        return prefix + "." + idProviderSystem.getEntityId(effectEntity);
     }
 
     @Override

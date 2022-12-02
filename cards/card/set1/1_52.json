@@ -9,22 +9,25 @@
       "type": "dilemmaEffect",
       "effects": [
         {
-          "type": "condition",
+          "type": "tryOrFail",
           "condition": "or(countSkillAtLeast(attemptingPersonnel,Engineer,1),countSkillAtLeast(attemptingPersonnel,Programming,1))",
-          "trueEffect": {
+          "tryEffect": {
             "type": "stop",
             "select": "attemptingPersonnel,type(Personnel),or(skill(Engineer),skill(Programming))"
           },
-          "falseEffect": [
-            {
-              "type": "stop",
-              "filter": "attemptingPersonnel,type(Personnel)"
-            },
-            {
-              "type": "putInDilemmaPile",
-              "filter": "self"
-            }
-          ]
+          "failEffect": {
+            "type": "sequence",
+            "actions": [
+              {
+                "type": "stop",
+                "filter": "attemptingPersonnel,type(Personnel)"
+              },
+              {
+                "type": "putInDilemmaPile",
+                "filter": "self"
+              }
+            ]
+          }
         }
       ]
     }
