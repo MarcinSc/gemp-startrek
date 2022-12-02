@@ -117,7 +117,6 @@ public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem impl
     private void initializeSelectionState(ObjectMap<String, String> decisionData) {
         String sourceId = decisionData.get("sourceId");
         triggerType = decisionData.get("triggerType");
-        String usedIds = decisionData.get("usedIds", "");
 
         Entity sourceEntity = null;
         if (sourceId != null)
@@ -127,7 +126,7 @@ public class ClientOptionalTriggerActionsDecisionHandler extends BaseSystem impl
 
         Entity userInputStateEntity = LazyEntityUtil.findEntityWithComponent(world, UserInputStateComponent.class);
         CardFilter triggerFilter = TriggerRequirements.createOptionalTriggerRequirements(
-                authenticationHolderSystem.getUsername(), triggerType, usedIds,
+                authenticationHolderSystem.getUsername(), triggerType,
                 cardFilteringSystem);
         selectionState = new SelectionState(world, userInputStateEntity, "inPlay", triggerFilter,
                 sourceEntity, memory,

@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
+import com.gempukku.startrek.game.zone.CardInPlayComponent;
 
 public class HasOnBoardFilterHandler extends CardFilterSystem {
     private CardFilteringSystem cardFilteringSystem;
@@ -21,7 +22,17 @@ public class HasOnBoardFilterHandler extends CardFilterSystem {
         return new CardFilter() {
             @Override
             public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
-                CardFilter attachedFilter = cardFilteringSystem.resolveCardFilter("attachedTo(idIn(" + idProviderSystem.getEntityId(cardEntity) + "))");
+                String shipId = idProviderSystem.getEntityId(cardEntity);
+                CardFilter attachedFilter = new CardFilter() {
+                    @Override
+                    public boolean accepts(Entity sourceEntity, Memory memory, Entity cardEntity) {
+                        CardInPlayComponent cardInPlay = cardEntity.getComponent(CardInPlayComponent.class);
+                        if (cardInPlay == null)
+                            return false;
+                        return shipId.equals(cardInPlay.getAttachedToId());
+                    }
+                };
+
                 return cardFilteringSystem.hasCard(sourceEntity, memory, parameters.get(0), attachedFilter, filter);
             }
         };

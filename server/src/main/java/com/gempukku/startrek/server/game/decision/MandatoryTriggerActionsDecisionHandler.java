@@ -49,11 +49,9 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
                 if (sourceIdStr != null)
                     sourceEntity = serverEntityIdSystem.findfromId(sourceIdStr);
 
-                String usedIds = decisionData.get("usedIds", "");
-
                 String triggerType = decisionData.get("triggerType");
                 CardFilter triggerFilter = TriggerRequirements.createMandatoryTriggerRequirements(
-                        decisionPlayer, triggerType, usedIds,
+                        decisionPlayer, triggerType,
                         cardFilteringSystem);
                 if (triggerFilter.accepts(sourceEntity, new Memory(decisionData), usedCardEntity)) {
                     int usableTriggerIndex = TriggerRequirements.findUsableTriggerIndex(usedCardEntity, triggerType, false,
@@ -75,10 +73,8 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
         if (sourceIdStr != null)
             sourceEntity = serverEntityIdSystem.findfromId(sourceIdStr);
 
-        String usedIds = decisionData.get("usedIds", "");
-
         CardFilter triggerFilter = TriggerRequirements.createMandatoryTriggerRequirements(
-                username, decisionData.get("triggerType"), usedIds,
+                username, decisionData.get("triggerType"),
                 cardFilteringSystem);
         return !cardFilteringSystem.hasCard(sourceEntity, new Memory(decisionData), "inPlay", triggerFilter);
     }

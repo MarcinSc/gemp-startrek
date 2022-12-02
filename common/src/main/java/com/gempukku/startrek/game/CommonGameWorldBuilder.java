@@ -51,7 +51,6 @@ public class CommonGameWorldBuilder {
 
                 // Card filter handlers
                 new MemoryFilterHandler(),
-                new IdInFilterHandler(),
                 new AttachedToFilterHandler(),
                 new CardTypeFilterHandler(),
                 new CardIconFilterHandler(),

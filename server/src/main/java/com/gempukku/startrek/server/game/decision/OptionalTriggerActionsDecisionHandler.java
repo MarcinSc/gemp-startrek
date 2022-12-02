@@ -50,11 +50,9 @@ public class OptionalTriggerActionsDecisionHandler extends BaseSystem implements
                 if (sourceIdStr != null)
                     sourceEntity = serverEntityIdSystem.findfromId(sourceIdStr);
 
-                String usedIds = decisionData.get("usedIds", "");
-
                 String triggerType = decisionData.get("triggerType");
                 CardFilter triggerFilter = TriggerRequirements.createOptionalTriggerRequirements(
-                        decisionPlayer, triggerType, usedIds,
+                        decisionPlayer, triggerType,
                         cardFilteringSystem);
                 if (triggerFilter.accepts(sourceEntity, new Memory(decisionData), usedCardEntity)) {
                     int usableTriggerIndex = TriggerRequirements.findUsableTriggerIndex(usedCardEntity, triggerType, true,

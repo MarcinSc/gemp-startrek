@@ -13,24 +13,20 @@ public class TriggerRequirements {
     public static CardFilter createMandatoryTriggerRequirements(
             String username,
             String triggerType,
-            String usedIds,
             CardFilteringSystem cardFilteringSystem) {
-        if (usedIds == null)
-            usedIds = "";
         return cardFilteringSystem.resolveCardFilter(
                 "or(zone(Mission),zone(Core)),owner(username(" + username + ")),hasAbility(Trigger)," +
-                        "not(idIn(" + usedIds + "))," +
+                        "not(memory(userIds))," +
                         "triggerConditionMatches(" + triggerType + ",false)");
     }
 
     public static CardFilter createOptionalTriggerRequirements(
             String username,
             String triggerType,
-            String usedIds,
             CardFilteringSystem cardFilteringSystem) {
         return cardFilteringSystem.resolveCardFilter(
                 "or(zone(Mission),zone(Core)),owner(username(" + username + ")),hasAbility(Trigger)," +
-                        "not(idIn(" + usedIds + "))," +
+                        "not(memory(userIds))," +
                         "triggerConditionMatches(" + triggerType + ",true)");
     }
 
