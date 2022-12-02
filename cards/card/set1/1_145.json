@@ -8,14 +8,28 @@
       "condition": "hasCard(your,affiliation(Bajoran),type(Personnel),attemptingPersonnel)",
       "effects": [
         {
-          "type": "select",
-          "memory": "livingCharacter",
-          "filter": "your,affiliation(Bajoran),type(Personnel),attemptingPersonnel"
+          "type": "processDecision",
+          "player": "owner(self)",
+          "decisionType": "select",
+          "data": {
+            "prompt": "Choose your living personnel",
+            "filter": "your,affiliation(Bajoran),type(Personnel),attemptingPersonnel",
+            "memory": "livingCharacter"
+          }
         },
         {
-          "type": "selectInDiscard",
-          "memory": "deadCharacter",
-          "filter": "affiliation(Bajoran),type(Personnel)"
+          "type": "processDecision",
+          "player": "owner(self)",
+          "decisionType": "selectInDiscard",
+          "data": {
+            "prompt": "Choose personnel in your discard",
+            "filter": "your,affiliation(Bajoran),type(Personnel)",
+            "memory": "deadCharacter"
+          }
+        },
+        {
+          "type": "revealCards",
+          "filter": "memory(livingCharacter)"
         },
         {
           "type": "gainSkillsFrom",
