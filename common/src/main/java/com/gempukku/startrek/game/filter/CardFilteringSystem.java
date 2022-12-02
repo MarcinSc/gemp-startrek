@@ -292,7 +292,7 @@ public class CardFilteringSystem extends BaseSystem {
     }
 
     private CardFilter inPlayFilter() {
-        return resolveCardFilter("or(zone(Core),zone(Brig),zone(Mission))");
+        return resolveCardFilter("inPlay");
     }
 
     public boolean hasCardInPlay(Entity sourceEntity, Memory memory, String filter) {

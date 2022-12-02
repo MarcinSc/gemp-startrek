@@ -360,6 +360,35 @@ public class ZoneOperations extends BaseSystem {
         notifyZoneChange(cardEntity, oldZone, newZone, missionOwner, missionIndex);
     }
 
+    public void moveFromCurrentZoneToHand(Entity cardEntity) {
+        String missionOwner = null;
+        int missionIndex = -1;
+        CardInMissionComponent inMission = cardEntity.getComponent(CardInMissionComponent.class);
+        if (inMission != null) {
+            missionOwner = inMission.getMissionOwner();
+            missionIndex = inMission.getMissionIndex();
+        }
+        removeFromCurrentZone(cardEntity);
+
+        CardComponent card = cardEntity.getComponent(CardComponent.class);
+        CardZone oldZone = card.getCardZone();
+        CardZone newZone = CardZone.Hand;
+        card.setCardZone(newZone);
+
+        String cardOwner = card.getOwner();
+
+        CardInHandComponent cardInHand = cardInHandComponentMapper.create(cardEntity);
+        cardInHand.setOwner(cardOwner);
+        eventSystem.fireEvent(EntityUpdated.instance, cardEntity);
+
+        Entity playerEntity = playerResolverSystem.findPlayerEntity(cardOwner);
+        PlayerPublicStatsComponent stats = playerEntity.getComponent(PlayerPublicStatsComponent.class);
+        stats.setHandCount(stats.getHandCount() + 1);
+        eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
+
+        notifyZoneChange(cardEntity, oldZone, newZone, missionOwner, missionIndex);
+    }
+
     public void removeCardFromCore(Entity cardEntity) {
         cardInCoreComponentMapper.remove(cardEntity);
         cardInPlayComponentMapper.remove(cardEntity);

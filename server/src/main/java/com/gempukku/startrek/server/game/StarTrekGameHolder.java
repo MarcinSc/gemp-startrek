@@ -160,6 +160,7 @@ public class StarTrekGameHolder implements Disposable {
                 new ExecuteKillEffect(),
                 new DiscardEffect(),
                 new ExecuteDiscardEffect(),
+                new ReturnToHandEffect(),
 
                 new BeamFromMissionEffect(),
                 new BeamToMissionEffect(),
