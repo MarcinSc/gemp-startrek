@@ -1,4 +1,4 @@
-package com.gempukku.startrek.test;
+package com.gempukku.startrek.server.test;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;

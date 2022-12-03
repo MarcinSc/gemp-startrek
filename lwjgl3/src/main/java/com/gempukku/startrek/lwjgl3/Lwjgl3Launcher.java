@@ -7,7 +7,7 @@ import com.gempukku.libgdx.graph.plugin.models.ModelsPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.particles.ParticlesPluginRuntimeInitializer;
 import com.gempukku.libgdx.graph.plugin.ui.UIPluginRuntimeInitializer;
 import com.gempukku.startrek.StarTrekGameSceneProvider;
-import com.gempukku.startrek.test.DualGameApplication;
+import com.gempukku.startrek.server.test.DualGameApplication;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {

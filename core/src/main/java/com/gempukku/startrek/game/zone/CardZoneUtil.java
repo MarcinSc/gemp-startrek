@@ -22,6 +22,10 @@ public class CardZoneUtil {
         return true;
     }
 
+    public static boolean isInPlay(CardZone zone) {
+        return zone == CardZone.Brig || zone == CardZone.Core || zone == CardZone.Mission;
+    }
+
     public static boolean isBigCard(CardZone zone) {
         if (zone == CardZone.Hand || zone == CardZone.Stack || zone == CardZone.DiscardPile)
             return true;

@@ -34,6 +34,9 @@ public class TextSystem extends BaseEntitySystem {
     private CharacterTextParser textParser;
     private String defaultSpriteBatchName;
 
+    private Array<Entity> insertedEntities = new Array<>();
+    private Array<Entity> removedEntities = new Array<>();
+
     public TextSystem() {
         this(new DefaultTextParser());
     }
@@ -53,15 +56,19 @@ public class TextSystem extends BaseEntitySystem {
 
     @Override
     protected void inserted(int entityId) {
-        addSprites(entityId);
+        insertedEntities.add(world.getEntity(entityId));
     }
 
-    private void addSprites(int entityId) {
-        Entity textEntity = world.getEntity(entityId);
+    @Override
+    protected void removed(int entityId) {
+        removedEntities.add(world.getEntity(entityId));
+    }
+
+    private void addSprites(Entity textEntity) {
         Matrix4 resolvedTransform = transformSystem.getResolvedTransform(textEntity);
 
         Array<DisplayedText> texts = new Array<>();
-        TextComponent textComponent = textComponentMapper.get(entityId);
+        TextComponent textComponent = textComponentMapper.get(textEntity);
         for (TextBlock textBlock : textComponent.getTextBlocks()) {
             String spriteBatchName = textBlock.getSpriteBatchName();
             if (spriteBatchName == null)
@@ -74,7 +81,14 @@ public class TextSystem extends BaseEntitySystem {
             texts.add(text);
         }
 
-        renderedTexts.put(entityId, texts);
+        renderedTexts.put(textEntity.getId(), texts);
+    }
+
+    private void removeSprites(Entity textEntity) {
+        Array<DisplayedText> texts = renderedTexts.remove(textEntity.getId());
+        for (DisplayedText text : texts) {
+            text.dispose();
+        }
     }
 
     @EventListener
@@ -88,8 +102,9 @@ public class TextSystem extends BaseEntitySystem {
     }
 
     public void updateTexts(int entityId) {
-        removed(entityId);
-        addSprites(entityId);
+        Entity textEntity = world.getEntity(entityId);
+        removeSprites(textEntity);
+        addSprites(textEntity);
     }
 
     public void updateText(int entityId, int textIndex) {
@@ -99,16 +114,15 @@ public class TextSystem extends BaseEntitySystem {
     }
 
     @Override
-    protected void removed(int entityId) {
-        Array<DisplayedText> texts = renderedTexts.remove(entityId);
-        for (DisplayedText text : texts) {
-            text.dispose();
-        }
-    }
-
-    @Override
     protected void processSystem() {
-
+        for (Entity insertedEntity : insertedEntities) {
+            addSprites(insertedEntity);
+        }
+        for (Entity removedEntity : removedEntities) {
+            removeSprites(removedEntity);
+        }
+        insertedEntities.clear();
+        removedEntities.clear();
     }
 
     @Override

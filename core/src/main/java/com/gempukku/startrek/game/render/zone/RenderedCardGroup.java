@@ -58,6 +58,10 @@ public class RenderedCardGroup {
         return renderedCards;
     }
 
+    public void setDirty() {
+        this.dirty = true;
+    }
+
     public boolean isDirty() {
         return dirty;
     }

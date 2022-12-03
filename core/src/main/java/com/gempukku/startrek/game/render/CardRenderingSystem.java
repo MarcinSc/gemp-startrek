@@ -14,6 +14,7 @@ import com.gempukku.startrek.game.PlayerPosition;
 import com.gempukku.startrek.game.PlayerPositionSystem;
 import com.gempukku.startrek.game.layout.*;
 import com.gempukku.startrek.game.render.zone.CommonZones;
+import com.gempukku.startrek.game.render.zone.MissionCards;
 import com.gempukku.startrek.game.render.zone.PlayerZones;
 import com.gempukku.startrek.game.render.zone.RenderedCardGroup;
 import com.gempukku.startrek.game.zone.CardZone;
@@ -80,6 +81,14 @@ public class CardRenderingSystem extends BaseSystem {
     public void addFaceUpAttachedCard(Entity attachedToCardEntity, Entity cardEntity, Entity renderedEntity) {
         RenderedCardGroup attachedGroup = getOrCreateAttachedGroup(attachedToCardEntity);
         attachedGroup.addFaceUpCard(cardEntity, renderedEntity);
+        notifyZoneContainingCardChanged(attachedToCardEntity);
+    }
+
+    public Entity replaceFaceUpAttachedCard(Entity attachedToCardEntity, Entity oldCardEntity, Entity newRenderedEntity) {
+        Entity result = removeFaceUpAttachedCard(attachedToCardEntity, oldCardEntity);
+        addFaceDownAttachedCard(attachedToCardEntity, newRenderedEntity);
+        notifyZoneContainingCardChanged(attachedToCardEntity);
+        return result;
     }
 
     public Entity removeFaceUpAttachedCard(Entity attachedToCardEntity, Entity cardEntity) {
@@ -88,12 +97,21 @@ public class CardRenderingSystem extends BaseSystem {
         if (attachedGroup.isEmpty()) {
             attachedCards.remove(attachedToCardEntity);
         }
+        notifyZoneContainingCardChanged(attachedToCardEntity);
         return renderedEntity;
     }
 
     public void addFaceDownAttachedCard(Entity attachedToCardEntity, Entity renderedEntity) {
         RenderedCardGroup attachedGroup = getOrCreateAttachedGroup(attachedToCardEntity);
         attachedGroup.addFaceDownCard(renderedEntity);
+        notifyZoneContainingCardChanged(attachedToCardEntity);
+    }
+
+    public Entity replaceFaceDownAttachedCard(Entity attachedToCardEntity, Entity newCardEntity, Entity newRenderedEntity) {
+        Entity result = removeFaceDownAttachedCard(attachedToCardEntity);
+        addFaceUpAttachedCard(attachedToCardEntity, newCardEntity, newRenderedEntity);
+        notifyZoneContainingCardChanged(attachedToCardEntity);
+        return result;
     }
 
     public Entity removeFaceDownAttachedCard(Entity attachedToCardEntity) {
@@ -102,7 +120,26 @@ public class CardRenderingSystem extends BaseSystem {
         if (attachedGroup.isEmpty()) {
             attachedCards.remove(attachedToCardEntity);
         }
+        notifyZoneContainingCardChanged(attachedToCardEntity);
         return renderedEntity;
+    }
+
+    private void notifyZoneContainingCardChanged(Entity cardEntity) {
+        for (PlayerZones playerZone : playerCardsMap.values()) {
+            dirtyIfContainsServerCard(playerZone.getCardsInCore(), cardEntity);
+            dirtyIfContainsServerCard(playerZone.getCardsInBrig(), cardEntity);
+            for (int i = 0; i < 5; i++) {
+                MissionCards missionCards = playerZone.getMissionCards(i);
+                dirtyIfContainsServerCard(missionCards.getMissionOwnerCards(), cardEntity);
+                dirtyIfContainsServerCard(missionCards.getMissionCards(), cardEntity);
+                dirtyIfContainsServerCard(missionCards.getOpposingCards(), cardEntity);
+            }
+        }
+    }
+
+    private void dirtyIfContainsServerCard(RenderedCardGroup cardGroup, Entity cardEntity) {
+        if (cardGroup.hasServerCard(cardEntity))
+            cardGroup.setDirty();
     }
 
     private RenderedCardGroup getOrCreateAttachedGroup(Entity attachedToCardEntity) {

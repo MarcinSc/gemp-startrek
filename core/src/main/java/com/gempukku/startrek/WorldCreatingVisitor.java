@@ -47,10 +47,7 @@ import com.gempukku.startrek.game.card.SpecialActionLookupSystem;
 import com.gempukku.startrek.game.config.ConfigureTextSystem;
 import com.gempukku.startrek.game.decision.*;
 import com.gempukku.startrek.game.render.*;
-import com.gempukku.startrek.game.zone.GameStateCardsTrackingSystem;
-import com.gempukku.startrek.game.zone.InitialFaceDownCardsCreatorSystem;
-import com.gempukku.startrek.game.zone.InitialGameStateCardsCreatorSystem;
-import com.gempukku.startrek.game.zone.MovementTrackingSystem;
+import com.gempukku.startrek.game.zone.*;
 import com.gempukku.startrek.hall.*;
 import com.gempukku.startrek.login.LoginScreenRenderer;
 
@@ -121,8 +118,6 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new ServerEntitySystem(),
 
                 new BitmapFontSystem(new RuntimeBitmapFontHandler()),
-                new TextSystem(),
-                new ConfigureTextSystem(),
                 new AudioSystem(),
 
                 new AnimationDirectorSystem(),
@@ -140,6 +135,7 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
                 new GameStateCardsTrackingSystem(),
                 new InitialFaceDownCardsCreatorSystem(),
                 new MovementTrackingSystem(),
+                new RevealCardsTrackingSystem(),
                 new StackTextHighlightingSystem(),
 
                 new ShapeSystem(),
@@ -172,6 +168,9 @@ public class WorldCreatingVisitor implements GameSceneVisitor<World> {
 
         worldConfigurationBuilder.with(DEPEND_ON_RENDERER_SYSTEMS,
                 new SpriteBatchSystem());
+        worldConfigurationBuilder.with(DEPEND_ON_SPRITE_SYSTEMS,
+                new TextSystem(),
+                new ConfigureTextSystem());
 
         World world = new World(worldConfigurationBuilder.build());
         SpawnSystem spawnSystem = world.getSystem(SpawnSystem.class);

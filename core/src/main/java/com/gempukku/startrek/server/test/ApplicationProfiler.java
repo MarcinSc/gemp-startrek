@@ -1,4 +1,4 @@
-package com.gempukku.startrek.test;
+package com.gempukku.startrek.server.test;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;

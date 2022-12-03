@@ -5,27 +5,20 @@ import com.artemis.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessFiles;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.DummyApplication;
 import com.gempukku.libgdx.lib.artemis.event.EventSystem;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
-import com.gempukku.libgdx.network.id.ServerEntityIdComponent;
-import com.gempukku.startrek.LazyEntityUtil;
 import com.gempukku.startrek.card.CardData;
-import com.gempukku.startrek.decision.DecisionMade;
 import com.gempukku.startrek.decision.PlayerDecisionComponent;
 import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.filter.CardFilteringSystem;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
-import com.gempukku.startrek.game.zone.CardInHandComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.game.decision.DecisionSystem;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
 import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
-import com.gempukku.startrek.test.TestUtil;
+import com.gempukku.startrek.server.test.TestUtil;
 import org.junit.BeforeClass;
-
-import java.util.function.Consumer;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -56,17 +49,7 @@ public abstract class AbstractGameTest {
     }
 
     protected Array<Entity> getCardsInHand(String player) {
-        Array<Entity> result = new Array<>();
-        LazyEntityUtil.forEachEntityWithComponent(world, CardInHandComponent.class,
-                new Consumer<Entity>() {
-                    @Override
-                    public void accept(Entity entity) {
-                        CardComponent card = entity.getComponent(CardComponent.class);
-                        if (card.getOwner().equals(player))
-                            result.add(entity);
-                    }
-                });
-        return result;
+        return TestUtil.getCardsInHand(world, player);
     }
 
     protected Entity createCard(String username, String cardId) {
@@ -109,19 +92,7 @@ public abstract class AbstractGameTest {
     }
 
     protected boolean sendDecision(String player, String... decisionKeysAndValues) {
-        ObjectMap<String, String> decisionResult = new ObjectMap<>();
-        for (int i = 0; i < decisionKeysAndValues.length; i += 2) {
-            decisionResult.put(decisionKeysAndValues[i], decisionKeysAndValues[i + 1]);
-        }
-
-        DecisionMade decisionMade = new DecisionMade(decisionResult);
-        decisionMade.setOrigin(player);
-
-        boolean result = decisionSystem.decisionMade(decisionMade, getTopMostStackEntity());
-        if (result) {
-            stackSystem.processStack();
-        }
-        return result;
+        return TestUtil.sendDecision(world, player, decisionKeysAndValues);
     }
 
     protected void sendDecisionSuccessfully(String player, String... decisionKeysAndValues) {
@@ -138,18 +109,15 @@ public abstract class AbstractGameTest {
     }
 
     protected boolean playCard(Entity playedCard) {
-        String cardId = playedCard.getComponent(ServerEntityIdComponent.class).getId();
-        return sendDecision("test1",
-                "action", "play",
-                "cardId", cardId);
+        return TestUtil.playCard(world, playedCard);
+    }
+
+    protected boolean useTrigger(Entity usedCard, int triggerIndex) {
+        return TestUtil.useTrigger(world, usedCard, triggerIndex);
     }
 
     protected void useTriggerSuccessfully(Entity usedCard, int triggerIndex) {
-        String cardId = usedCard.getComponent(ServerEntityIdComponent.class).getId();
-        assertTrue(sendDecision("test1",
-                "action", "use",
-                "cardId", cardId,
-                "triggerIndex", String.valueOf(triggerIndex)));
+        assertTrue(useTrigger(usedCard, triggerIndex));
     }
 
     protected Entity findEntity(String source, String filter) {

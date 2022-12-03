@@ -3,26 +3,23 @@ package com.gempukku.startrek.server.service;
 import com.artemis.Entity;
 import com.artemis.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.startrek.card.CardData;
 import com.gempukku.startrek.common.UserValidation;
-import com.gempukku.startrek.decision.DecisionMade;
-import com.gempukku.startrek.game.mission.MissionOperations;
+import com.gempukku.startrek.game.zone.FaceDownCardInMissionComponent;
 import com.gempukku.startrek.hall.PlayedGameComponent;
 import com.gempukku.startrek.hall.StarTrekDeck;
 import com.gempukku.startrek.server.game.PlayerGameInfo;
 import com.gempukku.startrek.server.game.StarTrekGameWebSocketHandler;
-import com.gempukku.startrek.server.game.decision.DecisionSystem;
-import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
-import com.gempukku.startrek.server.game.stack.ExecutionStackSystem;
 import com.gempukku.startrek.server.hall.StarTrekHallContext;
-import com.gempukku.startrek.test.TestUtil;
+import com.gempukku.startrek.server.test.TestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+
+import static org.junit.Assert.assertNotNull;
 
 @Profile("test")
 @Service
@@ -58,28 +55,25 @@ public class TestSetup {
     }
 
     private void setupScenario() {
-        setupGame(createDeckWithMissions("1_8", "1_4"));
+        setupGame(createDeckWithMissions("1_217"));
 
-        Entity personnel1 = createCard("test1", "1_207");
-        Entity personnel2 = createCard("test1", "1_207");
+        Entity card = getCardsInHand("test1").get(0);
+        playCardSuccessfully(card);
 
-        ZoneOperations zoneOperations = world.getSystem(ZoneOperations.class);
-        MissionOperations missionOperations = world.getSystem(MissionOperations.class);
-        Entity planetMission = missionOperations.findMission("test1", 4);
-        zoneOperations.moveFromCurrentZoneToMission(personnel1, planetMission, false);
-        zoneOperations.moveFromCurrentZoneToMission(personnel2, planetMission, false);
+        assertNotNull(card.getComponent(FaceDownCardInMissionComponent.class));
 
-        // Pass the play or draw
-        sendDecisionSuccessfully("test1",
-                "action", "pass");
+        // Pass on mandatory
+        sendDecisionSuccessfully("test1", "action", "pass");
+        sendDecisionSuccessfully("test2", "action", "pass");
 
-        sendDecisionSuccessfully("test1",
-                "action", "attemptPlanetMission",
-                "missionId", getCardId(planetMission));
     }
 
     private StarTrekDeck createDeckWithMissions(String... cards) {
         return TestUtil.createDeckWithMissions(cardData, cards);
+    }
+
+    private Array<Entity> getCardsInHand(String player) {
+        return TestUtil.getCardsInHand(world, player);
     }
 
     private Entity createCard(String username, String cardId) {
@@ -90,22 +84,12 @@ public class TestSetup {
         return TestUtil.getCardId(world, entity);
     }
 
+    private void playCardSuccessfully(Entity card) {
+        TestUtil.playCard(world, card);
+    }
+
     private void sendDecisionSuccessfully(String username, String... decisionKeysAndValues) {
-        DecisionSystem decisionSystem = world.getSystem(DecisionSystem.class);
-        ExecutionStackSystem executionStackSystem = world.getSystem(ExecutionStackSystem.class);
-
-        ObjectMap<String, String> decisionResult = new ObjectMap<>();
-        for (int i = 0; i < decisionKeysAndValues.length; i += 2) {
-            decisionResult.put(decisionKeysAndValues[i], decisionKeysAndValues[i + 1]);
-        }
-
-        DecisionMade decisionMade = new DecisionMade(decisionResult);
-        decisionMade.setOrigin(username);
-
-        boolean result = decisionSystem.decisionMade(decisionMade, executionStackSystem.getTopMostStackEntity());
-        if (result) {
-            executionStackSystem.processStack();
-        }
+        TestUtil.sendDecision(world, username, decisionKeysAndValues);
     }
 
     private void setupGame(StarTrekDeck deck) {
