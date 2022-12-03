@@ -46,14 +46,14 @@ public class DisplayedText implements Disposable {
     private ObjectSet<SpriteDefinitionAdapter> externalSprites = new ObjectSet<>();
 
     /*
-Up-Vector (vec3) - vector defining both height and up direction
-Right-Vector (vec3) - vector defining both width and right direction
-Font-Texture (texture-region) - font texture region
-U-Range - range of U in UV of given sprite
-V-Range - range of V in UV of given sprite
-Width - character width
-Edge - character smoothing
-Color - character color
+     * Up-Vector (vec3) - vector defining both height and up direction
+     * Right-Vector (vec3) - vector defining both width and right direction
+     * Font-Texture (texture-region) - font texture region
+     * U-Range - range of U in UV of given sprite
+     * V-Range - range of V in UV of given sprite
+     * Width - character width
+     * Edge - character smoothing
+     * Color - character color
      */
 
     public DisplayedText(GlyphOffseter glyphOffseter, CharacterTextParser textParser, SpriteBatchModel spriteBatchModel,

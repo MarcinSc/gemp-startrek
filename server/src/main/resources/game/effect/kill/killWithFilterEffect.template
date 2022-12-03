@@ -16,7 +16,7 @@
         },
         {
           "type": "clearMemory",
-          "memory": "internal.killFilter,internal.killMemory"
+          "memory": "internal.killMemory"
         }
       ]
     }

@@ -40,12 +40,13 @@ public abstract class AbstractGameTest {
         cardData.initializeCards();
     }
 
-    protected void putCardOnTopOfDeck(String player, String cardId) {
+    protected Entity putCardOnTopOfDeck(String player, String cardId) {
         Entity cardEntity = spawnSystem.spawnEntity("game/card.template");
         CardComponent card = cardEntity.getComponent(CardComponent.class);
         card.setOwner(player);
         card.setCardId(cardId);
         world.getSystem(ZoneOperations.class).setupCardToTopOfDeck(cardEntity);
+        return cardEntity;
     }
 
     protected Array<Entity> getCardsInHand(String player) {

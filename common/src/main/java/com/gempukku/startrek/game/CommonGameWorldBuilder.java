@@ -24,6 +24,8 @@ public class CommonGameWorldBuilder {
                 // Amount resolvers
                 new AmountResolverSystem(),
                 new MinusAmountHandler(),
+                new MinAmountHandler(),
+                new MaxAmountHandler(),
                 new CardMatchingCount(),
                 new CounterCountAmountHandler(),
                 new HandCountAmountHandler(),
@@ -34,6 +36,7 @@ public class CommonGameWorldBuilder {
                 new ShipRangeAmountHandler(),
                 new SkillCountHandler(),
                 new MemoryAmountHandler(),
+                new MemoryValueCountHandler(),
                 new PlayerCountAmountHandler(),
 
                 // Condition resolvers
@@ -88,6 +91,7 @@ public class CommonGameWorldBuilder {
                 new MissionSource(),
                 new InPlaySource(),
                 new HandSource(),
+                new DeckSource(),
                 new MemorySource(),
                 new AttemptingPersonnelSource(),
 

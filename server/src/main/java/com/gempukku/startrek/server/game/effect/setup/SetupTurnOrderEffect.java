@@ -33,7 +33,7 @@ public class SetupTurnOrderEffect extends EffectSystem {
     protected void processEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         GameComponent game = gameEntityProvider.getGameEntity().getComponent(GameComponent.class);
 
-        Entity turnSequenceEntity = spawnSystem.spawnEntity("game/turnSequence.template");
+        Entity turnSequenceEntity = spawnEffect("game/turnSequence.template", sourceEntity);
         Array<String> players = game.getPlayers();
         List<String> orderedPlayers = determinePlayerOrder(players);
 

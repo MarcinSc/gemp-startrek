@@ -32,12 +32,13 @@ public class DiscardEffect extends EffectSystem {
             memory.setValue("internal.player", "username(" + playerUsername + ")");
             memory.setValue("internal.discardMin", "1");
             memory.setValue("internal.discardMax", "1");
-            Entity discardEffectEntity = spawnSystem.spawnEntity("game/effect/discard/discardWithSelectEffect.template");
+            Entity discardEffectEntity = spawnEffect("game/effect/discard/discardWithSelectEffect.template", sourceEntity);
 
             memory.setValue("internal.discardStacked", "true");
             stackEffect(discardEffectEntity);
         } else {
-            memory.removeValue("internal.discardStacked");
+            memory.removeValue("internal.discardStacked", "internal.prompt", "internal.discardFilter", "internal.player",
+                    "internal.discardMin", "internal.discardMax");
             removeTopEffectFromStack();
         }
     }

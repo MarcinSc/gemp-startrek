@@ -2,6 +2,7 @@ package com.gempukku.startrek.server.game.decision;
 
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.libgdx.lib.artemis.event.EventListener;
@@ -11,6 +12,7 @@ import com.gempukku.startrek.game.GamePlayerComponent;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
+import com.gempukku.startrek.server.game.effect.EffectMemoryComponent;
 import com.gempukku.startrek.server.game.effect.EffectSystem;
 import com.gempukku.startrek.server.game.effect.GameEffectComponent;
 import com.gempukku.startrek.server.game.stack.ExecuteStackedAction;
@@ -34,9 +36,9 @@ public class DecisionSystem extends EffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"player", "decisionType"},
-                new String[]{"data", "memoryData"});
-        String player = effect.getString("player");
+                new String[]{"decisionType"},
+                new String[]{"player", "playerMemory", "data", "memoryData"});
+        String player = effect.getString("player", "currentPlayer");
         playerResolverSystem.validatePlayer(player);
     }
 
@@ -72,7 +74,8 @@ public class DecisionSystem extends EffectSystem {
 
     @Override
     public boolean processEndingEffect(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
-        String player = gameEffect.getDataString("player");
+        String player = getOptionalFromMemory(memory, gameEffect,
+                "player", "playerMemory");
         Entity playerEntity = playerResolverSystem.resolvePlayer(sourceEntity, memory, player);
 
         Entity decisionEntity = world.createEntity();
@@ -123,7 +126,14 @@ public class DecisionSystem extends EffectSystem {
         if (decisionTypeHandler == null)
             throw new RuntimeException("Unable to locate DecisionTypeHandler for type: " + decisionType);
 
-        decisionTypeHandler.processDecision(playerDecision.getOwner(), playerDecision.getData(), parameters);
+        Entity effectMemoryEntity = stackSystem.getTopMostStackEntityWithComponent(EffectMemoryComponent.class);
+        if (effectMemoryEntity == null)
+            throw new GdxRuntimeException("Unable to find an effect with memory on the stack");
+
+        EffectMemoryComponent effectMemory = effectMemoryEntity.getComponent(EffectMemoryComponent.class);
+        Memory memory = new Memory(effectMemory.getMemory());
+
+        decisionTypeHandler.processDecision(playerDecision.getOwner(), memory, playerDecision.getData(), parameters);
     }
 
     @Override

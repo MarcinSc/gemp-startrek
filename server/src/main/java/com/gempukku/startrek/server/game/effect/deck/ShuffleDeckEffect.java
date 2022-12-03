@@ -26,7 +26,8 @@ public class ShuffleDeckEffect extends OneTimeEffectSystem {
 
     @Override
     protected void processOneTimeEffect(Entity sourceEntity, Memory memory, GameEffectComponent gameEffect) {
-        String username = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory, gameEffect.getDataString("player"));
+        String player = getOptionalFromMemory(memory, gameEffect, "player", "playerMemory");
+        String username = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory, player);
         Entity playerEntity = playerResolverSystem.findPlayerEntity(username);
         String deckType = gameEffect.getDataString("deck");
         if (deckType.equals("dilemmaDeck")) {
@@ -44,9 +45,10 @@ public class ShuffleDeckEffect extends OneTimeEffectSystem {
     @Override
     public void validate(JsonValue effect) {
         ValidateUtil.effectExpectedFields(effect,
-                new String[]{"player", "deck"},
-                new String[]{});
-        playerResolverSystem.validatePlayer(effect.getString("player"));
+                new String[]{"deck"},
+                new String[]{"player", "playerMemory"});
+        ValidateUtil.hasExactlyOneOf(effect, "player", "playerMemory");
+        playerResolverSystem.validatePlayer(effect.getString("player", "currentPlayer"));
         String deck = effect.getString("deck");
         if (!deck.equals("dilemmaDeck") && !deck.equals("drawDeck"))
             throw new GdxRuntimeException("Unable to resolve deck type - " + deck);

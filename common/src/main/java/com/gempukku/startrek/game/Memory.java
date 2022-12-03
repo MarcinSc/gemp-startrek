@@ -33,7 +33,9 @@ public class Memory {
             setValue(name, source + StringUtils.getDefaultDelimiter() + appended);
     }
 
-    public void removeValue(String name) {
-        memory.remove(name);
+    public void removeValue(String... names) {
+        for (String name : names) {
+            memory.remove(name);
+        }
     }
 }

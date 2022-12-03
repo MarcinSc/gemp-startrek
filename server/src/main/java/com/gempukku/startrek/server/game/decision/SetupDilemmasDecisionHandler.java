@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.gempukku.startrek.common.StringUtils;
 import com.gempukku.startrek.game.CardComponent;
+import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.player.PlayerResolverSystem;
 import com.gempukku.startrek.server.game.deck.PlayerDilemmaPileComponent;
 import com.gempukku.startrek.server.game.effect.zone.ZoneOperations;
@@ -49,7 +50,7 @@ public class SetupDilemmasDecisionHandler extends BaseSystem implements Decision
     }
 
     @Override
-    public void processDecision(String decisionPlayer, ObjectMap<String, String> decisionData, ObjectMap<String, String> result) {
+    public void processDecision(String decisionPlayer, Memory memory, ObjectMap<String, String> decisionData, ObjectMap<String, String> result) {
         Entity playerEntity = playerResolverSystem.findPlayerEntity(decisionPlayer);
         PlayerDilemmaPileComponent dilemmaPile = playerEntity.getComponent(PlayerDilemmaPileComponent.class);
 

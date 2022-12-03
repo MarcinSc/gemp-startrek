@@ -9,12 +9,13 @@ import com.gempukku.startrek.game.CardComponent;
 import com.gempukku.startrek.game.Memory;
 import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.filter.CardFilter;
+import com.gempukku.startrek.game.zone.CardZone;
 
-public class AnySource extends CardSourceSystem {
+public class DeckSource extends CardSourceSystem {
     private EntitySubscription cards;
 
-    public AnySource() {
-        super("any");
+    public DeckSource() {
+        super("deck");
     }
 
     @Override
@@ -31,9 +32,11 @@ public class AnySource extends CardSourceSystem {
                 IntBag entities = cards.getEntities();
                 for (int i = 0; i < entities.size(); i++) {
                     Entity entity = world.getEntity(entities.get(i));
-                    if (isAccepted(sourceEntity, memory, entity, filters))
-                        if (consumer.accept(entity))
-                            return;
+                    CardComponent card = entity.getComponent(CardComponent.class);
+                    if (card.getCardZone() == CardZone.Deck)
+                        if (isAccepted(sourceEntity, memory, entity, filters))
+                            if (consumer.accept(entity))
+                                return;
                 }
             }
         };

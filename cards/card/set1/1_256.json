@@ -33,7 +33,8 @@
       "condition": "matches(self)",
       "effects": {
         "type": "download",
-        "filter": "type(ship),icon(Deep Space Nine)",
+        "player": "owner(self)",
+        "filter": "type(ship),icon(DS9)",
         "amount": 1
       }
     }

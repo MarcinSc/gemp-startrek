@@ -18,6 +18,9 @@
           "type": "processDecision",
           "player": "memory(internal.player)",
           "decisionType": "select",
+          "data": {
+            "resultMemory": "internal.selected"
+          },
           "memoryData": {
             "prompt": "internal.prompt",
             "cardIds": "internal.stopMemory",
@@ -32,7 +35,7 @@
         },
         {
           "type": "clearMemory",
-          "memory": "internal.prompt,internal.player,internal.stopFilter,internal.stopMemory,internal.stopMin,internal.stopMax,internal.selected"
+          "memory": "internal.selected,internal.stopMemory"
         }
       ]
     }

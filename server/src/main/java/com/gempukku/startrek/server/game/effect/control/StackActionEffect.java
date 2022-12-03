@@ -82,7 +82,7 @@ public class StackActionEffect extends EffectSystem {
     private void stackActionTemplate(Entity sourceEntity, Memory memory, Entity effectEntity, GameEffectComponent gameEffect) {
         String template = gameEffect.getDataString("template");
 
-        Entity spawnedAction = spawnSystem.spawnEntity(template);
+        Entity spawnedAction = spawnEffect(template, sourceEntity);
 
         removeTopEffectFromStack();
 

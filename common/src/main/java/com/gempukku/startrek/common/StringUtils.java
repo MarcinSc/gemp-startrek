@@ -1,5 +1,7 @@
 package com.gempukku.startrek.common;
 
+import com.badlogic.gdx.utils.Array;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Function;
@@ -17,6 +19,11 @@ public class StringUtils {
 
     public static String[] split(String str) {
         return split(str, defaultDelimiter);
+    }
+
+    public static Array<String> splitToArray(String str) {
+        String[] split = split(str);
+        return Array.with(split);
     }
 
     public static String[] split(String str, String delimiter) {

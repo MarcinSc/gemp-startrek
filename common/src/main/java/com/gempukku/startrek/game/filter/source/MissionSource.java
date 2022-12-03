@@ -10,8 +10,6 @@ import com.gempukku.startrek.game.ValidateUtil;
 import com.gempukku.startrek.game.filter.CardFilter;
 import com.gempukku.startrek.game.mission.MissionComponent;
 
-import java.util.function.Consumer;
-
 public class MissionSource extends CardSourceSystem {
     private EntitySubscription missions;
 
@@ -27,53 +25,16 @@ public class MissionSource extends CardSourceSystem {
 
     @Override
     public CardSource resolveSource(Array<String> parameters) {
-        return new CardSource() {
+        return new ShortcutCardSource() {
             @Override
-            public void forEach(Entity sourceEntity, Memory memory, Consumer<Entity> consumer, CardFilter... filters) {
+            protected void forEachWithShortcut(Entity sourceEntity, Memory memory, ShortcutConsumer<Entity> consumer, CardFilter... filters) {
                 IntBag entities = missions.getEntities();
                 for (int i = 0; i < entities.size(); i++) {
                     Entity entity = world.getEntity(entities.get(i));
                     if (isAccepted(sourceEntity, memory, entity, filters))
-                        consumer.accept(entity);
+                        if (consumer.accept(entity))
+                            return;
                 }
-            }
-
-            @Override
-            public Entity findFirst(Entity sourceEntity, Memory memory, CardFilter... filters) {
-                IntBag entities = missions.getEntities();
-                for (int i = 0; i < entities.size(); i++) {
-                    Entity entity = world.getEntity(entities.get(i));
-                    if (isAccepted(sourceEntity, memory, entity, filters))
-                        return entity;
-                }
-                return null;
-            }
-
-            @Override
-            public boolean hasCount(Entity sourceEntity, Memory memory, int required, CardFilter... filters) {
-                int count = 0;
-                IntBag entities = missions.getEntities();
-                for (int i = 0; i < entities.size(); i++) {
-                    Entity entity = world.getEntity(entities.get(i));
-                    if (isAccepted(sourceEntity, memory, entity, filters)) {
-                        count++;
-                        if (count >= required)
-                            return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public int getCount(Entity sourceEntity, Memory memory, CardFilter... filters) {
-                int result = 0;
-                IntBag entities = missions.getEntities();
-                for (int i = 0; i < entities.size(); i++) {
-                    Entity entity = world.getEntity(entities.get(i));
-                    if (isAccepted(sourceEntity, memory, entity, filters))
-                        result++;
-                }
-                return result;
             }
         };
     }

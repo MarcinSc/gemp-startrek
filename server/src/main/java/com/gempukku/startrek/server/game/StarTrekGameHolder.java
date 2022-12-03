@@ -136,6 +136,7 @@ public class StarTrekGameHolder implements Disposable {
                 new DrawCardEffect(),
                 new PlaceCardInHandOnBottomOfDeckEffect(),
                 new MoveCardToCoreEffect(),
+                new MoveCardToHandEffect(),
                 new MoveCardToDilemmaPileEffect(),
                 new OvercomeDilemmaEffect(),
                 new OvercomeRemainingDilemmasInStackEffect(),
@@ -151,6 +152,8 @@ public class StarTrekGameHolder implements Disposable {
                 new MemorizeAmountEffect(),
                 new MemorizeStringEffect(),
                 new MemorizeCardsEffect(),
+                new MemorizeCardIdsEffect(),
+                new MemorizeCardByIdEffect(),
                 new AddTitleToMemoryEffect(),
                 new RandomlySelectEffect(),
                 new DestroyEffect(),
@@ -158,9 +161,11 @@ public class StarTrekGameHolder implements Disposable {
                 new ExecuteStopEffect(),
                 new KillEffect(),
                 new ExecuteKillEffect(),
+                new DownloadEffect(),
                 new DiscardEffect(),
                 new ExecuteDiscardEffect(),
                 new ReturnToHandEffect(),
+                new RevealArbitraryCardsEffect(),
 
                 new BeamFromMissionEffect(),
                 new BeamToMissionEffect(),
@@ -188,6 +193,7 @@ public class StarTrekGameHolder implements Disposable {
                 new MandatoryTriggerActionsDecisionHandler(),
                 new OptionalTriggerActionsDecisionHandler(),
                 new SetupDilemmasDecisionHandler(),
+                new SelectArbitraryDecisionHandler(),
 
                 // Server condition resolvers
                 new MemoryMatchesHandler(),

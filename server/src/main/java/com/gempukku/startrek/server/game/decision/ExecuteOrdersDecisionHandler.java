@@ -234,7 +234,7 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
     }
 
     @Override
-    public void processDecision(String decisionPlayer, ObjectMap<String, String> decisionData, ObjectMap<String, String> result) {
+    public void processDecision(String decisionPlayer, Memory memory, ObjectMap<String, String> decisionData, ObjectMap<String, String> result) {
         String action = result.get("action");
         if (action.equals("pass")) {
             Entity effectMemoryEntity = stackSystem.getTopMostStackEntityWithComponent(EffectMemoryComponent.class);
@@ -243,43 +243,43 @@ public class ExecuteOrdersDecisionHandler extends BaseSystem implements Decision
         } else if (action.equals("beamFromMission")) {
             Entity beamFromMissionEffect = spawnSystem.spawnEntity("game/effect/beam/beamFromMissionEffect.template");
             EffectMemoryComponent effectMemory = beamFromMissionEffect.getComponent(EffectMemoryComponent.class);
-            Memory memory = new Memory(effectMemory.getMemory());
-            memory.setValue("shipId", result.get("shipId"));
-            memory.setValue("beamedIds", result.get("beamedId"));
+            Memory newEffectMemory = new Memory(effectMemory.getMemory());
+            newEffectMemory.setValue("shipId", result.get("shipId"));
+            newEffectMemory.setValue("beamedIds", result.get("beamedId"));
             stackSystem.stackEntity(beamFromMissionEffect);
         } else if (action.equals("beamToMission")) {
             Entity beamToMissionEffect = spawnSystem.spawnEntity("game/effect/beam/beamToMissionEffect.template");
             EffectMemoryComponent effectMemory = beamToMissionEffect.getComponent(EffectMemoryComponent.class);
-            Memory memory = new Memory(effectMemory.getMemory());
-            memory.setValue("shipId", result.get("shipId"));
-            memory.setValue("beamedIds", result.get("beamedId"));
+            Memory newEffectMemory = new Memory(effectMemory.getMemory());
+            newEffectMemory.setValue("shipId", result.get("shipId"));
+            newEffectMemory.setValue("beamedIds", result.get("beamedId"));
             stackSystem.stackEntity(beamToMissionEffect);
         } else if (action.equals("beamBetweenShips")) {
             Entity beamBetweenShipsEffect = spawnSystem.spawnEntity("game/effect/beam/beamBetweenShipsEffect.template");
             EffectMemoryComponent effectMemory = beamBetweenShipsEffect.getComponent(EffectMemoryComponent.class);
-            Memory memory = new Memory(effectMemory.getMemory());
-            memory.setValue("fromShipId", result.get("fromShipId"));
-            memory.setValue("toShipId", result.get("toShipId"));
-            memory.setValue("beamedIds", result.get("beamedId"));
+            Memory newEffectMemory = new Memory(effectMemory.getMemory());
+            newEffectMemory.setValue("fromShipId", result.get("fromShipId"));
+            newEffectMemory.setValue("toShipId", result.get("toShipId"));
+            newEffectMemory.setValue("beamedIds", result.get("beamedId"));
             stackSystem.stackEntity(beamBetweenShipsEffect);
         } else if (action.equals("moveShip")) {
             Entity beamBetweenShipsEffect = spawnSystem.spawnEntity("game/effect/beam/moveShipEffect.template");
             EffectMemoryComponent effectMemory = beamBetweenShipsEffect.getComponent(EffectMemoryComponent.class);
-            Memory memory = new Memory(effectMemory.getMemory());
-            memory.setValue("shipId", result.get("shipId"));
-            memory.setValue("missionId", result.get("missionId"));
+            Memory newEffectMemory = new Memory(effectMemory.getMemory());
+            newEffectMemory.setValue("shipId", result.get("shipId"));
+            newEffectMemory.setValue("missionId", result.get("missionId"));
             stackSystem.stackEntity(beamBetweenShipsEffect);
         } else if (action.equals("attemptPlanetMission")) {
             Entity attemptPlanetMissionEffect = spawnSystem.spawnEntity("game/effect/mission/attemptPlanetMission.template");
             EffectMemoryComponent effectMemory = attemptPlanetMissionEffect.getComponent(EffectMemoryComponent.class);
-            Memory memory = new Memory(effectMemory.getMemory());
-            memory.setValue("missionId", result.get("missionId"));
+            Memory newEffectMemory = new Memory(effectMemory.getMemory());
+            newEffectMemory.setValue("missionId", result.get("missionId"));
             stackSystem.stackEntity(attemptPlanetMissionEffect);
         } else if (action.equals("attemptSpaceMission")) {
             Entity attemptPlanetMissionEffect = spawnSystem.spawnEntity("game/effect/mission/attemptSpaceMission.template");
             EffectMemoryComponent effectMemory = attemptPlanetMissionEffect.getComponent(EffectMemoryComponent.class);
-            Memory memory = new Memory(effectMemory.getMemory());
-            memory.setValue("missionId", result.get("missionId"));
+            Memory newEffectMemory = new Memory(effectMemory.getMemory());
+            newEffectMemory.setValue("missionId", result.get("missionId"));
             stackSystem.stackEntity(attemptPlanetMissionEffect);
         }
     }

@@ -7,6 +7,9 @@
           "type": "processDecision",
           "player": "owner(self)",
           "decisionType": "select",
+          "date": {
+            "resultMemory": "internal.selected"
+          },
           "memoryData": {
             "prompt": "internal.prompt",
             "from": "internal.from",
@@ -22,7 +25,7 @@
         },
         {
           "type": "clearMemory",
-          "memory": "internal.prompt,internal.stopFilter,internal.stopMin,internal.stopMax,internal.selected"
+          "memory": "internal.selected"
         }
       ]
     }

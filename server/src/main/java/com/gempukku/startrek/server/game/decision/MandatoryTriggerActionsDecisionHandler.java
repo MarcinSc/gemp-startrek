@@ -80,13 +80,11 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
     }
 
     @Override
-    public void processDecision(String decisionPlayer, ObjectMap<String, String> decisionData, ObjectMap<String, String> result) {
+    public void processDecision(String decisionPlayer, Memory memory, ObjectMap<String, String> decisionData, ObjectMap<String, String> result) {
         String action = result.get("action");
         if (action.equals("pass")) {
-            Entity memoryEntity = stackSystem.getTopMostStackEntityWithComponent(EffectMemoryComponent.class);
-            ObjectMap<String, String> memory = memoryEntity.getComponent(EffectMemoryComponent.class).getMemory();
-            int playersPassed = Integer.parseInt(memory.get("playersPassed", "0"));
-            memory.put("playersPassed", String.valueOf(playersPassed + 1));
+            int playersPassed = Integer.parseInt(memory.getValue("playersPassed", "0"));
+            memory.setValue("playersPassed", String.valueOf(playersPassed + 1));
         } else if (action.equals("use")) {
             // Execute the use action
             String cardId = result.get("cardId");
@@ -94,9 +92,9 @@ public class MandatoryTriggerActionsDecisionHandler extends BaseSystem implement
             int triggerIndex = Integer.parseInt(result.get("triggerIndex"));
 
             Entity memoryEntity = stackSystem.getTopMostStackEntityWithComponent(EffectMemoryComponent.class);
-            Memory memory = new Memory(memoryEntity.getComponent(EffectMemoryComponent.class).getMemory());
-            memory.setValue("playersPassed", "0");
-            memory.appendValue("usedIds", String.valueOf(cardId));
+            Memory newEffectMemory = new Memory(memoryEntity.getComponent(EffectMemoryComponent.class).getMemory());
+            newEffectMemory.setValue("playersPassed", "0");
+            newEffectMemory.appendValue("usedIds", String.valueOf(cardId));
 
             Entity playCardEffect = spawnSystem.spawnEntity("game/effect/trigger/playTriggerEffect.template");
             EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);

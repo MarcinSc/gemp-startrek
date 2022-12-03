@@ -1,0 +1,72 @@
+{
+  "com.gempukku.startrek.server.game.effect.GameEffectComponent": {
+    "type": "sequence",
+    "data": {
+      "actions": [
+        {
+          "type": "memorizeCardIds",
+          "from": "deck",
+          "filterMemory": "internal.allCardsFilter",
+          "memory": "internal.allCards"
+        },
+        {
+          "type": "memorizeCardIds",
+          "from": "deck",
+          "filterMemory": "internal.matchingCardsFilter",
+          "memory": "internal.matchingCards"
+        },
+        {
+          "type": "memorizeAmount",
+          "memory": "internal.selectableMin",
+          "amount": "min(memory(internal.selectMin),memoryValueCount(internal.matchingCards))"
+        },
+        {
+          "type": "memorizeAmount",
+          "memory": "internal.selectableMax",
+          "amount": "min(memory(internal.selectMax),memoryValueCount(internal.matchingCards))"
+        },
+        {
+          "type": "processDecision",
+          "playerMemory": "internal.player",
+          "decisionType": "selectArbitrary",
+          "data": {
+            "resultMemory": "internal.downloadedCards"
+          },
+          "memoryData": {
+            "prompt": "internal.prompt",
+            "allCards": "internal.allCards",
+            "matchingCards": "internal.matchingCards",
+            "min": "internal.selectableMin",
+            "max": "internal.selectableMax"
+          }
+        },
+        {
+          "type": "revealArbitraryCards",
+          "playerMemory": "internal.player",
+          "cardsMemory": "internal.downloadedCards"
+        },
+        {
+          "type": "memorizeCardById",
+          "from": "deck",
+          "filterMemory": "internal.matchingCardsFilter",
+          "idsMemory": "internal.downloadedCards",
+          "memory": "internal.cardsToDownload"
+        },
+        {
+          "type": "moveCardToHand",
+          "from": "memory(internal.cardsToDownload)",
+          "filter": "any"
+        },
+        {
+          "type": "shuffleDeck",
+          "playerMemory": "internal.player",
+          "deck": "drawDeck"
+        },
+        {
+          "type": "clearMemory",
+          "memory": "internal.allCards,internal.matchingCards,internal.downloadedCards,internal.cardsToDownload"
+        }
+      ]
+    }
+  }
+}

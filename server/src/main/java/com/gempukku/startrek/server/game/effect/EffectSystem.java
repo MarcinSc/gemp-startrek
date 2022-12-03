@@ -5,6 +5,7 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.JsonValue;
+import com.gempukku.libgdx.lib.artemis.spawn.SpawnSystem;
 import com.gempukku.libgdx.network.id.ServerEntityIdSystem;
 import com.gempukku.startrek.common.IdProviderSystem;
 import com.gempukku.startrek.game.Memory;
@@ -15,6 +16,7 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
     private ExecutionStackSystem stackSystem;
     private ServerEntityIdSystem serverEntityIdSystem;
     private IdProviderSystem idProviderSystem;
+    private SpawnSystem spawnSystem;
 
     private ComponentMapper<GameEffectComponent> gameEffectComponentMapper;
     private ComponentMapper<EffectMemoryComponent> effectMemoryComponentMapper;
@@ -35,6 +37,14 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
     protected void removeTopEffectFromStack() {
         Entity entity = stackSystem.removeTopStackEntity();
         world.deleteEntity(entity);
+    }
+
+    protected Entity spawnEffect(String path, Entity sourceEntity) {
+        Entity stackedEntity = spawnSystem.spawnEntity(path);
+        GameEffectComponent newGameEffect = gameEffectComponentMapper.get(stackedEntity);
+        if (sourceEntity != null)
+            newGameEffect.setSourceEntityId(serverEntityIdSystem.getEntityId(sourceEntity));
+        return stackedEntity;
     }
 
     protected Entity createActionFromJson(JsonValue action, Entity sourceEntity) {
@@ -81,6 +91,13 @@ public abstract class EffectSystem extends BaseSystem implements GameEffectHandl
 
     protected String getMemoryName(Entity effectEntity, String prefix) {
         return prefix + "." + idProviderSystem.getEntityId(effectEntity);
+    }
+
+    protected String getOptionalFromMemory(Memory memory, GameEffectComponent gameEffect, String normalKey, String memoryKey) {
+        String result = gameEffect.getDataString(normalKey, null);
+        if (result != null)
+            return result;
+        return memory.getValue(gameEffect.getDataString(memoryKey));
     }
 
     @Override

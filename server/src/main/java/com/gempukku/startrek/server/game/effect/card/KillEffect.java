@@ -32,19 +32,17 @@ public class KillEffect extends EffectSystem {
             Entity killEffectEntity;
             if (filter != null) {
                 memory.setValue("internal.killFilter", filter);
-                memory.setValue("internal.killMemory", "cardsToKill");
-                killEffectEntity = spawnSystem.spawnEntity("game/effect/kill/killWithFilterEffect.template");
+                killEffectEntity = spawnEffect("game/effect/kill/killWithFilterEffect.template", sourceEntity);
             } else if (randomSelect != null) {
                 memory.setValue("internal.killFilter", randomSelect);
-                memory.setValue("internal.killMemory", "cardsToKill");
-                killEffectEntity = spawnSystem.spawnEntity("game/effect/kill/killWithRandomSelectEffect.template");
+                killEffectEntity = spawnEffect("game/effect/kill/killWithRandomSelectEffect.template", sourceEntity);
             } else {
                 throw new GdxRuntimeException("Unable to resolve a kill effect");
             }
             memory.setValue("internal.killStacked", "true");
             stackEffect(killEffectEntity);
         } else {
-            memory.removeValue("internal.killStacked");
+            memory.removeValue("internal.killStacked", "internal.from", "internal.killFilter");
             removeTopEffectFromStack();
         }
     }

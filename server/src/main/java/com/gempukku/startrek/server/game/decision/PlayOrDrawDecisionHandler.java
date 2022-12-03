@@ -67,7 +67,7 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
     }
 
     @Override
-    public void processDecision(String decisionPlayer, ObjectMap<String, String> decisionData, ObjectMap<String, String> result) {
+    public void processDecision(String decisionPlayer, Memory memory, ObjectMap<String, String> decisionData, ObjectMap<String, String> result) {
         String action = result.get("action");
         if (action.equals("draw")) {
             Entity playerEntity = playerResolverSystem.findPlayerEntity(decisionPlayer);
@@ -76,8 +76,8 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
             eventSystem.fireEvent(EntityUpdated.instance, playerEntity);
 
             Entity drawCardEffect = spawnSystem.spawnEntity("game/draw/drawCardEffect.template");
-            ObjectMap<String, String> memory = drawCardEffect.getComponent(EffectMemoryComponent.class).getMemory();
-            memory.put("player", decisionPlayer);
+            ObjectMap<String, String> newEffectMemory = drawCardEffect.getComponent(EffectMemoryComponent.class).getMemory();
+            newEffectMemory.put("player", decisionPlayer);
             GameEffectComponent gameEffect = drawCardEffect.getComponent(GameEffectComponent.class);
             JsonValue data = gameEffect.getClonedData();
             gameEffect.setData(data);
@@ -95,9 +95,9 @@ public class PlayOrDrawDecisionHandler extends BaseSystem implements DecisionTyp
 
             Entity playCardEffect = spawnSystem.spawnEntity("game/effect/play/playCardEffect.template");
             EffectMemoryComponent effectMemory = playCardEffect.getComponent(EffectMemoryComponent.class);
-            Memory memory = new Memory(effectMemory.getMemory());
-            memory.setValue("playedCardId", cardId);
-            memory.setValue("missionId", serverEntityIdSystem.getEntityId(missionEntity));
+            Memory newEffectMemory = new Memory(effectMemory.getMemory());
+            newEffectMemory.setValue("playedCardId", cardId);
+            newEffectMemory.setValue("missionId", serverEntityIdSystem.getEntityId(missionEntity));
             stackSystem.stackEntity(playCardEffect);
         }
     }

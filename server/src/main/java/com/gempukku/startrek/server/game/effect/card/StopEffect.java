@@ -33,14 +33,13 @@ public class StopEffect extends EffectSystem {
             memory.setValue("internal.from", gameEffect.getDataString("from"));
             if (filter != null) {
                 memory.setValue("internal.stopFilter", filter);
-                memory.setValue("internal.stopMemory", "cardsToStop");
-                stopEffectEntity = spawnSystem.spawnEntity("game/effect/stop/stopWithFilterEffect.template");
+                stopEffectEntity = spawnEffect("game/effect/stop/stopWithFilterEffect.template", sourceEntity);
             } else if (select != null) {
                 memory.setValue("internal.prompt", "Choose cards to stop");
                 memory.setValue("internal.stopFilter", select);
                 memory.setValue("internal.stopMin", "1");
                 memory.setValue("internal.stopMax", "1");
-                stopEffectEntity = spawnSystem.spawnEntity("game/effect/stop/stopWithSelectEffect.template");
+                stopEffectEntity = spawnEffect("game/effect/stop/stopWithSelectEffect.template", sourceEntity);
             } else if (opponentSelect != null) {
                 String opponentUsername = playerResolverSystem.resolvePlayerUsername(sourceEntity, memory, gameEffect.getDataString("player"));
 
@@ -49,14 +48,15 @@ public class StopEffect extends EffectSystem {
                 memory.setValue("internal.stopFilter", opponentSelect);
                 memory.setValue("internal.stopMin", "1");
                 memory.setValue("internal.stopMax", "1");
-                stopEffectEntity = spawnSystem.spawnEntity("game/effect/stop/stopWithOpponentSelectEffect.template");
+                stopEffectEntity = spawnEffect("game/effect/stop/stopWithOpponentSelectEffect.template", sourceEntity);
             } else {
                 throw new GdxRuntimeException("Unable to resolve a stop effect");
             }
             memory.setValue("internal.stopStacked", "true");
             stackEffect(stopEffectEntity);
         } else {
-            memory.removeValue("internal.stopStacked");
+            memory.removeValue("internal.stopStacked", "internal.stopFilter", "internal.prompt",
+                    "internal.stopMin", "internal.stopMax", "internal.player");
             removeTopEffectFromStack();
         }
     }
